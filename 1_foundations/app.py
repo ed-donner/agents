@@ -113,6 +113,10 @@ If the user is engaging in discussion, try to steer them towards getting in touc
         return system_prompt
     
     def chat(self, message, history):
+        message = f"""Answer the question based on the information provided.
+            If the question is not related to the given context, summary, linkedin profile, or {self.name},
+            answer Please ask a question related to my career, background, skills and experience. Question: {message}"""
+
         messages = [{"role": "system", "content": self.system_prompt()}] + history + [{"role": "user", "content": message}]
         done = False
         while not done:
