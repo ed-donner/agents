@@ -1,0 +1,8 @@
+This is a new file
+Created using write()
+Line 1
+Line 2
+Line 3
+
+This line was appended
+Using append mode
