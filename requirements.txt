@@ -688,3 +688,4 @@ zipp==3.23.0
     # via importlib-metadata
 zstandard==0.23.0
     # via langsmith
+slack_sdk==3.35.0
