@@ -1,3 +1,10 @@
+import warnings
+warnings.filterwarnings("ignore")
+
+import logging
+logging.getLogger("PyPDF2").setLevel(logging.ERROR)
+logging.getLogger("pypdf").setLevel(logging.ERROR)
+
 from dotenv import load_dotenv
 from openai import OpenAI
 import json
@@ -76,14 +83,41 @@ tools = [{"type": "function", "function": record_user_details_json},
 class Me:
 
     def __init__(self):
-        self.openai = OpenAI()
-        self.name = "Ed Donner"
-        reader = PdfReader("me/linkedin.pdf")
+        # Debug: Print all environment variables (without values for security)
+        print("Available environment variables:")
+        for key in os.environ.keys():
+            if 'API' in key or 'KEY' in key:
+                print(f"  {key}: {'*' * 10}")  # Hide the actual value
+            else:
+                print(f"  {key}: {os.environ[key]}")
+        
+        # Get API key from environment - handle HuggingFace secret format
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            # Try alternative format from HuggingFace secrets
+            openai_env = os.getenv("OpenAI")
+            if openai_env and openai_env.startswith("OPENAI_API_KEY="):
+                api_key = openai_env.replace("OPENAI_API_KEY=", "")
+            else:
+                raise ValueError("OPENAI_API_KEY environment variable is not set. Please add it to your HuggingFace Space secrets.")
+        
+        self.openai = OpenAI(api_key=api_key)
+        self.name = "Jack Agnew"
+        reader = PdfReader("me/JackAgnewResume2025.pdf")
         self.linkedin = ""
         for page in reader.pages:
             text = page.extract_text()
             if text:
                 self.linkedin += text
+        
+        # Read theatre resume
+        theatre_reader = PdfReader("me/Jack Musical Theatre Resume.pdf")
+        self.theatre_resume = ""
+        for page in theatre_reader.pages:
+            text = page.extract_text()
+            if text:
+                self.theatre_resume += text
+                
         with open("me/summary.txt", "r", encoding="utf-8") as f:
             self.summary = f.read()
 
@@ -108,7 +142,7 @@ Be professional and engaging, as if talking to a potential client or future empl
 If you don't know the answer to any question, use your record_unknown_question tool to record the question that you couldn't answer, even if it's about something trivial or unrelated to career. \
 If the user is engaging in discussion, try to steer them towards getting in touch via email; ask for their email and record it using your record_user_details tool. "
 
-        system_prompt += f"\n\n## Summary:\n{self.summary}\n\n## LinkedIn Profile:\n{self.linkedin}\n\n"
+        system_prompt += f"\n\n## Summary:\n{self.summary}\n\n## LinkedIn Profile:\n{self.linkedin}\n\n## Theatre Resume:\n{self.theatre_resume}\n\n"
         system_prompt += f"With this context, please chat with the user, always staying in character as {self.name}."
         return system_prompt
     
@@ -130,5 +164,31 @@ If the user is engaging in discussion, try to steer them towards getting in touc
 
 if __name__ == "__main__":
     me = Me()
-    gr.ChatInterface(me.chat, type="messages").launch()
+    with gr.Blocks() as demo:
+        gr.Markdown("<h2>Chat with virtual Jack!</h2>")
+        chatbot = gr.Chatbot(
+            avatar="ChatWithJack.jpeg",  # Make sure this file is in the same directory
+            bubble_full_width=False,
+            show_label=True,
+            label="Jack"
+        )
+        msg = gr.Textbox(label="Your message")
+        clear = gr.Button("Clear chat")
+
+        def respond(user_message, chat_history):
+            # Convert chat_history to OpenAI format
+            formatted_history = []
+            for user, bot in chat_history or []:
+                if user:
+                    formatted_history.append({"role": "user", "content": user})
+                if bot:
+                    formatted_history.append({"role": "assistant", "content": bot})
+            bot_message = me.chat(user_message, formatted_history)
+            chat_history = (chat_history or []) + [[user_message, bot_message]]
+            return "", chat_history
+
+        msg.submit(respond, [msg, chatbot], [msg, chatbot])
+        clear.click(lambda: None, None, chatbot, queue=False)
+
+    demo.launch()
     
