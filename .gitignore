@@ -135,6 +135,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+2_openai/.gradio
 
 # Spyder project settings
 .spyderproject
