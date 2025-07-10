@@ -1,0 +1,1733 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Welcome to the Second Lab - Week 1, Day 3\n",
+    "\n",
+    "Today we will work with lots of models! This is a way to get comfortable with APIs."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "<table style=\"margin: 0; text-align: left; width:100%\">\n",
+    "    <tr>\n",
+    "        <td style=\"width: 150px; height: 150px; vertical-align: middle;\">\n",
+    "            <img src=\"../assets/stop.png\" width=\"150\" height=\"150\" style=\"display: block;\" />\n",
+    "        </td>\n",
+    "        <td>\n",
+    "            <h2 style=\"color:#ff7800;\">Important point - please read</h2>\n",
+    "            <span style=\"color:#ff7800;\">The way I collaborate with you may be different to other courses you've taken. I prefer not to type code while you watch. Rather, I execute Jupyter Labs, like this, and give you an intuition for what's going on. My suggestion is that you carefully execute this yourself, <b>after</b> watching the lecture. Add print statements to understand what's going on, and then come up with your own variations.<br/><br/>If you have time, I'd love it if you submit a PR for changes in the community_contributions folder - instructions in the resources. Also, if you have a Github account, use this to showcase your variations. Not only is this essential practice, but it demonstrates your skills to others, including perhaps future clients or employers...\n",
+    "            </span>\n",
+    "        </td>\n",
+    "    </tr>\n",
+    "</table>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Start with imports - ask ChatGPT to explain any package that you don't know\n",
+    "\n",
+    "import os\n",
+    "import json\n",
+    "from dotenv import load_dotenv\n",
+    "from openai import OpenAI\n",
+    "from anthropic import Anthropic\n",
+    "from IPython.display import Markdown, display"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Always remember to do this!\n",
+    "load_dotenv(override=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "OpenAI API Key exists and begins sk-proj-\n",
+      "Anthropic API Key exists and begins sk-ant-\n",
+      "Google API Key exists and begins AI\n",
+      "DeepSeek API Key exists and begins sk-\n",
+      "Groq API Key not set (and this is optional)\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Print the key prefixes to help with any debugging\n",
+    "\n",
+    "openai_api_key = os.getenv('OPENAI_API_KEY')\n",
+    "anthropic_api_key = os.getenv('ANTHROPIC_API_KEY')\n",
+    "google_api_key = os.getenv('GOOGLE_API_KEY')\n",
+    "deepseek_api_key = os.getenv('DEEPSEEK_API_KEY')\n",
+    "groq_api_key = os.getenv('GROQ_API_KEY')\n",
+    "\n",
+    "if openai_api_key:\n",
+    "    print(f\"OpenAI API Key exists and begins {openai_api_key[:8]}\")\n",
+    "else:\n",
+    "    print(\"OpenAI API Key not set\")\n",
+    "    \n",
+    "if anthropic_api_key:\n",
+    "    print(f\"Anthropic API Key exists and begins {anthropic_api_key[:7]}\")\n",
+    "else:\n",
+    "    print(\"Anthropic API Key not set (and this is optional)\")\n",
+    "\n",
+    "if google_api_key:\n",
+    "    print(f\"Google API Key exists and begins {google_api_key[:2]}\")\n",
+    "else:\n",
+    "    print(\"Google API Key not set (and this is optional)\")\n",
+    "\n",
+    "if deepseek_api_key:\n",
+    "    print(f\"DeepSeek API Key exists and begins {deepseek_api_key[:3]}\")\n",
+    "else:\n",
+    "    print(\"DeepSeek API Key not set (and this is optional)\")\n",
+    "\n",
+    "if groq_api_key:\n",
+    "    print(f\"Groq API Key exists and begins {groq_api_key[:4]}\")\n",
+    "else:\n",
+    "    print(\"Groq API Key not set (and this is optional)\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "request = \"Please come up with a challenging, nuanced question that I can ask a number of LLMs to evaluate their intelligence. \"\n",
+    "request += \"Answer only with the question, no explanation.\"\n",
+    "messages = [{\"role\": \"user\", \"content\": request}]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[{'role': 'user',\n",
+       "  'content': 'Please come up with a challenging, nuanced question that I can ask a number of LLMs to evaluate their intelligence. Answer only with the question, no explanation.'}]"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "messages"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "How would you approach resolving a conflict between two individuals who both have valid perspectives, while ensuring that both parties feel heard and respected, and what specific strategies would you implement to facilitate a constructive dialogue?\n"
+     ]
+    }
+   ],
+   "source": [
+    "openai = OpenAI()\n",
+    "response = openai.chat.completions.create(\n",
+    "    model=\"gpt-4o-mini\",\n",
+    "    messages=messages,\n",
+    ")\n",
+    "question = response.choices[0].message.content\n",
+    "print(question)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "competitors = []\n",
+    "answers = []\n",
+    "messages = [{\"role\": \"user\", \"content\": question}]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/markdown": [
+       "Resolving conflict between individuals with valid but differing perspectives requires a thoughtful approach that fosters open communication, respect, and collaboration. Here’s how I would approach it:\n",
+       "\n",
+       "### Preparation\n",
+       "1. **Understand the Context**: Gather background information about the conflict and the individuals involved. This helps in understanding their perspectives and any underlying issues.\n",
+       "\n",
+       "2. **Set Ground Rules**: Establish a safe space for dialogue by agreeing on ground rules, such as respect for each speaker, no interruptions, and confidentiality.\n",
+       "\n",
+       "### Facilitation of Dialogue\n",
+       "1. **Arrange a Neutral Setting**: Choose an environment free from distractions and biases, where both parties feel comfortable expressing themselves.\n",
+       "\n",
+       "2. **Use Active Listening Techniques**:\n",
+       "   - **Reflective Listening**: Encourage each individual to paraphrase or summarize what the other has said to ensure accurate understanding.\n",
+       "   - **Nonverbal Cues**: Maintain eye contact, nod, and use other affirming body language to convey attentiveness.\n",
+       "\n",
+       "3. **Encourage Expression of Emotions**: Let each individual express their feelings about the conflict. Acknowledging emotions can help validate their experiences.\n",
+       "\n",
+       "4. **Focus on Interests, Not Positions**: Guide both parties to discuss their underlying interests and needs rather than just their positions. This often reveals common ground and areas for collaboration.\n",
+       "\n",
+       "### Structured Dialogue\n",
+       "1. **Use “I” Statements**: Encourage the use of “I” statements instead of “You” statements to express thoughts and feelings without placing blame. For example, “I feel overlooked when my ideas aren’t considered” instead of “You never listen to me.”\n",
+       "\n",
+       "2. **Identify Common Goals**: Help both parties recognize shared objectives or values. This can shift the focus from adversarial to collaborative.\n",
+       "\n",
+       "3. **Encourage Creative Solutions**: Facilitate brainstorming sessions where both individuals can propose solutions that satisfy both sets of interests. Aim for a win-win outcome.\n",
+       "\n",
+       "### Resolution and Follow-Up\n",
+       "1. **Summarize Agreements**: Once a resolution is reached, summarize the agreed-upon points clearly. Document this if possible to avoid misunderstandings.\n",
+       "\n",
+       "2. **Discuss Next Steps**: Ensure both parties understand their commitments moving forward and determine how to monitor the progress of the agreement.\n",
+       "\n",
+       "3. **Plan for Follow-Up**: Schedule a follow-up meeting to revisit the agreement and address any lingering issues or new conflicts.\n",
+       "\n",
+       "### Closing\n",
+       "1. **Express Appreciation**: Thank both parties for their willingness to engage in the dialogue. Recognizing their efforts demonstrates respect for their perspectives.\n",
+       "\n",
+       "2. **Encourage Continued Communication**: Foster an ongoing dialogue culture to address any future conflicts constructively.\n",
+       "\n",
+       "Implementing these strategies can create a constructive atmosphere for dialogue, ensuring that both parties feel heard, respected, and engaged in the resolution process."
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "# The API we know well\n",
+    "\n",
+    "model_name = \"gpt-4o-mini\"\n",
+    "\n",
+    "response = openai.chat.completions.create(model=model_name, messages=messages)\n",
+    "answer = response.choices[0].message.content\n",
+    "\n",
+    "display(Markdown(answer))\n",
+    "competitors.append(model_name)\n",
+    "answers.append(answer)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "BadRequestError",
+     "evalue": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}}",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[31m---------------------------------------------------------------------------\u001b[39m",
+      "\u001b[31mBadRequestError\u001b[39m                           Traceback (most recent call last)",
+      "\u001b[36mCell\u001b[39m\u001b[36m \u001b[39m\u001b[32mIn[12]\u001b[39m\u001b[32m, line 6\u001b[39m\n\u001b[32m      3\u001b[39m model_name = \u001b[33m\"\u001b[39m\u001b[33mclaude-sonnet-4-latest\u001b[39m\u001b[33m\"\u001b[39m\n\u001b[32m      5\u001b[39m claude = Anthropic()\n\u001b[32m----> \u001b[39m\u001b[32m6\u001b[39m response = \u001b[43mclaude\u001b[49m\u001b[43m.\u001b[49m\u001b[43mmessages\u001b[49m\u001b[43m.\u001b[49m\u001b[43mcreate\u001b[49m\u001b[43m(\u001b[49m\u001b[43mmodel\u001b[49m\u001b[43m=\u001b[49m\u001b[43mmodel_name\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mmessages\u001b[49m\u001b[43m=\u001b[49m\u001b[43mmessages\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mmax_tokens\u001b[49m\u001b[43m=\u001b[49m\u001b[32;43m1000\u001b[39;49m\u001b[43m)\u001b[49m\n\u001b[32m      7\u001b[39m answer = response.content[\u001b[32m0\u001b[39m].text\n\u001b[32m      9\u001b[39m display(Markdown(answer))\n",
+      "\u001b[36mFile \u001b[39m\u001b[32m~/src/agents/.venv/lib/python3.12/site-packages/anthropic/_utils/_utils.py:283\u001b[39m, in \u001b[36mrequired_args.<locals>.inner.<locals>.wrapper\u001b[39m\u001b[34m(*args, **kwargs)\u001b[39m\n\u001b[32m    281\u001b[39m             msg = \u001b[33mf\u001b[39m\u001b[33m\"\u001b[39m\u001b[33mMissing required argument: \u001b[39m\u001b[38;5;132;01m{\u001b[39;00mquote(missing[\u001b[32m0\u001b[39m])\u001b[38;5;132;01m}\u001b[39;00m\u001b[33m\"\u001b[39m\n\u001b[32m    282\u001b[39m     \u001b[38;5;28;01mraise\u001b[39;00m \u001b[38;5;167;01mTypeError\u001b[39;00m(msg)\n\u001b[32m--> \u001b[39m\u001b[32m283\u001b[39m \u001b[38;5;28;01mreturn\u001b[39;00m \u001b[43mfunc\u001b[49m\u001b[43m(\u001b[49m\u001b[43m*\u001b[49m\u001b[43margs\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43m*\u001b[49m\u001b[43m*\u001b[49m\u001b[43mkwargs\u001b[49m\u001b[43m)\u001b[49m\n",
+      "\u001b[36mFile \u001b[39m\u001b[32m~/src/agents/.venv/lib/python3.12/site-packages/anthropic/resources/messages/messages.py:978\u001b[39m, in \u001b[36mMessages.create\u001b[39m\u001b[34m(self, max_tokens, messages, model, metadata, service_tier, stop_sequences, stream, system, temperature, thinking, tool_choice, tools, top_k, top_p, extra_headers, extra_query, extra_body, timeout)\u001b[39m\n\u001b[32m    971\u001b[39m \u001b[38;5;28;01mif\u001b[39;00m model \u001b[38;5;129;01min\u001b[39;00m DEPRECATED_MODELS:\n\u001b[32m    972\u001b[39m     warnings.warn(\n\u001b[32m    973\u001b[39m         \u001b[33mf\u001b[39m\u001b[33m\"\u001b[39m\u001b[33mThe model \u001b[39m\u001b[33m'\u001b[39m\u001b[38;5;132;01m{\u001b[39;00mmodel\u001b[38;5;132;01m}\u001b[39;00m\u001b[33m'\u001b[39m\u001b[33m is deprecated and will reach end-of-life on \u001b[39m\u001b[38;5;132;01m{\u001b[39;00mDEPRECATED_MODELS[model]\u001b[38;5;132;01m}\u001b[39;00m\u001b[33m.\u001b[39m\u001b[38;5;130;01m\\n\u001b[39;00m\u001b[33mPlease migrate to a newer model. Visit https://docs.anthropic.com/en/docs/resources/model-deprecations for more information.\u001b[39m\u001b[33m\"\u001b[39m,\n\u001b[32m    974\u001b[39m         \u001b[38;5;167;01mDeprecationWarning\u001b[39;00m,\n\u001b[32m    975\u001b[39m         stacklevel=\u001b[32m3\u001b[39m,\n\u001b[32m    976\u001b[39m     )\n\u001b[32m--> \u001b[39m\u001b[32m978\u001b[39m \u001b[38;5;28;01mreturn\u001b[39;00m \u001b[38;5;28;43mself\u001b[39;49m\u001b[43m.\u001b[49m\u001b[43m_post\u001b[49m\u001b[43m(\u001b[49m\n\u001b[32m    979\u001b[39m \u001b[43m    \u001b[49m\u001b[33;43m\"\u001b[39;49m\u001b[33;43m/v1/messages\u001b[39;49m\u001b[33;43m\"\u001b[39;49m\u001b[43m,\u001b[49m\n\u001b[32m    980\u001b[39m \u001b[43m    \u001b[49m\u001b[43mbody\u001b[49m\u001b[43m=\u001b[49m\u001b[43mmaybe_transform\u001b[49m\u001b[43m(\u001b[49m\n\u001b[32m    981\u001b[39m \u001b[43m        \u001b[49m\u001b[43m{\u001b[49m\n\u001b[32m    982\u001b[39m \u001b[43m            \u001b[49m\u001b[33;43m\"\u001b[39;49m\u001b[33;43mmax_tokens\u001b[39;49m\u001b[33;43m\"\u001b[39;49m\u001b[43m:\u001b[49m\u001b[43m \u001b[49m\u001b[43mmax_tokens\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m    983\u001b[39m \u001b[43m            \u001b[49m\u001b[33;43m\"\u001b[39;49m\u001b[33;43mmessages\u001b[39;49m\u001b[33;43m\"\u001b[39;49m\u001b[43m:\u001b[49m\u001b[43m \u001b[49m\u001b[43mmessages\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m    984\u001b[39m \u001b[43m            \u001b[49m\u001b[33;43m\"\u001b[39;49m\u001b[33;43mmodel\u001b[39;49m\u001b[33;43m\"\u001b[39;49m\u001b[43m:\u001b[49m\u001b[43m \u001b[49m\u001b[43mmodel\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m    985\u001b[39m \u001b[43m            \u001b[49m\u001b[33;43m\"\u001b[39;49m\u001b[33;43mmetadata\u001b[39;49m\u001b[33;43m\"\u001b[39;49m\u001b[43m:\u001b[49m\u001b[43m \u001b[49m\u001b[43mmetadata\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m    986\u001b[39m \u001b[43m            \u001b[49m\u001b[33;43m\"\u001b[39;49m\u001b[33;43mservice_tier\u001b[39;49m\u001b[33;43m\"\u001b[39;49m\u001b[43m:\u001b[49m\u001b[43m \u001b[49m\u001b[43mservice_tier\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m    987\u001b[39m \u001b[43m            \u001b[49m\u001b[33;43m\"\u001b[39;49m\u001b[33;43mstop_sequences\u001b[39;49m\u001b[33;43m\"\u001b[39;49m\u001b[43m:\u001b[49m\u001b[43m \u001b[49m\u001b[43mstop_sequences\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m    988\u001b[39m \u001b[43m            \u001b[49m\u001b[33;43m\"\u001b[39;49m\u001b[33;43mstream\u001b[39;49m\u001b[33;43m\"\u001b[39;49m\u001b[43m:\u001b[49m\u001b[43m \u001b[49m\u001b[43mstream\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m    989\u001b[39m \u001b[43m            \u001b[49m\u001b[33;43m\"\u001b[39;49m\u001b[33;43msystem\u001b[39;49m\u001b[33;43m\"\u001b[39;49m\u001b[43m:\u001b[49m\u001b[43m \u001b[49m\u001b[43msystem\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m    990\u001b[39m \u001b[43m            \u001b[49m\u001b[33;43m\"\u001b[39;49m\u001b[33;43mtemperature\u001b[39;49m\u001b[33;43m\"\u001b[39;49m\u001b[43m:\u001b[49m\u001b[43m \u001b[49m\u001b[43mtemperature\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m    991\u001b[39m \u001b[43m            \u001b[49m\u001b[33;43m\"\u001b[39;49m\u001b[33;43mthinking\u001b[39;49m\u001b[33;43m\"\u001b[39;49m\u001b[43m:\u001b[49m\u001b[43m \u001b[49m\u001b[43mthinking\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m    992\u001b[39m \u001b[43m            \u001b[49m\u001b[33;43m\"\u001b[39;49m\u001b[33;43mtool_choice\u001b[39;49m\u001b[33;43m\"\u001b[39;49m\u001b[43m:\u001b[49m\u001b[43m \u001b[49m\u001b[43mtool_choice\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m    993\u001b[39m \u001b[43m            \u001b[49m\u001b[33;43m\"\u001b[39;49m\u001b[33;43mtools\u001b[39;49m\u001b[33;43m\"\u001b[39;49m\u001b[43m:\u001b[49m\u001b[43m \u001b[49m\u001b[43mtools\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m    994\u001b[39m \u001b[43m            \u001b[49m\u001b[33;43m\"\u001b[39;49m\u001b[33;43mtop_k\u001b[39;49m\u001b[33;43m\"\u001b[39;49m\u001b[43m:\u001b[49m\u001b[43m \u001b[49m\u001b[43mtop_k\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m    995\u001b[39m \u001b[43m            \u001b[49m\u001b[33;43m\"\u001b[39;49m\u001b[33;43mtop_p\u001b[39;49m\u001b[33;43m\"\u001b[39;49m\u001b[43m:\u001b[49m\u001b[43m \u001b[49m\u001b[43mtop_p\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m    996\u001b[39m \u001b[43m        \u001b[49m\u001b[43m}\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m    997\u001b[39m \u001b[43m        \u001b[49m\u001b[43mmessage_create_params\u001b[49m\u001b[43m.\u001b[49m\u001b[43mMessageCreateParamsStreaming\u001b[49m\n\u001b[32m    998\u001b[39m \u001b[43m        \u001b[49m\u001b[38;5;28;43;01mif\u001b[39;49;00m\u001b[43m \u001b[49m\u001b[43mstream\u001b[49m\n\u001b[32m    999\u001b[39m \u001b[43m        \u001b[49m\u001b[38;5;28;43;01melse\u001b[39;49;00m\u001b[43m \u001b[49m\u001b[43mmessage_create_params\u001b[49m\u001b[43m.\u001b[49m\u001b[43mMessageCreateParamsNonStreaming\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m   1000\u001b[39m \u001b[43m    \u001b[49m\u001b[43m)\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m   1001\u001b[39m \u001b[43m    \u001b[49m\u001b[43moptions\u001b[49m\u001b[43m=\u001b[49m\u001b[43mmake_request_options\u001b[49m\u001b[43m(\u001b[49m\n\u001b[32m   1002\u001b[39m \u001b[43m        \u001b[49m\u001b[43mextra_headers\u001b[49m\u001b[43m=\u001b[49m\u001b[43mextra_headers\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mextra_query\u001b[49m\u001b[43m=\u001b[49m\u001b[43mextra_query\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mextra_body\u001b[49m\u001b[43m=\u001b[49m\u001b[43mextra_body\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mtimeout\u001b[49m\u001b[43m=\u001b[49m\u001b[43mtimeout\u001b[49m\n\u001b[32m   1003\u001b[39m \u001b[43m    \u001b[49m\u001b[43m)\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m   1004\u001b[39m \u001b[43m    \u001b[49m\u001b[43mcast_to\u001b[49m\u001b[43m=\u001b[49m\u001b[43mMessage\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m   1005\u001b[39m \u001b[43m    \u001b[49m\u001b[43mstream\u001b[49m\u001b[43m=\u001b[49m\u001b[43mstream\u001b[49m\u001b[43m \u001b[49m\u001b[38;5;129;43;01mor\u001b[39;49;00m\u001b[43m \u001b[49m\u001b[38;5;28;43;01mFalse\u001b[39;49;00m\u001b[43m,\u001b[49m\n\u001b[32m   1006\u001b[39m \u001b[43m    \u001b[49m\u001b[43mstream_cls\u001b[49m\u001b[43m=\u001b[49m\u001b[43mStream\u001b[49m\u001b[43m[\u001b[49m\u001b[43mRawMessageStreamEvent\u001b[49m\u001b[43m]\u001b[49m\u001b[43m,\u001b[49m\n\u001b[32m   1007\u001b[39m \u001b[43m\u001b[49m\u001b[43m)\u001b[49m\n",
+      "\u001b[36mFile \u001b[39m\u001b[32m~/src/agents/.venv/lib/python3.12/site-packages/anthropic/_base_client.py:1314\u001b[39m, in \u001b[36mSyncAPIClient.post\u001b[39m\u001b[34m(self, path, cast_to, body, options, files, stream, stream_cls)\u001b[39m\n\u001b[32m   1300\u001b[39m \u001b[38;5;28;01mdef\u001b[39;00m\u001b[38;5;250m \u001b[39m\u001b[34mpost\u001b[39m(\n\u001b[32m   1301\u001b[39m     \u001b[38;5;28mself\u001b[39m,\n\u001b[32m   1302\u001b[39m     path: \u001b[38;5;28mstr\u001b[39m,\n\u001b[32m   (...)\u001b[39m\u001b[32m   1309\u001b[39m     stream_cls: \u001b[38;5;28mtype\u001b[39m[_StreamT] | \u001b[38;5;28;01mNone\u001b[39;00m = \u001b[38;5;28;01mNone\u001b[39;00m,\n\u001b[32m   1310\u001b[39m ) -> ResponseT | _StreamT:\n\u001b[32m   1311\u001b[39m     opts = FinalRequestOptions.construct(\n\u001b[32m   1312\u001b[39m         method=\u001b[33m\"\u001b[39m\u001b[33mpost\u001b[39m\u001b[33m\"\u001b[39m, url=path, json_data=body, files=to_httpx_files(files), **options\n\u001b[32m   1313\u001b[39m     )\n\u001b[32m-> \u001b[39m\u001b[32m1314\u001b[39m     \u001b[38;5;28;01mreturn\u001b[39;00m cast(ResponseT, \u001b[38;5;28;43mself\u001b[39;49m\u001b[43m.\u001b[49m\u001b[43mrequest\u001b[49m\u001b[43m(\u001b[49m\u001b[43mcast_to\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mopts\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mstream\u001b[49m\u001b[43m=\u001b[49m\u001b[43mstream\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mstream_cls\u001b[49m\u001b[43m=\u001b[49m\u001b[43mstream_cls\u001b[49m\u001b[43m)\u001b[49m)\n",
+      "\u001b[36mFile \u001b[39m\u001b[32m~/src/agents/.venv/lib/python3.12/site-packages/anthropic/_base_client.py:1102\u001b[39m, in \u001b[36mSyncAPIClient.request\u001b[39m\u001b[34m(self, cast_to, options, stream, stream_cls)\u001b[39m\n\u001b[32m   1099\u001b[39m             err.response.read()\n\u001b[32m   1101\u001b[39m         log.debug(\u001b[33m\"\u001b[39m\u001b[33mRe-raising status error\u001b[39m\u001b[33m\"\u001b[39m)\n\u001b[32m-> \u001b[39m\u001b[32m1102\u001b[39m         \u001b[38;5;28;01mraise\u001b[39;00m \u001b[38;5;28mself\u001b[39m._make_status_error_from_response(err.response) \u001b[38;5;28;01mfrom\u001b[39;00m\u001b[38;5;250m \u001b[39m\u001b[38;5;28;01mNone\u001b[39;00m\n\u001b[32m   1104\u001b[39m     \u001b[38;5;28;01mbreak\u001b[39;00m\n\u001b[32m   1106\u001b[39m \u001b[38;5;28;01massert\u001b[39;00m response \u001b[38;5;129;01mis\u001b[39;00m \u001b[38;5;129;01mnot\u001b[39;00m \u001b[38;5;28;01mNone\u001b[39;00m, \u001b[33m\"\u001b[39m\u001b[33mcould not resolve response (should never happen)\u001b[39m\u001b[33m\"\u001b[39m\n",
+      "\u001b[31mBadRequestError\u001b[39m: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}}"
+     ]
+    }
+   ],
+   "source": [
+    "# Anthropic has a slightly different API, and Max Tokens is required\n",
+    "\n",
+    "model_name = \"claude-sonnet-4-latest\"\n",
+    "\n",
+    "claude = Anthropic()\n",
+    "response = claude.messages.create(model=model_name, messages=messages, max_tokens=1000)\n",
+    "answer = response.content[0].text\n",
+    "\n",
+    "display(Markdown(answer))\n",
+    "competitors.append(model_name)\n",
+    "answers.append(answer)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/markdown": [
+       "Resolving a conflict between two individuals with valid perspectives requires a delicate and structured approach that prioritizes understanding, empathy, and collaboration. Here's a breakdown of my approach and the strategies I would implement:\n",
+       "\n",
+       "**I. Preparation and Setting the Stage:**\n",
+       "\n",
+       "*   **Individual Pre-meetings (Highly Recommended):** Before bringing the individuals together, I would meet with each person separately. This allows me to:\n",
+       "    *   **Understand their perspective:** Listen attentively to their viewpoint without interruption, clarifying any ambiguities and identifying their key concerns and feelings.\n",
+       "    *   **Gauge their willingness to resolve the conflict:** Assess their commitment to finding a solution and identify any potential roadblocks.\n",
+       "    *   **Identify common ground (if any):** Look for areas of agreement or shared goals that can be leveraged later.\n",
+       "    *   **Establish ground rules:**  Explain the purpose of the meeting, emphasizing a focus on respectful communication and collaborative problem-solving.  Set clear expectations for behavior (e.g., no personal attacks, active listening, focusing on the issue).\n",
+       "    *   **Address any emotional intensity:**  If either individual is particularly agitated, I would help them regulate their emotions before proceeding.\n",
+       "*   **Choose a Neutral Setting:** Select a comfortable and private location where both parties feel safe and at ease. This could be a meeting room, office, or even a neutral common area.\n",
+       "*   **Establish Ground Rules & Objectives (if pre-meetings aren't possible):** If pre-meetings aren't possible due to time constraints or other reasons, begin the group meeting by establishing the ground rules and objectives. Emphasize the importance of respect, active listening, and finding a mutually agreeable solution.\n",
+       "\n",
+       "**II. Facilitating the Dialogue:**\n",
+       "\n",
+       "*   **Act as a Neutral Facilitator:** My role is to guide the conversation, not to take sides or impose a solution. I will remain impartial and focus on facilitating understanding and collaboration.\n",
+       "*   **Clarify the Issue:** Start by clearly defining the specific issue at the heart of the conflict. This helps to ensure that everyone is on the same page and avoids misinterpretations.  \"Okay, so it seems like the core disagreement revolves around [specific issue]. Is that an accurate summary?\"\n",
+       "*   **Active Listening:** This is paramount. I will:\n",
+       "    *   **Encourage each person to fully express their perspective:** Prompt them to share their thoughts, feelings, and concerns related to the issue. \"Tell me more about why this is important to you.\"\n",
+       "    *   **Use reflective listening techniques:**  Paraphrase and summarize what each person is saying to ensure I understand their viewpoint correctly.  \"So, if I'm understanding you correctly, you're saying that [paraphrased statement] because of [reason]. Is that accurate?\"\n",
+       "    *   **Acknowledge their emotions:** Validate their feelings without necessarily agreeing with their viewpoint. \"I understand that you're feeling frustrated/upset/concerned about this situation.\"\n",
+       "    *   **Encourage empathy:**  Prompt each person to try to see the situation from the other person's perspective. \"Can you try to understand why [other person] might feel this way?\" or \"What do you think [other person]'s concerns might be?\"\n",
+       "*   **Focus on Interests, Not Positions:** Help the individuals move beyond their stated positions and explore the underlying interests, needs, and motivations that are driving their perspectives.\n",
+       "    *   **Ask \"Why?\"** Dig deeper to uncover the reasons behind their positions. \"Why is that important to you?\" \"What are you hoping to achieve by doing that?\"\n",
+       "    *   **Reframe the Issue:** Reframe the conflict in terms of shared goals and mutual interests. \"Both of you want to achieve [shared goal]. How can we find a solution that helps both of you get there?\"\n",
+       "*   **Brainstorming Solutions:** Once both perspectives are understood, facilitate a brainstorming session to generate potential solutions.\n",
+       "    *   **Encourage creativity:**  Promote a judgment-free environment where all ideas are welcome.\n",
+       "    *   **Focus on generating options:** Aim for a wide range of potential solutions.\n",
+       "    *   **Build on each other's ideas:** Encourage the individuals to collaborate and build upon each other's suggestions.\n",
+       "*   **Evaluate Solutions:**  Once a list of potential solutions is generated, help the individuals evaluate each option based on its feasibility, effectiveness, and impact on their needs and interests.\n",
+       "    *   **Use objective criteria:**  Develop objective criteria to evaluate each solution.\n",
+       "    *   **Consider trade-offs:**  Recognize that some solutions may require compromises.\n",
+       "    *   **Focus on mutual gain:**  Aim for a solution that benefits both parties as much as possible.\n",
+       "\n",
+       "**III. Reaching an Agreement and Follow-up:**\n",
+       "\n",
+       "*   **Negotiation and Compromise:** Facilitate a negotiation process to reach a mutually acceptable agreement.\n",
+       "    *   **Encourage flexibility:**  Help the individuals be willing to make concessions.\n",
+       "    *   **Focus on win-win solutions:**  Aim for a solution that satisfies the needs of both parties.\n",
+       "*   **Document the Agreement:**  Clearly document the terms of the agreement in writing, including specific actions, timelines, and responsibilities. This helps to prevent misunderstandings and ensures accountability.\n",
+       "*   **Follow-Up:** Schedule a follow-up meeting to check in on the progress of the agreement and address any remaining concerns. This demonstrates a commitment to the resolution process and helps to ensure that the conflict is truly resolved.  \"Let's schedule a follow-up in two weeks to see how things are going and address any unforeseen issues.\"\n",
+       "*   **Acknowledge Their Effort:** Thank both individuals for their willingness to engage in the process and work towards a resolution.  Recognizing their efforts reinforces positive behavior and strengthens relationships.\n",
+       "\n",
+       "**Key Considerations:**\n",
+       "\n",
+       "*   **Power Dynamics:** Be mindful of any power imbalances between the individuals and take steps to ensure that both parties feel equally empowered to express their views.\n",
+       "*   **Emotional Intelligence:**  Demonstrate empathy, self-awareness, and social skills throughout the process.\n",
+       "*   **Patience:** Conflict resolution can be a time-consuming process. Be patient and persistent, and don't give up easily.\n",
+       "*   **Confidentiality:** Maintain confidentiality throughout the process to build trust and encourage open communication.\n",
+       "\n",
+       "**Example Scenario:**\n",
+       "\n",
+       "Imagine two colleagues, Alice and Bob, are in conflict about the best approach to a marketing campaign. Alice believes a data-driven, analytical approach is crucial, while Bob favors a more creative, emotionally resonant campaign.\n",
+       "\n",
+       "1.  **Pre-meetings:**  I would meet with Alice and Bob separately to understand their perspectives, concerns, and desired outcomes.\n",
+       "2.  **Joint Meeting:** I would then bring them together, outlining the ground rules: respect, active listening, and a focus on finding a mutually beneficial solution.\n",
+       "3.  **Clarifying the Issue:** \"Okay, it seems like the core disagreement is about the best way to approach this marketing campaign - whether to prioritize data analysis or creative storytelling. Is that a fair assessment?\"\n",
+       "4.  **Active Listening:** I would facilitate a discussion where Alice and Bob could explain their perspectives, using reflective listening to ensure understanding.\n",
+       "5.  **Exploring Interests:** \"Alice, you mentioned data is crucial. Why is that so important for this campaign?\" and \"Bob, you believe in creative storytelling. What kind of impact are you hoping to create with that?\"\n",
+       "6.  **Brainstorming:** We would brainstorm potential solutions. Perhaps a hybrid approach, using data to inform creative decisions, or running A/B testing to evaluate different campaign elements.\n",
+       "7.  **Evaluating and Negotiating:**  We would evaluate the feasibility of each solution, discussing the potential benefits and drawbacks, and working towards a mutually agreeable compromise.\n",
+       "8.  **Agreement and Follow-Up:**  We would document the agreed-upon approach and schedule a follow-up to assess its effectiveness.\n",
+       "\n",
+       "By following this structured approach, I aim to create a safe and supportive environment where individuals can constructively address their differences, build understanding, and reach a resolution that benefits everyone involved. This process is iterative, requiring flexibility and adaptability to the specific context of the conflict.\n"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "gemini = OpenAI(api_key=google_api_key, base_url=\"https://generativelanguage.googleapis.com/v1beta/openai/\")\n",
+    "model_name = \"gemini-2.0-flash\"\n",
+    "\n",
+    "response = gemini.chat.completions.create(model=model_name, messages=messages)\n",
+    "answer = response.choices[0].message.content\n",
+    "\n",
+    "display(Markdown(answer))\n",
+    "competitors.append(model_name)\n",
+    "answers.append(answer)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "deepseek = OpenAI(api_key=deepseek_api_key, base_url=\"https://api.deepseek.com/v1\")\n",
+    "model_name = \"deepseek-chat\"\n",
+    "\n",
+    "response = deepseek.chat.completions.create(model=model_name, messages=messages)\n",
+    "answer = response.choices[0].message.content\n",
+    "\n",
+    "display(Markdown(answer))\n",
+    "competitors.append(model_name)\n",
+    "answers.append(answer)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "groq = OpenAI(api_key=groq_api_key, base_url=\"https://api.groq.com/openai/v1\")\n",
+    "model_name = \"llama-3.3-70b-versatile\"\n",
+    "\n",
+    "response = groq.chat.completions.create(model=model_name, messages=messages)\n",
+    "answer = response.choices[0].message.content\n",
+    "\n",
+    "display(Markdown(answer))\n",
+    "competitors.append(model_name)\n",
+    "answers.append(answer)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## For the next cell, we will use Ollama\n",
+    "\n",
+    "Ollama runs a local web service that gives an OpenAI compatible endpoint,  \n",
+    "and runs models locally using high performance C++ code.\n",
+    "\n",
+    "If you don't have Ollama, install it here by visiting https://ollama.com then pressing Download and following the instructions.\n",
+    "\n",
+    "After it's installed, you should be able to visit here: http://localhost:11434 and see the message \"Ollama is running\"\n",
+    "\n",
+    "You might need to restart Cursor (and maybe reboot). Then open a Terminal (control+\\`) and run `ollama serve`\n",
+    "\n",
+    "Useful Ollama commands (run these in the terminal, or with an exclamation mark in this notebook):\n",
+    "\n",
+    "`ollama pull <model_name>` downloads a model locally  \n",
+    "`ollama ls` lists all the models you've downloaded  \n",
+    "`ollama rm <model_name>` deletes the specified model from your downloads"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "<table style=\"margin: 0; text-align: left; width:100%\">\n",
+    "    <tr>\n",
+    "        <td style=\"width: 150px; height: 150px; vertical-align: middle;\">\n",
+    "            <img src=\"../assets/stop.png\" width=\"150\" height=\"150\" style=\"display: block;\" />\n",
+    "        </td>\n",
+    "        <td>\n",
+    "            <h2 style=\"color:#ff7800;\">Super important - ignore me at your peril!</h2>\n",
+    "            <span style=\"color:#ff7800;\">The model called <b>llama3.3</b> is FAR too large for home computers - it's not intended for personal computing and will consume all your resources! Stick with the nicely sized <b>llama3.2</b> or <b>llama3.2:1b</b> and if you want larger, try llama3.1 or smaller variants of Qwen, Gemma, Phi or DeepSeek. See the <A href=\"https://ollama.com/models\">the Ollama models page</a> for a full list of models and sizes.\n",
+    "            </span>\n",
+    "        </td>\n",
+    "    </tr>\n",
+    "</table>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "!ollama pull llama3.2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/markdown": [
+       "What a great question!\n",
+       "\n",
+       "Resolving conflicts effectively requires empathy, active listening, and effective communication. Here's my approach to tackling a conflict where both parties have valid perspectives:\n",
+       "\n",
+       "**Understanding the situation**\n",
+       "\n",
+       "1. **Seek clarity**: Encourage each party to share their perspective, using \"I\" statements to describe how they feel and what they need. This helps create a safe space for open discussion.\n",
+       "2. **Identify common goals**: Establish a shared understanding of the desired outcome or goal. This grounds the conversation in constructive problem-solving rather than adversarial debate.\n",
+       "\n",
+       "**Listening actively**\n",
+       "\n",
+       "1. **Mirroring and summarizing**: Reflect back what you've heard from each person, using their own words. This ensures comprehension and helps prevent miscommunication.\n",
+       "2. **Paraphrasing and clarifying**: Ask questions to confirm your understanding and explore the reasoning behind each party's perspective.\n",
+       "\n",
+       "**Finding mutually beneficial solutions**\n",
+       "\n",
+       "1. **Seeking creative solutions**: Collaboratively brainstorm ideas that satisfy both parties' needs. Encourage wild, unconventional thinking!\n",
+       "2. **Identifying areas of agreement**: Highlight shared interests or values that can serve as a foundation for compromise.\n",
+       "3. **Exploring trade-offs**: Discuss the potential consequences of each approach and how they might impact the other party.\n",
+       "\n",
+       "**Facilitating constructive dialogue**\n",
+       "\n",
+       "1. **Establishing ground rules**: Set expectations for respectful communication, open-mindedness, and empathy.\n",
+       "2. **Encouraging non-judgmental feedback**: Foster a safe environment where parties feel comfortable providing constructive criticism without fear of retribution.\n",
+       "3. **Staying calm and composed**: As the facilitator or mediator, maintain emotional control to keep the conversation productive and focused.\n",
+       "\n",
+       "**Specific strategies for facilitating a constructive dialogue**\n",
+       "\n",
+       "1. **The BATHE framework**: Assess (B)the situation, Acknowledge (A) each party's perspective, Target (T) specific issues, Highlight (H) key points, and Empathize (E) with both parties.\n",
+       "2. **Solution-focused conversation**: Focus on finding solutions rather than dwelling on the problem or blame-shifting.\n",
+       "3. **Role-playing exercises**: Use scenario-based role-plays to help parties practice different communication styles and perspectives, promoting empathy and understanding.\n",
+       "\n",
+       "**Post-dialogue follow-up**\n",
+       "\n",
+       "1. **Summarize the agreement**: Document key takeaways and action items.\n",
+       "2. **Monitor progress**: Regularly check-in with both parties to ensure the agreed-upon solution remains effective.\n",
+       "3. **Learn from the experience**: Encourage the parties to reflect on what they learned, how they can improve their communication, and what changes they'll implement moving forward.\n",
+       "\n",
+       "By implementing these strategies, you'll create a conducive environment for constructive dialogue and increase the likelihood of finding mutually beneficial solutions that respect both parties' perspectives."
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "ollama = OpenAI(base_url='http://localhost:11434/v1', api_key='ollama')\n",
+    "model_name = \"llama3\"\n",
+    "\n",
+    "response = ollama.chat.completions.create(model=model_name, messages=messages)\n",
+    "answer = response.choices[0].message.content\n",
+    "\n",
+    "display(Markdown(answer))\n",
+    "competitors.append(model_name)\n",
+    "answers.append(answer)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['gpt-4o-mini', 'gemini-2.0-flash', 'llama3']\n",
+      "['Resolving conflict between individuals with valid but differing perspectives requires a thoughtful approach that fosters open communication, respect, and collaboration. Here’s how I would approach it:\\n\\n### Preparation\\n1. **Understand the Context**: Gather background information about the conflict and the individuals involved. This helps in understanding their perspectives and any underlying issues.\\n\\n2. **Set Ground Rules**: Establish a safe space for dialogue by agreeing on ground rules, such as respect for each speaker, no interruptions, and confidentiality.\\n\\n### Facilitation of Dialogue\\n1. **Arrange a Neutral Setting**: Choose an environment free from distractions and biases, where both parties feel comfortable expressing themselves.\\n\\n2. **Use Active Listening Techniques**:\\n   - **Reflective Listening**: Encourage each individual to paraphrase or summarize what the other has said to ensure accurate understanding.\\n   - **Nonverbal Cues**: Maintain eye contact, nod, and use other affirming body language to convey attentiveness.\\n\\n3. **Encourage Expression of Emotions**: Let each individual express their feelings about the conflict. Acknowledging emotions can help validate their experiences.\\n\\n4. **Focus on Interests, Not Positions**: Guide both parties to discuss their underlying interests and needs rather than just their positions. This often reveals common ground and areas for collaboration.\\n\\n### Structured Dialogue\\n1. **Use “I” Statements**: Encourage the use of “I” statements instead of “You” statements to express thoughts and feelings without placing blame. For example, “I feel overlooked when my ideas aren’t considered” instead of “You never listen to me.”\\n\\n2. **Identify Common Goals**: Help both parties recognize shared objectives or values. This can shift the focus from adversarial to collaborative.\\n\\n3. **Encourage Creative Solutions**: Facilitate brainstorming sessions where both individuals can propose solutions that satisfy both sets of interests. Aim for a win-win outcome.\\n\\n### Resolution and Follow-Up\\n1. **Summarize Agreements**: Once a resolution is reached, summarize the agreed-upon points clearly. Document this if possible to avoid misunderstandings.\\n\\n2. **Discuss Next Steps**: Ensure both parties understand their commitments moving forward and determine how to monitor the progress of the agreement.\\n\\n3. **Plan for Follow-Up**: Schedule a follow-up meeting to revisit the agreement and address any lingering issues or new conflicts.\\n\\n### Closing\\n1. **Express Appreciation**: Thank both parties for their willingness to engage in the dialogue. Recognizing their efforts demonstrates respect for their perspectives.\\n\\n2. **Encourage Continued Communication**: Foster an ongoing dialogue culture to address any future conflicts constructively.\\n\\nImplementing these strategies can create a constructive atmosphere for dialogue, ensuring that both parties feel heard, respected, and engaged in the resolution process.', 'Resolving a conflict between two individuals with valid perspectives requires a delicate and structured approach that prioritizes understanding, empathy, and collaboration. Here\\'s a breakdown of my approach and the strategies I would implement:\\n\\n**I. Preparation and Setting the Stage:**\\n\\n*   **Individual Pre-meetings (Highly Recommended):** Before bringing the individuals together, I would meet with each person separately. This allows me to:\\n    *   **Understand their perspective:** Listen attentively to their viewpoint without interruption, clarifying any ambiguities and identifying their key concerns and feelings.\\n    *   **Gauge their willingness to resolve the conflict:** Assess their commitment to finding a solution and identify any potential roadblocks.\\n    *   **Identify common ground (if any):** Look for areas of agreement or shared goals that can be leveraged later.\\n    *   **Establish ground rules:**  Explain the purpose of the meeting, emphasizing a focus on respectful communication and collaborative problem-solving.  Set clear expectations for behavior (e.g., no personal attacks, active listening, focusing on the issue).\\n    *   **Address any emotional intensity:**  If either individual is particularly agitated, I would help them regulate their emotions before proceeding.\\n*   **Choose a Neutral Setting:** Select a comfortable and private location where both parties feel safe and at ease. This could be a meeting room, office, or even a neutral common area.\\n*   **Establish Ground Rules & Objectives (if pre-meetings aren\\'t possible):** If pre-meetings aren\\'t possible due to time constraints or other reasons, begin the group meeting by establishing the ground rules and objectives. Emphasize the importance of respect, active listening, and finding a mutually agreeable solution.\\n\\n**II. Facilitating the Dialogue:**\\n\\n*   **Act as a Neutral Facilitator:** My role is to guide the conversation, not to take sides or impose a solution. I will remain impartial and focus on facilitating understanding and collaboration.\\n*   **Clarify the Issue:** Start by clearly defining the specific issue at the heart of the conflict. This helps to ensure that everyone is on the same page and avoids misinterpretations.  \"Okay, so it seems like the core disagreement revolves around [specific issue]. Is that an accurate summary?\"\\n*   **Active Listening:** This is paramount. I will:\\n    *   **Encourage each person to fully express their perspective:** Prompt them to share their thoughts, feelings, and concerns related to the issue. \"Tell me more about why this is important to you.\"\\n    *   **Use reflective listening techniques:**  Paraphrase and summarize what each person is saying to ensure I understand their viewpoint correctly.  \"So, if I\\'m understanding you correctly, you\\'re saying that [paraphrased statement] because of [reason]. Is that accurate?\"\\n    *   **Acknowledge their emotions:** Validate their feelings without necessarily agreeing with their viewpoint. \"I understand that you\\'re feeling frustrated/upset/concerned about this situation.\"\\n    *   **Encourage empathy:**  Prompt each person to try to see the situation from the other person\\'s perspective. \"Can you try to understand why [other person] might feel this way?\" or \"What do you think [other person]\\'s concerns might be?\"\\n*   **Focus on Interests, Not Positions:** Help the individuals move beyond their stated positions and explore the underlying interests, needs, and motivations that are driving their perspectives.\\n    *   **Ask \"Why?\"** Dig deeper to uncover the reasons behind their positions. \"Why is that important to you?\" \"What are you hoping to achieve by doing that?\"\\n    *   **Reframe the Issue:** Reframe the conflict in terms of shared goals and mutual interests. \"Both of you want to achieve [shared goal]. How can we find a solution that helps both of you get there?\"\\n*   **Brainstorming Solutions:** Once both perspectives are understood, facilitate a brainstorming session to generate potential solutions.\\n    *   **Encourage creativity:**  Promote a judgment-free environment where all ideas are welcome.\\n    *   **Focus on generating options:** Aim for a wide range of potential solutions.\\n    *   **Build on each other\\'s ideas:** Encourage the individuals to collaborate and build upon each other\\'s suggestions.\\n*   **Evaluate Solutions:**  Once a list of potential solutions is generated, help the individuals evaluate each option based on its feasibility, effectiveness, and impact on their needs and interests.\\n    *   **Use objective criteria:**  Develop objective criteria to evaluate each solution.\\n    *   **Consider trade-offs:**  Recognize that some solutions may require compromises.\\n    *   **Focus on mutual gain:**  Aim for a solution that benefits both parties as much as possible.\\n\\n**III. Reaching an Agreement and Follow-up:**\\n\\n*   **Negotiation and Compromise:** Facilitate a negotiation process to reach a mutually acceptable agreement.\\n    *   **Encourage flexibility:**  Help the individuals be willing to make concessions.\\n    *   **Focus on win-win solutions:**  Aim for a solution that satisfies the needs of both parties.\\n*   **Document the Agreement:**  Clearly document the terms of the agreement in writing, including specific actions, timelines, and responsibilities. This helps to prevent misunderstandings and ensures accountability.\\n*   **Follow-Up:** Schedule a follow-up meeting to check in on the progress of the agreement and address any remaining concerns. This demonstrates a commitment to the resolution process and helps to ensure that the conflict is truly resolved.  \"Let\\'s schedule a follow-up in two weeks to see how things are going and address any unforeseen issues.\"\\n*   **Acknowledge Their Effort:** Thank both individuals for their willingness to engage in the process and work towards a resolution.  Recognizing their efforts reinforces positive behavior and strengthens relationships.\\n\\n**Key Considerations:**\\n\\n*   **Power Dynamics:** Be mindful of any power imbalances between the individuals and take steps to ensure that both parties feel equally empowered to express their views.\\n*   **Emotional Intelligence:**  Demonstrate empathy, self-awareness, and social skills throughout the process.\\n*   **Patience:** Conflict resolution can be a time-consuming process. Be patient and persistent, and don\\'t give up easily.\\n*   **Confidentiality:** Maintain confidentiality throughout the process to build trust and encourage open communication.\\n\\n**Example Scenario:**\\n\\nImagine two colleagues, Alice and Bob, are in conflict about the best approach to a marketing campaign. Alice believes a data-driven, analytical approach is crucial, while Bob favors a more creative, emotionally resonant campaign.\\n\\n1.  **Pre-meetings:**  I would meet with Alice and Bob separately to understand their perspectives, concerns, and desired outcomes.\\n2.  **Joint Meeting:** I would then bring them together, outlining the ground rules: respect, active listening, and a focus on finding a mutually beneficial solution.\\n3.  **Clarifying the Issue:** \"Okay, it seems like the core disagreement is about the best way to approach this marketing campaign - whether to prioritize data analysis or creative storytelling. Is that a fair assessment?\"\\n4.  **Active Listening:** I would facilitate a discussion where Alice and Bob could explain their perspectives, using reflective listening to ensure understanding.\\n5.  **Exploring Interests:** \"Alice, you mentioned data is crucial. Why is that so important for this campaign?\" and \"Bob, you believe in creative storytelling. What kind of impact are you hoping to create with that?\"\\n6.  **Brainstorming:** We would brainstorm potential solutions. Perhaps a hybrid approach, using data to inform creative decisions, or running A/B testing to evaluate different campaign elements.\\n7.  **Evaluating and Negotiating:**  We would evaluate the feasibility of each solution, discussing the potential benefits and drawbacks, and working towards a mutually agreeable compromise.\\n8.  **Agreement and Follow-Up:**  We would document the agreed-upon approach and schedule a follow-up to assess its effectiveness.\\n\\nBy following this structured approach, I aim to create a safe and supportive environment where individuals can constructively address their differences, build understanding, and reach a resolution that benefits everyone involved. This process is iterative, requiring flexibility and adaptability to the specific context of the conflict.\\n', 'What a great question!\\n\\nResolving conflicts effectively requires empathy, active listening, and effective communication. Here\\'s my approach to tackling a conflict where both parties have valid perspectives:\\n\\n**Understanding the situation**\\n\\n1. **Seek clarity**: Encourage each party to share their perspective, using \"I\" statements to describe how they feel and what they need. This helps create a safe space for open discussion.\\n2. **Identify common goals**: Establish a shared understanding of the desired outcome or goal. This grounds the conversation in constructive problem-solving rather than adversarial debate.\\n\\n**Listening actively**\\n\\n1. **Mirroring and summarizing**: Reflect back what you\\'ve heard from each person, using their own words. This ensures comprehension and helps prevent miscommunication.\\n2. **Paraphrasing and clarifying**: Ask questions to confirm your understanding and explore the reasoning behind each party\\'s perspective.\\n\\n**Finding mutually beneficial solutions**\\n\\n1. **Seeking creative solutions**: Collaboratively brainstorm ideas that satisfy both parties\\' needs. Encourage wild, unconventional thinking!\\n2. **Identifying areas of agreement**: Highlight shared interests or values that can serve as a foundation for compromise.\\n3. **Exploring trade-offs**: Discuss the potential consequences of each approach and how they might impact the other party.\\n\\n**Facilitating constructive dialogue**\\n\\n1. **Establishing ground rules**: Set expectations for respectful communication, open-mindedness, and empathy.\\n2. **Encouraging non-judgmental feedback**: Foster a safe environment where parties feel comfortable providing constructive criticism without fear of retribution.\\n3. **Staying calm and composed**: As the facilitator or mediator, maintain emotional control to keep the conversation productive and focused.\\n\\n**Specific strategies for facilitating a constructive dialogue**\\n\\n1. **The BATHE framework**: Assess (B)the situation, Acknowledge (A) each party\\'s perspective, Target (T) specific issues, Highlight (H) key points, and Empathize (E) with both parties.\\n2. **Solution-focused conversation**: Focus on finding solutions rather than dwelling on the problem or blame-shifting.\\n3. **Role-playing exercises**: Use scenario-based role-plays to help parties practice different communication styles and perspectives, promoting empathy and understanding.\\n\\n**Post-dialogue follow-up**\\n\\n1. **Summarize the agreement**: Document key takeaways and action items.\\n2. **Monitor progress**: Regularly check-in with both parties to ensure the agreed-upon solution remains effective.\\n3. **Learn from the experience**: Encourage the parties to reflect on what they learned, how they can improve their communication, and what changes they\\'ll implement moving forward.\\n\\nBy implementing these strategies, you\\'ll create a conducive environment for constructive dialogue and increase the likelihood of finding mutually beneficial solutions that respect both parties\\' perspectives.']\n"
+     ]
+    }
+   ],
+   "source": [
+    "# So where are we?\n",
+    "\n",
+    "print(competitors)\n",
+    "print(answers)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Competitor: gpt-4o-mini\n",
+      "\n",
+      "Resolving conflict between individuals with valid but differing perspectives requires a thoughtful approach that fosters open communication, respect, and collaboration. Here’s how I would approach it:\n",
+      "\n",
+      "### Preparation\n",
+      "1. **Understand the Context**: Gather background information about the conflict and the individuals involved. This helps in understanding their perspectives and any underlying issues.\n",
+      "\n",
+      "2. **Set Ground Rules**: Establish a safe space for dialogue by agreeing on ground rules, such as respect for each speaker, no interruptions, and confidentiality.\n",
+      "\n",
+      "### Facilitation of Dialogue\n",
+      "1. **Arrange a Neutral Setting**: Choose an environment free from distractions and biases, where both parties feel comfortable expressing themselves.\n",
+      "\n",
+      "2. **Use Active Listening Techniques**:\n",
+      "   - **Reflective Listening**: Encourage each individual to paraphrase or summarize what the other has said to ensure accurate understanding.\n",
+      "   - **Nonverbal Cues**: Maintain eye contact, nod, and use other affirming body language to convey attentiveness.\n",
+      "\n",
+      "3. **Encourage Expression of Emotions**: Let each individual express their feelings about the conflict. Acknowledging emotions can help validate their experiences.\n",
+      "\n",
+      "4. **Focus on Interests, Not Positions**: Guide both parties to discuss their underlying interests and needs rather than just their positions. This often reveals common ground and areas for collaboration.\n",
+      "\n",
+      "### Structured Dialogue\n",
+      "1. **Use “I” Statements**: Encourage the use of “I” statements instead of “You” statements to express thoughts and feelings without placing blame. For example, “I feel overlooked when my ideas aren’t considered” instead of “You never listen to me.”\n",
+      "\n",
+      "2. **Identify Common Goals**: Help both parties recognize shared objectives or values. This can shift the focus from adversarial to collaborative.\n",
+      "\n",
+      "3. **Encourage Creative Solutions**: Facilitate brainstorming sessions where both individuals can propose solutions that satisfy both sets of interests. Aim for a win-win outcome.\n",
+      "\n",
+      "### Resolution and Follow-Up\n",
+      "1. **Summarize Agreements**: Once a resolution is reached, summarize the agreed-upon points clearly. Document this if possible to avoid misunderstandings.\n",
+      "\n",
+      "2. **Discuss Next Steps**: Ensure both parties understand their commitments moving forward and determine how to monitor the progress of the agreement.\n",
+      "\n",
+      "3. **Plan for Follow-Up**: Schedule a follow-up meeting to revisit the agreement and address any lingering issues or new conflicts.\n",
+      "\n",
+      "### Closing\n",
+      "1. **Express Appreciation**: Thank both parties for their willingness to engage in the dialogue. Recognizing their efforts demonstrates respect for their perspectives.\n",
+      "\n",
+      "2. **Encourage Continued Communication**: Foster an ongoing dialogue culture to address any future conflicts constructively.\n",
+      "\n",
+      "Implementing these strategies can create a constructive atmosphere for dialogue, ensuring that both parties feel heard, respected, and engaged in the resolution process.\n",
+      "Competitor: gemini-2.0-flash\n",
+      "\n",
+      "Resolving a conflict between two individuals with valid perspectives requires a delicate and structured approach that prioritizes understanding, empathy, and collaboration. Here's a breakdown of my approach and the strategies I would implement:\n",
+      "\n",
+      "**I. Preparation and Setting the Stage:**\n",
+      "\n",
+      "*   **Individual Pre-meetings (Highly Recommended):** Before bringing the individuals together, I would meet with each person separately. This allows me to:\n",
+      "    *   **Understand their perspective:** Listen attentively to their viewpoint without interruption, clarifying any ambiguities and identifying their key concerns and feelings.\n",
+      "    *   **Gauge their willingness to resolve the conflict:** Assess their commitment to finding a solution and identify any potential roadblocks.\n",
+      "    *   **Identify common ground (if any):** Look for areas of agreement or shared goals that can be leveraged later.\n",
+      "    *   **Establish ground rules:**  Explain the purpose of the meeting, emphasizing a focus on respectful communication and collaborative problem-solving.  Set clear expectations for behavior (e.g., no personal attacks, active listening, focusing on the issue).\n",
+      "    *   **Address any emotional intensity:**  If either individual is particularly agitated, I would help them regulate their emotions before proceeding.\n",
+      "*   **Choose a Neutral Setting:** Select a comfortable and private location where both parties feel safe and at ease. This could be a meeting room, office, or even a neutral common area.\n",
+      "*   **Establish Ground Rules & Objectives (if pre-meetings aren't possible):** If pre-meetings aren't possible due to time constraints or other reasons, begin the group meeting by establishing the ground rules and objectives. Emphasize the importance of respect, active listening, and finding a mutually agreeable solution.\n",
+      "\n",
+      "**II. Facilitating the Dialogue:**\n",
+      "\n",
+      "*   **Act as a Neutral Facilitator:** My role is to guide the conversation, not to take sides or impose a solution. I will remain impartial and focus on facilitating understanding and collaboration.\n",
+      "*   **Clarify the Issue:** Start by clearly defining the specific issue at the heart of the conflict. This helps to ensure that everyone is on the same page and avoids misinterpretations.  \"Okay, so it seems like the core disagreement revolves around [specific issue]. Is that an accurate summary?\"\n",
+      "*   **Active Listening:** This is paramount. I will:\n",
+      "    *   **Encourage each person to fully express their perspective:** Prompt them to share their thoughts, feelings, and concerns related to the issue. \"Tell me more about why this is important to you.\"\n",
+      "    *   **Use reflective listening techniques:**  Paraphrase and summarize what each person is saying to ensure I understand their viewpoint correctly.  \"So, if I'm understanding you correctly, you're saying that [paraphrased statement] because of [reason]. Is that accurate?\"\n",
+      "    *   **Acknowledge their emotions:** Validate their feelings without necessarily agreeing with their viewpoint. \"I understand that you're feeling frustrated/upset/concerned about this situation.\"\n",
+      "    *   **Encourage empathy:**  Prompt each person to try to see the situation from the other person's perspective. \"Can you try to understand why [other person] might feel this way?\" or \"What do you think [other person]'s concerns might be?\"\n",
+      "*   **Focus on Interests, Not Positions:** Help the individuals move beyond their stated positions and explore the underlying interests, needs, and motivations that are driving their perspectives.\n",
+      "    *   **Ask \"Why?\"** Dig deeper to uncover the reasons behind their positions. \"Why is that important to you?\" \"What are you hoping to achieve by doing that?\"\n",
+      "    *   **Reframe the Issue:** Reframe the conflict in terms of shared goals and mutual interests. \"Both of you want to achieve [shared goal]. How can we find a solution that helps both of you get there?\"\n",
+      "*   **Brainstorming Solutions:** Once both perspectives are understood, facilitate a brainstorming session to generate potential solutions.\n",
+      "    *   **Encourage creativity:**  Promote a judgment-free environment where all ideas are welcome.\n",
+      "    *   **Focus on generating options:** Aim for a wide range of potential solutions.\n",
+      "    *   **Build on each other's ideas:** Encourage the individuals to collaborate and build upon each other's suggestions.\n",
+      "*   **Evaluate Solutions:**  Once a list of potential solutions is generated, help the individuals evaluate each option based on its feasibility, effectiveness, and impact on their needs and interests.\n",
+      "    *   **Use objective criteria:**  Develop objective criteria to evaluate each solution.\n",
+      "    *   **Consider trade-offs:**  Recognize that some solutions may require compromises.\n",
+      "    *   **Focus on mutual gain:**  Aim for a solution that benefits both parties as much as possible.\n",
+      "\n",
+      "**III. Reaching an Agreement and Follow-up:**\n",
+      "\n",
+      "*   **Negotiation and Compromise:** Facilitate a negotiation process to reach a mutually acceptable agreement.\n",
+      "    *   **Encourage flexibility:**  Help the individuals be willing to make concessions.\n",
+      "    *   **Focus on win-win solutions:**  Aim for a solution that satisfies the needs of both parties.\n",
+      "*   **Document the Agreement:**  Clearly document the terms of the agreement in writing, including specific actions, timelines, and responsibilities. This helps to prevent misunderstandings and ensures accountability.\n",
+      "*   **Follow-Up:** Schedule a follow-up meeting to check in on the progress of the agreement and address any remaining concerns. This demonstrates a commitment to the resolution process and helps to ensure that the conflict is truly resolved.  \"Let's schedule a follow-up in two weeks to see how things are going and address any unforeseen issues.\"\n",
+      "*   **Acknowledge Their Effort:** Thank both individuals for their willingness to engage in the process and work towards a resolution.  Recognizing their efforts reinforces positive behavior and strengthens relationships.\n",
+      "\n",
+      "**Key Considerations:**\n",
+      "\n",
+      "*   **Power Dynamics:** Be mindful of any power imbalances between the individuals and take steps to ensure that both parties feel equally empowered to express their views.\n",
+      "*   **Emotional Intelligence:**  Demonstrate empathy, self-awareness, and social skills throughout the process.\n",
+      "*   **Patience:** Conflict resolution can be a time-consuming process. Be patient and persistent, and don't give up easily.\n",
+      "*   **Confidentiality:** Maintain confidentiality throughout the process to build trust and encourage open communication.\n",
+      "\n",
+      "**Example Scenario:**\n",
+      "\n",
+      "Imagine two colleagues, Alice and Bob, are in conflict about the best approach to a marketing campaign. Alice believes a data-driven, analytical approach is crucial, while Bob favors a more creative, emotionally resonant campaign.\n",
+      "\n",
+      "1.  **Pre-meetings:**  I would meet with Alice and Bob separately to understand their perspectives, concerns, and desired outcomes.\n",
+      "2.  **Joint Meeting:** I would then bring them together, outlining the ground rules: respect, active listening, and a focus on finding a mutually beneficial solution.\n",
+      "3.  **Clarifying the Issue:** \"Okay, it seems like the core disagreement is about the best way to approach this marketing campaign - whether to prioritize data analysis or creative storytelling. Is that a fair assessment?\"\n",
+      "4.  **Active Listening:** I would facilitate a discussion where Alice and Bob could explain their perspectives, using reflective listening to ensure understanding.\n",
+      "5.  **Exploring Interests:** \"Alice, you mentioned data is crucial. Why is that so important for this campaign?\" and \"Bob, you believe in creative storytelling. What kind of impact are you hoping to create with that?\"\n",
+      "6.  **Brainstorming:** We would brainstorm potential solutions. Perhaps a hybrid approach, using data to inform creative decisions, or running A/B testing to evaluate different campaign elements.\n",
+      "7.  **Evaluating and Negotiating:**  We would evaluate the feasibility of each solution, discussing the potential benefits and drawbacks, and working towards a mutually agreeable compromise.\n",
+      "8.  **Agreement and Follow-Up:**  We would document the agreed-upon approach and schedule a follow-up to assess its effectiveness.\n",
+      "\n",
+      "By following this structured approach, I aim to create a safe and supportive environment where individuals can constructively address their differences, build understanding, and reach a resolution that benefits everyone involved. This process is iterative, requiring flexibility and adaptability to the specific context of the conflict.\n",
+      "\n",
+      "Competitor: llama3\n",
+      "\n",
+      "What a great question!\n",
+      "\n",
+      "Resolving conflicts effectively requires empathy, active listening, and effective communication. Here's my approach to tackling a conflict where both parties have valid perspectives:\n",
+      "\n",
+      "**Understanding the situation**\n",
+      "\n",
+      "1. **Seek clarity**: Encourage each party to share their perspective, using \"I\" statements to describe how they feel and what they need. This helps create a safe space for open discussion.\n",
+      "2. **Identify common goals**: Establish a shared understanding of the desired outcome or goal. This grounds the conversation in constructive problem-solving rather than adversarial debate.\n",
+      "\n",
+      "**Listening actively**\n",
+      "\n",
+      "1. **Mirroring and summarizing**: Reflect back what you've heard from each person, using their own words. This ensures comprehension and helps prevent miscommunication.\n",
+      "2. **Paraphrasing and clarifying**: Ask questions to confirm your understanding and explore the reasoning behind each party's perspective.\n",
+      "\n",
+      "**Finding mutually beneficial solutions**\n",
+      "\n",
+      "1. **Seeking creative solutions**: Collaboratively brainstorm ideas that satisfy both parties' needs. Encourage wild, unconventional thinking!\n",
+      "2. **Identifying areas of agreement**: Highlight shared interests or values that can serve as a foundation for compromise.\n",
+      "3. **Exploring trade-offs**: Discuss the potential consequences of each approach and how they might impact the other party.\n",
+      "\n",
+      "**Facilitating constructive dialogue**\n",
+      "\n",
+      "1. **Establishing ground rules**: Set expectations for respectful communication, open-mindedness, and empathy.\n",
+      "2. **Encouraging non-judgmental feedback**: Foster a safe environment where parties feel comfortable providing constructive criticism without fear of retribution.\n",
+      "3. **Staying calm and composed**: As the facilitator or mediator, maintain emotional control to keep the conversation productive and focused.\n",
+      "\n",
+      "**Specific strategies for facilitating a constructive dialogue**\n",
+      "\n",
+      "1. **The BATHE framework**: Assess (B)the situation, Acknowledge (A) each party's perspective, Target (T) specific issues, Highlight (H) key points, and Empathize (E) with both parties.\n",
+      "2. **Solution-focused conversation**: Focus on finding solutions rather than dwelling on the problem or blame-shifting.\n",
+      "3. **Role-playing exercises**: Use scenario-based role-plays to help parties practice different communication styles and perspectives, promoting empathy and understanding.\n",
+      "\n",
+      "**Post-dialogue follow-up**\n",
+      "\n",
+      "1. **Summarize the agreement**: Document key takeaways and action items.\n",
+      "2. **Monitor progress**: Regularly check-in with both parties to ensure the agreed-upon solution remains effective.\n",
+      "3. **Learn from the experience**: Encourage the parties to reflect on what they learned, how they can improve their communication, and what changes they'll implement moving forward.\n",
+      "\n",
+      "By implementing these strategies, you'll create a conducive environment for constructive dialogue and increase the likelihood of finding mutually beneficial solutions that respect both parties' perspectives.\n"
+     ]
+    }
+   ],
+   "source": [
+    "# It's nice to know how to use \"zip\"\n",
+    "for competitor, answer in zip(competitors, answers):\n",
+    "    print(f\"Competitor: {competitor}\\n\\n{answer}\")\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/markdown": [
+       "# Competitor: gpt-4o-mini\n",
+       "\n",
+       "Resolving conflict between individuals with valid but differing perspectives requires a thoughtful approach that fosters open communication, respect, and collaboration. Here’s how I would approach it:\n",
+       "\n",
+       "### Preparation\n",
+       "1. **Understand the Context**: Gather background information about the conflict and the individuals involved. This helps in understanding their perspectives and any underlying issues.\n",
+       "\n",
+       "2. **Set Ground Rules**: Establish a safe space for dialogue by agreeing on ground rules, such as respect for each speaker, no interruptions, and confidentiality.\n",
+       "\n",
+       "### Facilitation of Dialogue\n",
+       "1. **Arrange a Neutral Setting**: Choose an environment free from distractions and biases, where both parties feel comfortable expressing themselves.\n",
+       "\n",
+       "2. **Use Active Listening Techniques**:\n",
+       "   - **Reflective Listening**: Encourage each individual to paraphrase or summarize what the other has said to ensure accurate understanding.\n",
+       "   - **Nonverbal Cues**: Maintain eye contact, nod, and use other affirming body language to convey attentiveness.\n",
+       "\n",
+       "3. **Encourage Expression of Emotions**: Let each individual express their feelings about the conflict. Acknowledging emotions can help validate their experiences.\n",
+       "\n",
+       "4. **Focus on Interests, Not Positions**: Guide both parties to discuss their underlying interests and needs rather than just their positions. This often reveals common ground and areas for collaboration.\n",
+       "\n",
+       "### Structured Dialogue\n",
+       "1. **Use “I” Statements**: Encourage the use of “I” statements instead of “You” statements to express thoughts and feelings without placing blame. For example, “I feel overlooked when my ideas aren’t considered” instead of “You never listen to me.”\n",
+       "\n",
+       "2. **Identify Common Goals**: Help both parties recognize shared objectives or values. This can shift the focus from adversarial to collaborative.\n",
+       "\n",
+       "3. **Encourage Creative Solutions**: Facilitate brainstorming sessions where both individuals can propose solutions that satisfy both sets of interests. Aim for a win-win outcome.\n",
+       "\n",
+       "### Resolution and Follow-Up\n",
+       "1. **Summarize Agreements**: Once a resolution is reached, summarize the agreed-upon points clearly. Document this if possible to avoid misunderstandings.\n",
+       "\n",
+       "2. **Discuss Next Steps**: Ensure both parties understand their commitments moving forward and determine how to monitor the progress of the agreement.\n",
+       "\n",
+       "3. **Plan for Follow-Up**: Schedule a follow-up meeting to revisit the agreement and address any lingering issues or new conflicts.\n",
+       "\n",
+       "### Closing\n",
+       "1. **Express Appreciation**: Thank both parties for their willingness to engage in the dialogue. Recognizing their efforts demonstrates respect for their perspectives.\n",
+       "\n",
+       "2. **Encourage Continued Communication**: Foster an ongoing dialogue culture to address any future conflicts constructively.\n",
+       "\n",
+       "Implementing these strategies can create a constructive atmosphere for dialogue, ensuring that both parties feel heard, respected, and engaged in the resolution process."
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "# Competitor: gemini-2.0-flash\n",
+       "\n",
+       "Resolving a conflict between two individuals with valid perspectives requires a delicate and structured approach that prioritizes understanding, empathy, and collaboration. Here's a breakdown of my approach and the strategies I would implement:\n",
+       "\n",
+       "**I. Preparation and Setting the Stage:**\n",
+       "\n",
+       "*   **Individual Pre-meetings (Highly Recommended):** Before bringing the individuals together, I would meet with each person separately. This allows me to:\n",
+       "    *   **Understand their perspective:** Listen attentively to their viewpoint without interruption, clarifying any ambiguities and identifying their key concerns and feelings.\n",
+       "    *   **Gauge their willingness to resolve the conflict:** Assess their commitment to finding a solution and identify any potential roadblocks.\n",
+       "    *   **Identify common ground (if any):** Look for areas of agreement or shared goals that can be leveraged later.\n",
+       "    *   **Establish ground rules:**  Explain the purpose of the meeting, emphasizing a focus on respectful communication and collaborative problem-solving.  Set clear expectations for behavior (e.g., no personal attacks, active listening, focusing on the issue).\n",
+       "    *   **Address any emotional intensity:**  If either individual is particularly agitated, I would help them regulate their emotions before proceeding.\n",
+       "*   **Choose a Neutral Setting:** Select a comfortable and private location where both parties feel safe and at ease. This could be a meeting room, office, or even a neutral common area.\n",
+       "*   **Establish Ground Rules & Objectives (if pre-meetings aren't possible):** If pre-meetings aren't possible due to time constraints or other reasons, begin the group meeting by establishing the ground rules and objectives. Emphasize the importance of respect, active listening, and finding a mutually agreeable solution.\n",
+       "\n",
+       "**II. Facilitating the Dialogue:**\n",
+       "\n",
+       "*   **Act as a Neutral Facilitator:** My role is to guide the conversation, not to take sides or impose a solution. I will remain impartial and focus on facilitating understanding and collaboration.\n",
+       "*   **Clarify the Issue:** Start by clearly defining the specific issue at the heart of the conflict. This helps to ensure that everyone is on the same page and avoids misinterpretations.  \"Okay, so it seems like the core disagreement revolves around [specific issue]. Is that an accurate summary?\"\n",
+       "*   **Active Listening:** This is paramount. I will:\n",
+       "    *   **Encourage each person to fully express their perspective:** Prompt them to share their thoughts, feelings, and concerns related to the issue. \"Tell me more about why this is important to you.\"\n",
+       "    *   **Use reflective listening techniques:**  Paraphrase and summarize what each person is saying to ensure I understand their viewpoint correctly.  \"So, if I'm understanding you correctly, you're saying that [paraphrased statement] because of [reason]. Is that accurate?\"\n",
+       "    *   **Acknowledge their emotions:** Validate their feelings without necessarily agreeing with their viewpoint. \"I understand that you're feeling frustrated/upset/concerned about this situation.\"\n",
+       "    *   **Encourage empathy:**  Prompt each person to try to see the situation from the other person's perspective. \"Can you try to understand why [other person] might feel this way?\" or \"What do you think [other person]'s concerns might be?\"\n",
+       "*   **Focus on Interests, Not Positions:** Help the individuals move beyond their stated positions and explore the underlying interests, needs, and motivations that are driving their perspectives.\n",
+       "    *   **Ask \"Why?\"** Dig deeper to uncover the reasons behind their positions. \"Why is that important to you?\" \"What are you hoping to achieve by doing that?\"\n",
+       "    *   **Reframe the Issue:** Reframe the conflict in terms of shared goals and mutual interests. \"Both of you want to achieve [shared goal]. How can we find a solution that helps both of you get there?\"\n",
+       "*   **Brainstorming Solutions:** Once both perspectives are understood, facilitate a brainstorming session to generate potential solutions.\n",
+       "    *   **Encourage creativity:**  Promote a judgment-free environment where all ideas are welcome.\n",
+       "    *   **Focus on generating options:** Aim for a wide range of potential solutions.\n",
+       "    *   **Build on each other's ideas:** Encourage the individuals to collaborate and build upon each other's suggestions.\n",
+       "*   **Evaluate Solutions:**  Once a list of potential solutions is generated, help the individuals evaluate each option based on its feasibility, effectiveness, and impact on their needs and interests.\n",
+       "    *   **Use objective criteria:**  Develop objective criteria to evaluate each solution.\n",
+       "    *   **Consider trade-offs:**  Recognize that some solutions may require compromises.\n",
+       "    *   **Focus on mutual gain:**  Aim for a solution that benefits both parties as much as possible.\n",
+       "\n",
+       "**III. Reaching an Agreement and Follow-up:**\n",
+       "\n",
+       "*   **Negotiation and Compromise:** Facilitate a negotiation process to reach a mutually acceptable agreement.\n",
+       "    *   **Encourage flexibility:**  Help the individuals be willing to make concessions.\n",
+       "    *   **Focus on win-win solutions:**  Aim for a solution that satisfies the needs of both parties.\n",
+       "*   **Document the Agreement:**  Clearly document the terms of the agreement in writing, including specific actions, timelines, and responsibilities. This helps to prevent misunderstandings and ensures accountability.\n",
+       "*   **Follow-Up:** Schedule a follow-up meeting to check in on the progress of the agreement and address any remaining concerns. This demonstrates a commitment to the resolution process and helps to ensure that the conflict is truly resolved.  \"Let's schedule a follow-up in two weeks to see how things are going and address any unforeseen issues.\"\n",
+       "*   **Acknowledge Their Effort:** Thank both individuals for their willingness to engage in the process and work towards a resolution.  Recognizing their efforts reinforces positive behavior and strengthens relationships.\n",
+       "\n",
+       "**Key Considerations:**\n",
+       "\n",
+       "*   **Power Dynamics:** Be mindful of any power imbalances between the individuals and take steps to ensure that both parties feel equally empowered to express their views.\n",
+       "*   **Emotional Intelligence:**  Demonstrate empathy, self-awareness, and social skills throughout the process.\n",
+       "*   **Patience:** Conflict resolution can be a time-consuming process. Be patient and persistent, and don't give up easily.\n",
+       "*   **Confidentiality:** Maintain confidentiality throughout the process to build trust and encourage open communication.\n",
+       "\n",
+       "**Example Scenario:**\n",
+       "\n",
+       "Imagine two colleagues, Alice and Bob, are in conflict about the best approach to a marketing campaign. Alice believes a data-driven, analytical approach is crucial, while Bob favors a more creative, emotionally resonant campaign.\n",
+       "\n",
+       "1.  **Pre-meetings:**  I would meet with Alice and Bob separately to understand their perspectives, concerns, and desired outcomes.\n",
+       "2.  **Joint Meeting:** I would then bring them together, outlining the ground rules: respect, active listening, and a focus on finding a mutually beneficial solution.\n",
+       "3.  **Clarifying the Issue:** \"Okay, it seems like the core disagreement is about the best way to approach this marketing campaign - whether to prioritize data analysis or creative storytelling. Is that a fair assessment?\"\n",
+       "4.  **Active Listening:** I would facilitate a discussion where Alice and Bob could explain their perspectives, using reflective listening to ensure understanding.\n",
+       "5.  **Exploring Interests:** \"Alice, you mentioned data is crucial. Why is that so important for this campaign?\" and \"Bob, you believe in creative storytelling. What kind of impact are you hoping to create with that?\"\n",
+       "6.  **Brainstorming:** We would brainstorm potential solutions. Perhaps a hybrid approach, using data to inform creative decisions, or running A/B testing to evaluate different campaign elements.\n",
+       "7.  **Evaluating and Negotiating:**  We would evaluate the feasibility of each solution, discussing the potential benefits and drawbacks, and working towards a mutually agreeable compromise.\n",
+       "8.  **Agreement and Follow-Up:**  We would document the agreed-upon approach and schedule a follow-up to assess its effectiveness.\n",
+       "\n",
+       "By following this structured approach, I aim to create a safe and supportive environment where individuals can constructively address their differences, build understanding, and reach a resolution that benefits everyone involved. This process is iterative, requiring flexibility and adaptability to the specific context of the conflict.\n"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "# Competitor: llama3\n",
+       "\n",
+       "What a great question!\n",
+       "\n",
+       "Resolving conflicts effectively requires empathy, active listening, and effective communication. Here's my approach to tackling a conflict where both parties have valid perspectives:\n",
+       "\n",
+       "**Understanding the situation**\n",
+       "\n",
+       "1. **Seek clarity**: Encourage each party to share their perspective, using \"I\" statements to describe how they feel and what they need. This helps create a safe space for open discussion.\n",
+       "2. **Identify common goals**: Establish a shared understanding of the desired outcome or goal. This grounds the conversation in constructive problem-solving rather than adversarial debate.\n",
+       "\n",
+       "**Listening actively**\n",
+       "\n",
+       "1. **Mirroring and summarizing**: Reflect back what you've heard from each person, using their own words. This ensures comprehension and helps prevent miscommunication.\n",
+       "2. **Paraphrasing and clarifying**: Ask questions to confirm your understanding and explore the reasoning behind each party's perspective.\n",
+       "\n",
+       "**Finding mutually beneficial solutions**\n",
+       "\n",
+       "1. **Seeking creative solutions**: Collaboratively brainstorm ideas that satisfy both parties' needs. Encourage wild, unconventional thinking!\n",
+       "2. **Identifying areas of agreement**: Highlight shared interests or values that can serve as a foundation for compromise.\n",
+       "3. **Exploring trade-offs**: Discuss the potential consequences of each approach and how they might impact the other party.\n",
+       "\n",
+       "**Facilitating constructive dialogue**\n",
+       "\n",
+       "1. **Establishing ground rules**: Set expectations for respectful communication, open-mindedness, and empathy.\n",
+       "2. **Encouraging non-judgmental feedback**: Foster a safe environment where parties feel comfortable providing constructive criticism without fear of retribution.\n",
+       "3. **Staying calm and composed**: As the facilitator or mediator, maintain emotional control to keep the conversation productive and focused.\n",
+       "\n",
+       "**Specific strategies for facilitating a constructive dialogue**\n",
+       "\n",
+       "1. **The BATHE framework**: Assess (B)the situation, Acknowledge (A) each party's perspective, Target (T) specific issues, Highlight (H) key points, and Empathize (E) with both parties.\n",
+       "2. **Solution-focused conversation**: Focus on finding solutions rather than dwelling on the problem or blame-shifting.\n",
+       "3. **Role-playing exercises**: Use scenario-based role-plays to help parties practice different communication styles and perspectives, promoting empathy and understanding.\n",
+       "\n",
+       "**Post-dialogue follow-up**\n",
+       "\n",
+       "1. **Summarize the agreement**: Document key takeaways and action items.\n",
+       "2. **Monitor progress**: Regularly check-in with both parties to ensure the agreed-upon solution remains effective.\n",
+       "3. **Learn from the experience**: Encourage the parties to reflect on what they learned, how they can improve their communication, and what changes they'll implement moving forward.\n",
+       "\n",
+       "By implementing these strategies, you'll create a conducive environment for constructive dialogue and increase the likelihood of finding mutually beneficial solutions that respect both parties' perspectives."
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "for competitor, answer in zip(competitors, answers):\n",
+    "    display(Markdown(f\"# Competitor: {competitor}\\n\\n{answer}\"))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Let's bring this together - note the use of \"enumerate\"\n",
+    "\n",
+    "together = \"\"\n",
+    "for index, answer in enumerate(answers):\n",
+    "    together += f\"# Response from competitor {index+1}\\n\\n\"\n",
+    "    together += answer + \"\\n\\n\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "# Response from competitor 1\n",
+      "\n",
+      "Resolving conflict between individuals with valid but differing perspectives requires a thoughtful approach that fosters open communication, respect, and collaboration. Here’s how I would approach it:\n",
+      "\n",
+      "### Preparation\n",
+      "1. **Understand the Context**: Gather background information about the conflict and the individuals involved. This helps in understanding their perspectives and any underlying issues.\n",
+      "\n",
+      "2. **Set Ground Rules**: Establish a safe space for dialogue by agreeing on ground rules, such as respect for each speaker, no interruptions, and confidentiality.\n",
+      "\n",
+      "### Facilitation of Dialogue\n",
+      "1. **Arrange a Neutral Setting**: Choose an environment free from distractions and biases, where both parties feel comfortable expressing themselves.\n",
+      "\n",
+      "2. **Use Active Listening Techniques**:\n",
+      "   - **Reflective Listening**: Encourage each individual to paraphrase or summarize what the other has said to ensure accurate understanding.\n",
+      "   - **Nonverbal Cues**: Maintain eye contact, nod, and use other affirming body language to convey attentiveness.\n",
+      "\n",
+      "3. **Encourage Expression of Emotions**: Let each individual express their feelings about the conflict. Acknowledging emotions can help validate their experiences.\n",
+      "\n",
+      "4. **Focus on Interests, Not Positions**: Guide both parties to discuss their underlying interests and needs rather than just their positions. This often reveals common ground and areas for collaboration.\n",
+      "\n",
+      "### Structured Dialogue\n",
+      "1. **Use “I” Statements**: Encourage the use of “I” statements instead of “You” statements to express thoughts and feelings without placing blame. For example, “I feel overlooked when my ideas aren’t considered” instead of “You never listen to me.”\n",
+      "\n",
+      "2. **Identify Common Goals**: Help both parties recognize shared objectives or values. This can shift the focus from adversarial to collaborative.\n",
+      "\n",
+      "3. **Encourage Creative Solutions**: Facilitate brainstorming sessions where both individuals can propose solutions that satisfy both sets of interests. Aim for a win-win outcome.\n",
+      "\n",
+      "### Resolution and Follow-Up\n",
+      "1. **Summarize Agreements**: Once a resolution is reached, summarize the agreed-upon points clearly. Document this if possible to avoid misunderstandings.\n",
+      "\n",
+      "2. **Discuss Next Steps**: Ensure both parties understand their commitments moving forward and determine how to monitor the progress of the agreement.\n",
+      "\n",
+      "3. **Plan for Follow-Up**: Schedule a follow-up meeting to revisit the agreement and address any lingering issues or new conflicts.\n",
+      "\n",
+      "### Closing\n",
+      "1. **Express Appreciation**: Thank both parties for their willingness to engage in the dialogue. Recognizing their efforts demonstrates respect for their perspectives.\n",
+      "\n",
+      "2. **Encourage Continued Communication**: Foster an ongoing dialogue culture to address any future conflicts constructively.\n",
+      "\n",
+      "Implementing these strategies can create a constructive atmosphere for dialogue, ensuring that both parties feel heard, respected, and engaged in the resolution process.\n",
+      "\n",
+      "# Response from competitor 2\n",
+      "\n",
+      "Resolving a conflict between two individuals with valid perspectives requires a delicate and structured approach that prioritizes understanding, empathy, and collaboration. Here's a breakdown of my approach and the strategies I would implement:\n",
+      "\n",
+      "**I. Preparation and Setting the Stage:**\n",
+      "\n",
+      "*   **Individual Pre-meetings (Highly Recommended):** Before bringing the individuals together, I would meet with each person separately. This allows me to:\n",
+      "    *   **Understand their perspective:** Listen attentively to their viewpoint without interruption, clarifying any ambiguities and identifying their key concerns and feelings.\n",
+      "    *   **Gauge their willingness to resolve the conflict:** Assess their commitment to finding a solution and identify any potential roadblocks.\n",
+      "    *   **Identify common ground (if any):** Look for areas of agreement or shared goals that can be leveraged later.\n",
+      "    *   **Establish ground rules:**  Explain the purpose of the meeting, emphasizing a focus on respectful communication and collaborative problem-solving.  Set clear expectations for behavior (e.g., no personal attacks, active listening, focusing on the issue).\n",
+      "    *   **Address any emotional intensity:**  If either individual is particularly agitated, I would help them regulate their emotions before proceeding.\n",
+      "*   **Choose a Neutral Setting:** Select a comfortable and private location where both parties feel safe and at ease. This could be a meeting room, office, or even a neutral common area.\n",
+      "*   **Establish Ground Rules & Objectives (if pre-meetings aren't possible):** If pre-meetings aren't possible due to time constraints or other reasons, begin the group meeting by establishing the ground rules and objectives. Emphasize the importance of respect, active listening, and finding a mutually agreeable solution.\n",
+      "\n",
+      "**II. Facilitating the Dialogue:**\n",
+      "\n",
+      "*   **Act as a Neutral Facilitator:** My role is to guide the conversation, not to take sides or impose a solution. I will remain impartial and focus on facilitating understanding and collaboration.\n",
+      "*   **Clarify the Issue:** Start by clearly defining the specific issue at the heart of the conflict. This helps to ensure that everyone is on the same page and avoids misinterpretations.  \"Okay, so it seems like the core disagreement revolves around [specific issue]. Is that an accurate summary?\"\n",
+      "*   **Active Listening:** This is paramount. I will:\n",
+      "    *   **Encourage each person to fully express their perspective:** Prompt them to share their thoughts, feelings, and concerns related to the issue. \"Tell me more about why this is important to you.\"\n",
+      "    *   **Use reflective listening techniques:**  Paraphrase and summarize what each person is saying to ensure I understand their viewpoint correctly.  \"So, if I'm understanding you correctly, you're saying that [paraphrased statement] because of [reason]. Is that accurate?\"\n",
+      "    *   **Acknowledge their emotions:** Validate their feelings without necessarily agreeing with their viewpoint. \"I understand that you're feeling frustrated/upset/concerned about this situation.\"\n",
+      "    *   **Encourage empathy:**  Prompt each person to try to see the situation from the other person's perspective. \"Can you try to understand why [other person] might feel this way?\" or \"What do you think [other person]'s concerns might be?\"\n",
+      "*   **Focus on Interests, Not Positions:** Help the individuals move beyond their stated positions and explore the underlying interests, needs, and motivations that are driving their perspectives.\n",
+      "    *   **Ask \"Why?\"** Dig deeper to uncover the reasons behind their positions. \"Why is that important to you?\" \"What are you hoping to achieve by doing that?\"\n",
+      "    *   **Reframe the Issue:** Reframe the conflict in terms of shared goals and mutual interests. \"Both of you want to achieve [shared goal]. How can we find a solution that helps both of you get there?\"\n",
+      "*   **Brainstorming Solutions:** Once both perspectives are understood, facilitate a brainstorming session to generate potential solutions.\n",
+      "    *   **Encourage creativity:**  Promote a judgment-free environment where all ideas are welcome.\n",
+      "    *   **Focus on generating options:** Aim for a wide range of potential solutions.\n",
+      "    *   **Build on each other's ideas:** Encourage the individuals to collaborate and build upon each other's suggestions.\n",
+      "*   **Evaluate Solutions:**  Once a list of potential solutions is generated, help the individuals evaluate each option based on its feasibility, effectiveness, and impact on their needs and interests.\n",
+      "    *   **Use objective criteria:**  Develop objective criteria to evaluate each solution.\n",
+      "    *   **Consider trade-offs:**  Recognize that some solutions may require compromises.\n",
+      "    *   **Focus on mutual gain:**  Aim for a solution that benefits both parties as much as possible.\n",
+      "\n",
+      "**III. Reaching an Agreement and Follow-up:**\n",
+      "\n",
+      "*   **Negotiation and Compromise:** Facilitate a negotiation process to reach a mutually acceptable agreement.\n",
+      "    *   **Encourage flexibility:**  Help the individuals be willing to make concessions.\n",
+      "    *   **Focus on win-win solutions:**  Aim for a solution that satisfies the needs of both parties.\n",
+      "*   **Document the Agreement:**  Clearly document the terms of the agreement in writing, including specific actions, timelines, and responsibilities. This helps to prevent misunderstandings and ensures accountability.\n",
+      "*   **Follow-Up:** Schedule a follow-up meeting to check in on the progress of the agreement and address any remaining concerns. This demonstrates a commitment to the resolution process and helps to ensure that the conflict is truly resolved.  \"Let's schedule a follow-up in two weeks to see how things are going and address any unforeseen issues.\"\n",
+      "*   **Acknowledge Their Effort:** Thank both individuals for their willingness to engage in the process and work towards a resolution.  Recognizing their efforts reinforces positive behavior and strengthens relationships.\n",
+      "\n",
+      "**Key Considerations:**\n",
+      "\n",
+      "*   **Power Dynamics:** Be mindful of any power imbalances between the individuals and take steps to ensure that both parties feel equally empowered to express their views.\n",
+      "*   **Emotional Intelligence:**  Demonstrate empathy, self-awareness, and social skills throughout the process.\n",
+      "*   **Patience:** Conflict resolution can be a time-consuming process. Be patient and persistent, and don't give up easily.\n",
+      "*   **Confidentiality:** Maintain confidentiality throughout the process to build trust and encourage open communication.\n",
+      "\n",
+      "**Example Scenario:**\n",
+      "\n",
+      "Imagine two colleagues, Alice and Bob, are in conflict about the best approach to a marketing campaign. Alice believes a data-driven, analytical approach is crucial, while Bob favors a more creative, emotionally resonant campaign.\n",
+      "\n",
+      "1.  **Pre-meetings:**  I would meet with Alice and Bob separately to understand their perspectives, concerns, and desired outcomes.\n",
+      "2.  **Joint Meeting:** I would then bring them together, outlining the ground rules: respect, active listening, and a focus on finding a mutually beneficial solution.\n",
+      "3.  **Clarifying the Issue:** \"Okay, it seems like the core disagreement is about the best way to approach this marketing campaign - whether to prioritize data analysis or creative storytelling. Is that a fair assessment?\"\n",
+      "4.  **Active Listening:** I would facilitate a discussion where Alice and Bob could explain their perspectives, using reflective listening to ensure understanding.\n",
+      "5.  **Exploring Interests:** \"Alice, you mentioned data is crucial. Why is that so important for this campaign?\" and \"Bob, you believe in creative storytelling. What kind of impact are you hoping to create with that?\"\n",
+      "6.  **Brainstorming:** We would brainstorm potential solutions. Perhaps a hybrid approach, using data to inform creative decisions, or running A/B testing to evaluate different campaign elements.\n",
+      "7.  **Evaluating and Negotiating:**  We would evaluate the feasibility of each solution, discussing the potential benefits and drawbacks, and working towards a mutually agreeable compromise.\n",
+      "8.  **Agreement and Follow-Up:**  We would document the agreed-upon approach and schedule a follow-up to assess its effectiveness.\n",
+      "\n",
+      "By following this structured approach, I aim to create a safe and supportive environment where individuals can constructively address their differences, build understanding, and reach a resolution that benefits everyone involved. This process is iterative, requiring flexibility and adaptability to the specific context of the conflict.\n",
+      "\n",
+      "\n",
+      "# Response from competitor 3\n",
+      "\n",
+      "What a great question!\n",
+      "\n",
+      "Resolving conflicts effectively requires empathy, active listening, and effective communication. Here's my approach to tackling a conflict where both parties have valid perspectives:\n",
+      "\n",
+      "**Understanding the situation**\n",
+      "\n",
+      "1. **Seek clarity**: Encourage each party to share their perspective, using \"I\" statements to describe how they feel and what they need. This helps create a safe space for open discussion.\n",
+      "2. **Identify common goals**: Establish a shared understanding of the desired outcome or goal. This grounds the conversation in constructive problem-solving rather than adversarial debate.\n",
+      "\n",
+      "**Listening actively**\n",
+      "\n",
+      "1. **Mirroring and summarizing**: Reflect back what you've heard from each person, using their own words. This ensures comprehension and helps prevent miscommunication.\n",
+      "2. **Paraphrasing and clarifying**: Ask questions to confirm your understanding and explore the reasoning behind each party's perspective.\n",
+      "\n",
+      "**Finding mutually beneficial solutions**\n",
+      "\n",
+      "1. **Seeking creative solutions**: Collaboratively brainstorm ideas that satisfy both parties' needs. Encourage wild, unconventional thinking!\n",
+      "2. **Identifying areas of agreement**: Highlight shared interests or values that can serve as a foundation for compromise.\n",
+      "3. **Exploring trade-offs**: Discuss the potential consequences of each approach and how they might impact the other party.\n",
+      "\n",
+      "**Facilitating constructive dialogue**\n",
+      "\n",
+      "1. **Establishing ground rules**: Set expectations for respectful communication, open-mindedness, and empathy.\n",
+      "2. **Encouraging non-judgmental feedback**: Foster a safe environment where parties feel comfortable providing constructive criticism without fear of retribution.\n",
+      "3. **Staying calm and composed**: As the facilitator or mediator, maintain emotional control to keep the conversation productive and focused.\n",
+      "\n",
+      "**Specific strategies for facilitating a constructive dialogue**\n",
+      "\n",
+      "1. **The BATHE framework**: Assess (B)the situation, Acknowledge (A) each party's perspective, Target (T) specific issues, Highlight (H) key points, and Empathize (E) with both parties.\n",
+      "2. **Solution-focused conversation**: Focus on finding solutions rather than dwelling on the problem or blame-shifting.\n",
+      "3. **Role-playing exercises**: Use scenario-based role-plays to help parties practice different communication styles and perspectives, promoting empathy and understanding.\n",
+      "\n",
+      "**Post-dialogue follow-up**\n",
+      "\n",
+      "1. **Summarize the agreement**: Document key takeaways and action items.\n",
+      "2. **Monitor progress**: Regularly check-in with both parties to ensure the agreed-upon solution remains effective.\n",
+      "3. **Learn from the experience**: Encourage the parties to reflect on what they learned, how they can improve their communication, and what changes they'll implement moving forward.\n",
+      "\n",
+      "By implementing these strategies, you'll create a conducive environment for constructive dialogue and increase the likelihood of finding mutually beneficial solutions that respect both parties' perspectives.\n",
+      "\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(together)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 53,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "evaluation_criteria = [\"Effectiveness in resolving the conflict\", \"Clarity of argument\", \"Creativity of solution\", \"Strength of argument\", \"conciseness\", \"applicability to a business context\"]\n",
+    "\n",
+    "judgements = []\n",
+    "\n",
+    "for evaluation_criterion in evaluation_criteria:\n",
+    "\n",
+    "  judgements.append (f\"\"\"You are judging a competition between {len(competitors)} competitors.\n",
+    "  Each model has been given this question:\n",
+    "\n",
+    "  {question}\n",
+    "\n",
+    "  Your job is to evaluate each response for {evaluation_criterion}, and rank them in order of best to worst.\n",
+    "  Respond with JSON, and only JSON, with the following format:\n",
+    "  {{\"results\": [\"best competitor number\", \"second best competitor number\", \"third best competitor number\", ...]}}\n",
+    "\n",
+    "  Here are the responses from each competitor:\n",
+    "\n",
+    "  {together}\n",
+    "\n",
+    "  Now respond with the JSON with the ranked order of the competitors, nothing else. Do not include markdown formatting or code blocks.\"\"\")\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 50,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "You are judging a competition between 3 competitors.\n",
+      "  Each model has been given this question:\n",
+      "\n",
+      "  How would you approach resolving a conflict between two individuals who both have valid perspectives, while ensuring that both parties feel heard and respected, and what specific strategies would you implement to facilitate a constructive dialogue?\n",
+      "\n",
+      "  Your job is to evaluate each response for Clarity of argument, and rank them in order of best to worst.\n",
+      "  Respond with JSON, and only JSON, with the following format:\n",
+      "  {\"results\": [\"best competitor number\", \"second best competitor number\", \"third best competitor number\", ...]}\n",
+      "\n",
+      "  Here are the responses from each competitor:\n",
+      "\n",
+      "  # Response from competitor 1\n",
+      "\n",
+      "Resolving conflict between individuals with valid but differing perspectives requires a thoughtful approach that fosters open communication, respect, and collaboration. Here’s how I would approach it:\n",
+      "\n",
+      "### Preparation\n",
+      "1. **Understand the Context**: Gather background information about the conflict and the individuals involved. This helps in understanding their perspectives and any underlying issues.\n",
+      "\n",
+      "2. **Set Ground Rules**: Establish a safe space for dialogue by agreeing on ground rules, such as respect for each speaker, no interruptions, and confidentiality.\n",
+      "\n",
+      "### Facilitation of Dialogue\n",
+      "1. **Arrange a Neutral Setting**: Choose an environment free from distractions and biases, where both parties feel comfortable expressing themselves.\n",
+      "\n",
+      "2. **Use Active Listening Techniques**:\n",
+      "   - **Reflective Listening**: Encourage each individual to paraphrase or summarize what the other has said to ensure accurate understanding.\n",
+      "   - **Nonverbal Cues**: Maintain eye contact, nod, and use other affirming body language to convey attentiveness.\n",
+      "\n",
+      "3. **Encourage Expression of Emotions**: Let each individual express their feelings about the conflict. Acknowledging emotions can help validate their experiences.\n",
+      "\n",
+      "4. **Focus on Interests, Not Positions**: Guide both parties to discuss their underlying interests and needs rather than just their positions. This often reveals common ground and areas for collaboration.\n",
+      "\n",
+      "### Structured Dialogue\n",
+      "1. **Use “I” Statements**: Encourage the use of “I” statements instead of “You” statements to express thoughts and feelings without placing blame. For example, “I feel overlooked when my ideas aren’t considered” instead of “You never listen to me.”\n",
+      "\n",
+      "2. **Identify Common Goals**: Help both parties recognize shared objectives or values. This can shift the focus from adversarial to collaborative.\n",
+      "\n",
+      "3. **Encourage Creative Solutions**: Facilitate brainstorming sessions where both individuals can propose solutions that satisfy both sets of interests. Aim for a win-win outcome.\n",
+      "\n",
+      "### Resolution and Follow-Up\n",
+      "1. **Summarize Agreements**: Once a resolution is reached, summarize the agreed-upon points clearly. Document this if possible to avoid misunderstandings.\n",
+      "\n",
+      "2. **Discuss Next Steps**: Ensure both parties understand their commitments moving forward and determine how to monitor the progress of the agreement.\n",
+      "\n",
+      "3. **Plan for Follow-Up**: Schedule a follow-up meeting to revisit the agreement and address any lingering issues or new conflicts.\n",
+      "\n",
+      "### Closing\n",
+      "1. **Express Appreciation**: Thank both parties for their willingness to engage in the dialogue. Recognizing their efforts demonstrates respect for their perspectives.\n",
+      "\n",
+      "2. **Encourage Continued Communication**: Foster an ongoing dialogue culture to address any future conflicts constructively.\n",
+      "\n",
+      "Implementing these strategies can create a constructive atmosphere for dialogue, ensuring that both parties feel heard, respected, and engaged in the resolution process.\n",
+      "\n",
+      "# Response from competitor 2\n",
+      "\n",
+      "Resolving a conflict between two individuals with valid perspectives requires a delicate and structured approach that prioritizes understanding, empathy, and collaboration. Here's a breakdown of my approach and the strategies I would implement:\n",
+      "\n",
+      "**I. Preparation and Setting the Stage:**\n",
+      "\n",
+      "*   **Individual Pre-meetings (Highly Recommended):** Before bringing the individuals together, I would meet with each person separately. This allows me to:\n",
+      "    *   **Understand their perspective:** Listen attentively to their viewpoint without interruption, clarifying any ambiguities and identifying their key concerns and feelings.\n",
+      "    *   **Gauge their willingness to resolve the conflict:** Assess their commitment to finding a solution and identify any potential roadblocks.\n",
+      "    *   **Identify common ground (if any):** Look for areas of agreement or shared goals that can be leveraged later.\n",
+      "    *   **Establish ground rules:**  Explain the purpose of the meeting, emphasizing a focus on respectful communication and collaborative problem-solving.  Set clear expectations for behavior (e.g., no personal attacks, active listening, focusing on the issue).\n",
+      "    *   **Address any emotional intensity:**  If either individual is particularly agitated, I would help them regulate their emotions before proceeding.\n",
+      "*   **Choose a Neutral Setting:** Select a comfortable and private location where both parties feel safe and at ease. This could be a meeting room, office, or even a neutral common area.\n",
+      "*   **Establish Ground Rules & Objectives (if pre-meetings aren't possible):** If pre-meetings aren't possible due to time constraints or other reasons, begin the group meeting by establishing the ground rules and objectives. Emphasize the importance of respect, active listening, and finding a mutually agreeable solution.\n",
+      "\n",
+      "**II. Facilitating the Dialogue:**\n",
+      "\n",
+      "*   **Act as a Neutral Facilitator:** My role is to guide the conversation, not to take sides or impose a solution. I will remain impartial and focus on facilitating understanding and collaboration.\n",
+      "*   **Clarify the Issue:** Start by clearly defining the specific issue at the heart of the conflict. This helps to ensure that everyone is on the same page and avoids misinterpretations.  \"Okay, so it seems like the core disagreement revolves around [specific issue]. Is that an accurate summary?\"\n",
+      "*   **Active Listening:** This is paramount. I will:\n",
+      "    *   **Encourage each person to fully express their perspective:** Prompt them to share their thoughts, feelings, and concerns related to the issue. \"Tell me more about why this is important to you.\"\n",
+      "    *   **Use reflective listening techniques:**  Paraphrase and summarize what each person is saying to ensure I understand their viewpoint correctly.  \"So, if I'm understanding you correctly, you're saying that [paraphrased statement] because of [reason]. Is that accurate?\"\n",
+      "    *   **Acknowledge their emotions:** Validate their feelings without necessarily agreeing with their viewpoint. \"I understand that you're feeling frustrated/upset/concerned about this situation.\"\n",
+      "    *   **Encourage empathy:**  Prompt each person to try to see the situation from the other person's perspective. \"Can you try to understand why [other person] might feel this way?\" or \"What do you think [other person]'s concerns might be?\"\n",
+      "*   **Focus on Interests, Not Positions:** Help the individuals move beyond their stated positions and explore the underlying interests, needs, and motivations that are driving their perspectives.\n",
+      "    *   **Ask \"Why?\"** Dig deeper to uncover the reasons behind their positions. \"Why is that important to you?\" \"What are you hoping to achieve by doing that?\"\n",
+      "    *   **Reframe the Issue:** Reframe the conflict in terms of shared goals and mutual interests. \"Both of you want to achieve [shared goal]. How can we find a solution that helps both of you get there?\"\n",
+      "*   **Brainstorming Solutions:** Once both perspectives are understood, facilitate a brainstorming session to generate potential solutions.\n",
+      "    *   **Encourage creativity:**  Promote a judgment-free environment where all ideas are welcome.\n",
+      "    *   **Focus on generating options:** Aim for a wide range of potential solutions.\n",
+      "    *   **Build on each other's ideas:** Encourage the individuals to collaborate and build upon each other's suggestions.\n",
+      "*   **Evaluate Solutions:**  Once a list of potential solutions is generated, help the individuals evaluate each option based on its feasibility, effectiveness, and impact on their needs and interests.\n",
+      "    *   **Use objective criteria:**  Develop objective criteria to evaluate each solution.\n",
+      "    *   **Consider trade-offs:**  Recognize that some solutions may require compromises.\n",
+      "    *   **Focus on mutual gain:**  Aim for a solution that benefits both parties as much as possible.\n",
+      "\n",
+      "**III. Reaching an Agreement and Follow-up:**\n",
+      "\n",
+      "*   **Negotiation and Compromise:** Facilitate a negotiation process to reach a mutually acceptable agreement.\n",
+      "    *   **Encourage flexibility:**  Help the individuals be willing to make concessions.\n",
+      "    *   **Focus on win-win solutions:**  Aim for a solution that satisfies the needs of both parties.\n",
+      "*   **Document the Agreement:**  Clearly document the terms of the agreement in writing, including specific actions, timelines, and responsibilities. This helps to prevent misunderstandings and ensures accountability.\n",
+      "*   **Follow-Up:** Schedule a follow-up meeting to check in on the progress of the agreement and address any remaining concerns. This demonstrates a commitment to the resolution process and helps to ensure that the conflict is truly resolved.  \"Let's schedule a follow-up in two weeks to see how things are going and address any unforeseen issues.\"\n",
+      "*   **Acknowledge Their Effort:** Thank both individuals for their willingness to engage in the process and work towards a resolution.  Recognizing their efforts reinforces positive behavior and strengthens relationships.\n",
+      "\n",
+      "**Key Considerations:**\n",
+      "\n",
+      "*   **Power Dynamics:** Be mindful of any power imbalances between the individuals and take steps to ensure that both parties feel equally empowered to express their views.\n",
+      "*   **Emotional Intelligence:**  Demonstrate empathy, self-awareness, and social skills throughout the process.\n",
+      "*   **Patience:** Conflict resolution can be a time-consuming process. Be patient and persistent, and don't give up easily.\n",
+      "*   **Confidentiality:** Maintain confidentiality throughout the process to build trust and encourage open communication.\n",
+      "\n",
+      "**Example Scenario:**\n",
+      "\n",
+      "Imagine two colleagues, Alice and Bob, are in conflict about the best approach to a marketing campaign. Alice believes a data-driven, analytical approach is crucial, while Bob favors a more creative, emotionally resonant campaign.\n",
+      "\n",
+      "1.  **Pre-meetings:**  I would meet with Alice and Bob separately to understand their perspectives, concerns, and desired outcomes.\n",
+      "2.  **Joint Meeting:** I would then bring them together, outlining the ground rules: respect, active listening, and a focus on finding a mutually beneficial solution.\n",
+      "3.  **Clarifying the Issue:** \"Okay, it seems like the core disagreement is about the best way to approach this marketing campaign - whether to prioritize data analysis or creative storytelling. Is that a fair assessment?\"\n",
+      "4.  **Active Listening:** I would facilitate a discussion where Alice and Bob could explain their perspectives, using reflective listening to ensure understanding.\n",
+      "5.  **Exploring Interests:** \"Alice, you mentioned data is crucial. Why is that so important for this campaign?\" and \"Bob, you believe in creative storytelling. What kind of impact are you hoping to create with that?\"\n",
+      "6.  **Brainstorming:** We would brainstorm potential solutions. Perhaps a hybrid approach, using data to inform creative decisions, or running A/B testing to evaluate different campaign elements.\n",
+      "7.  **Evaluating and Negotiating:**  We would evaluate the feasibility of each solution, discussing the potential benefits and drawbacks, and working towards a mutually agreeable compromise.\n",
+      "8.  **Agreement and Follow-Up:**  We would document the agreed-upon approach and schedule a follow-up to assess its effectiveness.\n",
+      "\n",
+      "By following this structured approach, I aim to create a safe and supportive environment where individuals can constructively address their differences, build understanding, and reach a resolution that benefits everyone involved. This process is iterative, requiring flexibility and adaptability to the specific context of the conflict.\n",
+      "\n",
+      "\n",
+      "# Response from competitor 3\n",
+      "\n",
+      "What a great question!\n",
+      "\n",
+      "Resolving conflicts effectively requires empathy, active listening, and effective communication. Here's my approach to tackling a conflict where both parties have valid perspectives:\n",
+      "\n",
+      "**Understanding the situation**\n",
+      "\n",
+      "1. **Seek clarity**: Encourage each party to share their perspective, using \"I\" statements to describe how they feel and what they need. This helps create a safe space for open discussion.\n",
+      "2. **Identify common goals**: Establish a shared understanding of the desired outcome or goal. This grounds the conversation in constructive problem-solving rather than adversarial debate.\n",
+      "\n",
+      "**Listening actively**\n",
+      "\n",
+      "1. **Mirroring and summarizing**: Reflect back what you've heard from each person, using their own words. This ensures comprehension and helps prevent miscommunication.\n",
+      "2. **Paraphrasing and clarifying**: Ask questions to confirm your understanding and explore the reasoning behind each party's perspective.\n",
+      "\n",
+      "**Finding mutually beneficial solutions**\n",
+      "\n",
+      "1. **Seeking creative solutions**: Collaboratively brainstorm ideas that satisfy both parties' needs. Encourage wild, unconventional thinking!\n",
+      "2. **Identifying areas of agreement**: Highlight shared interests or values that can serve as a foundation for compromise.\n",
+      "3. **Exploring trade-offs**: Discuss the potential consequences of each approach and how they might impact the other party.\n",
+      "\n",
+      "**Facilitating constructive dialogue**\n",
+      "\n",
+      "1. **Establishing ground rules**: Set expectations for respectful communication, open-mindedness, and empathy.\n",
+      "2. **Encouraging non-judgmental feedback**: Foster a safe environment where parties feel comfortable providing constructive criticism without fear of retribution.\n",
+      "3. **Staying calm and composed**: As the facilitator or mediator, maintain emotional control to keep the conversation productive and focused.\n",
+      "\n",
+      "**Specific strategies for facilitating a constructive dialogue**\n",
+      "\n",
+      "1. **The BATHE framework**: Assess (B)the situation, Acknowledge (A) each party's perspective, Target (T) specific issues, Highlight (H) key points, and Empathize (E) with both parties.\n",
+      "2. **Solution-focused conversation**: Focus on finding solutions rather than dwelling on the problem or blame-shifting.\n",
+      "3. **Role-playing exercises**: Use scenario-based role-plays to help parties practice different communication styles and perspectives, promoting empathy and understanding.\n",
+      "\n",
+      "**Post-dialogue follow-up**\n",
+      "\n",
+      "1. **Summarize the agreement**: Document key takeaways and action items.\n",
+      "2. **Monitor progress**: Regularly check-in with both parties to ensure the agreed-upon solution remains effective.\n",
+      "3. **Learn from the experience**: Encourage the parties to reflect on what they learned, how they can improve their communication, and what changes they'll implement moving forward.\n",
+      "\n",
+      "By implementing these strategies, you'll create a conducive environment for constructive dialogue and increase the likelihood of finding mutually beneficial solutions that respect both parties' perspectives.\n",
+      "\n",
+      "\n",
+      "\n",
+      "  Now respond with the JSON with the ranked order of the competitors, nothing else. Do not include markdown formatting or code blocks.\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(judgements[1])\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 62,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n",
+    "judge_messages = []\n",
+    "for judgement in judgements:\n",
+    "    judge_messages.append ([{\"role\": \"user\", \"content\": judgement}])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 63,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "{\"results\": [\"2\", \"1\", \"3\"]}\n",
+      "{\"results\": [\"2\", \"1\", \"3\"]}\n",
+      "{\"results\": [\"2\", \"1\", \"3\"]}\n",
+      "{\"results\": [\"2\", \"1\", \"3\"]}\n",
+      "{\"results\": [\"2\", \"1\", \"3\"]}\n",
+      "{\"results\": [\"2\", \"1\", \"3\"]}\n"
+     ]
+    }
+   ],
+   "source": [
+    "results = []\n",
+    "# Judgement time!\n",
+    "for judge_message in judge_messages:\n",
+    "  openai = OpenAI()\n",
+    "  response = openai.chat.completions.create(\n",
+    "    model=\"o3-mini\",\n",
+    "    messages=judge_message,\n",
+    "  )\n",
+    "  results.append (response.choices[0].message.content)\n",
+    "  print(results[0])\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 64,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "{\"results\": [\"2\", \"1\", \"3\"]}\n",
+      "{\"results\": [\"2\", \"1\", \"3\"]}\n",
+      "{\"results\": [\"3\", \"2\", \"1\"]}\n",
+      "{\"results\": [\"2\", \"1\", \"3\"]}\n",
+      "{\"results\": [\"3\", \"1\", \"2\"]}\n",
+      "{\"results\": [\"2\", \"1\", \"3\"]}\n"
+     ]
+    }
+   ],
+   "source": [
+    "for result in results:\n",
+    "  print(result)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 67,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/markdown": [
+       "### Effectiveness in resolving the conflict"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 1: gemini-2.0-flash"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 2: gpt-4o-mini"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 3: llama3"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "### Clarity of argument"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 1: gemini-2.0-flash"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 2: gpt-4o-mini"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 3: llama3"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "### Creativity of solution"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 1: llama3"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 2: gemini-2.0-flash"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 3: gpt-4o-mini"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "### Strength of argument"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 1: gemini-2.0-flash"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 2: gpt-4o-mini"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 3: llama3"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "### conciseness"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 1: llama3"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 2: gpt-4o-mini"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 3: gemini-2.0-flash"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "### applicability to a business context"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 1: gemini-2.0-flash"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 2: gpt-4o-mini"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "Rank 3: llama3"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "# OK let's turn this into results!\n",
+    "\n",
+    "for result, evaluation_criterion in zip(results, evaluation_criteria):\n",
+    "    results_dict = json.loads(result)\n",
+    "    ranks = results_dict[\"results\"]\n",
+    "    display(Markdown(f\"### {evaluation_criterion}\"))\n",
+    "    for index, result in enumerate(ranks):\n",
+    "        competitor = competitors[int(result)-1]    \n",
+    "        display(Markdown(f\"Rank {index+1}: {competitor}\"))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "<table style=\"margin: 0; text-align: left; width:100%\">\n",
+    "    <tr>\n",
+    "        <td style=\"width: 150px; height: 150px; vertical-align: middle;\">\n",
+    "            <img src=\"../assets/exercise.png\" width=\"150\" height=\"150\" style=\"display: block;\" />\n",
+    "        </td>\n",
+    "        <td>\n",
+    "            <h2 style=\"color:#ff7800;\">Exercise</h2>\n",
+    "            <span style=\"color:#ff7800;\">Which pattern(s) did this use? Try updating this to add another Agentic design pattern.\n",
+    "            </span>\n",
+    "        </td>\n",
+    "    </tr>\n",
+    "</table>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "<table style=\"margin: 0; text-align: left; width:100%\">\n",
+    "    <tr>\n",
+    "        <td style=\"width: 150px; height: 150px; vertical-align: middle;\">\n",
+    "            <img src=\"../assets/business.png\" width=\"150\" height=\"150\" style=\"display: block;\" />\n",
+    "        </td>\n",
+    "        <td>\n",
+    "            <h2 style=\"color:#00bfff;\">Commercial implications</h2>\n",
+    "            <span style=\"color:#00bfff;\">These kinds of patterns - to send a task to multiple models, and evaluate results,\n",
+    "            are common where you need to improve the quality of your LLM response. This approach can be universally applied\n",
+    "            to business projects where accuracy is critical.\n",
+    "            </span>\n",
+    "        </td>\n",
+    "    </tr>\n",
+    "</table>"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": ".venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.10"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
