@@ -1,0 +1,22 @@
+[project]
+name = "engineering_team_using_flow"
+version = "0.1.0"
+description = "engineering_team_using_flow using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=0.140.0,<1.0.0",
+    "gradio>=5.38.0",
+]
+
+[project.scripts]
+kickoff = "engineering_team_using_flow.main:kickoff"
+run_crew = "engineering_team_using_flow.main:kickoff"
+plot = "engineering_team_using_flow.main:plot"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "flow"
