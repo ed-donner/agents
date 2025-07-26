@@ -34,10 +34,10 @@ class ResearchManager:
                 follow_up_questions=report.follow_up_questions,
                 markdown_report=improved.improved_markdown_report
             )
-            yield "Report written, sending email..."
-            await self.send_email(improved_report)
-            yield "Email sent, research complete"
-            yield report.markdown_report
+            yield "Report written" # , sending email...
+            # await self.send_email(improved_report)
+            yield "Research complete" # Email sent, 
+            # yield report.markdown_report
             yield improved_report.markdown_report
 
     async def get_clarifying_questions(self, query: str) -> list[str]:
