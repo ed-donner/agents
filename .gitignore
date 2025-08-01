@@ -181,3 +181,18 @@ cython_debug/
 # Ignore Accounts database in capstone project
 6_mcp/accounts.db
 6_mcp/memory/*.db
+
+# Ignore below files
+1_foundations/1_lab1.ipynb
+1_foundations/2_lab2.ipynb
+1_foundations/3_lab3.ipynb
+1_foundations/4_lab4.ipynb
+1_foundations/Chatbot.ipynb
+1_foundations/*.ipynb
+2_openai/
+3_crew/
+4_langgraph/
+5_autogen/
+6_mcp/
+guides/
+setup/
