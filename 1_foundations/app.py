@@ -131,4 +131,14 @@ If the user is engaging in discussion, try to steer them towards getting in touc
 if __name__ == "__main__":
     me = Me()
     gr.ChatInterface(me.chat, type="messages").launch()
+    gr.ChatInterface(
+        me.chat,
+        type="messages",
+        chatbot=gr.Chatbot(
+            value=[{"role": "assistant", "content": "Hello! How can I assist you today? If you have any questions about my background, skills, or experience, feel free to ask"}],
+            label="Chat",
+            height=400,
+            type="messages"
+        )
+    ).launch()
     
