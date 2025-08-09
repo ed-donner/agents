@@ -9,15 +9,17 @@ import gradio as gr
 
 load_dotenv(override=True)
 
-def push(text):
-    requests.post(
-        "https://api.pushover.net/1/messages.json",
-        data={
-            "token": os.getenv("PUSHOVER_TOKEN"),
-            "user": os.getenv("PUSHOVER_USER"),
-            "message": text,
-        }
-    )
+discord_webhook_url = os.getenv("DISCORD_WEBHOOK_URL")
+
+if discord_webhook_url:
+    print(f"Discord webhook URL found and starts with {discord_webhook_url[0]}")
+else:
+    print("Discord webhook URL not found")
+
+def push(message):
+    print(f"Discord: {message}")
+    payload = {"content": message}
+    requests.post(discord_webhook_url, data=payload)
 
 
 def record_user_details(email, name="Name not provided", notes="not provided"):
