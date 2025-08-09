@@ -688,3 +688,7 @@ zipp==3.23.0
     # via importlib-metadata
 zstandard==0.23.0
     # via langsmith
+
+# Optional but recommended for SSL verification and environment handling
+certifi>=2024.2.2
+python-dotenv>=1.0.1
