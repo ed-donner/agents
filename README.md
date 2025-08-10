@@ -1,3 +1,9 @@
+---
+title: profile
+app_file: /home/mbhoge/agents/agents/1_foundations/app.py
+sdk: gradio
+sdk_version: 5.34.2
+---
 ## Master AI Agentic Engineering -  build autonomous AI Agents
 
 ### 6 week journey to code and deploy AI Agents with OpenAI Agents SDK, CrewAI, LangGraph, AutoGen and MCP
