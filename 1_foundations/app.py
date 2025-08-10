@@ -10,14 +10,23 @@ import gradio as gr
 load_dotenv(override=True)
 
 def push(text):
-    requests.post(
-        "https://api.pushover.net/1/messages.json",
-        data={
-            "token": os.getenv("PUSHOVER_TOKEN"),
-            "user": os.getenv("PUSHOVER_USER"),
-            "message": text,
-        }
-    )
+    try:
+        pushover_token = os.getenv("PUSHOVER_TOKEN")
+        pushover_user = os.getenv("PUSHOVER_USER")
+        
+        if pushover_token and pushover_user:
+            requests.post(
+                "https://api.pushover.net/1/messages.json",
+                data={
+                    "token": pushover_token,
+                    "user": pushover_user,
+                    "message": text,
+                }
+            )
+        else:
+            print(f"Push notification not sent - missing credentials: {text}")
+    except Exception as e:
+        print(f"Error sending push notification: {e}")
 
 
 def record_user_details(email, name="Name not provided", notes="not provided"):
@@ -78,18 +87,34 @@ class Me:
     def __init__(self):
         self.openai = OpenAI()
         self.name = "Manish Bhoge"
-        # Read both PDF files and concatenate their text into self.linkedin
-        reader1 = PdfReader("me/profile.pdf")
-        reader2 = PdfReader("me/Manish_Bhoge_v0.1.pdf")
-        self.linkedin = ""
-        for reader in [reader1, reader2]:
-            for page in reader.pages:
-                text = page.extract_text()
-                if text:
-                    self.linkedin += text
         
-        with open("me/summary.txt", "r", encoding="utf-8") as f:
-            self.summary = f.read()
+        # Initialize with fallback content
+        self.linkedin = "Manish Bhoge's LinkedIn Profile"
+        self.summary = ""
+        
+        # Try to read PDF files, but handle missing files gracefully
+        try:
+            reader1 = PdfReader("me/profile.pdf")
+            reader2 = PdfReader("me/Manish_Bhoge_v0.1.pdf")
+            
+            for reader in [reader1, reader2]:
+                for page in reader.pages:
+                    text = page.extract_text()
+                    if text:
+                        self.linkedin += text
+        except Exception as e:
+            print(f"Warning: Could not read PDF files: {e}")
+            # Add fallback content
+            self.linkedin += "\n\nManish Bhoge is a software engineer and data scientist with experience in AI and machine learning."
+        
+        # Try to read summary file, but handle missing file gracefully
+        try:
+            with open("me/summary.txt", "r", encoding="utf-8") as f:
+                self.summary = f.read()
+        except Exception as e:
+            print(f"Warning: Could not read summary.txt: {e}")
+            # Add fallback content
+            self.summary = "My name is Manish Bhoge. I'm an entrepreneur, software engineer and data scientist."
 
 
     def handle_tool_call(self, tool_calls):
@@ -117,22 +142,29 @@ If the user is engaging in discussion, try to steer them towards getting in touc
         return system_prompt
     
     def chat(self, message, history):
-        messages = [{"role": "system", "content": self.system_prompt()}] + history + [{"role": "user", "content": message}]
-        done = False
-        while not done:
-            response = self.openai.chat.completions.create(model="gpt-4o-mini", messages=messages, tools=tools)
-            if response.choices[0].finish_reason=="tool_calls":
-                message = response.choices[0].message
-                tool_calls = message.tool_calls
-                results = self.handle_tool_call(tool_calls)
-                messages.append(message)
-                messages.extend(results)
-            else:
-                done = True
-        return response.choices[0].message.content
+        try:
+            messages = [{"role": "system", "content": self.system_prompt()}] + history + [{"role": "user", "content": message}]
+            done = False
+            while not done:
+                response = self.openai.chat.completions.create(model="gpt-4o-mini", messages=messages, tools=tools)
+                if response.choices[0].finish_reason=="tool_calls":
+                    message = response.choices[0].message
+                    tool_calls = message.tool_calls
+                    results = self.handle_tool_call(tool_calls)
+                    messages.append(message)
+                    messages.extend(results)
+                else:
+                    done = True
+            return response.choices[0].message.content
+        except Exception as e:
+            print(f"Error in chat: {e}")
+            return f"I apologize, but I encountered an error: {str(e)}. Please try again later."
     
 
+# Create the Gradio interface for Hugging Face Spaces
+me = Me()
+demo = gr.ChatInterface(me.chat, type="messages")
+
 if __name__ == "__main__":
-    me = Me()
-    gr.ChatInterface(me.chat, type="messages").launch()
+    demo.launch()
     
