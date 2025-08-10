@@ -77,13 +77,17 @@ class Me:
 
     def __init__(self):
         self.openai = OpenAI()
-        self.name = "Ed Donner"
-        reader = PdfReader("me/linkedin.pdf")
+        self.name = "Manish Bhoge"
+        # Read both PDF files and concatenate their text into self.linkedin
+        reader1 = PdfReader("me/profile.pdf")
+        reader2 = PdfReader("me/Manish_Bhoge_v0.1.pdf")
         self.linkedin = ""
-        for page in reader.pages:
-            text = page.extract_text()
-            if text:
-                self.linkedin += text
+        for reader in [reader1, reader2]:
+            for page in reader.pages:
+                text = page.extract_text()
+                if text:
+                    self.linkedin += text
+        
         with open("me/summary.txt", "r", encoding="utf-8") as f:
             self.summary = f.read()
 
