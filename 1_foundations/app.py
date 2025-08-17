@@ -29,7 +29,7 @@ def record_unknown_question(question):
     return {"recorded": "ok"}
 
 def record_unfounded_response(question, response, missing_context):
-    push(f"Unfounded response detected - Q: {question} | A: {response} | Missing: {missing_context}")
+    push(f"Unfounded response detected - Q: {str(question)} | A: {str(response)} | Missing: {str(missing_context)}")
     return {"recorded": "ok"}
 
 record_user_details_json = {
