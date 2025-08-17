@@ -1,0 +1,44 @@
+find_trending_cryptos:
+  description: >
+    Find the top trending cryptocurrencies and projects in {market_focus} by searching 
+    the latest crypto news, DeFi updates, and market movements. Discover new projects 
+    not previously analyzed.
+  expected_output: >
+    A list of trending cryptocurrencies with their ticker symbols and reasons for trending
+  agent: crypto_news_analyst
+  output_file: output/trending_cryptos.json
+
+research_crypto_fundamentals:
+  description: >
+    Given trending cryptocurrencies, provide detailed technical and fundamental analysis 
+    including tokenomics, TVL, protocol mechanics, team background, and market position.
+  expected_output: >
+    Comprehensive research report analyzing each cryptocurrency's fundamentals and technology
+  agent: defi_researcher
+  context:
+    - find_trending_cryptos
+  output_file: output/crypto_research.json
+
+assess_crypto_risks:
+  description: >
+    Evaluate regulatory compliance, technical security, market volatility, and other risk 
+    factors for the researched cryptocurrencies.
+  expected_output: >
+    Risk assessment report with risk scores and mitigation strategies for each crypto
+  agent: risk_analyst
+  context:
+    - research_crypto_fundamentals
+  output_file: output/risk_assessment.json
+
+select_crypto_investment:
+  description: >
+    Analyze all research and risk assessments to select the best cryptocurrency for investment.
+    Send push notification with decision and rationale. Provide detailed investment thesis.
+  expected_output: >
+    Selected cryptocurrency with detailed investment thesis and explanation of why 
+    other options were not chosen
+  agent: portfolio_manager
+  context:
+    - research_crypto_fundamentals
+    - assess_crypto_risks
+  output_file: output/investment_decision.md
