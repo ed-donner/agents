@@ -210,14 +210,17 @@ If the user is engaging in discussion, try to steer them towards getting in touc
         
         # Evaluate the response
         evaluation = self.evaluate_response(message, final_response)
+        print(f"Evaluation result: {evaluation}")  # Debug print
         
         # If response is not grounded, record it and potentially modify the response
         if not evaluation.get("is_grounded", True):
-            # Record the unfounded response
-            self.openai.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[{"role": "user", "content": f"Record this unfounded response: Q: {message}, A: {final_response}, Missing: {evaluation.get('missing_context', '')}"}],
-                tools=[{"type": "function", "function": record_unfounded_response_json}]
+            print(f"Unfounded response detected: {evaluation}")  # Debug print
+            
+            # Record the unfounded response directly
+            record_unfounded_response(
+                question=message,
+                response=final_response,
+                missing_context=evaluation.get('missing_context', 'Unknown')
             )
             
             # Optionally modify the response to be more honest
