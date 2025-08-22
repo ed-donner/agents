@@ -126,15 +126,9 @@ class FinanceCopilotApp:
         
         test_notification_btn.click(fn=self.test_notification, outputs=[])
         
-        auto_refresh_btn.click(fn=self.load_initial_data, outputs=[
-            self.available_functions_output,    # Available Functions
-            self.agent_status_output,           # Agent Status
-            self.portfolio_table,               # Portfolio Table
-            self.portfolio_charts_output,       # Portfolio Charts
-            self.market_summary_output,         # Market Summary
-            self.portfolio_summary_output,      # Portfolio Summary
-            self.alerts_table,                  # Alerts Table
-            self.notification_status_output     # Notification Status
+        auto_refresh_btn.click(fn=self.refresh_dashboard, outputs=[
+            self.market_summary_output,
+            self.portfolio_summary_output
         ])
         
         # Auto-refresh dashboard data every 60 seconds
@@ -172,7 +166,10 @@ class FinanceCopilotApp:
                 )
                 
                 gr.HTML("<h3>Portfolio Charts</h3>")
-                self.portfolio_charts_output = gr.Plot(label="Portfolio Charts")
+                self.portfolio_charts_output = gr.Plot(label="Portfolio Allocation")
+                
+                gr.HTML("<h3>Portfolio Performance</h3>")
+                self.portfolio_performance_chart = gr.Plot(label="Performance Chart")
                 
                 refresh_portfolio_btn = gr.Button("🔄 Refresh Portfolio")
         
@@ -180,18 +177,18 @@ class FinanceCopilotApp:
         add_btn.click(
             fn=self.add_portfolio_item,
             inputs=[symbol_input, shares_input, price_input, date_input],
-            outputs=[self.portfolio_table, self.portfolio_charts_output]
+            outputs=[self.portfolio_table, self.portfolio_charts_output, self.portfolio_performance_chart]
         )
         
         update_btn.click(
             fn=self.update_portfolio_item,
             inputs=[update_symbol, update_shares, update_price, transaction_type],
-            outputs=[self.portfolio_table, self.portfolio_charts_output]
+            outputs=[self.portfolio_table, self.portfolio_charts_output, self.portfolio_performance_chart]
         )
         
         refresh_portfolio_btn.click(
             fn=self.refresh_portfolio,
-            outputs=[self.portfolio_table, self.portfolio_charts_output]
+            outputs=[self.portfolio_table, self.portfolio_charts_output, self.portfolio_performance_chart]
         )
         
         # Auto-refresh portfolio data every 60 seconds
@@ -410,33 +407,41 @@ class FinanceCopilotApp:
             outputs=[self.agent_status_output]
         )
         
-        refresh_all_btn.click(fn=self.load_initial_data, outputs=[
+        refresh_all_btn.click(fn=self.refresh_ai_assistant_data, outputs=[
             self.available_functions_output,    # Available Functions
-            self.agent_status_output,           # Agent Status
-            self.portfolio_table,               # Portfolio Table
-            self.portfolio_charts_output,       # Portfolio Charts
-            self.market_summary_output,         # Market Summary
-            self.portfolio_summary_output,      # Portfolio Summary
-            self.alerts_table,                  # Alerts Table
-            self.notification_status_output     # Notification Status
+            self.agent_status_output            # Agent Status
         ])
         
         # Auto-refresh data every 30 seconds
         # Note: Using manual refresh for now due to Gradio version compatibility
         
-        # Initial data load - use delayed loading for reliability
-        import threading
-        import time
-        def delayed_load():
-            time.sleep(3)  # Wait 3 seconds for app to fully load
-            try:
-                # Just call the method to trigger data loading
-                # The UI will be updated when users click refresh buttons
-                self.load_initial_data()
-                print("✅ Delayed data load completed - use refresh buttons to see data")
-            except Exception as e:
-                print(f"❌ Delayed data load failed: {str(e)}")
-        threading.Thread(target=delayed_load, daemon=True).start()
+        # Set initial default values
+        try:
+            # Load available functions
+            functions = self.ai_agent.get_available_functions()
+            functions_table = []
+            for func in functions[:5]:  # Show first 5 functions
+                functions_table.append([func.get('name', 'Unknown'), func.get('description', 'No description')])
+            
+            # Load agent status
+            status = self.ai_agent.get_agent_status()
+            status_table = []
+            for key, value in status.items():
+                if isinstance(value, bool):
+                    status_text = "✅ Active" if value else "❌ Inactive"
+                else:
+                    status_text = str(value)
+                key_name = key.replace('_', ' ').title()
+                status_table.append([key_name, status_text])
+            
+            # Set initial values
+            self.available_functions_output.value = functions_table
+            self.agent_status_output.value = status_table
+            
+            print("✅ AI Assistant tab setup complete with initial data")
+        except Exception as e:
+            print(f"⚠️  AI Assistant initialization warning: {str(e)}")
+            print("✅ AI Assistant tab setup complete - use refresh buttons to load data")
     
     def setup_settings_tab(self):
         """Setup the settings tab"""
@@ -618,16 +623,37 @@ class FinanceCopilotApp:
                         )
                         
                         charts_data = fig
+                        
+                        # Create performance bar chart
+                        performance_fig = px.bar(
+                            df,
+                            x='Symbol',
+                            y='Value',
+                            title='Portfolio Holdings by Value',
+                            color='Symbol'
+                        )
+                        
+                        performance_fig.update_layout(
+                            height=400,
+                            margin=dict(t=50, b=50, l=50, r=50),
+                            xaxis_title="Symbol",
+                            yaxis_title="Value ($)"
+                        )
+                        
+                        performance_chart = performance_fig
                     else:
                         charts_data = None
+                        performance_chart = None
                 else:
                     charts_data = None
+                    performance_chart = None
             else:
                 charts_data = None
+                performance_chart = None
             
-            return portfolio_data, charts_data
+            return portfolio_data, charts_data, performance_chart
         except Exception as e:
-            return [], None
+            return [], None, None
     
     def add_portfolio_item(self, symbol, shares, price, date):
         """Add portfolio item"""
@@ -1003,7 +1029,7 @@ class FinanceCopilotApp:
                 [["Error", str(e)]],     # Agent Status
                 [],                       # Portfolio Table
                 None,                     # Portfolio Charts
-                [],                       # Market Summary
+                [["Error", str(e)]],     # Market Summary
                 [["Error", str(e)]],     # Portfolio Summary
                 [],                       # Alerts Table
                 [["Error", str(e)]]      # Notification Status

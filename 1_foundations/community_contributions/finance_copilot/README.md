@@ -1,272 +1,208 @@
-# 🚀 Finance Copilot
+# Finance Copilot
 
-An AI-powered financial assistant that provides comprehensive market data, portfolio management, quantitative analysis, and intelligent decision support.
+AI-powered financial assistant for market data, portfolio management, and quantitative analysis.
 
-## ✨ Features
+## Features
 
-### 📊 Market Data & News
-- **Live Stock Prices**: Real-time stock and cryptocurrency prices via Yahoo Finance
-- **Company Fundamentals**: PE ratios, market cap, dividend yields, and more
-- **News & Sentiment**: Company news with sentiment analysis (requires Alpha Vantage API)
-- **Market Summary**: Major indices overview (S&P 500, Dow Jones, NASDAQ, Russell 2000)
+- 📊 **Market Data**: Live stock/crypto prices via Yahoo Finance
+- 💼 **Portfolio Management**: Track holdings, transactions, and performance
+- 🔬 **Quantitative Analysis**: Risk metrics, Monte Carlo simulations, rebalancing
+- 🔔 **Push Notifications**: Price alerts via Pushover
+- 🤖 **AI Assistant**: OpenAI-powered financial insights
+- 📱 **Web Interface**: Modern Gradio UI
 
-### 💼 Portfolio Management
-- **Portfolio Tracking**: Add, update, and monitor stock/crypto positions
-- **Transaction History**: Complete buy/sell transaction logging
-- **Performance Metrics**: Real-time P&L, returns, and position tracking
-- **Portfolio Visualization**: Interactive charts for allocation and performance
+## Prerequisites
 
-### 🔬 Quantitative Analysis
-- **Risk Metrics**: Volatility, Sharpe ratio, maximum drawdown, VaR, CVaR
-- **Monte Carlo Simulation**: Portfolio forecasting with customizable parameters
-- **Correlation Analysis**: Asset correlation matrix and diversification insights
-- **Rebalancing Suggestions**: AI-powered portfolio rebalancing recommendations
-
-### 🔔 Alert System
-- **Price Alerts**: Set custom thresholds for price drops, rises, and volatility
-- **Push Notifications**: Instant alerts via Pushover
-- **Portfolio Monitoring**: Automatic alerts for significant gains/losses
-- **Daily Summaries**: Market and portfolio performance summaries
-
-### 🤖 AI Assistant
-- **Natural Language Queries**: Ask questions in plain English
-- **Intelligent Analysis**: AI-powered insights and recommendations
-- **Tool Integration**: Seamless access to all financial tools
-- **Decision Support**: Risk-adjusted investment advice
-
-## 🏗️ Architecture
-
-```
-Finance Copilot
-├── 📱 Gradio Web Interface
-├── 🧠 AI Agent (OpenAI GPT-4)
-├── 🛠️ Core Tools
-│   ├── Market Data Tool (Yahoo Finance)
-│   ├── Analysis Tool (Quantitative Analysis)
-│   ├── Database Tool (SQLite)
-│   └── Notification Tool (Pushover)
-└── 📊 Data Storage (SQLite Database)
-```
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Python 3.8+
+- Python 3.8 or higher
 - Required API keys (see Configuration section)
 
-### Installation
+## Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd finance_copilot
-   ```
+### Option 1: Automated Installation (Recommended)
+```bash
+cd 1_foundations/community_contributions/finance_copilot
+python install.py
+```
 
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+### Option 2: Manual Installation
 
-3. **Set up environment variables**
-   ```bash
-   # Create .env file
-   cp .env.example .env
-   
-   # Edit .env with your API keys
-   OPENAI_API_KEY=your_openai_api_key
-   PUSHOVER_USER_KEY=your_pushover_user_key
-   PUSHOVER_APP_TOKEN=your_pushover_app_token
-   ALPHA_VANTAGE_API_KEY=your_alpha_vantage_api_key
-   ```
+#### 1. Clone and Navigate
+```bash
+cd 1_foundations/community_contributions/finance_copilot
+```
 
-4. **Run the application**
-   ```bash
-   python app.py
-   ```
+#### 2. Install Dependencies
+```bash
+python -m pip install -r requirements.txt
+```
 
-5. **Open your browser**
-   Navigate to `http://localhost:7860`
+#### 3. Verify Installation
+```bash
+python -c "import yfinance, pandas, gradio; print('✅ Dependencies installed successfully!')"
+```
 
-## ⚙️ Configuration
+## Configuration
 
-### Required API Keys
+### 1. Create Environment File
+```bash
+cp env_example.txt .env
+```
 
-| Service | Purpose | Required |
-|---------|---------|----------|
-| **OpenAI API** | AI assistant functionality | ✅ Required |
-| **Pushover** | Push notifications | ✅ Required |
-| **Alpha Vantage** | News sentiment analysis | ⚪ Optional |
-| **Yahoo Finance** | Market data | ❌ Free tier |
-
-### Environment Variables
-
-Create a `.env` file in the project root:
-
+### 2. Add API Keys to .env
 ```env
-# OpenAI API for AI assistant
+# Required for AI assistant
 OPENAI_API_KEY=sk-your-openai-api-key
 
-# Pushover for notifications
+# Required for push notifications
 PUSHOVER_USER_KEY=your-pushover-user-key
 PUSHOVER_APP_TOKEN=your-pushover-app-token
 
-# Alpha Vantage for news (optional)
+# Optional for news sentiment analysis
 ALPHA_VANTAGE_API_KEY=your-alpha-vantage-api-key
 ```
 
-## 📱 Pushover Setup
+### 3. Get API Keys
 
-1. **Install Pushover app** on your mobile device
-2. **Create account** at [pushover.net](https://pushover.net)
-3. **Get your User Key** from the main page
-4. **Create a new application** to get your App Token
-5. **Add both keys** to your `.env` file
+**OpenAI API Key:**
+- Visit [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+- Create new API key
 
-## 🎯 Usage Examples
+**Pushover Keys:**
+- Install [Pushover app](https://pushover.net/)
+- Create account and get User Key
+- Create application to get App Token
+
+**Alpha Vantage Key (Optional):**
+- Visit [alphavantage.co/support/#api-key](https://www.alphavantage.co/support/#api-key)
+- Get free API key (500 calls/day)
+
+## Running the Application
+
+### Method 1: Interactive Startup (Recommended)
+```bash
+python start.py
+```
+Choose from:
+- Run demo
+- Start web application
+- Exit
+
+### Method 2: Direct Web App
+```bash
+python app.py
+```
+Access at: http://localhost:7860
+
+### Method 3: Run Demo Only
+```bash
+python demo.py
+```
+
+### Method 4: Run Tests
+```bash
+python test_basic.py
+```
+
+### Method 5: Test App Initialization
+```bash
+python test_app.py
+```
+
+### Method 6: Test Portfolio Charts
+```bash
+python test_charts.py
+```
+
+## Usage
+
+### Web Interface
+1. Open http://localhost:7860 in your browser
+2. Navigate through tabs:
+   - **Dashboard**: Market overview and portfolio summary
+   - **Portfolio**: Add/manage positions
+   - **Market Data**: Stock/crypto lookups
+   - **Analysis**: Risk metrics and simulations
+   - **Alerts**: Price notifications
+   - **AI Assistant**: Ask financial questions
+   - **Settings**: Configuration
 
 ### Portfolio Management
-```
-"Add 100 shares of AAPL at $150.50"
-"Show my current portfolio performance"
-"What's my exposure to tech stocks?"
-```
+```python
+# Add position
+Add: AAPL, 100 shares, $150.00
 
-### Market Analysis
-```
-"Get current price of TSLA"
-"Show Tesla's fundamentals"
-"Run Monte Carlo simulation for 5 years"
+# Update position
+Buy/Sell: AAPL, 50 shares, $160.00
+
+# View portfolio
+Check current holdings and performance
 ```
 
 ### AI Assistant
 ```
+"Show my portfolio performance"
+"Run Monte Carlo simulation for 5 years"
 "Should I increase my tech allocation?"
-"Am I overexposed to any sector?"
 "Suggest rebalancing for lower volatility"
 ```
 
-## 🗄️ Database Schema
-
-The application uses SQLite with the following tables:
-
-- **portfolio**: Current holdings and positions
-- **transactions**: Complete transaction history
-- **market_data_cache**: Cached market data
-- **alerts**: Price alert configurations
-- **user_preferences**: User settings and risk profile
-
-## 🔧 Development
-
-### Project Structure
-```
-finance_copilot/
-├── app.py                 # Main Gradio application
-├── config.py             # Configuration and environment variables
-├── database.py           # Database operations and schema
-├── market_data.py        # Market data fetching and caching
-├── analysis_tool.py      # Quantitative analysis tools
-├── notification_system.py # Push notification system
-├── ai_agent.py          # AI agent and tool orchestration
-├── requirements.txt      # Python dependencies
-└── README.md            # This file
-```
-
-### Adding New Features
-
-1. **Create new tool class** in appropriate module
-2. **Add tool to AI agent** in `ai_agent.py`
-3. **Create UI components** in `app.py`
-4. **Update requirements.txt** if needed
-
-### Testing
-
-```bash
-# Run basic tests
-python -m pytest tests/
-
-# Run with coverage
-python -m pytest --cov=. tests/
-```
-
-## 🚨 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
-1. **"OpenAI API key not configured"**
-   - Check your `.env` file
-   - Verify API key is valid and has credits
+**"ModuleNotFoundError: No module named 'yfinance'"**
+```bash
+python -m pip install yfinance
+```
 
-2. **"Pushover credentials not configured"**
-   - Ensure both USER_KEY and APP_TOKEN are set
-   - Verify keys are correct in Pushover dashboard
+**"Permission denied"**
+```bash
+python -m pip install --user yfinance
+```
 
-3. **"Database connection error"**
-   - Check file permissions in project directory
-   - Ensure SQLite is available
+**"Python version incompatible"**
+- Ensure Python 3.8+ is installed
+- All dependencies are compatible with Python 3.8+
 
-4. **"Market data fetch error"**
-   - Check internet connection
-   - Verify symbol format (e.g., "AAPL" not "AAPL.US")
+**"API key not configured"**
+- Check `.env` file exists
+- Verify API keys are correct
+- Restart application after changes
 
 ### Performance Tips
+- Market data is cached for 5 minutes
+- Use portfolio-specific queries to reduce API calls
+- Monitor notification frequency to avoid spam
 
-- **Enable caching** for market data (default: 5 minutes)
-- **Limit API calls** by using portfolio-specific queries
-- **Use appropriate timeframes** for historical data
-- **Monitor notification frequency** to avoid spam
+## Project Structure
 
-## 📈 Roadmap
+```
+finance_copilot/
+├── install.py            # Automated installation script
+├── app.py                # Main Gradio application
+├── start.py              # Interactive startup script
+├── demo.py               # Feature demonstration
+├── test_basic.py         # Unit tests
+├── config.py             # Configuration settings
+├── database.py           # Portfolio database
+├── market_data.py        # Market data fetching
+├── analysis_tool.py      # Quantitative analysis
+├── notification_system.py # Push notifications
+├── ai_agent.py          # AI assistant
+├── requirements.txt      # Dependencies
+├── env_example.txt       # Environment template
+└── README.md            # This file
+```
 
-### Upcoming Features
-- [ ] **Advanced Charting**: Interactive Plotly charts with technical indicators
-- [ ] **Backtesting**: Historical strategy performance testing
-- [ ] **Options Analysis**: Options chain and Greeks calculation
-- [ ] **Tax Optimization**: Tax-loss harvesting suggestions
-- [ ] **Social Features**: Portfolio sharing and community insights
-- [ ] **Mobile App**: Native iOS/Android applications
+## Support
 
-### Integration Possibilities
-- **Broker APIs**: Direct trading integration
-- **Google Sheets**: Portfolio sync and reporting
-- **Slack/Teams**: Team collaboration features
-- **Webhooks**: Custom notification endpoints
+- **Issues**: Check error messages and troubleshooting section
+- **Dependencies**: Verify Python version and package installation
+- **Configuration**: Ensure API keys are set correctly
 
-## 🤝 Contributing
+## License
 
-1. **Fork the repository**
-2. **Create feature branch** (`git checkout -b feature/amazing-feature`)
-3. **Commit changes** (`git commit -m 'Add amazing feature'`)
-4. **Push to branch** (`git push origin feature/amazing-feature`)
-5. **Open Pull Request**
-
-### Development Guidelines
-- Follow PEP 8 style guide
-- Add type hints for all functions
-- Include docstrings for classes and methods
-- Write tests for new functionality
-- Update documentation as needed
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **Yahoo Finance** for free market data
-- **OpenAI** for AI capabilities
-- **Pushover** for reliable notifications
-- **Gradio** for the beautiful web interface
-- **Plotly** for interactive visualizations
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/your-repo/finance_copilot/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/your-repo/finance_copilot/discussions)
-- **Email**: support@financecopilot.com
-
----
-
-**Disclaimer**: This application is for educational and informational purposes only. It does not constitute financial advice. Always consult with qualified financial professionals before making investment decisions.
+MIT License - see LICENSE file for details.
 
 
 
