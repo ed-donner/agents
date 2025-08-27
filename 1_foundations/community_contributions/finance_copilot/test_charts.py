@@ -99,3 +99,6 @@ if __name__ == "__main__":
         print("   Run: python app.py")
     else:
         print("\n❌ Fix the chart issues before running the main app")
+
+
+

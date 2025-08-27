@@ -11,7 +11,8 @@ class Config:
     PUSHOVER_APP_TOKEN = os.getenv('PUSHOVER_APP_TOKEN', '')
     
     # Database
-    DATABASE_PATH = 'finance_copilot.db'
+    # Use /tmp for Hugging Face Spaces (writable) or local path for development
+    DATABASE_PATH = os.getenv('DATABASE_PATH', '/tmp/finance_copilot.db')
     
     # Default settings
     DEFAULT_RISK_PROFILE = 'moderate'  # conservative, moderate, aggressive
@@ -28,3 +29,5 @@ class Config:
     # Notification settings
     ENABLE_PUSH_NOTIFICATIONS = True
     ENABLE_EMAIL_NOTIFICATIONS = False
+
+

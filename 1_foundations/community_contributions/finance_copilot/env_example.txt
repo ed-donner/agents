@@ -15,11 +15,12 @@ PUSHOVER_APP_TOKEN=your-pushover-app-token-here
 ALPHA_VANTAGE_API_KEY=your-alpha-vantage-api-key-here
 
 # Optional: Custom Configuration
-# DATABASE_PATH=finance_copilot.db
+# DATABASE_PATH=/tmp/finance_copilot.db  # Use /tmp for Hugging Face Spaces
 # DEFAULT_RISK_PROFILE=moderate
 # DEFAULT_ALERT_THRESHOLD=0.05
 # MONTE_CARLO_SIMULATIONS=10000
 # FORECAST_YEARS=5
+
 
 
 

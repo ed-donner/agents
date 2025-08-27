@@ -1,208 +1,295 @@
-# Finance Copilot
+---
+title: Finance Copilot - AI-Powered Financial Analysis
+emoji: 🚀
+colorFrom: blue
+colorTo: purple
+sdk: docker
+sdk_version: 4.44.1
+app_file: app.py
+pinned: false
+---
 
-AI-powered financial assistant for market data, portfolio management, and quantitative analysis.
+# 🚀 Finance Copilot - AI-Powered Financial Analysis Platform
 
-## Features
+A comprehensive financial analysis platform that combines real-time market data, portfolio management, AI-powered insights, and Monte Carlo simulations for investment forecasting.
 
-- 📊 **Market Data**: Live stock/crypto prices via Yahoo Finance
-- 💼 **Portfolio Management**: Track holdings, transactions, and performance
-- 🔬 **Quantitative Analysis**: Risk metrics, Monte Carlo simulations, rebalancing
-- 🔔 **Push Notifications**: Price alerts via Pushover
-- 🤖 **AI Assistant**: OpenAI-powered financial insights
-- 📱 **Web Interface**: Modern Gradio UI
+## ✨ Features
 
-## Prerequisites
+### 🤖 AI-Powered Financial Assistant
+- **Intelligent Query Processing**: Ask questions in natural language
+- **Comprehensive Analysis**: Get insights on stocks, crypto, and portfolios
+- **Monte Carlo Simulations**: Advanced forecasting for any asset
+- **Conversation Memory**: Context-aware responses
 
-- Python 3.8 or higher
-- Required API keys (see Configuration section)
+### 📊 Market Data & Analysis
+- **Real-time Stock Prices**: Live data for global markets
+- **Cryptocurrency Tracking**: Bitcoin, Ethereum, and more
+- **Company Fundamentals**: P/E ratios, revenue growth, financial metrics
+- **Portfolio Management**: Track holdings, calculate metrics, rebalancing
 
-## Installation
+### 🔮 Advanced Forecasting
+- **Monte Carlo Simulations**: Risk assessment and price projections
+- **Portfolio Optimization**: Rebalancing suggestions and risk analysis
+- **Market Trends**: Technical analysis and pattern recognition
 
-### Option 1: Automated Installation (Recommended)
-```bash
-cd 1_foundations/community_contributions/finance_copilot
-python install.py
-```
+## 🚀 Quick Start
 
-### Option 2: Manual Installation
+### Prerequisites
+- Python 3.9 or higher
+- pip package manager
+- API keys for required services
 
-#### 1. Clone and Navigate
-```bash
-cd 1_foundations/community_contributions/finance_copilot
-```
+### Local Development
 
-#### 2. Install Dependencies
-```bash
-python -m pip install -r requirements.txt
-```
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd finance_copilot
+   ```
 
-#### 3. Verify Installation
-```bash
-python -c "import yfinance, pandas, gradio; print('✅ Dependencies installed successfully!')"
-```
+2. **Install dependencies**
+   ```bash
+   pip3 install -r requirements.txt
+   ```
 
-## Configuration
+3. **Set up environment variables**
+   ```bash
+   cp env_example.txt .env
+   # Edit .env with your API keys (see Configuration section below)
+   ```
 
-### 1. Create Environment File
-```bash
-cp env_example.txt .env
-```
+4. **Run the application**
+   ```bash
+   python3 run_app.py
+   ```
 
-### 2. Add API Keys to .env
+5. **Access the app**
+   - URL: http://localhost:7860
+   - Username: `admin`
+   - Password: `finance123`
+
+### Docker Local Testing
+
+1. **Build the Docker image**
+   ```bash
+   docker build -t finance-copilot .
+   ```
+
+2. **Run the container**
+   ```bash
+   docker run -p 7860:7860 --env-file .env finance-copilot
+   ```
+
+3. **Access the app**
+   - URL: http://localhost:7860
+   - Username: `admin`
+   - Password: `finance123`
+
+## 🔧 Configuration
+
+### Required API Keys
+
+You need to obtain and configure the following API keys:
+
+#### 1. OpenAI API Key (Required)
+- **Purpose**: Powers the AI assistant features
+- **Get it from**: [OpenAI Platform](https://platform.openai.com/api-keys)
+- **Cost**: Pay-per-use (typically very low for personal use)
+
+#### 2. Pushover API Keys (Required)
+- **Purpose**: Enables push notifications for alerts
+- **Get them from**: [Pushover](https://pushover.net/)
+- **Cost**: Free for basic use, $4.99/month for unlimited
+
+#### 3. Alpha Vantage API Key (Optional)
+- **Purpose**: Enhanced news sentiment analysis
+- **Get it from**: [Alpha Vantage](https://www.alphavantage.co/support/#api-key)
+- **Cost**: Free tier available (500 requests/day)
+
+### Environment Variables Setup
+
+Create a `.env` file in your project root with the following content:
+
 ```env
-# Required for AI assistant
-OPENAI_API_KEY=sk-your-openai-api-key
+# OpenAI Configuration (REQUIRED)
+OPENAI_API_KEY=sk-your-openai-api-key-here
 
-# Required for push notifications
-PUSHOVER_USER_KEY=your-pushover-user-key
-PUSHOVER_APP_TOKEN=your-pushover-app-token
+# Pushover Configuration (REQUIRED)
+PUSHOVER_USER_KEY=your-pushover-user-key-here
+PUSHOVER_APP_TOKEN=your-pushover-app-token-here
 
-# Optional for news sentiment analysis
-ALPHA_VANTAGE_API_KEY=your-alpha-vantage-api-key
+# Alpha Vantage Configuration (OPTIONAL)
+ALPHA_VANTAGE_API_KEY=your-alpha-vantage-api-key-here
+
+# Optional: Custom Configuration
+# DATABASE_PATH=finance_copilot.db
+# DEFAULT_RISK_PROFILE=moderate
+# DEFAULT_ALERT_THRESHOLD=0.05
+# MONTE_CARLO_SIMULATIONS=10000
+# FORECAST_YEARS=5
 ```
 
-### 3. Get API Keys
+### Configuration Options
 
-**OpenAI API Key:**
-- Visit [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
-- Create new API key
+The application supports the following configuration options:
 
-**Pushover Keys:**
-- Install [Pushover app](https://pushover.net/)
-- Create account and get User Key
-- Create application to get App Token
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `DATABASE_PATH` | `/tmp/finance_copilot.db` | SQLite database file path (use `/tmp/` for Hugging Face Spaces) |
+| `DEFAULT_RISK_PROFILE` | `moderate` | Risk tolerance: conservative, moderate, aggressive |
+| `DEFAULT_ALERT_THRESHOLD` | `0.05` | Default price change threshold for alerts (5%) |
+| `MONTE_CARLO_SIMULATIONS` | `10000` | Number of simulations for forecasting |
+| `FORECAST_YEARS` | `5` | Years to forecast into the future |
 
-**Alpha Vantage Key (Optional):**
-- Visit [alphavantage.co/support/#api-key](https://www.alphavantage.co/support/#api-key)
-- Get free API key (500 calls/day)
+### Hugging Face Spaces Deployment
 
-## Running the Application
+This repository is configured for deployment on Hugging Face Spaces using Docker:
 
-### Method 1: Interactive Startup (Recommended)
+1. **Push to Hugging Face Repository**
+   ```bash
+   git add .
+   git commit -m "Configure for Hugging Face Spaces deployment"
+   git push origin main
+   ```
+
+2. **Create Space**
+   - Go to [Hugging Face Spaces](https://huggingface.co/spaces)
+   - Click "Create new Space"
+   - Choose your repository
+   - Select "Docker" as SDK
+   - Click "Create Space"
+
+3. **Set Environment Variables**
+   - Add your API keys in the Space settings:
+     - `OPENAI_API_KEY`
+     - `ALPHA_VANTAGE_API_KEY`
+     - `PUSHOVER_USER_KEY`
+     - `PUSHOVER_APP_TOKEN`
+   - **Important**: The database will automatically use `/tmp/finance_copilot.db` for Hugging Face Spaces
+
+4. **Automatic Deployment**
+   - Your Space will automatically build and deploy
+   - Access at: `https://huggingface.co/spaces/YOUR_USERNAME/YOUR_SPACE_NAME`
+
+For detailed deployment instructions, see `README_Spaces.md`.
+
+### Default Stock & Crypto Symbols
+
+The application comes pre-configured with popular symbols:
+
+**Stocks**: AAPL, GOOGL, MSFT, TSLA, NVDA, AMZN, META, NFLX
+**Cryptocurrencies**: BTC-USD, ETH-USD, ADA-USD, DOT-USD
+
+You can modify these in `config.py` or add them through the UI.
+
+## 🚀 Hugging Face Spaces Deployment
+
+### 1. Create a new Space
+- Go to [Hugging Face Spaces](https://huggingface.co/spaces)
+- Click "Create new Space"
+- Choose "Gradio" as the SDK
+- Name your space (e.g., `finance-copilot`)
+
+### 2. Upload your code
 ```bash
-python start.py
-```
-Choose from:
-- Run demo
-- Start web application
-- Exit
-
-### Method 2: Direct Web App
-```bash
-python app.py
-```
-Access at: http://localhost:7860
-
-### Method 3: Run Demo Only
-```bash
-python demo.py
+git clone https://huggingface.co/spaces/YOUR_USERNAME/finance-copilot
+cd finance-copilot
+# Copy all project files to this directory
+git add .
+git commit -m "Initial commit"
+git push
 ```
 
-### Method 4: Run Tests
-```bash
-python test_basic.py
-```
+### 3. Configure environment variables
+In your Space settings, add these environment variables:
+- `OPENAI_API_KEY`: Your OpenAI API key
+- `PUSHOVER_USER_KEY`: Your Pushover user key
+- `PUSHOVER_APP_TOKEN`: Your Pushover app token
+- `ALPHA_VANTAGE_API_KEY`: Your Alpha Vantage API key (optional)
 
-### Method 5: Test App Initialization
-```bash
-python test_app.py
-```
+### 4. Deploy
+Your Space will automatically build and deploy. Access it at:
+`https://huggingface.co/spaces/YOUR_USERNAME/finance-copilot`
 
-### Method 6: Test Portfolio Charts
-```bash
-python test_charts.py
-```
-
-## Usage
-
-### Web Interface
-1. Open http://localhost:7860 in your browser
-2. Navigate through tabs:
-   - **Dashboard**: Market overview and portfolio summary
-   - **Portfolio**: Add/manage positions
-   - **Market Data**: Stock/crypto lookups
-   - **Analysis**: Risk metrics and simulations
-   - **Alerts**: Price notifications
-   - **AI Assistant**: Ask financial questions
-   - **Settings**: Configuration
-
-### Portfolio Management
-```python
-# Add position
-Add: AAPL, 100 shares, $150.00
-
-# Update position
-Buy/Sell: AAPL, 50 shares, $160.00
-
-# View portfolio
-Check current holdings and performance
-```
-
-### AI Assistant
-```
-"Show my portfolio performance"
-"Run Monte Carlo simulation for 5 years"
-"Should I increase my tech allocation?"
-"Suggest rebalancing for lower volatility"
-```
-
-## Troubleshooting
+## 🐛 Troubleshooting
 
 ### Common Issues
 
-**"ModuleNotFoundError: No module named 'yfinance'"**
-```bash
-python -m pip install yfinance
-```
+1. **Port 7860 already in use**
+   ```bash
+   lsof -i :7860  # Find process using the port
+   kill <PID>     # Kill the process
+   ```
 
-**"Permission denied"**
-```bash
-python -m pip install --user yfinance
-```
+2. **Missing API keys**
+   - Ensure all required API keys are set in your `.env` file
+   - Check that the file is named exactly `.env` (not `.env.txt`)
 
-**"Python version incompatible"**
-- Ensure Python 3.8+ is installed
-- All dependencies are compatible with Python 3.8+
+3. **Package installation errors**
+   - Use `pip3` instead of `pip`
+   - Ensure Python 3.9+ is installed
+   - Try upgrading pip: `python3 -m pip install --upgrade pip`
 
-**"API key not configured"**
-- Check `.env` file exists
-- Verify API keys are correct
-- Restart application after changes
+4. **Database errors**
+   - Check file permissions for the database directory
+   - Ensure SQLite3 is available (built into Python)
 
-### Performance Tips
-- Market data is cached for 5 minutes
-- Use portfolio-specific queries to reduce API calls
-- Monitor notification frequency to avoid spam
+### Getting Help
 
-## Project Structure
+- Check the logs in your terminal when running the app
+- Verify all environment variables are set correctly
+- Ensure all required packages are installed
 
-```
-finance_copilot/
-├── install.py            # Automated installation script
-├── app.py                # Main Gradio application
-├── start.py              # Interactive startup script
-├── demo.py               # Feature demonstration
-├── test_basic.py         # Unit tests
-├── config.py             # Configuration settings
-├── database.py           # Portfolio database
-├── market_data.py        # Market data fetching
-├── analysis_tool.py      # Quantitative analysis
-├── notification_system.py # Push notifications
-├── ai_agent.py          # AI assistant
-├── requirements.txt      # Dependencies
-├── env_example.txt       # Environment template
-└── README.md            # This file
-```
+## 📱 Features Overview
 
-## Support
+### Dashboard
+- Portfolio overview and performance metrics
+- Quick actions for common tasks
+- Market summary and trends
 
-- **Issues**: Check error messages and troubleshooting section
-- **Dependencies**: Verify Python version and package installation
-- **Configuration**: Ensure API keys are set correctly
+### Portfolio Management
+- Add/remove holdings
+- Track performance and returns
+- Portfolio rebalancing suggestions
 
-## License
+### Market Data
+- Real-time stock and crypto prices
+- Historical price charts
+- Company fundamentals
 
-MIT License - see LICENSE file for details.
+### AI Assistant
+- Natural language financial queries
+- Investment advice and analysis
+- Risk assessment and recommendations
+
+### Analysis Tools
+- Technical analysis indicators
+- Monte Carlo simulations
+- Risk metrics and calculations
+
+### Alerts & Notifications
+- Price change alerts
+- Portfolio threshold notifications
+- Push notifications via Pushover
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- OpenAI for AI capabilities
+- Gradio for the web interface
+- YFinance for market data
+- Alpha Vantage for financial data APIs
 
 
 

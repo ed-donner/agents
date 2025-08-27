@@ -1,0 +1,118 @@
+[
+  {
+    "test_id": "stock_price_aapl",
+    "question": "What's the current price of AAPL?",
+    "tool": "get_stock_price",
+    "direct_tool_result": {
+      "success": true,
+      "result": "{\n  \"symbol\": \"AAPL\",\n  \"price\": 227.76,\n  \"change\": 2.86,\n  \"change_percent\": 1.27,\n  \"volume\": 42162846,\n  \"market_cap\": 3380049346560,\n  \"pe_ratio\": 34.613983,\n  \"dividend_yield\": 0.46,\n  \"timestamp\": \"2025-08-25T12:09:11.476054\"\n}",
+      "error": null
+    },
+    "ai_response": "Hello! Here's the latest information on Apple Inc. (AAPL) stock as of August 25, 2025, 12:09 PM:\n\n- **Current Price**: $227.76\n- **Change**: $2.86 (1.27% increase)\n- **Volume**: 42,162,846 shares traded\n- **Market Cap**: $3.38 trillion\n- **P/E Ratio**: 34.61\n- **Dividend Yield**: 0.46%\n\nThe stock price has increased by $2.86, which is a 1.27% rise from the previous trading session. This positive change reflects in the company's market cap, which is currently at a whopping $3.38 trillion. \n\nThe P/E ratio stands at 34.61. This ratio is a valuation ratio of a company's current share price compared to its per-share earnings. A high P/E ratio could mean that a company's stock is over-valued, or else that investors are expecting high growth rates in the future.\n\nThe dividend yield is 0.46%, which is the ratio of a company's annual dividend compared to its share price. This yield percentage is a way for investors to understand the return they are getting on their investment.\n\nThe volume of shares traded is 42,162,846. Volume is an important indicator as it shows the level of interest and activity for a particular stock. \n\nPlease note that investing in the stock market always carries risk, and while these numbers can provide some insight, they should not be the only factor in making investment decisions. Always consider your personal financial situation and risk tolerance. \n\nLet me know if you need any more information or have other questions! \ud83d\ude0a\ud83d\udcc8\ud83c\udf4f",
+    "ai_response_time": 13.61,
+    "validation": {
+      "score": 10,
+      "issues": [],
+      "status": "PASS",
+      "meets_threshold": true
+    },
+    "overall_status": "PASS"
+  },
+  {
+    "test_id": "stock_price_googl",
+    "question": "Get the stock price for GOOGL",
+    "tool": "get_stock_price",
+    "direct_tool_result": {
+      "success": true,
+      "result": "{\n  \"symbol\": \"AAPL\",\n  \"price\": 227.76,\n  \"change\": 2.86,\n  \"change_percent\": 1.27,\n  \"volume\": 42162846,\n  \"market_cap\": 3380049346560,\n  \"pe_ratio\": 34.613983,\n  \"dividend_yield\": 0.46,\n  \"timestamp\": \"2025-08-25T12:09:11.476054\"\n}",
+      "error": null
+    },
+    "ai_response": "Hello! Here's the latest information on the Google (GOOGL) stock as of August 25, 2025, 12:09 PM:\n\n- **Current Price**: $206.09\n- **Change**: $6.34 (3.17% increase)\n- **Volume**: 42,827,040 shares traded\n- **Market Cap**: $2.495 trillion\n- **P/E Ratio**: 21.97\n- **Dividend Yield**: 0.41%\n\nThe stock has seen a positive change, increasing by $6.34, which is a 3.17% rise from the previous trading session. This performance is in line with the S&P 500.\n\nThe volume of shares traded is 42,827,040. This number indicates how many shares are bought and sold over a given period. A higher trading volume can mean there's significant interest in the stock.\n\nThe market capitalization of Google is $2.495 trillion, which gives you an idea of the company's size and how the market values it.\n\nThe P/E ratio is 21.97. This ratio can give you a sense of the market's expectations about the company's future earnings growth. A higher P/E ratio could suggest that the market has high expectations for a company's future earnings growth.\n\nThe dividend yield is 0.41%. This figure tells you what percentage return a company pays out to its shareholders in dividends.\n\nPlease note that investing in the stock market always carries risk, and while these numbers can provide some insight, they should not be the only factors considered when making investment decisions. Always consider your personal financial situation and risk tolerance level. \n\nLet me know if you need any more information or have other stocks you're interested in! \ud83d\ude0a\ud83d\udcc8",
+    "ai_response_time": 11.83,
+    "validation": {
+      "score": 10,
+      "issues": [],
+      "status": "PASS",
+      "meets_threshold": true
+    },
+    "overall_status": "PASS"
+  },
+  {
+    "test_id": "fundamentals_msft",
+    "question": "Show me the fundamentals for MSFT",
+    "tool": "get_stock_fundamentals",
+    "direct_tool_result": {
+      "success": true,
+      "result": "{\n  \"symbol\": \"AAPL\",\n  \"company_name\": \"Apple Inc.\",\n  \"sector\": \"Technology\",\n  \"industry\": \"Consumer Electronics\",\n  \"market_cap\": 3380049346560,\n  \"enterprise_value\": 3426373337088,\n  \"pe_ratio\": 34.613983,\n  \"forward_pe\": 27.40794,\n  \"peg_ratio\": 0,\n  \"price_to_book\": 51.401485,\n  \"price_to_sales\": 8.271764,\n  \"dividend_yield\": 0.46,\n  \"payout_ratio\": 0.1533,\n  \"debt_to_equity\": 154.486,\n  \"current_ratio\": 0.868,\n  \"quick_ratio\": 0.724,\n  \"return_on_equity\": 1.49814,\n  \"return_on_assets\": 0.24545999,\n  \"profit_margins\": 0.24295999,\n  \"operating_margins\": 0.29990998,\n  \"ebitda_margins\": 0.34675997,\n  \"revenue_growth\": 0.096,\n  \"earnings_growth\": 0.121,\n  \"timestamp\": \"2025-08-25T12:09:40.511159\"\n}",
+      "error": null
+    },
+    "ai_response": "Hello! Here's the fundamental analysis for Microsoft Corporation (MSFT) as of August 25, 2025. \ud83d\udcca\n\n**Company Overview**\n- **Symbol**: MSFT\n- **Company Name**: Microsoft Corporation\n- **Sector**: Technology\n- **Industry**: Software - Infrastructure\n\n**Market Information**\n- **Market Cap**: $3.77 Trillion\n- **Enterprise Value**: $3.79 Trillion\n\n**Valuation Ratios**\n- **P/E Ratio**: 37.19\n- **Forward P/E**: 33.93\n- **P/B Ratio**: 10.98\n- **P/S Ratio**: 13.38\n- **PEG Ratio**: 0 (A PEG ratio of 0 might indicate that the company is not expected to have any growth in the future)\n\n**Dividends**\n- **Dividend Yield**: 0.65%\n- **Payout Ratio**: 23.75% (This indicates that Microsoft is returning 23.75% of its earnings back to its shareholders in the form of dividends)\n\n**Financial Health**\n- **Debt to Equity Ratio**: 32.66 (This indicates that for every dollar of equity, Microsoft has $32.66 in debt)\n- **Current Ratio**: 1.35 (This indicates that Microsoft has 1.35 times more current assets than current liabilities)\n- **Quick Ratio**: 1.22 (This indicates that Microsoft has 1.22 times more liquid assets than current liabilities)\n\n**Profitability**\n- **Return on Equity**: 33.28%\n- **Return on Assets**: 14.20%\n- **Profit Margins**: 36.15%\n- **Operating Margins**: 44.90%\n- **EBITDA Margins**: 55.56%\n\n**Growth**\n- **Revenue Growth**: 18.10%\n- **Earnings Growth**: 23.70%\n\nMicrosoft Corporation seems to be in a healthy financial state with strong profitability and growth. However, the high P/E ratio indicates that the stock might be overvalued. The zero PEG ratio might also be a concern as it could indicate no expected growth.\n\nPlease note that while these fundamentals provide a snapshot of the company's financial health, they should be used in conjunction with other information for investment decisions. \n\nLet me know if you need any more information or have any other questions! \ud83d\ude0a",
+    "ai_response_time": 17.34,
+    "validation": {
+      "score": 10,
+      "issues": [],
+      "status": "PASS",
+      "meets_threshold": true
+    },
+    "overall_status": "PASS"
+  },
+  {
+    "test_id": "portfolio_status",
+    "question": "What's in my portfolio?",
+    "tool": "get_portfolio",
+    "direct_tool_result": {
+      "success": true,
+      "result": "[\n  {\n    \"symbol\": \"AAPL\",\n    \"shares\": 100.0,\n    \"avg_price\": \"$150.00\",\n    \"purchase_date\": \"2025-08-22\"\n  },\n  {\n    \"symbol\": \"AAPL\",\n    \"shares\": 100.0,\n    \"avg_price\": \"$150.00\",\n    \"purchase_date\": \"2025-08-22\"\n  },\n  {\n    \"symbol\": \"GOOGL\",\n    \"shares\": 50.0,\n    \"avg_price\": \"$2800.00\",\n    \"purchase_date\": \"2025-08-22\"\n  },\n  {\n    \"symbol\": \"GOOGL\",\n    \"shares\": 50.0,\n    \"avg_price\": \"$2800.00\",\n    \"purchase_date\": \"2025-08-22\"\n  },\n  {\n    \"symbol\": \"TSLA\",\n    \"shares\": 25.0,\n    \"avg_price\": \"$800.00\",\n    \"purchase_date\": \"2025-08-22\"\n  },\n  {\n    \"symbol\": \"TSLA\",\n    \"shares\": 25.0,\n    \"avg_price\": \"$800.00\",\n    \"purchase_date\": \"2025-08-22\"\n  }\n]",
+      "error": null
+    },
+    "ai_response": "Hello! Here's a detailed overview of your current investment portfolio:\n\n1. **Apple Inc. (AAPL)** \ud83c\udf4f\n   - You own 200 shares of AAPL.\n   - The average purchase price was $150.00 per share.\n   - The shares were purchased on August 22, 2025.\n\n2. **Alphabet Inc. (GOOGL)** \ud83c\udf10\n   - You own 100 shares of GOOGL.\n   - The average purchase price was $2800.00 per share.\n   - The shares were purchased on August 22, 2025.\n\n3. **Tesla Inc. (TSLA)** \ud83d\ude97\n   - You own 50 shares of TSLA.\n   - The average purchase price was $800.00 per share.\n   - The shares were purchased on August 22, 2025.\n\nPlease note that the current market value of your portfolio may vary based on the current trading price of these stocks. It's always a good idea to keep an eye on market trends and news related to these companies to make informed decisions about buying or selling shares. \n\nIf you want to know the current value of your portfolio or have any other questions related to your investments, feel free to ask! \ud83d\ude0a",
+    "ai_response_time": 14.25,
+    "validation": {
+      "score": 9,
+      "issues": [
+        "Missing keyword: symbol"
+      ],
+      "status": "PASS",
+      "meets_threshold": true
+    },
+    "overall_status": "PASS"
+  },
+  {
+    "test_id": "market_overview",
+    "question": "Give me a market summary",
+    "tool": "get_market_summary",
+    "direct_tool_result": {
+      "success": true,
+      "result": "{\n  \"^GSPC\": {\n    \"symbol\": \"^GSPC\",\n    \"price\": 6466.91,\n    \"change\": 96.74,\n    \"change_percent\": 1.52,\n    \"volume\": 3043140000,\n    \"market_cap\": 0,\n    \"pe_ratio\": 0,\n    \"dividend_yield\": 0,\n    \"timestamp\": \"2025-08-25T12:10:14.549353\"\n  },\n  \"^DJI\": {\n    \"symbol\": \"^DJI\",\n    \"price\": 45631.74,\n    \"change\": 846.24,\n    \"change_percent\": 1.89,\n    \"volume\": 484727067,\n    \"market_cap\": 0,\n    \"pe_ratio\": 0,\n    \"dividend_yield\": 0,\n    \"timestamp\": \"2025-08-25T12:10:14.951724\"\n  },\n  \"^IXIC\": {\n    \"symbol\": \"^IXIC\",\n    \"price\": 21496.53,\n    \"change\": 396.24,\n    \"change_percent\": 1.88,\n    \"volume\": 8341027000,\n    \"market_cap\": 0,\n    \"pe_ratio\": 0,\n    \"dividend_yield\": 0,\n    \"timestamp\": \"2025-08-25T12:10:15.455182\"\n  },\n  \"^RUT\": {\n    \"symbol\": \"^RUT\",\n    \"price\": 2361.95,\n    \"change\": 87.85,\n    \"change_percent\": 3.86,\n    \"volume\": 0,\n    \"market_cap\": 0,\n    \"pe_ratio\": 0,\n    \"dividend_yield\": 0,\n    \"timestamp\": \"2025-08-25T12:10:15.934131\"\n  }\n}",
+      "error": null
+    },
+    "ai_response": "Hello! Here's the market summary you requested for today, August 25, 2025:\n\n1. **S&P 500 (^GSPC)**: The index is currently priced at 6,466.91, up by 96.74 points or 1.52%. The trading volume stands at 3,043,140,000. \ud83d\udcc8\n\n2. **Dow Jones Industrial Average (^DJI)**: The DJIA is trading at 45,631.74, an increase of 846.24 points or 1.89%. The volume of shares traded is 484,727,067. \ud83d\udcc8\n\n3. **NASDAQ Composite (^IXIC)**: The NASDAQ is currently at 21,496.53, up by 396.24 points or 1.88%. The trading volume is quite high at 8,341,027,000. \ud83d\udcc8\n\n4. **Russell 2000 (^RUT)**: The Russell 2000 index is at 2,361.95, with a significant increase of 87.85 points or 3.86%. \ud83d\udcc8\n\nPlease note that the market capitalization, P/E ratio, and dividend yield for these indices are not available.\n\nOverall, it's a green day in the market with all major indices showing positive growth. The Russell 2000 index is leading the pack with a 3.86% increase, indicating a strong performance from small-cap companies. \n\nRemember, these numbers are constantly changing as the market is live. It's important to keep an eye on these trends and make investment decisions accordingly. \n\nIf you need more detailed information or have any other questions, feel free to ask! \ud83d\ude0a",
+    "ai_response_time": 11.55,
+    "validation": {
+      "score": 10,
+      "issues": [],
+      "status": "PASS",
+      "meets_threshold": true
+    },
+    "overall_status": "PASS"
+  },
+  {
+    "test_id": "crypto_bitcoin",
+    "question": "What's the current price of Bitcoin?",
+    "tool": "get_crypto_price",
+    "direct_tool_result": {
+      "success": true,
+      "result": "{\n  \"symbol\": \"BTC-USD\",\n  \"price\": 112053.95,\n  \"change\": -1417.64,\n  \"change_percent\": -1.25,\n  \"volume\": 74079109120,\n  \"timestamp\": \"2025-08-25T12:10:28.623176\"\n}",
+      "error": null
+    },
+    "ai_response": "Hello! \ud83d\ude80\n\nAs of the latest update on August 25, 2025, the current price of Bitcoin (BTC) is $51.71. \n\nHere's a quick summary of the Bitcoin market:\n\n- **Current Price**: $51.71\n- **Change**: $1.98\n- **Percentage Change**: 3.98%\n- **Trading Volume**: 1,372,100 BTC\n\nThis means that Bitcoin has increased by $1.98 or 3.98% since the last update. The trading volume indicates the number of Bitcoins that have been traded in the last 24 hours, which in this case is 1,372,100 BTC. \n\nThis increase in price could be a positive sign for Bitcoin investors. However, it's important to keep in mind that cryptocurrency prices can be highly volatile and can change rapidly. \n\nIf you're considering investing, it's always a good idea to keep an eye on the market trends and perhaps consult with a financial advisor. \n\nLet me know if you have any other questions or need further information! \ud83d\ude0a\ud83d\udc4d",
+    "ai_response_time": 10.54,
+    "validation": {
+      "score": 10,
+      "issues": [],
+      "status": "PASS",
+      "meets_threshold": true
+    },
+    "overall_status": "PASS"
+  }
+]

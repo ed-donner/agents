@@ -1,0 +1,68 @@
+[
+  {
+    "test_id": "stock_price_1",
+    "question": "What's the current price of AAPL?",
+    "expected_tool": "get_stock_price",
+    "response": "Hello! Here's the latest information on Apple Inc. (AAPL) stock as of August 25, 2025, 12:11 PM:\n\n- **Current Price**: $227.76\n- **Change**: $2.86 (1.27% increase)\n- **Volume**: 42,162,846 shares traded\n- **Market Cap**: $3.38 trillion\n- **P/E Ratio**: 34.61\n- **Dividend Yield**: 0.46%\n\nThe stock price has increased by $2.86, which is a 1.27% rise from the previous trading session. This positive change shows a bullish trend for the day.\n\nThe volume of shares traded is 42,162,846. This number indicates how many shares have been bought and sold during the current trading day.\n\nApple's market capitalization is $3.38 trillion, which makes it one of the most valuable companies in the world. The P/E ratio is 34.61, suggesting that investors are willing to pay a high price for each dollar of earnings, indicating high expectations for future growth.\n\nThe dividend yield is 0.46%, which is relatively low. This suggests that Apple is reinvesting most of its profits into growth and expansion rather than returning it to shareholders as dividends.\n\nPlease note that investing in the stock market always carries risk, and it's important to do thorough research and consider seeking advice from a financial advisor before making investment decisions. \n\nLet me know if you need any more information or have other questions! \ud83d\ude0a\ud83d\udcc8\ud83c\udf4f",
+    "response_time": 17.99,
+    "ai_rating": 10,
+    "validation_details": "10",
+    "meets_threshold": true,
+    "status": "\u2705 PASS"
+  },
+  {
+    "test_id": "stock_price_2",
+    "question": "Get the stock price for GOOGL",
+    "expected_tool": "get_stock_price",
+    "response": "Hello! Here's the latest information on the Google (GOOGL) stock:\n\n- **Current Price**: $206.09\n- **Change**: $6.34 (3.17%)\n- **Volume**: 42,827,040 shares\n- **Market Cap**: $2.495 trillion\n- **P/E Ratio**: 21.97\n- **Dividend Yield**: 0.41%\n\nThe stock has seen a positive change of $6.34, which is a 3.17% increase. This is a good sign for investors as the stock is gaining value. The trading volume, which is the number of shares traded, is 42,827,040. This high volume indicates a lot of activity for this stock today.\n\nThe market capitalization, which is the total dollar market value of all of a company's outstanding shares, is approximately $2.495 trillion. This places Google among the highest valued companies in the world.\n\nThe P/E ratio (price-to-earnings ratio) is 21.97. This ratio is used by investors to determine the relative value of a company's shares. A high P/E ratio could mean that a company's stock is over-valued, or else that investors are expecting high growth rates in the future.\n\nThe dividend yield is 0.41%. This is the dividend payment divided by the value of the stock's price. While Google's yield is relatively low, it's important to note that not all tech companies offer dividends, choosing instead to reinvest profits back into the company.\n\nPlease note that this information is as of the latest timestamp: 2025-08-25T12:11:52.107819.\n\nIf you have any other questions or need further clarification, feel free to ask! \ud83d\ude0a",
+    "response_time": 17.15,
+    "ai_rating": 10,
+    "validation_details": "10",
+    "meets_threshold": true,
+    "status": "\u2705 PASS"
+  },
+  {
+    "test_id": "fundamentals_1",
+    "question": "Show me the fundamentals for MSFT",
+    "expected_tool": "get_stock_fundamentals",
+    "response": "Hello! Here's the comprehensive financial data for **Microsoft Corporation (MSFT)** as of August 25, 2025. \ud83d\udcca\n\n**Company Overview:**\n- **Sector:** Technology\n- **Industry:** Software - Infrastructure\n\n**Market Data:**\n- **Market Cap:** $3.77 Trillion\n- **Enterprise Value:** $3.79 Trillion\n\n**Valuation Ratios:**\n- **P/E Ratio:** 37.19\n- **Forward P/E:** 33.93\n- **P/B Ratio (Price to Book):** 10.98\n- **P/S Ratio (Price to Sales):** 13.38\n\n**Dividend Information:**\n- **Dividend Yield:** 0.65%\n- **Payout Ratio:** 23.75%\n\n**Financial Health:**\n- **Debt to Equity Ratio:** 32.66\n- **Current Ratio:** 1.35\n- **Quick Ratio:** 1.22\n\n**Profitability Ratios:**\n- **Return on Equity (ROE):** 33.28%\n- **Return on Assets (ROA):** 14.20%\n- **Profit Margins:** 36.15%\n- **Operating Margins:** 44.90%\n- **EBITDA Margins:** 55.56%\n\n**Growth:**\n- **Revenue Growth:** 18.10%\n- **Earnings Growth:** 23.70%\n\nMicrosoft's P/E ratio is higher than the Forward P/E, indicating that the market expects the company's earnings to grow in the future. The company's ROE is quite high, suggesting that it's efficient at generating profits from shareholders' equity. The company's debt-to-equity ratio is relatively high, indicating that the company has been aggressive in financing its growth with debt.\n\nThe company's profit margins, operating margins, and EBITDA margins are all quite high, indicating strong profitability. The company's revenue and earnings growth are also robust, indicating a healthy financial performance.\n\nPlease note that while these numbers provide a snapshot of the company's financial health, they should be used in conjunction with other information for investment decisions. \ud83d\udcc8\n\nLet me know if you need any more information or have any other questions! \ud83d\ude0a",
+    "response_time": 21.98,
+    "ai_rating": 9,
+    "validation_details": "9",
+    "meets_threshold": true,
+    "status": "\u2705 PASS"
+  },
+  {
+    "test_id": "portfolio_1",
+    "question": "What's in my portfolio?",
+    "expected_tool": "get_portfolio",
+    "response": "Hello! Here's a detailed overview of your current investment portfolio:\n\n1. **Apple Inc. (AAPL)** \ud83c\udf4f\n   - You own 200 shares of AAPL.\n   - The average purchase price was $150.00 per share.\n   - The shares were purchased on August 22, 2025.\n\n2. **Alphabet Inc. (GOOGL)** \ud83c\udf10\n   - You own 100 shares of GOOGL.\n   - The average purchase price was $2800.00 per share.\n   - The shares were purchased on August 22, 2025.\n\n3. **Tesla Inc. (TSLA)** \ud83d\ude97\n   - You own 50 shares of TSLA.\n   - The average purchase price was $800.00 per share.\n   - The shares were purchased on August 22, 2025.\n\nPlease note that the current market value of these shares may be different from your purchase price, which could affect the total value of your portfolio. \n\nIt's always a good idea to regularly review your portfolio to ensure it aligns with your investment goals. If you need any further assistance or have any other questions, feel free to ask! \ud83d\ude0a",
+    "response_time": 10.58,
+    "ai_rating": 10,
+    "validation_details": "10",
+    "meets_threshold": true,
+    "status": "\u2705 PASS"
+  },
+  {
+    "test_id": "market_summary_1",
+    "question": "Give me a market summary",
+    "expected_tool": "get_market_summary",
+    "response": "Hello! Here's the market summary you requested for August 25, 2025. \ud83d\udcc8\n\n1. **S&P 500 (^GSPC)**\n   - Price: $6,466.91\n   - Change: +$96.74 (+1.52%)\n   - Volume: 3,043,140,000\n\n2. **Dow Jones Industrial Average (^DJI)**\n   - Price: $45,631.74\n   - Change: +$846.24 (+1.89%)\n   - Volume: 484,727,067\n\n3. **NASDAQ Composite (^IXIC)**\n   - Price: $21,496.53\n   - Change: +$396.24 (+1.88%)\n   - Volume: 8,341,027,000\n\n4. **Russell 2000 (^RUT)**\n   - Price: $2,361.95\n   - Change: +$87.85 (+3.86%)\n\nPlease note that the market cap, P/E ratio, and dividend yield for these indices are not available as they are not applicable to market indices.\n\nThe market is showing a positive trend today, with all indices reporting gains. The Russell 2000 (^RUT) has shown the most significant increase, with a change of +3.86%. This could indicate a strong performance from small-cap companies. \n\nThe NASDAQ Composite (^IXIC) has the highest trading volume, indicating a high level of trading activity in the tech sector.\n\nRemember, these numbers are a snapshot of the market at a specific time and can change rapidly. Always consider your personal investment goals and risk tolerance before making investment decisions. \n\nIf you need more detailed information or have any other questions, feel free to ask! \ud83d\ude0a",
+    "response_time": 18.07,
+    "ai_rating": 10,
+    "validation_details": "10",
+    "meets_threshold": true,
+    "status": "\u2705 PASS"
+  },
+  {
+    "test_id": "crypto_1",
+    "question": "What's the current price of Bitcoin?",
+    "expected_tool": "get_crypto_price",
+    "response": "Hello! \ud83d\ude80\n\nAs of the latest update on August 25, 2025, at 12:13 PM, the current price of Bitcoin (BTC) is $51.71. \n\nHere's a quick summary of the Bitcoin market:\n\n- **Current Price**: $51.71\n- **24h Change**: $1.98\n- **24h Change Percentage**: 3.98%\n- **24h Trading Volume**: 1,372,100 BTC\n\nThis means that Bitcoin has increased by 3.98% in the last 24 hours, which is a significant change. The trading volume also indicates a high level of activity in the Bitcoin market. \n\nIf you're considering investing, it's essential to keep an eye on these fluctuations as they can provide insights into the market's current trend. However, remember that cryptocurrency prices are highly volatile and can change rapidly. \n\nPlease let me know if you need any more information or if there's anything else I can assist you with. Happy investing! \ud83d\udcb0\ud83d\udcc8",
+    "response_time": 9.16,
+    "ai_rating": 10,
+    "validation_details": "10",
+    "meets_threshold": true,
+    "status": "\u2705 PASS"
+  }
+]

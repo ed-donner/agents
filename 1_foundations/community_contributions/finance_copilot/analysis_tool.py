@@ -214,7 +214,7 @@ class AnalysisTool:
         total_value = 0
         
         for symbol, data in portfolio_data.items():
-            if symbol in current_prices and "error" not in current_prices[symbol]:
+            if symbol in current_prices and current_prices[symbol].get("error") is None:
                 current_price = current_prices[symbol]["price"]
                 shares = data["shares"]
                 avg_price = data["avg_price"]
