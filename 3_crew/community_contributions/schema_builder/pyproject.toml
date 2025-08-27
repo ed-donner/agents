@@ -1,0 +1,23 @@
+[project]
+name = "schema_builder"
+version = "0.1.0"
+description = "schema_builder using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=0.165.1,<1.0.0"
+]
+
+[project.scripts]
+schema_builder = "schema_builder.main:run"
+run_crew = "schema_builder.main:run"
+train = "schema_builder.main:train"
+replay = "schema_builder.main:replay"
+test = "schema_builder.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
