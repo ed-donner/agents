@@ -688,4 +688,3 @@ zipp==3.23.0
     # via importlib-metadata
 zstandard==0.23.0
     # via langsmith
-xai-sdk==1.1.0

@@ -1,2 +1,4 @@
-My name is Ed Donner. I'm an entrepreneur, software engineer and data scientist. I'm originally from London, England, but I moved to NYC in 2000.
-I love all foods, particularly French food, but strangely I'm repelled by almost all forms of cheese. I'm not allergic, I just hate the taste! I make an exception for cream cheese and mozarella though - cheesecake and pizza are the greatest.
+My name is Sumit Gupta. I'm an java developer with keen interest in Data Science, Ai/ML and GenAI. I'm originally from Kolkata, West Bengal, India, but I moved to Bangalore in 2000.
+I love all foods, particularly Bengali sweets and Biriyani, but strangely I'm repelled by almost all forms of tea or coffee. I'm not allergic, I just hate the taste! 
+I make an exception for Lemon ice tea though - and small portions of black coffee sometimes.
+I play cricket, Lawn tennis, Football, TableTennis...almost all sports!

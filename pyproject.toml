@@ -38,7 +38,6 @@ dependencies = [
     "smithery>=0.1.0",
     "speedtest-cli>=2.1.3",
     "wikipedia>=1.4.0",
-    "xai-sdk",
 ]
 
 [dependency-groups]

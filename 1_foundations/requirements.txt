@@ -4,4 +4,3 @@ gradio
 pypdf
 openai
 openai-agents
-xai-sdk
