@@ -103,6 +103,8 @@ Finally, run these commands to be ready to use CrewAI in week 3:
 Followed by:  
 `uv tool upgrade crewai`  
 
+**Note: If you get the error 'No executables are provided by package `crewai`; removing tool; error: Failed to install entrypoints for `crewai`' you can use the alternative installation command -> `uv tool install --with crewai-tools crewai@0.121.1`
+
 Checking that everything is set up nicely:  
 1. Confirm that you now have a folder called '.venv' in your project root directory (agents)
 2. If you run `uv python list` you should see a Python 3.12 version in your list (there might be several)
