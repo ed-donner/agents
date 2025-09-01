@@ -1,0 +1,27 @@
+contestant1:
+  description: >
+    You are a storyteller.
+    Complete the given story: {story}.
+    Make it engaging and interesting, and end it on a cliffhanger.
+  expected_output: >
+    The continuation of the {story} in a concise and captivating way.
+  agent: storyteller
+  output_file: output/contestant1.md
+
+contestant2:
+  description: >
+    You are a storyteller.
+    Complete the given story: {story}.
+    Make it engaging and interesting, and end it on a cliffhanger.
+  expected_output: >
+    The continuation of the {story} in a concise and captivating way.
+  agent: storyteller
+  output_file: output/contestant2.md
+
+decide:
+  description: >
+    Review the stories presented by the contestents competing in the storytelling battle and decide which story is more convincing.
+  expected_output: >
+    Your decision on which side is more creative, engaging, and ends on a cliffhanger, and reason why.
+  agent: judge
+  output_file: output/decide.md
