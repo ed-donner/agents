@@ -1,0 +1,32 @@
+analyze_requirements_task:
+  description: >
+    Collect and analyze the provided {business} requirements.
+    Identify the core entities, attributes, and relationships required
+    to design the database schema. Make sure no important aspect
+    of the business operations is left out.
+  expected_output: >
+    A structured requirements document listing all entities, attributes,
+    and relationships, ready to be used for schema design.
+  agent: requirements_analyst
+
+build_schema_task:
+  description: >
+    Using the structured requirements, design the database schema.
+    Create a detailed Entity-Relationship Diagram (ERD), normalize the schema,
+    and generate SQL DDL scripts for database creation.
+    Include schema documentation explaining the design choices.
+    Save the outputs into appropriate files for later use.
+  expected_output: >
+    - schema_doc.md → Documentation explaining design choices
+  agent: schema_builder
+  output_file: output/schema_doc.md
+
+review_schema_task:
+  description: >
+    Review the generated ERD and SQL schema for normalization, redundancy,
+    and scalability issues. Suggest improvements such as foreign keys, indexing,
+    denormalization (if needed), partitioning, or performance optimizations.
+  expected_output: >
+    A detailed schema review report with identified issues and suggested
+    improvements for scalability, performance, and integrity.
+  agent: reviewer_critic

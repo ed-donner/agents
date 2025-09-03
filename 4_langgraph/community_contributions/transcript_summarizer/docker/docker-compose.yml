@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # Ollama service for running LLaMA models
+  ollama:
+    image: ollama/ollama:latest
+    container_name: transcript-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - transcript-network
+
+  # Transcript Summarizer application
+  transcripter:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: transcript-summarizer
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    env_file:
+      - ../.env
+    ports:
+      - 7861:7861
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7861/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    networks:
+      - transcript-network
+
+volumes:
+  ollama_data:
+    driver: local
+
+networks:
+  transcript-network:
+    driver: bridge
