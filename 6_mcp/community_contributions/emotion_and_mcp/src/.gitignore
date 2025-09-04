@@ -1,0 +1,21 @@
+# Root gitignore
+# Python
+__pycache__/
+*.py[cod]
+*.so
+venv/
+.venv/
+env/
+ENV/
+.pytest_cache/
+.mypy_cache/
+*.log
+# Go
+mcp-go-server/bin/
+*.test
+*.out
+# Editors/OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
