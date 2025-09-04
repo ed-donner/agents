@@ -11,7 +11,7 @@ Used as mcp tool for start of day exchange rates for USD to requested currency
 as EXCHANGE_RATE_API_KEY=<<key free for start of day rates from exchangerate-api.com >>
 
 ### Example 
- see request and instructions
+ see request and instructions examples in 
 in jupyter notebook
     mcp_exchange_rates.ipynb
 

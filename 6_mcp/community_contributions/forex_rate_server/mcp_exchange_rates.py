@@ -1,6 +1,8 @@
 """
 MCP server : mcp_exchange_rates.py
 
+producd fot ed donners agentic ai course
+
 Used for start of day exchange rates for USD to requested currency
 
 Get free api key from exchangerate-api.com
