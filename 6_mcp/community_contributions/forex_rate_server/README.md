@@ -7,7 +7,7 @@
 Used as mcp tool for start of day exchange rates for USD to requested currency
 
 1. Register for a free API key 
-2. store the API key in .env file
+2. store the API key in .env file as
 as EXCHANGE_RATE_API_KEY=<<key free for start of day rates from exchangerate-api.com >>
 
 ### Example 

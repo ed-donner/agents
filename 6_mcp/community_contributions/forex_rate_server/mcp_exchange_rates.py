@@ -1,5 +1,6 @@
 """
 MCP server : mcp_exchange_rates.py
+mcp server with api pattern for USD to requested currency
 
 producd fot ed donners agentic ai course
 
