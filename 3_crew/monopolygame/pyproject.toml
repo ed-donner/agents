@@ -1,0 +1,23 @@
+[project]
+name = "monopolygame"
+version = "0.1.0"
+description = "monoPolyGame using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=0.152.0,<1.0.0"
+]
+
+[project.scripts]
+monopolygame = "monopolygame.main:run"
+run_crew = "monopolygame.main:run"
+train = "monopolygame.main:train"
+replay = "monopolygame.main:replay"
+test = "monopolygame.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
