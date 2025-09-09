@@ -182,3 +182,10 @@ cython_debug/
 6_mcp/accounts.db
 6_mcp/memory/*.db
 .vercel
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
