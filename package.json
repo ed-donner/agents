@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "@supabase/supabase-js": "^2.51.0",
+    "dotenv": "^17.2.0",
+    "openai": "^5.9.1",
+    "rss-parser": "^3.13.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.1",
+    "@types/react": "19.1.8",
+    "typescript": "5.8.3"
+  }
+}

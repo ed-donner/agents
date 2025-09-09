@@ -132,7 +132,7 @@ class Me:
         self.openai = OpenAI(api_key=os.getenv("GOOGLE_API_KEY"), base_url="https://generativelanguage.googleapis.com/v1beta/openai/")
         self.name = "Sagarnil Das"
         self.rate_limiter = RateLimiter(max_requests=5, time_window=60)  # 5 messages per minute
-        reader = PdfReader("me/linkedin.pdf")
+        reader = PdfReader("me/JackAgnewResume2025.pdf")
         self.linkedin = ""
         for page in reader.pages:
             text = page.extract_text()
