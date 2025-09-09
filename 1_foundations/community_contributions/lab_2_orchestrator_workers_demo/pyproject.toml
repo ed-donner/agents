@@ -1,0 +1,35 @@
+[project]
+name = "orchestrator-workers-demo"
+version = "0.1.0"
+description = "Demo of the orchestrator-workers workflow pattern from Anthropic's Building Effective Agents blog post"
+authors = [
+    {name = "Community Contributor", email = "contributor@example.com"}
+]
+readme = "README_orchestrator_workers.md"
+requires-python = ">=3.8"
+dependencies = [
+    "openai>=1.0.0",
+    "anthropic>=0.7.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]

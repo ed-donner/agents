@@ -1,0 +1,7 @@
+streamlit
+python-dotenv
+sendgrid
+reportlab
+python-docx
+openai
+openai-agents

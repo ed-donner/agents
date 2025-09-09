@@ -1,0 +1,55 @@
+[project]
+name = "ai-career-assistant"
+version = "1.0.0"
+description = "An AI-powered career assistant with modular architecture"
+authors = [
+    {name = "Amir Nathoo", email = "amir@example.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+dependencies = [
+    "requests",
+    "python-dotenv", 
+    "gradio",
+    "pypdf",
+    "openai",
+    "openai-agents"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "ruff",
+    "mypy"
+]
+
+[project.urls]
+Repository = "https://github.com/amirna2/agents"
+Documentation = "https://github.com/amirna2/agents/tree/main/1_foundations/community_contributions/amirna2_contributions/personal-ai"
+
+[project.scripts]
+ai-career-assistant = "main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 88
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true

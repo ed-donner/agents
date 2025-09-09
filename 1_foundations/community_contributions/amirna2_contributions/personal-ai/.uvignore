@@ -1,0 +1,36 @@
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Cache directories
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Personal documents (keep private)
+me/*.pdf
+me/*.txt
+
+# Backup files
+*_backup*
+
+# Environment variables
+.env
+*.env
+
+# Build artifacts
+dist/
+build/
+*.egg-info/

@@ -1,0 +1,12 @@
+pytest
+requests
+aiohttp
+langchain-core
+langchain
+langgraph
+google-generativeai
+gradio
+pydantic
+pydantic-settings
+webvtt-py
+tiktoken

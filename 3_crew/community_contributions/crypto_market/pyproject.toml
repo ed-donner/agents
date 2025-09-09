@@ -1,0 +1,23 @@
+[project]
+name = "crypto_market"
+version = "0.1.0"
+description = "crypto_market using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=0.150.0,<1.0.0"
+]
+
+[project.scripts]
+crypto_market = "crypto_market.main:run"
+run_crew = "crypto_market.main:run"
+train = "crypto_market.main:train"
+replay = "crypto_market.main:replay"
+test = "crypto_market.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

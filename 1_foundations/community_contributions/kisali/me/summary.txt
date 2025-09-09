@@ -1,0 +1,2 @@
+My name is Ian Kisali. I'm a DevOps engineer, with skills in SRE. I'm currently upskilling inn ML and AI, specifically agentic AI.
+I live in Kenya. I have previously worked as an SRE Intern at Safaricom PLC where I mostly worked using ELK stack and Dynatrace. I also worked on a project involving RCA on ELK Log data. I'm currently out of contract and learning AI, looking forward to apply in in DevOps.
