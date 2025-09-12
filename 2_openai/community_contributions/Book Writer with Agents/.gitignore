@@ -1,0 +1,13 @@
+﻿# Ignore local env and caches
+.env
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+notebook.txt
+# Ignore build artifacts
+build/
+dist/
+cache/
+logs/
+# Project content not to upload
+content/
