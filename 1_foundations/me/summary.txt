@@ -1,2 +1,7 @@
-My name is Ed Donner. I'm an entrepreneur, software engineer and data scientist. I'm originally from London, England, but I moved to NYC in 2000.
-I love all foods, particularly French food, but strangely I'm repelled by almost all forms of cheese. I'm not allergic, I just hate the taste! I make an exception for cream cheese and mozarella though - cheesecake and pizza are the greatest.
+My name is Stephen Shenk. I'm a DevSecOps Engineer with expertise in AWS, Kubernetes, Terraform, CI/CD, Cloud Automation, FinOps, Generative AI, Agentic AI, and Prompt Engineering.
+
+With over a decade of experience across the SDLC, I design and implement secure, scalable AWS multi-account architectures using Control Tower and AWS Organizations. My focus is on automating cloud infrastructure, optimizing costs, and enabling teams to deliver software faster and more securely.
+
+Passionate about the future of AI, I explore Generative AI and Amazon Bedrock, building agentic AI workflows that transform ideas into scalable solutions.
+
+Outside of tech, I'm a foodie — I love French steak (medium-well) with a good red wine, Caribbean fusion dishes, and Jollof rice with grilled sea bass and plantain. During football season, you'll usually find me twice a week at the pitch — weekday training and weekend league matches — cheering on my boys. In the summer, I switch gears to barbecues and family time outdoors.
