@@ -1,0 +1,106 @@
+design_task:
+  description: >
+    Take the high level requirements described here and prepare a detailed design for the engineer;
+    everything should be in 1 python module, but outline the classes and methods in the module.
+    Here are the requirements: {requirement}
+    IMPORTANT: Only output the design in markdown format, laying out in detail the classes and functions in the module, describing the functionality. Do not use backquotes and other unnecessary markers.
+  expected_output: >
+    A detailed design in markdown format for the engineer, identifying the classes and functions in the module.
+  agent: development_lead
+  output_file: output/{module_name}/{id}/design.md
+
+backend_coding_task:
+  description: >
+    Based on the backend design provided by the design task, write crisp code in python for a given requirement. make sure to address only the backend requirements using Gradio.
+    No clutter and unnecessary commentary please. just the python that we can save as a py file and execute directly should be good enough.
+    if there are review comments provided by the reviewer, please address those as well. here are the comments:
+    \n\n---------------------------------------\n\n
+    {review_comments}
+
+    \n\n---------------------------------------\n\n
+    Here is the requirement: \n
+     {requirement}
+  expected_output: >
+    A python file containing the backend code for the given requirement.
+  agent: backend_engineer
+  output_file: output/{module_name}/{id}/backend.py
+  context:
+    - design_task
+
+frontend_coding_task:
+  description: >
+    Create nice and simple UI for the given requirement usin Gradio. Make sure to import the module written by the backend engineer in your interface for backend calls. Do not copy the same code into your code. Refer to it.
+    The backend module name is "backend"
+    if there are review comments provided by the reviewer, please address those as well. here are the comments:
+    \n\n---------------------------------------\n\n
+    {review_comments}
+
+    \n\n---------------------------------------\n\n
+    Here is the requirement: \n    
+    The requirement is this : {requirement}
+  expected_output: >
+    A python file containing the UI code for the given requirement.
+  agent: frontend_engineer
+  output_file: output/{module_name}/{id}/app.py
+  context:
+    - backend_coding_task
+    - design_task
+
+code_review_task:
+  description: >
+    Review the python code provided by the backend engineer and ensure it is done according to the design provided by the development lead. 
+    DO NOT pass if atleast one MAJOR issue is open. Do not review test coverage as that will be handled by the tester. 
+    At the end, provide a summary mentioning whether the code passes the review or not (a clear yes or no should do.)
+    here is the latest code submitted by the developer: 
+    \n---------------------------------------\n
+    {backend_code}
+    \n---------------------------------------\n
+    The requirement is this : {requirement}
+  expected_output: >
+    A code review feedback object of type format CodeReviewFeedback. Also create a json file.
+  agent: code_reviewer
+  output_file: output/{module_name}/{id}/backend_code_review_{iteration}.json
+  context:
+    - design_task
+    - backend_coding_task
+
+frontend_code_review_task:
+  description: >
+    Review the python code provided by the frontend engineer and ensure it is done according to the design provided by the development lead. 
+    Just output pure Markdown only. no ```markdown
+    be lenient in your reviews. Do not review test coverage as that will be handled by the tester. 
+    At the end, provide a summary mentioning whether the code passes the review or not (a clear yes or no should do.)
+    here is the latest code submitted by the developer: 
+    \n---------------------------------------\n
+    {frontend_code}
+    \n---------------------------------------\n
+    The requirement is this : {requirement}
+  expected_output: >
+    A code review feedback object of type format CodeReviewFeedback.
+  agent: code_reviewer
+  output_file: output/{module_name}/{id}/frontend_code_review_{iteration}.json
+  context:
+    - design_task
+    - frontend_coding_task
+
+test_preparation_task:
+  description: >
+    Write comprehensive unit test cases for the oode written by the backend & the frontend engineers for the given requirement.  Ensure all edge scenarios are covered comprehensively.
+    Do not return any backquotes or unnecessary markdown formatting. Just pure python code should suffice. Make sure the code is well documented and logged.
+    backend module name is: backend
+    frontend module name is: app
+    here is the backend code 
+    \n---------------------------------------
+    {backend_code}
+    \n---------------------------------------
+    here is the frontend code 
+    \n---------------------------------------
+    {frontend_code}
+    \n---------------------------------------
+    The requirement is this : {requirement}
+  expected_output: >
+    A python file containing the code with unit test cases for the given requirement.
+  agent: test_engineer
+  output_file: output/{module_name}/{id}/test.py
+  context:
+    - code_review_task
