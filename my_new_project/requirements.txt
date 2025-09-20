@@ -1,0 +1,6 @@
+python-dotenv
+openai
+anthropic
+ipython
+openai-whisper
+Flask 
