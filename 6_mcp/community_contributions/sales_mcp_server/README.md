@@ -1,14 +1,3 @@
-Got it ✅ I’ll draft a **GitHub README** for your project. It will include:
-
-* Clear project description & scope
-* Prerequisites (what must be installed/configured)
-* Setup & run instructions
-* Usage flow explanation
-* A simple architecture/flow diagram
-
-Here’s a solid first version:
-
----
 
 # Sales Agent Email Generator
 
@@ -70,7 +59,7 @@ This launches the **Sales Agent Tools Server** at `http://127.0.0.1:8000`.
 ### 2. Run the Streamlit Frontend
 
 ```bash
-uv run streamlit run sales_ui.py
+uv run streamlit run ui_client.py
 ```
 
 This starts the **Sales Manager UI** where you can chat with the system to generate and send emails.
@@ -99,7 +88,7 @@ This starts the **Sales Manager UI** where you can chat with the system to gener
 ```mermaid
 flowchart TD
 
-subgraph UI["Streamlit UI (Sales Manager)"]
+subgraph UI["UI (Sales Manager)"]
     U[User Input]
     CH[Chat History]
 end
@@ -132,10 +121,9 @@ MCP --> Send
 
 ```
 .
-├── sales_agents.py   # MCP server with email generation tools
-├── sales_ui.py       # Streamlit frontend UI
+├── mcp_server.py   # MCP server with email generation tools
+├── ui_client.py       # Streamlit frontend UI
 ├── .env              # Environment variables (API keys)
-├── requirements.txt  # Dependencies
 └── README.md         # Project documentation
 ```
 
