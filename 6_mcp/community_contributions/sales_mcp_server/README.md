@@ -88,7 +88,7 @@ This starts the **Sales Manager UI** where you can chat with the system to gener
 ```mermaid
 flowchart TD
 
-subgraph UI["UI (Sales Manager)"]
+subgraph UI["Sales Manager"]
     U[User Input]
     CH[Chat History]
 end
@@ -106,11 +106,13 @@ subgraph MCP["FastMCP Tool Server"]
     Send[Send Email Tool]
 end
 
-U -->|Prompt| UI --> GA
+U --> CH
+U -->|Prompt| GA
+CH --> GA
+
 GA --> MCPClient --> MCP
 MCP -->|Results| MCPClient --> GA
-GA --> UI
-CH --> UI
+GA --> CH
 
 MCP --> Send
 ```
