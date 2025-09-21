@@ -106,7 +106,7 @@ subgraph MCP["FastMCP Tool Server"]
     Send[Send Email Tool]
 end
 
-U -->|Prompt| --> GA
+U -->|Prompt| UI --> GA
 GA --> MCPClient --> MCP
 MCP -->|Results| MCPClient --> GA
 GA --> UI
