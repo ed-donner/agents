@@ -70,7 +70,7 @@ This starts the **Sales Manager UI** where you can chat with the system to gener
 
 1. Open the **Streamlit app** in your browser.
 
-2. Type a prompt (e.g., *"Write a cold email for a cybersecurity SaaS to a compliance officer."*)
+2. Type a prompt (e.g., *"Write a busy email for a cybersecurity SaaS to a compliance officer."*)
 
 3. The system will:
 
@@ -106,7 +106,7 @@ subgraph MCP["FastMCP Tool Server"]
     Send[Send Email Tool]
 end
 
-U -->|Prompt| UI --> GA
+U -->|Prompt| --> GA
 GA --> MCPClient --> MCP
 MCP -->|Results| MCPClient --> GA
 GA --> UI
