@@ -94,7 +94,7 @@ def send_email(subject: str, body: str):
     
     # Set up email sender, recipient, and content
     from_email = "onboarding@resend.dev"  # Replace with your verified sender
-    to_email = "anthonylaforgia09@gmail.com"  # Replace with recipient's email
+    to_email = "CHANGEME@CHANGEME.com"  # Replace with recipient's email
     
     # Resend API headers and payload
     headers = {
