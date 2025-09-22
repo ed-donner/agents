@@ -1,0 +1,109 @@
+map_industry:
+  description: >
+    Normalize the input industry "{industry}" into an actionable vocabulary for discovery.
+    Deliver: (1) 6–12 core keywords (precise, primary terms), (2) 4–8 adjacent terms (GICS/NAICS
+    style, common synonyms), (3) a one‑line scope note (in vs out, with examples), and (4) 3–8
+    pitfalls (common mislabels/overlaps to avoid false positives). Use short, lower‑case tokens for
+    keywords unless proper nouns are required.
+  expected_output: >
+    A YAML block ONLY (no prose) with keys:
+      core_terms: [string, ...]
+      adjacent_terms: [string, ...]
+      scope_note: "one line scoped note"
+      pitfalls: [string, ...]
+  agent: industry_mapper
+  output_file: outputs/01_industry_mapping.yaml
+
+company_discovery:
+  description: >
+    Using the mapping and web tools, list 20–40 public companies primarily in {industry}
+    (apply {region} if provided). Rules:
+    - Favor primary exposure; exclude diversified names where {industry} is incidental/minor.
+    - Prefer official sources (IR sites, 10‑K/20‑F, 6‑K) for confirmation; use encyclopedic sites only
+      as secondary cross‑checks.
+    - Normalize: ticker UPPERCASE; include exchange if known; de‑duplicate strictly by ticker.
+    - Provide a succinct reason (<=140 chars) for the industry match.
+  expected_output: >
+    Return ONLY a JSON array (no prose). Each object fields:
+      ticker (str, UPPERCASE), name (str), exchange (str, optional), country (str, optional),
+      industry_match_reason (str, <=140 chars)
+  agent: company_discovery_agent
+  markdown: false
+  output_file: outputs/02_candidates.json
+  context:
+    - map_industry
+
+screen_fundamentals:
+  description: >
+    For each candidate, gather recent, comparable metrics (consistent units, ideally in USD where
+    applicable). Apply the hard filter: market_cap >= {min_mcap}. Guidance:
+    - Prefer TTM or latest fiscal values; include an as_of date in notes; set NA/null when unavailable.
+    - Do NOT invent numbers; include concise notes with source URLs or identifiers.
+    - Keep units explicit (e.g., market_cap in USD). If native currency cannot be normalized,
+      state the currency in notes.
+  expected_output: >
+    Return ONLY a JSON array (no prose). One row per ticker with fields:
+      ticker, name, market_cap, pe_ttm, ev_ebitda, revenue_cagr_3y,
+      operating_margin_ttm, fcf_margin_ttm, net_debt_to_ebitda, dividend_yield, notes
+  agent: fundamental_screener
+  output_file: outputs/03_screened_metrics.json
+  context:
+    - company_discovery
+
+valuation_rank:
+  description: >
+    From screened metrics, compute transparent, reproducible composite scores and a final ranking.
+    Components:
+    - rel_valuation_score: cheaper is better (e.g., rank inverse of pe_ttm and ev_ebitda).
+    - quality_score: higher operating/FCF margins, lower leverage (net_debt_to_ebitda).
+    - growth_score: higher revenue_cagr_3y; optionally reward margin improvement if available.
+    Weighting by {valuation_pref}:
+      value: 60% valuation, 20% quality, 20% growth
+      growth: 20% valuation, 20% quality, 60% growth
+      balanced: 40% valuation, 30% quality, 30% growth
+    Determinism & NA handling:
+    - Use rank‑based scoring with documented directionality; impute NA with neutral ranks rather than
+      penalizing harshly; state exact method in intrinsic_estimate_note.
+    - Tie‑breakers: higher quality_score, then higher growth_score, then larger market_cap.
+  expected_output: >
+    Return ONLY a JSON array (no prose) of ValuationView rows, sorted by final_score desc. Include
+    fields (example):
+      ticker, name, rel_valuation_score, quality_score, growth_score, final_score, intrinsic_estimate_note
+  agent: valuation_analyst
+  output_file: outputs/04_valuation_rank.json
+  context:
+    - screen_fundamentals
+
+news_and_risks:
+  description: >
+    For the top ~12 by prior ranking, scan last 30–90 days of headlines. Summarize material items:
+    earnings/guidance, regulation/litigation, M&A, supply‑chain, short‑seller reports, product or
+    contract wins/losses. Avoid paywalled links when possible; prefer public sources. Tag sentiment
+    (positive/neutral/negative) conservatively.
+  expected_output: >
+    Return ONLY a JSON array (no prose) of RiskNewsItem rows:
+      ticker, headline, url (optional), sentiment (optional), risk_note (optional)
+  agent: news_risk_analyst
+  output_file: outputs/05_news_risks.json
+  context:
+    - valuation_rank
+
+compile_shortlist:
+  description: >
+    Propose a ranked shortlist of {n_picks} aligned with {valuation_pref}. For each pick include:
+    - Thesis (80–140 words) covering the "why now" and the edge vs peers.
+    - 3–5 key drivers (short bullets, imperative phrasing) and 2–3 red flags (short bullets).
+    Apply tie‑breakers: higher quality_score, then higher growth_score. Keep language factual and crisp.
+    Also generate a Markdown brief with weights used, common caveats, and a timestamp.
+  expected_output: >
+    Produce BOTH:
+      1) A FinalShortlist JSON object with picks[] (return ONLY JSON when returning JSON), and
+      2) A Markdown brief saved to outputs/06_shortlist.md summarizing ranking, weights, and caveats.
+  agent: shortlist_writer
+  markdown: true
+  output_file: outputs/06_shortlist.md
+  context:
+    - screen_fundamentals
+    - valuation_rank
+    - news_and_risks
+    - company_discovery

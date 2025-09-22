@@ -1,0 +1,70 @@
+summarize_data_task:
+  description: >
+    Summarize the user data provided in the context to create a comprehensive financial plan.
+    Make sure to cover all relevant aspects of the user's financial situation, including income,
+    expenses, assets, liabilities, and financial goals.
+    If user has not provided enough information, make reasonable assumptions based on typical financial scenarios.
+    Also provide information on users local currency and country to make relevant assumptions and caluclatiuons only in local currency.
+    consider all data points provided in user data to make relevant calculations and assumptions.
+  expected_output: >
+    A detailed summary of the user's financial data, highlighting key points and insights that will inform the financial plan. Also mention any assumptions made due to lack of information seprately.
+  agent: user_data_summarizer
+  output_file: output/summarized_user_data.md
+
+emergency_fund_task:
+  description: >
+    Based on the summarized user data provided in the context, provide tailored advice on building and managing an emergency fund.
+    Consider the user's income, expenses, and financial goals when making your recommendations.
+    The emergency fund calculation should be based on 3 to 6 months of essential expenses and monthly income of user.
+    Calculate all amounts in user's local currency.
+  expected_output: >
+    A comprehensive set of recommendations for building and managing an emergency fund, including the optimal amount to save, strategies for saving, and tips for maintaining the fund over time.
+  agent: emergency_fund_advisor
+  context:
+    - summarize_data_task
+  output_file: output/emergency_fund_advice.md
+
+investment_task:
+  description: >
+    Based on the summarized user data provided in the context, provide tailored investment advice.
+    Consider the user's financial goals, risk tolerance, and investment horizon when making your recommendations.
+    Mostly stick to the mutual funds and ETFs as investment options.
+    Prefer passive investment strategies over active ones.
+    Calculate all amounts in user's local currency.
+  expected_output: >
+    A detailed investment strategy that aligns with the user's financial goals and risk profile, including specific investment options and asset allocation recommendations. Seprately mention any assumptions made due to lack of information.
+  agent: investment_advisor
+  context:
+    - summarize_data_task
+  output_file: output/investment_advice.md
+
+insurance_task:
+  description: >
+    Based on the summarized user data provided in the context, provide tailored insurance advice.
+    Consider the user's financial situation, dependents, and potential risks when making your recommendations.
+    Cover the main types of insurance: health, life, disability, property, and liability.
+    Calculate all amounts in user's local currency.
+  expected_output: >
+    A comprehensive insurance plan that addresses the user's needs and provides adequate coverage against potential risks. Include specific insurance products and coverage amounts where relevant.
+  agent: insurance_advisor
+  context:
+    - summarize_data_task
+  output_file: output/insurance_advice.md
+
+financial_plan_report_task:
+  description: >
+    Create a comprehensive financial plan report based on the advice provided by the data summarizer, emergency fund, investment, and insurance advisors.
+    Ensure the report is well-structured, easy to understand, and tailored to the user's unique financial situation and goals.
+  expected_output: >
+    A detailed financial plan report that synthesizes the advice from the various advisors into a cohesive document.
+    The report should include an executive summary, detailed sections on emergency fund, investment strategy, and insurance plan, and actionable recommendations for the user to follow. seprately mention any assumptions made due to lack of information and disclaimer that this is not a financial advice and user should consult a financial advisor before making any investment decisions.
+    Formatted as markdown without '```'
+    Report should contain sections on data provided, estimated net worth, emergency fund advice, investment strategy, and insurance plan in user's local currency.
+    Also include overall commentry on current financial situation of user and actionable recommendations for the user to follow as part of financial behaviour and comment on if all goals are achivable and suggest some additional goals if possible.
+  agent: reporting_analyst_financial_plan
+  context:
+    - summarize_data_task
+    - emergency_fund_task
+    - investment_task
+    - insurance_task
+  output_file: output/financial_plan_report.md
