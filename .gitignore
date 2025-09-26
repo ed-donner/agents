@@ -182,3 +182,6 @@ cython_debug/
 6_mcp/accounts.db
 6_mcp/memory/*.db
 practice.ipynb
+# Ignore generated files
+1_foundations/community_contributions/manzoor/public 
+1_foundations/community_contributions/manzoor/src
