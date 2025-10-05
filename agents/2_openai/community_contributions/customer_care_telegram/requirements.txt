@@ -1,0 +1,13 @@
+python-telegram-bot>=20.0
+quart>=0.18.0
+python-dotenv>=0.21.0
+gspread>=5.7.0
+google-auth>=2.15.0
+pandas>=1.5.0
+fuzzywuzzy>=0.18.0
+python-Levenshtein>=0.12.2
+google-adk>=0.1.0
+python-dotenv
+google-api-python-client
+google-auth-oauthlib
+google-auth-httplib2

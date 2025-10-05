@@ -1,0 +1,53 @@
+resume_analysis_task:
+  description: >
+    Analyze the downloaded resume to extract key details such as full name, contact information, work experience, education, technical and soft skills, certifications, and other relevant highlights.
+  expected_output: >
+    A structured summary (as a list or key-value pairs) of the extracted information from the resume.
+    Ensure all key sections are represented with relevant data.
+  agent: resume_analyst
+  output_file: output/analyst_report.md
+
+job_scraping_task:
+  description: >
+    Based on the extracted resume data, generate 5–10 realistic mock job listings that align with
+    the candidate’s skills, experience, and career path. Each listing should appear as though it came
+    from a specific job board or platform, such as LinkedIn, Indeed, or Stack Overflow Jobs.
+    The goal is to simulate how a candidate might view relevant job opportunities online. Ensure that
+    job titles, company names, skills, and descriptions are appropriate to the candidate’s level and domain.
+  expected_output: >
+    A list of 5–10 job postings, each including:
+    - Job Title
+    - Company Name
+    - Required Skills (3–8 relevant skills)
+    - Short Job Description (2–4 sentences)
+    - Mock Location (City, Country or Remote)
+    - Mock Salary Range (e.g., "$80,000 – $110,000 USD/year")
+    - Source Job Site (e.g., "LinkedIn", "Indeed", "Glassdoor", "Stack Overflow", etc.)
+    Ensure each job appears to come from a plausible source and reflects realistic formatting and content.
+  agent: job_scraper
+  output_file: output/job_scraping_report.md
+
+
+job_matching_task:
+  description: >
+    Using the candidate’s resume and the list of job postings, calculate a match score (0–100)
+    for each job. Base it on how well the candidate’s skills, experience, and background
+    align with the job requirements. Include a brief explanation for each score.
+  expected_output: >
+    A list of jobs with:
+    - Match score
+    - Summary of matched and missing criteria
+    - Short rationale for the score
+  agent: matchmaker
+  output_file: output/job_matching_report.md
+
+resume_advising_task:
+  description: >
+    Review the candidate’s resume and job match scores. Provide clear, actionable suggestions
+    to improve the resume in terms of content, formatting, and alignment with the desired roles.
+    Focus on areas like missing skills, unclear role descriptions, or outdated formats.
+  expected_output: >
+    A list of improvement suggestions for the resume, prioritized by impact.
+    Include tips for tailoring it to better fit the job market.
+  agent: advisor
+  output_file: output/resume_advising_report.md
