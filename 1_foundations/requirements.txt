@@ -4,3 +4,5 @@ gradio
 pypdf
 openai
 openai-agents
+chromadb
+python-docx
