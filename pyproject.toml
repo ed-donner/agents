@@ -9,12 +9,15 @@ dependencies = [
     "autogen-agentchat>=0.4.9.2",
     "autogen-ext[grpc,mcp,ollama,openai]>=0.4.9.2",
     "bs4>=0.0.2",
+    "fastmcp>=2.12.3",
     "gradio>=5.22.0",
     "httpx>=0.28.1",
     "ipywidgets>=8.1.5",
     "langchain-anthropic>=0.3.10",
     "langchain-community>=0.3.20",
     "langchain-experimental>=0.3.4",
+    "langchain-google-genai>=2.1.12",
+    "langchain-mcp-adapters>=0.1.10",
     "langchain-openai>=0.3.9",
     "langgraph>=0.3.18",
     "langgraph-checkpoint-sqlite>=2.0.6",
@@ -37,10 +40,16 @@ dependencies = [
     "setuptools>=78.1.0",
     "smithery>=0.1.0",
     "speedtest-cli>=2.1.3",
+    "streamlit>=1.49.1",
     "wikipedia>=1.4.0",
 ]
 
 [dependency-groups]
 dev = [
     "ipykernel>=6.29.5",
+]
+
+[tool.uv.workspace]
+members = [
+    "6_mcp/community_contributions/sales_mcp_server",
 ]
