@@ -1,0 +1,39 @@
+{
+  "modules": [
+    {
+      "name": "accounts.py",
+      "class_name": "AccountService",
+      "purpose": "Creates accounts; manages balances, deposits, and withdrawals with validation and ledger logging."
+    },
+    {
+      "name": "trading.py",
+      "class_name": "TradingEngine",
+      "purpose": "Executes buy/sell orders; validates operations; updates balances and holdings; records trades."
+    },
+    {
+      "name": "portfolio.py",
+      "class_name": "PortfolioService",
+      "purpose": "Tracks holdings and computes portfolio value and P/L (realized/unrealized) using pricing data."
+    },
+    {
+      "name": "pricing.py",
+      "class_name": "PricingService",
+      "purpose": "Exposes get_share_price(symbol) with fixed test prices for AAPL, TSLA, and GOOGL."
+    },
+    {
+      "name": "transactions.py",
+      "class_name": "TransactionLedger",
+      "purpose": "Persists and retrieves transaction history for accounts (deposits, withdrawals, buys, sells)."
+    },
+    {
+      "name": "validation.py",
+      "class_name": "ValidationRules",
+      "purpose": "Centralizes business rules to prevent invalid operations (amounts, symbols, funds, quantities)."
+    },
+    {
+      "name": "storage.py",
+      "class_name": "InMemoryStore",
+      "purpose": "Provides in-memory persistence and atomic updates for accounts, holdings, and transactions."
+    }
+  ]
+}
