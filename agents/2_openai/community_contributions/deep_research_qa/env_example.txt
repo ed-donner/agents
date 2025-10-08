@@ -1,0 +1,14 @@
+# Copy this file to .env and fill in your actual values
+
+# OpenAI API Configuration (Required)
+OPENAI_API_KEY=your_openai_api_key_here
+
+# SendGrid Email Configuration (Optional)
+SENDGRID_API_KEY=your_sendgrid_api_key_here
+SENDGRID_FROM_EMAIL=your_verified_sender_email@example.com
+
+# OpenAI Organization (Optional)
+OPENAI_ORG_ID=your_openai_org_id_here
+
+# Environment Settings
+ENVIRONMENT=production 

@@ -1,0 +1,26 @@
+[project]
+name = "resume_match_ai"
+version = "0.1.0"
+description = "resume-match-ai using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=0.126.0,<1.0.0",
+    "langchain-anthropic>=0.3.15",
+    "pypdf>=5.6.0",
+    "requests>=2.32.3",
+]
+
+[project.scripts]
+resume_match_ai = "resume_match_ai.main:run"
+run_crew = "resume_match_ai.main:run"
+train = "resume_match_ai.main:train"
+replay = "resume_match_ai.main:replay"
+test = "resume_match_ai.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
