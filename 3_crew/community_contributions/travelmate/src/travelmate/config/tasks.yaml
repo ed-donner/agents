@@ -1,0 +1,167 @@
+# =============================================================================
+# TRAVEL MATE TASKS CONFIGURATION
+# =============================================================================
+# This file defines the tasks for the TravelMate crew, organized to correspond
+# with the agents defined in agents.yaml
+
+# =============================================================================
+# GUIDE TASKS - Information Gathering
+# =============================================================================
+# These tasks gather specific information about travel destinations
+
+travel_guide_task:
+  description: >
+    Research and provide comprehensive information about popular tourist destinations
+    and attractions in {location}. Include details about cultural significance,
+    best times to visit, entry requirements, and visitor experiences.
+  expected_output: >
+    A detailed report of popular tourist destinations in {location} including:
+    - Top attractions with descriptions
+    - Cultural and historical significance
+    - Best visiting times and seasons
+    - Entry fees and requirements
+    - Visitor tips and recommendations
+  agent: travel_guide_agent
+
+food_guide_task:
+  description: >
+    Research and provide detailed information about local cuisine, popular restaurants,
+    street food, and dining experiences in {location}. Include recommendations for
+    different budgets and dietary preferences.
+  expected_output: >
+    A comprehensive food guide for {location} including:
+    - Popular local dishes and specialties
+    - Recommended restaurants by category and budget
+    - Street food and local markets
+    - Dining etiquette and cultural tips
+    - Dietary accommodation options
+  agent: food_guide_agent
+  context:
+    - travel_guide_task
+
+stay_guide_task:
+  description: >
+    Research and provide comprehensive information about accommodation options in {location}.
+    Include recommendations for different budgets, traveler types, and preferences.
+  expected_output: >
+    A detailed accommodation guide for {location} including:
+    - Hotels, hostels, and vacation rentals
+    - Budget, mid-range, and luxury options
+    - Location recommendations by area
+    - Unique and boutique stays
+    - Booking tips and best practices
+  agent: stay_guide_agent
+  context:
+    - travel_guide_task
+    - food_guide_task
+
+# =============================================================================
+# PLANNER TASKS - Comprehensive Planning
+# =============================================================================
+# These tasks create detailed travel plans using information from guide agents
+
+travel_plan_task:
+  description: >
+    Create a comprehensive travel itinerary for {location} that combines attractions,
+    accommodations, dining, and activities into a cohesive travel plan. Consider
+    different traveler types, budgets, and time constraints.
+  expected_output: >
+    A complete travel plan for {location} including:
+    - Day-by-day itinerary with time allocations
+    - Transportation recommendations
+    - Accommodation suggestions
+    - Dining recommendations
+    - Activity scheduling
+    - Budget estimates
+    - Alternative options and flexibility
+  agent: travel_planner_agent
+  context:
+    - travel_guide_task
+    - stay_guide_task
+    - food_guide_task
+
+activity_plan_task:
+  description: >
+    Create a detailed activity schedule for {location} that includes daily activities,
+    timing, and recommendations. Consider weather, location proximity, and traveler
+    interests to optimize the experience.
+  expected_output: >
+    A comprehensive activity plan for {location} including:
+    - Daily activity schedules
+    - Time management and logistics
+    - Indoor/outdoor activity alternatives
+    - Group and solo activity options
+    - Seasonal considerations
+    - Booking requirements and tips
+  agent: activity_planner_agent
+  context:
+    - travel_guide_task
+    - stay_guide_task
+    - food_guide_task
+
+food_plan_task:
+  description: >
+    Create a comprehensive dining plan for {location} that showcases local cuisine
+    through carefully planned meals, food experiences, and culinary activities.
+  expected_output: >
+    A detailed food plan for {location} including:
+    - Meal-by-meal dining recommendations
+    - Food tour and culinary experience suggestions
+    - Local market visits and cooking classes
+    - Dietary accommodation strategies
+    - Budget-friendly and splurge options
+    - Reservation requirements and tips
+  agent: food_planner_agent
+  context:
+    - travel_guide_task
+    - stay_guide_task
+    - food_guide_task
+
+budget_plan_task:
+  description: >
+    Create a detailed budget plan for {location} that provides accurate cost estimates
+    and money-saving strategies for different types of travelers and budgets.
+  expected_output: >
+    A comprehensive budget plan for {location} including:
+    - Detailed cost breakdown by category
+    - Budget tiers (budget, mid-range, luxury)
+    - Money-saving tips and strategies
+    - Hidden costs and considerations
+    - Currency and payment information
+    - Value-for-money recommendations
+  agent: budget_planner_agent
+  context:
+    - travel_guide_task
+    - stay_guide_task
+    - food_guide_task
+
+# =============================================================================
+# COMPREHENSIVE TRAVEL PACKAGE TASK
+# =============================================================================
+# This task combines all planning elements into a complete travel package
+
+complete_travel_package_task:
+  description: >
+    Create a complete travel package for {location} that integrates all aspects
+    of travel planning including destinations, accommodations, dining, activities,
+    and budget considerations into one comprehensive guide.
+  expected_output: >
+    A complete travel package for {location} including:
+    - Executive summary and overview
+    - Detailed daily itineraries
+    - Complete accommodation recommendations
+    - Comprehensive dining guide
+    - Activity schedules and recommendations
+    - Detailed budget breakdown
+    - Practical travel tips and information
+    - Emergency contacts and resources
+  agent: travel_planner_agent
+  context:
+    - travel_guide_task
+    - stay_guide_task
+    - food_guide_task
+    - activity_plan_task
+    - food_plan_task
+    - budget_plan_task
+  output_file: output/complete_travel_package_{location}.md
+
