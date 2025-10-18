@@ -12,7 +12,7 @@ class ResearchCrew():
         return Agent(
             config=self.agents_config['researcher'],
             verbose=True,
-            tools=[SerperDevTool()]
+            tools=[SerperDevTool()] # give to researcher the ability to use serperDevTool platform for fast google search
         )
 
     @agent

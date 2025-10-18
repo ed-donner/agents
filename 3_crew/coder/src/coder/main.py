@@ -11,6 +11,7 @@ warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 # Create output directory if it doesn't exist
 os.makedirs('output', exist_ok=True)
 
+#approxmiation of pi
 assignment = 'Write a python program to calculate the first 10,000 terms \
     of this series, multiplying the total by 4: 1 - 1/3 + 1/5 - 1/7 + ...'
 

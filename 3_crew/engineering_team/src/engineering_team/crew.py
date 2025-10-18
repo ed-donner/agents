@@ -74,8 +74,8 @@ class EngineeringTeam():
     def crew(self) -> Crew:
         """Creates the research crew"""
         return Crew(
-            agents=self.agents,
-            tasks=self.tasks,
+            agents=self.agents, # all above defined agents
+            tasks=self.tasks, #all above defined tasks
             process=Process.sequential,
             verbose=True,
         )

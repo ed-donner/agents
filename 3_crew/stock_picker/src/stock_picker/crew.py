@@ -5,9 +5,10 @@ from pydantic import BaseModel, Field
 from typing import List
 from .tools.push_tool import PushNotificationTool
 from crewai.memory import LongTermMemory, ShortTermMemory, EntityMemory
-from crewai.memory.storage.rag_storage import RAGStorage
+from crewai.memory.storage.rag_storage import RAGStorage #for vector-based retrieval
 from crewai.memory.storage.ltm_sqlite_storage import LTMSQLiteStorage
 
+#structured outputs
 class TrendingCompany(BaseModel):
     """ A company that is in the news and attracting attention """
     name: str = Field(description="Company name")
@@ -40,7 +41,7 @@ class StockPicker():
     @agent
     def trending_company_finder(self) -> Agent:
         return Agent(config=self.agents_config['trending_company_finder'],
-                     tools=[SerperDevTool()], memory=True)
+                     tools=[SerperDevTool()], memory=True) # memory just requests to add more context into the prompts/ use history infor.
     
     @agent
     def financial_researcher(self) -> Agent:
@@ -55,7 +56,7 @@ class StockPicker():
     @task
     def find_trending_companies(self) -> Task:
         return Task(
-            config=self.tasks_config['find_trending_companies'],
+            config=self.tasks_config['find_trending_companies'], #constraint the output to match the expected template defined above.
             output_pydantic=TrendingCompanyList,
         )
 
@@ -81,13 +82,13 @@ class StockPicker():
 
         manager = Agent(
             config=self.agents_config['manager'],
-            allow_delegation=True
+            allow_delegation=True # Allow crew to delegate the task equival to handoffs in OpenAI SDK
         )
             
         return Crew(
             agents=self.agents,
             tasks=self.tasks, 
-            process=Process.hierarchical,
+            process=Process.hierarchical, # this means we ask the agent (manager) to assign tasks to others
             verbose=True,
             manager_agent=manager,
             memory=True,
@@ -107,7 +108,7 @@ class StockPicker():
                             }
                         },
                         type="short_term",
-                        path="./memory/"
+                        path="./memory/" #path to create that vector
                     )
                 ),            # Entity memory for tracking key information about entities
             entity_memory = EntityMemory(
@@ -115,7 +116,7 @@ class StockPicker():
                     embedder_config={
                         "provider": "openai",
                         "config": {
-                            "model": 'text-embedding-3-small'
+                            "model": 'text-embedding-3-small' # convert to vector
                         }
                     },
                     type="short_term",

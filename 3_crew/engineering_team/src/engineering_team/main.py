@@ -11,6 +11,8 @@ warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 # Create output directory if it doesn't exist
 os.makedirs('output', exist_ok=True)
 
+# define all inputs as per the agent.yaml file
+
 requirements = """
 A simple account management system for a trading simulation platform.
 The system should allow users to create an account, deposit funds, and withdraw funds.

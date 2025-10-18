@@ -11,7 +11,7 @@ INSTRUCTIONS = (
 search_agent = Agent(
     name="Search agent",
     instructions=INSTRUCTIONS,
-    tools=[WebSearchTool(search_context_size="low")],
+    tools=[WebSearchTool(search_context_size="low")], # search_context_size="low" to reduce the AI cost
     model="gpt-4o-mini",
     model_settings=ModelSettings(tool_choice="required"),
 )
