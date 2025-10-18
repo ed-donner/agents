@@ -5,6 +5,7 @@ import os
 import requests
 from pypdf import PdfReader
 import gradio as gr
+from resume_rag import ResumeRAG
 
 
 load_dotenv(override=True)
@@ -77,7 +78,7 @@ class Me:
 
     def __init__(self):
         self.openai = OpenAI()
-        self.name = "Ed Donner"
+        self.name = "Quentin Chu"
         reader = PdfReader("me/linkedin.pdf")
         self.linkedin = ""
         for page in reader.pages:
@@ -86,6 +87,14 @@ class Me:
                 self.linkedin += text
         with open("me/summary.txt", "r", encoding="utf-8") as f:
             self.summary = f.read()
+        
+        # Initialize RAG system
+        try:
+            self.rag = ResumeRAG()
+            print(f"RAG system initialized. Collection has {self.rag.get_collection_info().get('count', 0)} documents.")
+        except Exception as e:
+            print(f"Warning: Could not initialize RAG system: {e}")
+            self.rag = None
 
 
     def handle_tool_call(self, tool_calls):
@@ -99,7 +108,7 @@ class Me:
             results.append({"role": "tool","content": json.dumps(result),"tool_call_id": tool_call.id})
         return results
     
-    def system_prompt(self):
+    def system_prompt(self, additional_context=""):
         system_prompt = f"You are acting as {self.name}. You are answering questions on {self.name}'s website, \
 particularly questions related to {self.name}'s career, background, skills and experience. \
 Your responsibility is to represent {self.name} for interactions on the website as faithfully as possible. \
@@ -109,11 +118,25 @@ If you don't know the answer to any question, use your record_unknown_question t
 If the user is engaging in discussion, try to steer them towards getting in touch via email; ask for their email and record it using your record_user_details tool. "
 
         system_prompt += f"\n\n## Summary:\n{self.summary}\n\n## LinkedIn Profile:\n{self.linkedin}\n\n"
+        
+        if additional_context:
+            system_prompt += f"## Additional Resume Context:\n{additional_context}\n\n"
+            
         system_prompt += f"With this context, please chat with the user, always staying in character as {self.name}."
         return system_prompt
     
     def chat(self, message, history):
-        messages = [{"role": "system", "content": self.system_prompt()}] + history + [{"role": "user", "content": message}]
+        # Get relevant context from RAG system if available
+        additional_context = ""
+        if self.rag:
+            try:
+                additional_context = self.rag.get_relevant_context(message, max_context_length=1500)
+                if additional_context:
+                    print(f"RAG context retrieved for query: {message[:50]}...")
+            except Exception as e:
+                print(f"Error retrieving RAG context: {e}")
+        
+        messages = [{"role": "system", "content": self.system_prompt(additional_context)}] + history + [{"role": "user", "content": message}]
         done = False
         while not done:
             response = self.openai.chat.completions.create(model="gpt-4o-mini", messages=messages, tools=tools)
