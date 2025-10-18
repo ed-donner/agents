@@ -181,3 +181,8 @@ cython_debug/
 # Ignore Accounts database in capstone project
 6_mcp/accounts.db
 6_mcp/memory/*.db
+
+# prevent future leaks
+.env
+*.env
+*.env.*
