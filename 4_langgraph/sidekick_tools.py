@@ -11,13 +11,15 @@ from langchain_community.utilities import GoogleSerperAPIWrapper
 from langchain_community.utilities.wikipedia import WikipediaAPIWrapper
 
 
-
+#set up send notification
 load_dotenv(override=True)
 pushover_token = os.getenv("PUSHOVER_TOKEN")
 pushover_user = os.getenv("PUSHOVER_USER")
 pushover_url = "https://api.pushover.net/1/messages.json"
-serper = GoogleSerperAPIWrapper()
 
+serper = GoogleSerperAPIWrapper() #use the serper API when web search
+
+#set-up the web browser for navigating with chromium 
 async def playwright_tools():
     playwright = await async_playwright().start()
     browser = await playwright.chromium.launch(headless=False)
@@ -30,7 +32,7 @@ def push(text: str):
     requests.post(pushover_url, data = {"token": pushover_token, "user": pushover_user, "message": text})
     return "success"
 
-
+#file mangement tool writing to root directory called sandbox
 def get_file_tools():
     toolkit = FileManagementToolkit(root_dir="sandbox")
     return toolkit.get_tools()
@@ -46,10 +48,13 @@ async def other_tools():
         description="Use this tool when you want to get the results of an online web search"
     )
 
+    #define tool to collect wikipedia pages
     wikipedia = WikipediaAPIWrapper()
     wiki_tool = WikipediaQueryRun(api_wrapper=wikipedia)
 
-    python_repl = PythonREPLTool()
+    python_repl = PythonREPLTool() #python REPL tool gving LLM the ability to run python code. Should be used with caution as it is not packaged within any sandbox like docker
+    #it is not insolated
     
     return file_tools + [push_tool, tool_search, python_repl,  wiki_tool]
 
+# can add more tools as needed, google calender, ..

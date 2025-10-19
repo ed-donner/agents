@@ -16,15 +16,17 @@ from datetime import datetime
 
 load_dotenv(override=True)
 
-
+# 1- defiene the state
 class State(TypedDict):
     messages: Annotated[List[Any], add_messages]
     success_criteria: str
+
+    #assessment variables
     feedback_on_work: Optional[str]
     success_criteria_met: bool
     user_input_needed: bool
 
-
+#structured output schema for the evaluation
 class EvaluatorOutput(BaseModel):
     feedback: str = Field(description="Feedback on the assistant's response")
     success_criteria_met: bool = Field(description="Whether the success criteria have been met")
@@ -45,6 +47,7 @@ class Sidekick:
         self.browser = None
         self.playwright = None
 
+    #below is required as we cannot use async in the --init-- function/constructor above
     async def setup(self):
         self.tools, self.browser, self.playwright = await playwright_tools()
         self.tools += await other_tools()
@@ -54,6 +57,7 @@ class Sidekick:
         self.evaluator_llm_with_output = evaluator_llm.with_structured_output(EvaluatorOutput)
         await self.build_graph()
 
+    #define the worker/co-worker agent
     def worker(self, state: State) -> Dict[str, Any]:
         system_message = f"""You are a helpful assistant that can use tools to complete tasks.
     You keep working on a task until either you have a question or clarification for the user, or the success criteria is met.
@@ -98,6 +102,7 @@ class Sidekick:
             "messages": [response],
         }
 
+    #worker router making decision whether or not the worker should go to tools or the evaluator
     def worker_router(self, state: State) -> str:
         last_message = state["messages"][-1]
 
@@ -116,6 +121,7 @@ class Sidekick:
                 conversation += f"Assistant: {text}\n"
         return conversation
 
+    #the evaluator
     def evaluator(self, state: State) -> State:
         last_response = state["messages"][-1].content
 
@@ -164,12 +170,14 @@ class Sidekick:
         }
         return new_state
 
+    # Condition to End or Continue
     def route_based_on_evaluation(self, state: State) -> str:
         if state["success_criteria_met"] or state["user_input_needed"]:
             return "END"
         else:
             return "worker"
 
+    # build the grapgh
     async def build_graph(self):
         # Set up Graph Builder with State
         graph_builder = StateGraph(State)
@@ -208,6 +216,7 @@ class Sidekick:
         feedback = {"role": "assistant", "content": result["messages"][-1].content}
         return history + [user, reply, feedback]
 
+    #close previous browser
     def cleanup(self):
         if self.browser:
             try:

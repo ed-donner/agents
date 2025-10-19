@@ -3,8 +3,8 @@ from sidekick import Sidekick
 
 
 async def setup():
-    sidekick = Sidekick()
-    await sidekick.setup()
+    sidekick = Sidekick() #create an instance of sidekick
+    await sidekick.setup() #populate the graph
     return sidekick
 
 
@@ -27,7 +27,7 @@ def free_resources(sidekick):
     except Exception as e:
         print(f"Exception during cleanup: {e}")
 
-
+# building gradio
 with gr.Blocks(title="Sidekick", theme=gr.themes.Default(primary_hue="emerald")) as ui:
     gr.Markdown("## Sidekick Personal Co-Worker")
     sidekick = gr.State(delete_callback=free_resources)
@@ -42,8 +42,8 @@ with gr.Blocks(title="Sidekick", theme=gr.themes.Default(primary_hue="emerald"))
                 show_label=False, placeholder="What are your success critiera?"
             )
     with gr.Row():
-        reset_button = gr.Button("Reset", variant="stop")
-        go_button = gr.Button("Go!", variant="primary")
+        reset_button = gr.Button("Reset", variant="stop") # Reset buttopn
+        go_button = gr.Button("Go!", variant="primary") #go button
 
     ui.load(setup, [], [sidekick])
     message.submit(
