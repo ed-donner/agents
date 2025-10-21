@@ -86,24 +86,18 @@ Follow the instructions here to install uv - I recommend using the Standalone In
 
 https://docs.astral.sh/uv/getting-started/installation/
 
+Any installation problems with uv, please see [Q11 on my FAQ page](https://edwarddonner.com/faq/#11).
+
 Then within Cursor, select View >> Terminal, to see a Terminal window within Cursor.  
 Type `pwd` to see the current directory, and check you are in the 'agents' directory. For me it is `/Users/ed/projects/agents` and it should be something similar for you.
 
 Start by running `uv self update` to make sure you're on the latest version of uv.
 
-One thing to watch for: if you've used Anaconda before, make sure that your Anaconda environment is deactivated   
-`conda deactivate`
-
-And if you still have any problems with python versions, it's possible that you will need this too:  
-`conda config --set auto_activate_base false`
-
 And now simply run:  
 `uv sync`  
 And marvel at the speed and reliability! If necessary, uv should install python 3.12, and then it should install all the packages.  
-If you get an error about "invalid certificate" while running `uv sync`, then please try this instead:  
-`uv --native-tls sync`  
-And also try this instead:  
-`uv --allow-insecure-host github.com sync`
+
+Any problems with uv, please see [Q11 on my FAQ page](https://edwarddonner.com/faq/#11).
 
 Finally, run these commands to be ready to use CrewAI in week 3:  
 `uv tool install crewai`   
