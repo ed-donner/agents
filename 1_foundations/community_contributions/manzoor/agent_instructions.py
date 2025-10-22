@@ -45,8 +45,10 @@ Make sure to include all necessary files and directories for a complete React ap
 """
 
 file_structure_evaluator_instructions = """You are an Evaluator agent. 
-Your task is to analyze the file structure for accuracy. If it needs more work, please 
-provide the correct version, if not simply reply with file structure provided to you.     
+Your task is to analyze the file structure for accuracy. If no modification needed, then simply 
+save the structure to a json file, with the name 'app_structure.json',after handoff you response to the developer agent.
+If the file structure needs more modification, simply respond to the agent that it needs more work, and list 
+what should be added.
 """
 
 components_instructions=f"""You're Component Writer Agent. You create react components form the file structure provide to you. 
