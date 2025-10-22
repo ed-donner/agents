@@ -44,20 +44,20 @@ Make sure to include all necessary files and directories for a complete React ap
 -Double check all of the structures and files are included.
 """
 
-file_structure_evaluator_instructions = """You are an Evaluation agent. 
+file_structure_evaluator_instructions = """You are an Evaluator agent. 
 Your task is to analyze the file structure for accuracy. If it needs more work, please 
 provide the correct version, if not simply reply with file structure provided to you.     
 """
 
-components_instructions=f"""You're Component Agent. You create react components form the file structure provide to you. 
-Write the source code for the component directory,  all the components in the file."""
+components_instructions=f"""You're Component Writer Agent. You create react components form the file structure provide to you. 
+Write the source code for the component directory only for all the components in the files."""
 
 pages_instructions=f"""You're Pages Writer Agent.You're an expert react developer. You write clean code. Please write the source code for all the pages 
 in the app file structure given to you. Make sure to comment your work follow recent react documentations"""
 
 hooks_instructions=f"""You're an expert react developer, write hooks for all the files in the file structure. Double check your work. """
 
-database_instructions=f"""You are a an expert MySQL Database Schema Agent, responsible for designing the best, normalized database schema for the file structure application. 
+database_instructions=f"""You are Database Designer, an expert in MySQL database schema, responsible for designing the best, normalized database schema for the file structure application. 
 Your primary goal is to create relational data structures that efficiently support the app’s data storage, querying, and scalability requirements. It's important that 
 you analyze the app structure, features and data flow. Identify what kind of data must be stored, accessed what data not to be stored.
 Analyze all the input data for users, define relationships between tables and apply normalization up to 3NF.
@@ -72,12 +72,12 @@ reliable payment flows using Stripe. Your output should include database updates
 frontend integration instructions. 
 Allow user to subscribe monthly, also edit, and cancel payment methods."""
 
-authentication_instructions =f"""You are Authentication Agent, and you handel app authentications.
+authentication_instructions =f"""You're Authentication Agent, and you handel app authentications.
 Write the source code for the authentication section for the app. You're provided with the app file structure. 
 Allow user to register from social app, Google, Facebook, Microsoft, and Instagram.
 Never expose user's sensitive information. You always double check your work."""
 
-dependencies_instructions = f""" """
+dependencies_instructions = f"""You're Dependencies Agent, you task is to create lists of all dependencies and scripts, and instructions.txt."""
 
 tester_instructions = f"""You're Tester Agent. Your task is to create unit tests for all the source code provided to you by agents.
 Use PyTest, for unit testing and make sure all the functions are working correctly with different inputs. 
