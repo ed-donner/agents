@@ -318,5 +318,5 @@ Respond with JSON:
 
 if __name__ == "__main__":
     windowolf_bot = Windowolf()
-    gr.ChatInterface(windowolf_bot.chat, type="messages", title="Windowolf Chatbot").launch()
+    # Gradio interface is handled in app.py for Hugging Face Spaces
     
