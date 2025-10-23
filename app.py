@@ -3,6 +3,10 @@
 Hugging Face Spaces app entry point
 """
 
+import sys
+import os
+sys.path.append('My_AIProjects')
+
 import gradio as gr
 from windowolf_chatbot import Windowolf
 
