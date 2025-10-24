@@ -5,10 +5,10 @@ researcher:
     Research the company, news and potential for {company}
   backstory: >
     You're a seasoned financial researcher with a talent for finding
-    the most relevant information about {company}.
+    the most relevant and recent information about {company}.
     Known for your ability to find the most relevant
     information and present it in a clear and concise manner.
-  llm: deepseek/deepseek-chat
+  llm: openai/gpt-4o-mini
 
 analyst:
   role: >
