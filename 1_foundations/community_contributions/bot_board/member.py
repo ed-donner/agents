@@ -2,6 +2,7 @@ from typing import List, Dict, Optional
 from openai import OpenAI
 from conversation_context import ConversationContext
 from conversation_state import ConversationState
+from conversation_role import ConversationRole
 
 def generate_user_content(prompt: Optional[str] = None) -> str:
     """Return a clear, state-specific user instruction for the LLM.
@@ -45,6 +46,7 @@ def generate_user_content(prompt: Optional[str] = None) -> str:
             
         case ConversationState.ANSWER:
             return (
+                "Introduce yourself just by name.\n"
                 "Answer the most recent decision question in the conversation from your role’s perspective.\n"
                 "Requirements:\n"
                 "- Start with a one-sentence recommendation.\n"
@@ -54,6 +56,7 @@ def generate_user_content(prompt: Optional[str] = None) -> str:
             
         case ConversationState.EVALUATION:
             return (
+                "Introduce yourself just by name.\n"
                 "Evaluate the proposed answer against the question. Provide a brief, structured critique and an overall judgment.\n"
                 "Structure:\n"
                 "- Relevance (1–5): short justification.\n"
@@ -86,6 +89,14 @@ def generate_user_content(prompt: Optional[str] = None) -> str:
     # Fallback (should not happen): provide a safe, generic instruction
     return "Provide a concise, helpful response based on the conversation so far."
 
+
+def get_shared_context() -> ConversationContext:
+    shared = Member.get_shared_context()
+    if shared is None:
+        raise RuntimeError(
+            "Shared ConversationContext is not set. Call Member.set_shared_context(...) before generating messages.")
+    return shared
+
 class Member:
     # Class-level shared ConversationContext reference (singleton-style)
     _shared_context: Optional[ConversationContext] = None
@@ -106,6 +117,7 @@ class Member:
         self.model = model
         self.role = role
         self.client = OpenAI(api_key=api_key, base_url=url)
+        self.conversation_role = ConversationRole.NONE
 
     def __generate_response(self, messages: List[Dict[str, str]]) -> str:
         response = self.client.chat.completions.create(model=self.model, messages=messages)
@@ -118,12 +130,8 @@ class Member:
        )
 
     def __generate_messages(self, prompt: Optional[str] = None) -> List[Dict[str, str]]:
-        shared = Member.get_shared_context()
-        if shared is None:
-            raise RuntimeError(
-                "Shared ConversationContext is not set. Call Member.set_shared_context(...) before generating messages.")
+        context = get_shared_context().get_context()
 
-        context = shared.get_context()
         messages = [{"role": "system", "content": self.__generate_system_content()}]
         messages.extend(context)
         messages.append({"role": "user", "content": generate_user_content(prompt)})
@@ -131,7 +139,18 @@ class Member:
         return messages
 
     def get_member_response(self, prompt: Optional[str] = None) -> str:
+        shared = get_shared_context()
+
+        if not shared.should_participate(self.conversation_role):
+            return ""
+
+        if prompt is None:
+            prompt = shared.subject
+
         messages = self.__generate_messages(prompt)
         return self.__generate_response(messages)
+
+    def set_conversation_role(self, role: ConversationRole) -> None:
+        self.conversation_role = role
 
 
