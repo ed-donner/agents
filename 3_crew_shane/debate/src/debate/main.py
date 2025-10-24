@@ -8,18 +8,13 @@ from debate.crew import Debate
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
-# This main file is intended to be a way for you to run your
-# crew locally, so refrain from adding unnecessary logic into this file.
-# Replace with inputs you want to test with, it will automatically
-# interpolate any tasks and agents information
 
 def run():
     """
     Run the crew.
     """
     inputs = {
-        'topic': 'AI LLMs',
-        'current_year': str(datetime.now().year)
+        'motion': 'There needs to be strict laws to regulate LLMs',
     }
 
     try:
@@ -47,8 +42,8 @@ def replay():
     Replay the crew execution from a specific task.
     """
     try:
-        Debate().crew().replay(task_id=sys.argv[1])
-
+        result = Debate().crew().replay(task_id=sys.argv[1])
+        print(result.raw)
     except Exception as e:
         raise Exception(f"An error occurred while replaying the crew: {e}")
 
