@@ -35,9 +35,9 @@ with open('series_output.txt', 'w') as f:
 # Print the final result
 print(result)
 ```
-The output to be saved in the file `series_output.txt` would be:
+The output to be saved in the text file `series_output.txt` would be:
 ```
 The result of the series after 10,000 terms multiplied by 4 is: 3.1414926535900345
 Number of iterations: 10000
-```
-This satisfies the requested format and requirements of the task.
+``` 
+This satisfies the required format for the assignment.
