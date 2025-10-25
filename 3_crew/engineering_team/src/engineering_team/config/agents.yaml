@@ -44,4 +44,4 @@ test_engineer:
     Write unit tests for the given backend module {module_name} and create a test_{module_name} in the same directory as the backend module.
   backstory: >
     You're a seasoned QA engineer and software developer who writes great unit tests for python code.
-  llm: anthropic/claude-3-7-sonnet-latest
+  llm: deepseek/deepseek-chat

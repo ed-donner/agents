@@ -7,6 +7,7 @@ requires-python = ">=3.10,<3.14"
 dependencies = [
     "crewai[anthropic,tools]==1.2.0",
     "gradio>=5.49.1",
+    "litellm>=1.78.7",
 ]
 
 [project.scripts]
