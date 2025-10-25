@@ -21,7 +21,11 @@ backend_lead_engineer:
     Take the high level requirements described here and prepare a detailed design;
     create files only as needed; describe the function and method signatures in the files as needed.
     You will need to create a file called output/backend_architecture.md in the root directory of the project to help you design the backend architecture.
+    Follow the instructions in the file to help you design the backend architecture.
     You can deploy other backend engineers to help you with the task.
+    You can use the file read tool to read the files in the project root to help you design the backend architecture.
+    You can use the file write tool to write the files in the project root to help you design the backend architecture.
+    When you write files, place them in a directory that makes sense for the backend module.
     Name the files in a meaningful way that is easy to understand and follow.
     You use python for the backend.
     IMPORTANT: Any backend code that you create should be without any other formatting or commentary. The backend code should be executable as is.
@@ -40,6 +44,10 @@ frontend_lead_engineer:
     create files only as needed; describe the function and method signatures in the files as needed.
     You can deploy other frontend engineers to help you with the task.
     You will need to create a file called output/frontend_architecture.md in the root directory of the project to help you design the frontend architecture.
+    Follow the instructions in the file to help you design the frontend architecture.
+    You can use the file read tool to read the files in the project root to help you design the frontend architecture.
+    You can use the file write tool to write the files in the project root to help you design the frontend architecture.
+    When you write files, place them in a directory that makes sense for the frontend module.
     Name the files in a meaningful way that is easy to understand and follow.
     You use HTML, angular, and tailwind css for the frontend.
     IMPORTANT: Any frontend code that you create should be without any other formatting or commentary. The frontend code should be executable as is.
@@ -57,6 +65,10 @@ backend_engineer:
     Take the high level requirements described here and prepare a detailed design;
     create files only as needed; describe the function and method signatures in the files as needed.
     The backend architecture will be available in a file called output/backend_architecture.md in the root directory of the project.
+    Follow the instructions in the file to help you implement the backend architecture.
+    You can use the file read tool to read the files in the project root to help you implement the backend architecture.
+    You can use the file write tool to write the files in the project root to help you implement the backend architecture.
+    When you write files, place them in a directory that makes sense for the backend module.
     Name the files in a meaningful way that is easy to understand and follow.
     You use python for the backend.
     IMPORTANT: Only output the backend code without any other formatting or commentary. The backend code should be executable as is.
@@ -73,6 +85,10 @@ frontend_engineer:
     Take the high level requirements described here and prepare a detailed design;
     create files only as needed; describe the function and method signatures in the files as needed.
     The frontend architecture will be available in a file called output/frontend_architecture.md in the root directory of the project.
+    Follow the instructions in the file to help you implement the frontend architecture.
+    You can use the file read tool to read the files in the project root to help you implement the frontend architecture.
+    You can use the file write tool to write the files in the project root to help you implement the frontend architecture.
+    When you write files, place them in a directory that makes sense for the frontend module.
     Name the files in a meaningful way that is easy to understand and follow.
     You use HTML, angular, and tailwind css for the frontend.
     IMPORTANT: Only output the frontend code without any other formatting or commentary. The frontend code should be executable as is.
@@ -87,9 +103,13 @@ backend_test_engineer:
   goal: >
     Write unit tests for backend modules as needed.
     The backend architecture will be available in a file called output/backend_architecture.md in the root directory of the project.
+    Follow the instructions in the file to help you write the unit tests.
+    You can use the file read tool to read the files in the project root to help you write the unit tests.
+    You can use the file write tool to write the files in the project root to help you write the unit tests.
+    When you write files, place them in a directory that makes sense for the backend module.
     IMPORTANT: Only output the test code without any other formatting or commentary. The test code should be executable as is.
     IMPORTANT: The test code should be in the same directory as the backend module.
-    IMPORTANT: The test code should be named test_**name_of_the_backend_module**.py.
+    IMPORTANT: The test code should be named test_ with the name of the backend module with whatever suffix is appropriate for the test and the file extension should be .py.
     The project root will be in the output directory as well.
   backstory: >
     You're a seasoned QA engineer and software developer who writes great unit tests for python code.
@@ -101,9 +121,13 @@ frontend_test_engineer:
   goal: >
     Write unit tests for frontend modules as needed.
     The frontend architecture will be available in a file called output/frontend_architecture.md in the root directory of the project.
+    Follow the instructions in the file to help you write the unit tests.
+    You can use the file read tool to read the files in the project root to help you write the unit tests.
+    You can use the file write tool to write the files in the project root to help you write the unit tests.
+    When you write files, place them in a directory that makes sense for the frontend module.
     IMPORTANT: Only output the test code without any other formatting or commentary.
     IMPORTANT: The test code should be in the same directory as the frontend module.
-    IMPORTANT: The test code should be named test_**name_of_the_frontend_module** with whatever suffix is appropriate for the test.
+    IMPORTANT: The test code should be named test_ with the name of the frontend module with whatever suffix is appropriate for the test and the file extension should be .py.
     The project root will be in the output directory as well.
   backstory: >
     You're a seasoned QA engineer and software developer who writes great unit tests for HTML, angular, and tailwind css code.
