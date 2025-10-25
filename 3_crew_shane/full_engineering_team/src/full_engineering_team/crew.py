@@ -5,6 +5,7 @@ from typing import List
 from crewai.memory import LongTermMemory, ShortTermMemory, EntityMemory
 from crewai.memory.storage.rag_storage import RAGStorage
 from crewai.memory.storage.ltm_sqlite_storage import LTMSQLiteStorage
+from crewai_tools import FileWriterTool
 
 @CrewBase
 class FullEngineeringTeam():
@@ -20,6 +21,7 @@ class FullEngineeringTeam():
             verbose=True,
             allow_delegation=True,
             memory=True,
+            tools=[FileWriterTool()],
         )
 
     @agent
@@ -33,6 +35,7 @@ class FullEngineeringTeam():
             max_retry_limit=5,
             memory=True,
             allow_delegation=True,
+            tools=[FileWriterTool()],
         )
     
     @agent
@@ -46,6 +49,7 @@ class FullEngineeringTeam():
             max_retry_limit=5,
             memory=True,
             allow_delegation=True,
+            tools=[FileWriterTool()],
         )
     
     @agent
@@ -58,6 +62,7 @@ class FullEngineeringTeam():
             max_execution_time=900,
             max_retry_limit=5,
             memory=True,
+            tools=[FileWriterTool()],
         )
     
     @agent
@@ -70,6 +75,7 @@ class FullEngineeringTeam():
             max_execution_time=900,
             max_retry_limit=5,
             memory=True,
+            tools=[FileWriterTool()],
         )
     
     @agent
@@ -82,6 +88,7 @@ class FullEngineeringTeam():
             max_execution_time=900,
             max_retry_limit=5,
             memory=True,
+            tools=[FileWriterTool()],
         )
     
     @agent
@@ -94,6 +101,7 @@ class FullEngineeringTeam():
             max_execution_time=900,
             max_retry_limit=5,
             memory=True,
+            tools=[FileWriterTool()],
         )
 
     @task

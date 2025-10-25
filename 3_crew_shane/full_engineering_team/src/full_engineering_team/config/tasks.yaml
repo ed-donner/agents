@@ -9,7 +9,6 @@ architect_task:
     A more detailed design for the architect, identifying the classes and functions in the module.
     The design will be available in a file called output/architecture.md in the root directory of the project.
   agent: architect
-  output_file: output/architecture.md
 
 backend_lead_engineer_task:
   description: >

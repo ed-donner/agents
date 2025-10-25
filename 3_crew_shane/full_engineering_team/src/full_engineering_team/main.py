@@ -26,11 +26,13 @@ def run():
     """
     Run the crew.
     """
+    my_crew = FullEngineeringTeam().crew()
     inputs = {
         'requirements': requirements,
+        'engineers': ", ".join([agent.role for agent in my_crew.agents if agent.role != 'manager']),
     }
 
     try:
-        FullEngineeringTeam().crew().kickoff(inputs=inputs)
+        my_crew.kickoff(inputs=inputs)
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
