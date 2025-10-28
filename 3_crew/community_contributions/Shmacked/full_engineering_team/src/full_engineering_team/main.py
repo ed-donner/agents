@@ -10,8 +10,9 @@ warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
 requirements = """
 A simple account management system for a trading simulation platform.
+The system should be able to be interacted with through a web interface.
 The system should allow users to create an account, and login to their account.
-Everything else should be done through the login process.
+Before anything can be done, the user must be logged in.
 The system should allow users to deposit funds, and withdraw funds.
 The system should allow users to record that they have bought or sold shares, providing a quantity.
 The system should calculate the total value of the user's portfolio, and the profit or loss from the initial deposit.

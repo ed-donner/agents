@@ -21,7 +21,7 @@ class FullEngineeringTeam():
             verbose=True,
             allow_delegation=True,
             memory=True,
-            tools=[FileWriterTool(), FileReadTool()],
+            tools=[FileWriterTool(directory="output"), FileReadTool(directory="output")],
         )
 
     @agent
@@ -35,7 +35,7 @@ class FullEngineeringTeam():
             max_retry_limit=5,
             memory=True,
             allow_delegation=True,
-            tools=[FileWriterTool(), FileReadTool()],
+            tools=[FileWriterTool(directory="output"), FileReadTool(directory="output")],
         )
     
     @agent
@@ -49,7 +49,7 @@ class FullEngineeringTeam():
             max_retry_limit=5,
             memory=True,
             allow_delegation=True,
-            tools=[FileWriterTool(), FileReadTool()],
+            tools=[FileWriterTool(directory="output"), FileReadTool(directory="output")],
         )
     
     @agent
@@ -62,7 +62,7 @@ class FullEngineeringTeam():
             max_execution_time=900,
             max_retry_limit=5,
             memory=True,
-            tools=[FileWriterTool(), FileReadTool()],
+            tools=[FileWriterTool(directory="output"), FileReadTool(directory="output")],
         )
     
     @agent
@@ -88,7 +88,7 @@ class FullEngineeringTeam():
             max_execution_time=900,
             max_retry_limit=5,
             memory=True,
-            tools=[FileWriterTool(), FileReadTool()],
+            tools=[FileWriterTool(directory="output"), FileReadTool(directory="output")],
         )
     
     @agent
@@ -101,7 +101,7 @@ class FullEngineeringTeam():
             max_execution_time=900,
             max_retry_limit=5,
             memory=True,
-            tools=[FileWriterTool(), FileReadTool()],
+            tools=[FileWriterTool(directory="output"), FileReadTool(directory="output")],
         )
 
     @task

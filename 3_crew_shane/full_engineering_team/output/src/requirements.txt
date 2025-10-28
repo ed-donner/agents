@@ -1,5 +1,0 @@
-# Requirements for the Trading Simulation Platform
-
-# Core dependencies
-bcrypt==4.0.1  # For password hashing
-sqlite3==0.0.0  # Part of Python standard library, included for completeness
