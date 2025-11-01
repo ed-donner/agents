@@ -1,0 +1,11 @@
+{
+    "status": "failed",
+    "issues": [
+        "File outputs/app.py is missing the required function definition 'def build_demo()'.",
+        "File outputs/app.py contains script content but does not meet quality criteria."
+    ],
+    "recommendation": "Add function 'def build_demo()' to outputs/app.py.",
+    "evidence": {
+        "file_path": "outputs/app.py"
+    }
+}

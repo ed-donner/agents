@@ -28,7 +28,7 @@ There are 4 common gotchas to developing on Windows to be aware of:
 
 ### Part 1: Clone the Repo
 
-T1. **Install Git** (if not already installed):
+1. **Install Git** (if not already installed):
 
 - Download Git from https://git-scm.com/download/win
 - Run the installer and follow the prompts, using default options (press OK lots of times!)
@@ -89,23 +89,18 @@ Follow the instructions here to install uv - I recommend using the Standalone In
 
 https://docs.astral.sh/uv/getting-started/installation/
 
+Any installation problems with uv, please see [Q11 on my FAQ page](https://edwarddonner.com/faq/#11).
+
 Then within Cursor, select View >> Terminal, to see a Terminal window within Cursor.  
 Type `pwd` to see the current directory, and check you are in the 'agents' directory - like `C:\Users\YourUsername\Documents\Projects\agents` or similar
 
 Start by running `uv self update` to make sure you're on the latest version of uv.
 
-One thing to watch for: if you've used Anaconda before, make sure that your Anaconda environment is deactivated   
-`conda deactivate`  
-And if you still have any problems with conda and python versions, it's possible that you will need to run this too:  
-`conda config --set auto_activate_base false`  
-
 And now simply run:  
 `uv sync`  
 And marvel at the speed and reliability! If necessary, uv should install python 3.12, and then it should install all the packages.  
-If you get an error about "invalid certificate" while running `uv sync`, then please try this instead:  
-`uv --native-tls sync`  
-And also try this instead:  
-`uv --allow-insecure-host github.com sync`
+
+Any problems with uv, please see [Q11 on my FAQ page](https://edwarddonner.com/faq/#11).
 
 Finally, run these commands to be ready to use CrewAI in week 3 - but please note that this needs you to have installed Microsoft Build Tools (#4 in the 'gotchas' section at the top of this doc):  
 `uv tool install crewai`   
