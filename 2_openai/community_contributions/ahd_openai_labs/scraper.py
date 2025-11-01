@@ -34,4 +34,4 @@ def fetch_website_links(url):
     response = requests.get(url, headers=headers)
     soup = BeautifulSoup(response.content, "html.parser")
     links = [link.get("href") for link in soup.find_all("a")]
-    return list(dict.fromkeys(links))
+    return [link for link in links if link]
