@@ -1,0 +1,5 @@
+gradio>=4.0.0
+python-dotenv>=1.0.0
+openai>=1.54.0
+sendgrid>=6.11.0
+pydantic>=2.0.0
