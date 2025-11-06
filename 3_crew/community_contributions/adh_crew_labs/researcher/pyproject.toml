@@ -1,0 +1,28 @@
+[project]
+name = "researcher"
+version = "0.1.0"
+description = "researcher using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[google-genai,tools]==1.3.0",
+    "markdown>=3.10",
+    "pandoc>=2.4",
+    "pypandoc>=1.15",
+    "weasyprint>=66.0",
+]
+
+[project.scripts]
+researcher = "researcher.main:run"
+run_crew = "researcher.main:run"
+train = "researcher.main:train"
+replay = "researcher.main:replay"
+test = "researcher.main:test"
+run_with_trigger = "researcher.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

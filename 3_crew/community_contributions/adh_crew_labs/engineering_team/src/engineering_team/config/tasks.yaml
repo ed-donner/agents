@@ -1,0 +1,65 @@
+create_userstories_task:
+  description: >
+    Transform raw client requirements into complete, implementable user stories. 
+    The requirements are: {requirements}
+    Analyze the requirement, write clear user story format (As/Want/So that), 
+    define 5-8 testable acceptance criteria covering happy paths and edge cases, 
+    specify UI/UX needs, 
+    and ensure the story meets Definition of Ready so developers can estimate and implement without ambiguity.
+  expected_output: >
+    Complete user stories document in: {output_file} containing:
+      Story Header: ID, title, user story statement (As/Want/So that), business value, priority
+      Acceptance Criteria: 5-8 Given-When-Then scenarios (3 happy path, 3 edge cases, 2 error cases)
+      UI/UX Specs: Wireframes/mockups, design components, accessibility checklist (if applicable)
+      Test Scenarios: Table with input/expected output examples
+  agent: product_manager
+  output_file: '{output_file}'
+
+design_task:
+  description: >
+    Take the User Stories details from Product Manager and prepare a detailed design for the engineer;
+    everything should be in 1 python module, but outline the classes and methods in the module.
+    Here are the original requirements: {requirements}
+    The user stories are provided in conext: create_userstories_task
+    IMPORTANT: Only output the design in markdown format, laying out in detail the classes and functions in the module, describing the functionality.
+  expected_output: >
+    A detailed design for the engineer, identifying the classes and functions in the module.
+  agent: engineering_lead
+  output_file: output/{module_name}_design.md
+  content:
+    - create_userstories_task
+
+code_task:
+  description: >
+    Write a python module that implements the design described by the engineering lead, in order to achieve all User Stories from Product Manager.
+    Here are the original requirements: {requirements}
+    The user stories are provided in conext: create_userstories_task
+  expected_output: >
+    A python module that implements the design and achieves all User Stories.
+    Your entire response must consist ONLY of the requested code. DO NOT include any surrounding text, explanations, code block fences (```), or comments outside the function definition.
+    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks, or ```python
+    The output should be valid Python code that can be directly saved to a file and executed.
+  agent: backend_engineer
+  context:
+    - create_userstories_task
+    - design_task
+  output_file: output/{module_name}
+
+frontend_task:
+  description: >
+    Write a gradio UI in a module app.py that demonstrates the given backend class in {module_name}.
+    Assume there is only 1 user, and keep the UI very simple indeed - just a prototype or demo.
+    Here are the original requirements: {requirements}
+    The user stories are provided in conext: create_userstories_task
+  expected_output: >
+    A gradio UI in module app.py that demonstrates the given backend class.
+    The file should be ready so that it can be run as-is, in the same directory as the backend module, and it should import the backend class from {module_name}.
+    Your entire response must consist ONLY of the requested code. DO NOT include any surrounding text, explanations, code block fences (```), or comments outside the function definition.
+    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks. 
+    IMPORTANT: Output ONLY the raw Python code, DO NOT include any surrounding text, explanations, code block fences (```), or comments outside the function definition.
+    The output file should be valid Python code that can be directly saved to a file and executed.
+  agent: frontend_engineer
+  context:
+    - create_userstories_task
+    - code_task
+  output_file: output/app.py

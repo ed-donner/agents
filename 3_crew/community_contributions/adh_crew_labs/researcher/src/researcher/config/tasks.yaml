@@ -1,0 +1,24 @@
+research_task:
+  description: >
+    Conduct a thorough research about {topic}
+    Make sure you find any interesting and relevant information given
+    You MUST use the search tool to find information about {topic}.
+    Do not rely on your internal knowledge - always search first.
+    the current year is {current_year}.
+  expected_output: >
+    A list with 10 bullet points of the most relevant information about {topic}
+  agent: researcher
+  output_file: output/research.md
+
+reporting_task:
+  description: >
+    Review the context you got and expand each topic into a full section for a report.
+    Make sure the report is detailed and contains any and all relevant information.
+  expected_output: >
+    A fully fledged report with the main topics, each with a full section of information.
+    Formatted as markdown without '```'
+    language: Vietnamese
+    Then convert the markdown content to a pdf file using the ConvertMarkdownContentToPdfTool tool with output_pdf_path is {output_pdf_path}
+  agent: reporting_analyst
+  context:
+    - research_task

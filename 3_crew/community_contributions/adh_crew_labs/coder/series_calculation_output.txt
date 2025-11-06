@@ -1,0 +1,14 @@
+Python Code for the Calculation:
+# Initialize variables
+n_terms = 10000
+series_sum = 0.0
+
+# Calculate the sum of the first 10,000 terms of the series
+for i in range(n_terms):
+    term = (-1)**i / (2 * i + 1)  # Alternative term calculation with alternating signs
+    series_sum += term
+
+# Multiply the total sum by 4
+result = 4 * series_sum
+
+The calculated result for the first 10000 terms of the series, multiplied by 4, is: 3.1414926535900345
