@@ -103,7 +103,7 @@ class Me:
         self.linkedin = ""
         self.resume = ""
         try:
-            reader = PdfReader("me/linkedIn.pdf")
+            reader = PdfReader("me/linkedin.pdf")
             for page in reader.pages:
                 text = page.extract_text()
                 if text:
