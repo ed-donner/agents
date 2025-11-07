@@ -1,0 +1,160 @@
+{
+  "page_title": "Gradio App",
+  "url": "http://127.0.0.1:7860",
+  "interactive_elements": [
+    {
+      "element_type": "input",
+      "id": "component-6",
+      "label": "Email",
+      "type": "textarea",
+      "placeholder": "user@example.com",
+      "action": "Input email for registration/login"
+    },
+    {
+      "element_type": "input",
+      "id": "component-7",
+      "label": "Password",
+      "type": "password",
+      "placeholder": "",
+      "action": "Input user password"
+    },
+    {
+      "element_type": "input",
+      "id": "component-8",
+      "label": "Confirm Password",
+      "type": "password",
+      "placeholder": "",
+      "action": "Input password confirmation"
+    },
+    {
+      "element_type": "button",
+      "id": "component-9",
+      "text": "Create Account",
+      "action": "Submit account creation form"
+    },
+    {
+      "element_type": "input",
+      "id": "component-11",
+      "label": "Deposit Amount",
+      "type": "number",
+      "constraints": "min=0.01",
+      "action": "Input amount to deposit"
+    },
+    {
+      "element_type": "button",
+      "id": "component-12",
+      "text": "Deposit",
+      "action": "Execute deposit transaction"
+    },
+    {
+      "element_type": "input",
+      "id": "component-13",
+      "label": "Withdraw Amount",
+      "type": "number",
+      "constraints": "min=0.01",
+      "action": "Input amount to withdraw"
+    },
+    {
+      "element_type": "button",
+      "id": "component-14",
+      "text": "Withdraw",
+      "action": "Execute withdrawal transaction"
+    },
+    {
+      "element_type": "input",
+      "id": "component-17",
+      "label": "Stock Symbol",
+      "type": "textarea",
+      "placeholder": "AAPL",
+      "action": "Input stock symbol for trading"
+    },
+    {
+      "element_type": "input",
+      "id": "component-18",
+      "label": "Quantity",
+      "type": "number",
+      "constraints": "min=1",
+      "action": "Input quantity of shares to trade"
+    },
+    {
+      "element_type": "button",
+      "id": "component-21",
+      "text": "Buy Shares",
+      "action": "Execute buy transaction"
+    },
+    {
+      "element_type": "button",
+      "id": "component-22",
+      "text": "Sell Shares",
+      "action": "Execute sell transaction"
+    },
+    {
+      "element_type": "button",
+      "id": "component-33",
+      "text": "Refresh Transactions",
+      "action": "Refresh the transaction history view"
+    }
+  ],
+  "display_elements": [
+    {
+      "element_type": "output",
+      "id": "component-28",
+      "label": "Messages",
+      "purpose": "Displays status messages/errors (disabled input)"
+    },
+    {
+      "element_type": "output",
+      "id": "component-29",
+      "label": "Cash Balance",
+      "purpose": "Displays current cash balance (disabled input)"
+    },
+    {
+      "element_type": "output",
+      "id": "component-30",
+      "label": "Holdings",
+      "purpose": "Displays current stock holdings (disabled input)"
+    },
+    {
+      "element_type": "output",
+      "id": "component-31",
+      "label": "Portfolio Summary",
+      "purpose": "Displays total portfolio value summary (disabled input)"
+    },
+    {
+      "element_type": "output",
+      "id": "component-34",
+      "label": "Recent Transactions",
+      "purpose": "Displays transaction history (disabled input)"
+    }
+  ],
+  "markdown_sections": [
+    {
+      "id": "component-1",
+      "content": "<h1>Trading Simulation Platform Demo</h1>"
+    },
+    {
+      "id": "component-2",
+      "content": "<p>This is a simple demo of the account management system. Create an account, deposit funds, and start trading!</p>"
+    },
+    {
+      "id": "component-5",
+      "content": "<h2>Account Creation</h2>"
+    },
+    {
+      "id": "component-10",
+      "content": "<h2>Fund Management</h2>"
+    },
+    {
+      "id": "component-15",
+      "content": "<h2>Trading (Available: AAPL, TSLA, GOOGL)</h2>"
+    },
+    {
+      "id": "component-27",
+      "content": "<h2>Account Status</h2>"
+    },
+    {
+      "id": "component-32",
+      "content": "<h2>Transaction History</h2>"
+    }
+  ]
+}

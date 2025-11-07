@@ -1,0 +1,62 @@
+analyze_requirements:
+  description: >
+    Analyze the user story and extract testable requirements. Break down the user story into specific, 
+    measurable, and actionable requirements that can be validated through testing. Identify acceptance 
+    criteria, functional requirements, non-functional requirements, and any constraints or dependencies.
+    Here are the user stories: {user_stories}
+  expected_output: >
+    A structured document containing:
+    - List of functional requirements with clear acceptance criteria
+    - Non-functional requirements (performance, security, usability)
+    - Testable scenarios for each requirement
+    - Dependencies and constraints
+    - Priority levels for each requirement
+  agent: requirement_analyst
+  output_file: output/requirements_analysis.md
+
+dom_scan_task:
+  description: >
+    Extract DOM elements from the target URL {application_url} using the DomExtractTool.
+  expected_output: >
+    A structured JSON file containing all identified DOM elements.
+  agent: dom_scan_agent
+  output_file: output/DOM_elements.json
+
+test_case_designer_task:
+  description: >
+    Using extracted requirements from analyze_requirements and DOM elements from dom_scan_agent, generate comprehensive test cases for {application_url}. 
+    Create both positive and negative scenarios in Gherkin format with examples and test data. 
+    Include preconditions, detailed steps, expected results, and unique test IDs. 
+    Ensure coverage of edge cases, boundary conditions, happy paths, and error scenarios using data tables and scenario outlines where relevant.
+  expected_output: >
+    A single markdown file containing:
+    - Test cases in BDD Gherkin format (Feature, Scenario, Given, When, Then)
+    - Unique test IDs for each scenario
+    - Preconditions, steps, and expected results
+    - Positive and negative test scenarios with valid/invalid data
+    - Example tables for data-driven testing
+    - Traceability mapping to requirements
+  agent: test_case_designer
+  output_file: output/testcases.md
+  context:
+    - analyze_requirements
+    - dom_scan_task
+
+automation_test_script_task:
+  description: >
+    Generate executable Playwright test scripts in TypeScript using test cases from
+    test_case_designer and DOM elements from dom_scan_agent. Output must be pure,
+    runnable TypeScript code without markdown formatting, code fences, backticks, or
+    explanatory text. Utilize structured selectors from dom_scan_agent for reliability.
+    Implement Playwright best practices including describe/it blocks, proper fixtures,
+    page object patterns where applicable, and robust expect assertions. Validate syntax
+    to ensure immediate executability.
+  expected_output: >
+    Production-ready TypeScript Playwright spec file (.ts) containing properly structured
+    test suites with describe/it blocks, type-safe selectors, appropriate fixtures, and
+    comprehensive expect assertions. Code must be executable without modification.
+  agent: automation_test_script_designer
+  output_file: output/account-registration.spec.ts
+  context:
+    - test_case_designer_task
+    - dom_scan_task
