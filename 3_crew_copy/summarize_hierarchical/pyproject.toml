@@ -1,0 +1,27 @@
+[project]
+name = "summarize_hierarchical"
+version = "0.1.0"
+description = "summarize using crewAI with hierarchical process"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools,google-genai]==1.4.0",
+    "litellm",
+    "firecrawl-py"
+]
+
+[project.scripts]
+summarize_hierarchical = "summarize_hierarchical.main:run"
+run_crew = "summarize_hierarchical.main:run"
+train = "summarize_hierarchical.main:train"
+replay = "summarize_hierarchical.main:replay"
+test = "summarize_hierarchical.main:test"
+run_with_trigger = "summarize_hierarchical.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
+

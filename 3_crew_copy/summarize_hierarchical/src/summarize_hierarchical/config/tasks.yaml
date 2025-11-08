@@ -1,0 +1,95 @@
+research_task:
+  description: >
+    Perform in-depth research on {topic} with focus on current information (current year: {current_year}).
+    
+    Research Requirements:
+    - Search for the best and most relevant articles about {topic}
+    - Evaluate articles based on authority, relevance, recency, and quality
+    - Identify the top 3 most valuable articles that provide comprehensive coverage
+    - Consider articles from authoritative sources, expert publications, and credible platforms
+    
+    Ensure articles are:
+    - Current and up-to-date (considering {current_year})
+    - From authoritative and credible sources
+    - Highly relevant to {topic}
+    - Provide substantial value and insights
+  expected_output: >
+    A list of the 3 best articles about {topic}. For each article, provide:
+    - Article title
+    - Source/publication name
+    - URL or reference (if available)
+    - Brief summary of why this article is valuable and what key insights it provides
+    - Main topics or themes covered in the article
+  agent: researcher
+
+article_picker_task:
+  description: >
+    Review the 3 articles provided from the research stage. Analyze and compare each
+    article's quality, relevance, depth, authority, and value. Find the best article
+    from the 3 articles and generate a detailed reason explaining why this article
+    is the best choice. Evaluate factors such as:
+    - Source credibility and authority
+    - Depth and comprehensiveness of coverage
+    - Relevance to {topic}
+    - Quality of insights and information
+    - Recency and up-to-date information
+    - Practical value and actionable content
+    
+    Select the single best article and provide a clear, detailed explanation of why
+    it was chosen over the other two alternatives.
+  expected_output: >
+    A comprehensive selection output containing:
+    
+    **Reason for Selection:**
+    - Detailed explanation of why this article was chosen as the best
+    - Comparison with the other 2 articles highlighting why this one is superior
+    - Key factors that make this article stand out (credibility, depth, relevance, etc.)
+    - Specific qualities and unique value this article provides
+    
+    **Selected Article Details:**
+    - Article title
+    - Source/publication name
+    - URL or reference (if available)
+    - Brief summary of why this article is valuable and what key insights it provides
+    - Main topics or themes covered in the article
+  agent: article_picker
+
+article_summarizer_task:
+  description: >
+    Review the selected article provided from the article picker stage. Read and analyze
+    the article content thoroughly. Create a comprehensive summary that:
+    
+    - Distills the complex information into a clear and concise format
+    - Highlights the key insights, main points, and important information
+    - Identifies the most valuable and actionable takeaways
+    - Presents the information in a structured and easy-to-understand manner
+    - Maintains accuracy while making the content accessible
+    
+    The summary should capture the essence of the article while being both comprehensive
+    and actionable, making it easy for readers to understand the key points without
+    reading the full article.
+    
+    IMPORTANT: After completing the summary, you MUST use the "Pushover Notification Tool"
+    to send a notification message. The notification should include a brief message
+    indicating that the article summary has been completed, along with the topic or
+    article title. Use the tool with a message like: "Article summary completed for {topic}"
+    or similar notification text.
+  expected_output: >
+    A well-structured article summary containing:
+    
+    **Article Summary:**
+    - Clear and concise overview of the article's main content
+    - Key insights and important information highlighted
+    - Main points and arguments presented in a structured format
+    - Most valuable takeaways and actionable information
+    
+    **Summary Structure:**
+    - Introduction/Overview: Brief context and purpose of the article
+    - Key Points: Main ideas and arguments (organized in sections or bullet points)
+    - Key Insights: Important findings, statistics, or revelations
+    - Takeaways: Actionable information and practical applications
+    - Conclusion: Summary of the article's main message or implications
+    
+    Format as markdown without '```' code blocks, making it easy to read and understand.
+  agent: article_summarizer
+
