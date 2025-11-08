@@ -1,8 +1,22 @@
 #!/usr/bin/env python
 import sys
 import warnings
+import os
+from pathlib import Path
 
 from datetime import datetime
+
+# Load environment variables from .env file if it exists
+try:
+    from dotenv import load_dotenv
+    env_path = Path(__file__).parent.parent.parent.parent / '.env'
+    if env_path.exists():
+        load_dotenv(env_path)
+    else:
+        # Also try loading from current directory
+        load_dotenv()
+except ImportError:
+    pass  # dotenv is optional
 
 from summarize.crew import Summarize
 
@@ -18,7 +32,7 @@ def run():
     Run the crew.
     """
     inputs = {
-        'topic': 'AI LLMs',
+        'topic': 'Buy Car Insurance In Iran',
         'current_year': str(datetime.now().year)
     }
 

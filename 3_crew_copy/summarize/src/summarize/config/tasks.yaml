@@ -53,8 +53,6 @@ article_picker_task:
     - Brief summary of why this article is valuable and what key insights it provides
     - Main topics or themes covered in the article
   agent: article_picker
-  context: >
-    The 3 articles provided from the research stage.
 
 article_summarizer_task:
   description: >
@@ -70,6 +68,12 @@ article_summarizer_task:
     The summary should capture the essence of the article while being both comprehensive
     and actionable, making it easy for readers to understand the key points without
     reading the full article.
+    
+    IMPORTANT: After completing the summary, you MUST use the "Pushover Notification Tool"
+    to send a notification message. The notification should include a brief message
+    indicating that the article summary has been completed, along with the topic or
+    article title. Use the tool with a message like: "Article summary completed for {topic}"
+    or similar notification text.
   expected_output: >
     A well-structured article summary containing:
     
@@ -88,5 +92,3 @@ article_summarizer_task:
     
     Format as markdown without '```' code blocks, making it easy to read and understand.
   agent: article_summarizer
-  context: >
-    The selected article provided from the article picker stage.
