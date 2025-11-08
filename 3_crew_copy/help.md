@@ -1,0 +1,1 @@
+uv tool run crewai run

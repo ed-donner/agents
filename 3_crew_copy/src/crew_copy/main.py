@@ -18,8 +18,9 @@ def run():
     Run the crew.
     """
     inputs = {
-        'topic': 'AI LLMs',
-        'current_year': str(datetime.now().year)
+        'topic': 'Computer Backend Tech',
+        'current_year': str(datetime.now().year),
+        'difficulty_level': 'easy'  # Options: 'easy', 'middle', 'hard'
     }
 
     try:
@@ -34,7 +35,8 @@ def train():
     """
     inputs = {
         "topic": "AI LLMs",
-        'current_year': str(datetime.now().year)
+        'current_year': str(datetime.now().year),
+        'difficulty_level': 'middle'
     }
     try:
         CrewCopy().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
@@ -58,7 +60,8 @@ def test():
     """
     inputs = {
         "topic": "AI LLMs",
-        "current_year": str(datetime.now().year)
+        "current_year": str(datetime.now().year),
+        'difficulty_level': 'middle'
     }
 
     try:
@@ -84,7 +87,8 @@ def run_with_trigger():
     inputs = {
         "crewai_trigger_payload": trigger_payload,
         "topic": "",
-        "current_year": ""
+        "current_year": "",
+        "difficulty_level": "middle"
     }
 
     try:

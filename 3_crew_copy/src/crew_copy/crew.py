@@ -1,10 +1,16 @@
-from crewai import Agent, Crew, Process, Task
+from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
+
+# Configure Ollama LLM with qwen3:1.7b model
+ollama_llm = LLM(
+    model="ollama/qwen3:1.7b",
+    base_url="http://localhost:11434"
+)
 
 @CrewBase
 class CrewCopy():
@@ -23,13 +29,15 @@ class CrewCopy():
     def researcher(self) -> Agent:
         return Agent(
             config=self.agents_config['researcher'], # type: ignore[index]
+            llm=ollama_llm,
             verbose=True
         )
 
     @agent
-    def reporting_analyst(self) -> Agent:
+    def quiz_generator(self) -> Agent:
         return Agent(
-            config=self.agents_config['reporting_analyst'], # type: ignore[index]
+            config=self.agents_config['quiz_generator'], # type: ignore[index]
+            llm=ollama_llm,
             verbose=True
         )
 
@@ -40,13 +48,14 @@ class CrewCopy():
     def research_task(self) -> Task:
         return Task(
             config=self.tasks_config['research_task'], # type: ignore[index]
+            output_file='research.md'
         )
 
     @task
-    def reporting_task(self) -> Task:
+    def quiz_task(self) -> Task:
         return Task(
-            config=self.tasks_config['reporting_task'], # type: ignore[index]
-            output_file='report.md'
+            config=self.tasks_config['quiz_task'], # type: ignore[index]
+            output_file='quiz.md'
         )
 
     @crew

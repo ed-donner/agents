@@ -7,11 +7,35 @@ research_task:
     A list with 10 bullet points of the most relevant information about {topic}
   agent: researcher
 
-reporting_task:
+quiz_task:
   description: >
-    Review the context you got and expand each topic into a full section for a report.
-    Make sure the report is detailed and contains any and all relevant information.
+    Based on the research findings about {topic}, create a comprehensive quiz at
+    {difficulty_level} difficulty level. The quiz should include:
+    
+    Difficulty Level Guidelines:
+    - Easy: Focus on basic definitions, simple facts, fundamental concepts (5-7 questions)
+    - Middle: Include application questions, moderate complexity, connections between concepts (8-12 questions)
+    - Hard: Advanced topics, deep analysis, synthesis, complex problem-solving (10-15 questions)
+    
+    Question Types (mix based on difficulty):
+    - Multiple Choice questions (with 4 options each)
+    - True/False questions
+    - Short Answer questions
+    - For hard level: Include essay/explanation questions
+    
+    Requirements:
+    - Cover key concepts from the research
+    - Questions should be clear and unambiguous
+    - Wrong answers should be plausible but clearly incorrect
+    - Provide detailed explanations for all answers
+    - Include scoring guide
   expected_output: >
-    A fully fledged report with the main topics, each with a full section of information.
-    Formatted as markdown without '```'
-  agent: reporting_analyst
+    A complete quiz document in markdown format containing:
+    - Quiz title with topic and difficulty level
+    - Instructions for taking the quiz
+    - Questions numbered and organized by type
+    - Answer key section with correct answers
+    - Detailed explanations for each answer
+    - Scoring guide
+    Format as markdown without '```'
+  agent: quiz_generator
