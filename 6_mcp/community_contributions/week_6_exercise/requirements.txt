@@ -1,8 +1,0 @@
-openai
-gradio
-wikipedia
-duckduckgo-search
-gnews
-reportlab
-requests
-python-dotenv
