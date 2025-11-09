@@ -1,12 +1,11 @@
-"""Summarizer Agent - Summarizes news articles using Gemini."""
+"""Summarizer Agent - Summarizes news articles using OpenAI."""
 
-import asyncio
 import os
 import json
 from typing import Dict, List, Any
 
+from agents import Agent, function_tool
 from openai import OpenAI
-from .base import Agent, function_tool
 
 
 @function_tool
@@ -19,14 +18,6 @@ def summarize_articles(articles_json: str) -> str:
     Returns:
         Summary text suitable for a 2-minute audio briefing
     """
-    api_key = os.getenv("GEMINI_API_KEY")
-    base_url = os.getenv("GEMINI_BASE_URL")
-    
-    if not api_key or not base_url:
-        raise ValueError(
-            "GEMINI_API_KEY and GEMINI_BASE_URL must be set in environment variables"
-        )
-    
     # Parse JSON string to list
     try:
         articles = json.loads(articles_json) if isinstance(articles_json, str) else articles_json
@@ -35,8 +26,6 @@ def summarize_articles(articles_json: str) -> str:
     
     if not articles:
         raise ValueError("No articles to summarize")
-    
-    client = OpenAI(api_key=api_key, base_url=base_url)
     
     context = "\n\n".join([
         f"Article: {a.get('title', 'No title')}\n{a.get('summary', '')}"
@@ -56,8 +45,15 @@ def summarize_articles(articles_json: str) -> str:
     
     Summary:"""
     
+    # Use OpenAI API directly
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError("OPENAI_API_KEY must be set in environment variables")
+    
+    client = OpenAI(api_key=api_key)
+    
     response = client.chat.completions.create(
-        model="gemini-2.5-flash",
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "You are a news summarizer."},
             {"role": "user", "content": prompt}
@@ -65,20 +61,6 @@ def summarize_articles(articles_json: str) -> str:
     )
     
     return response.choices[0].message.content
-
-
-async def summarize_articles_async(articles: List[Dict[str, str]]) -> str:
-    """Async wrapper for summarize_articles to run in executor.
-    
-    This function is kept for backward compatibility.
-    """
-    try:
-        loop = asyncio.get_running_loop()
-    except RuntimeError:
-        loop = asyncio.new_event_loop()
-    
-    articles_json = json.dumps(articles)
-    return await loop.run_in_executor(None, summarize_articles, articles_json)
 
 
 # Create the Summarizer Agent
@@ -93,5 +75,5 @@ summarizer_agent = Agent(
     name="News Summarizer",
     instructions=SUMMARIZER_INSTRUCTIONS,
     tools=[summarize_articles],
-    model="gemini-2.5-flash",
+    model="gpt-4o-mini",  
 )

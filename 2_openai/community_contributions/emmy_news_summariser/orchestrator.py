@@ -2,7 +2,8 @@
 
 import json
 from typing import Tuple
-from agents import (
+from agents import Runner, ToolCallOutputItem
+from news_agents import (
     news_aggregator_agent,
     summarizer_agent,
     audio_generator_agent,
@@ -12,8 +13,8 @@ from agents import (
 class NewsSummaryOrchestrator:
     """Orchestrates the news summary workflow using multiple autonomous agents.
     
-    Each agent decides autonomously when and how to use its tools based on
-    the instructions provided to it.
+    Uses the OpenAI Agents SDK Runner to execute agents autonomously.
+    Each agent decides when and how to use its tools based on instructions.
     """
     
     def __init__(self):
@@ -41,45 +42,55 @@ class NewsSummaryOrchestrator:
         print(f"{'='*60}\n")
         
         # Step 1: Ask the aggregator agent to fetch news
-        # The agent will autonomously decide to call aggregate_news
         print("Step 1: Fetching news articles...")
-        articles_response = await self.aggregator.run(
-            f"Fetch the latest news articles about {topic}",
-            return_raw_tool_result=True  # Get raw JSON result from the tool
+        aggregator_result = await Runner.run(
+            self.aggregator,
+            f"Fetch the latest news articles about {topic}"
         )
         
-        # Extract articles from the response
-        if isinstance(articles_response, dict):
-            articles = articles_response.get("articles", [])
-        elif isinstance(articles_response, str):
-            try:
-                articles_data = json.loads(articles_response)
-                articles = articles_data.get("articles", [])
-            except json.JSONDecodeError:
-                raise ValueError(f"Could not parse articles from aggregator response: {articles_response}")
-        else:
-            raise ValueError(f"Unexpected response type from aggregator: {type(articles_response)}")
+        # Extract articles from the tool call outputs
+        articles = None
+        for item in aggregator_result.new_items:
+            if isinstance(item, ToolCallOutputItem):
+                result = item.output
+                if isinstance(result, dict) and "articles" in result:
+                    articles = result["articles"]
+                    break
+        
+        if not articles:
+            raise ValueError("Failed to fetch articles from aggregator agent")
         
         print(f"✓ Fetched {len(articles)} articles\n")
         
         # Step 2: Ask the summarizer agent to create a summary
-        # The agent will autonomously decide to call summarize_articles
         print("Step 2: Creating summary...")
-        summary = await self.summarizer.run(
+        summarizer_result = await Runner.run(
+            self.summarizer,
             f"Summarize these news articles into a 300-word briefing: {json.dumps(articles)}"
         )
+        
+        summary = summarizer_result.final_output
         print(f"✓ Summary created ({len(summary.split())} words)\n")
         
         # Step 3: Ask the audio generator agent to create audio
-        # The agent will autonomously decide to call synthesize_speech
         print("Step 3: Generating audio...")
-        audio_path = await self.audio_generator.run(
-            f"Convert this text to speech: {summary}",
-            return_raw_tool_result=True  # Get the actual file path from the tool
+        audio_result = await Runner.run(
+            self.audio_generator,
+            f"Convert this text to speech: {summary}"
         )
         
-        # Clean up the path in case there's any extra text
-        audio_path = str(audio_path).strip()
+        # Extract audio path from the tool call outputs
+        audio_path = None
+        for item in audio_result.new_items:
+            if isinstance(item, ToolCallOutputItem):
+                result = item.output
+                if isinstance(result, str) and (result.endswith('.mp3') or '/' in result):
+                    audio_path = result.strip()
+                    break
+        
+        if not audio_path:
+            raise ValueError("Failed to generate audio from audio generator agent")
+        
         print(f"✓ Audio generated: {audio_path}\n")
         
         print(f"{'='*60}")

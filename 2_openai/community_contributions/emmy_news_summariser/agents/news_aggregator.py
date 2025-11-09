@@ -5,7 +5,7 @@ import aiohttp
 import feedparser
 from typing import Dict, List, Any
 
-from .base import Agent, function_tool
+from agents import Agent, function_tool
 
 
 FEEDS = {
@@ -84,7 +84,7 @@ async def aggregate_news(topic: str, num_sources: int = 5) -> Dict[str, Any]:
     return {"articles": articles[:15]}
 
 
-# Create the News Aggregator Agent
+# Create the News Aggregator Agent with Gemini via LiteLLM
 NEWS_AGGREGATOR_INSTRUCTIONS = """You are a news aggregator agent. Your task is to fetch and aggregate 
 news articles from RSS feeds for a given topic. 
 
@@ -96,5 +96,5 @@ news_aggregator_agent = Agent(
     name="News Aggregator",
     instructions=NEWS_AGGREGATOR_INSTRUCTIONS,
     tools=[aggregate_news],
-    model="gemini-2.5-flash",
+    model="gpt-4o-mini", 
 )

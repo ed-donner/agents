@@ -8,13 +8,12 @@ from pathlib import Path
 from typing import Dict, Any
 import uuid
 
-from .base import Agent, function_tool
+from agents import Agent, function_tool
 
 
 @function_tool
 async def synthesize_speech(
     text: str, 
-    # voice_id: str = "Chinese (Mandarin)_Warm_Bestie",
     voice_id: str = "Chinese (Mandarin)_News_Anchor",
     speed: float = 0.95,
     pitch: int = -1
@@ -81,7 +80,7 @@ async def synthesize_speech(
                 raise Exception(f"Error: {response.status} - {error_text}")
 
 
-# Create the Audio Generator Agent
+# Create the Audio Generator Agent with Gemini via LiteLLM
 AUDIO_GENERATOR_INSTRUCTIONS = """You are an audio generator agent. Your task is to convert text 
 summaries into audio files using the MiniMax TTS API. 
 
@@ -92,5 +91,5 @@ audio_generator_agent = Agent(
     name="Audio Generator",
     instructions=AUDIO_GENERATOR_INSTRUCTIONS,
     tools=[synthesize_speech],
-    model="gemini-2.5-flash",
+    model="gpt-4o-mini",  
 )
