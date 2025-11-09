@@ -2,6 +2,7 @@
 
 import asyncio
 import os
+import json
 from typing import Dict, List, Any
 
 from openai import OpenAI
@@ -9,11 +10,11 @@ from .base import Agent, function_tool
 
 
 @function_tool
-def summarize_articles(articles: List[Dict[str, str]]) -> str:
+def summarize_articles(articles_json: str) -> str:
     """Summarize news articles into a concise 300-word briefing.
     
     Args:
-        articles: List of article dictionaries to summarize
+        articles_json: JSON string containing list of article dictionaries to summarize
         
     Returns:
         Summary text suitable for a 2-minute audio briefing
@@ -26,13 +27,19 @@ def summarize_articles(articles: List[Dict[str, str]]) -> str:
             "GEMINI_API_KEY and GEMINI_BASE_URL must be set in environment variables"
         )
     
+    # Parse JSON string to list
+    try:
+        articles = json.loads(articles_json) if isinstance(articles_json, str) else articles_json
+    except json.JSONDecodeError:
+        raise ValueError("Invalid JSON format for articles")
+    
     if not articles:
         raise ValueError("No articles to summarize")
     
     client = OpenAI(api_key=api_key, base_url=base_url)
     
     context = "\n\n".join([
-        f"Article: {a['title']}\n{a['summary']}"
+        f"Article: {a.get('title', 'No title')}\n{a.get('summary', '')}"
         for a in articles
     ])
     
@@ -61,18 +68,24 @@ def summarize_articles(articles: List[Dict[str, str]]) -> str:
 
 
 async def summarize_articles_async(articles: List[Dict[str, str]]) -> str:
-    """Async wrapper for summarize_articles to run in executor."""
+    """Async wrapper for summarize_articles to run in executor.
+    
+    This function is kept for backward compatibility.
+    """
     try:
         loop = asyncio.get_running_loop()
     except RuntimeError:
         loop = asyncio.new_event_loop()
     
-    return await loop.run_in_executor(None, summarize_articles, articles)
+    articles_json = json.dumps(articles)
+    return await loop.run_in_executor(None, summarize_articles, articles_json)
 
 
 # Create the Summarizer Agent
 SUMMARIZER_INSTRUCTIONS = """You are a news summarizer agent. Your task is to take a list of news 
 articles and create a concise, engaging 300-word summary suitable for a 2-minute audio briefing. 
+
+When given articles, use the summarize_articles tool with the articles in JSON format.
 The summary should have an opening hook, cover the top 3 stories with key details, and include a 
 brief closing. Make it conversational and easy to listen to."""
 

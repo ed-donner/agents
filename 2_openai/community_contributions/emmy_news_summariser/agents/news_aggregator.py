@@ -33,7 +33,6 @@ FEEDS = {
 }
 
 
-@function_tool
 async def fetch_feed(session: aiohttp.ClientSession, url: str) -> List[Dict[str, str]]:
     """Fetch articles from a single RSS feed.
     
@@ -87,12 +86,15 @@ async def aggregate_news(topic: str, num_sources: int = 5) -> Dict[str, Any]:
 
 # Create the News Aggregator Agent
 NEWS_AGGREGATOR_INSTRUCTIONS = """You are a news aggregator agent. Your task is to fetch and aggregate 
-news articles from RSS feeds for a given topic. You should fetch articles from multiple sources 
-concurrently and return a list of the most recent articles."""
+news articles from RSS feeds for a given topic. 
+
+When asked to get news on a topic, use the aggregate_news tool with the topic name 
+(tech, world, business, politics, or sports). The tool will fetch articles from multiple sources 
+and return a list of the most recent articles."""
 
 news_aggregator_agent = Agent(
     name="News Aggregator",
     instructions=NEWS_AGGREGATOR_INSTRUCTIONS,
-    tools=[fetch_feed, aggregate_news],
+    tools=[aggregate_news],
     model="gemini-2.5-flash",
 )

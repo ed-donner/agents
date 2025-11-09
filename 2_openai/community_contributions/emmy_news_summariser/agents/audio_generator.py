@@ -83,8 +83,10 @@ async def synthesize_speech(
 
 # Create the Audio Generator Agent
 AUDIO_GENERATOR_INSTRUCTIONS = """You are an audio generator agent. Your task is to convert text 
-summaries into audio files using the MiniMax TTS API. You should generate high-quality speech 
-from the provided text and return the path to the generated audio file."""
+summaries into audio files using the MiniMax TTS API. 
+
+When given text, use the synthesize_speech tool to generate high-quality Chinese audio.
+Return the path to the generated audio file."""
 
 audio_generator_agent = Agent(
     name="Audio Generator",

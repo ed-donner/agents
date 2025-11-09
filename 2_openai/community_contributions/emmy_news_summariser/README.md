@@ -11,237 +11,264 @@ An AI-powered news summarization system that aggregates news from multiple RSS f
 - **Agent-Based Architecture**: Modular design with separate agents for each task, following OpenAI Agents SDK patterns
 - **Async/Await Support**: Fully asynchronous implementation for optimal performance
 
-## 📋 Table of Contents
+### (The Solution)
 
-- [Architecture](#architecture)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Technologies](#technologies)
-- [API Keys Required](#api-keys-required)
-
-## 🏗️ Architecture
-
-The project follows a modular agent-based architecture with three specialized agents:
-
-### 1. **News Aggregator Agent**
-
-- Fetches articles from RSS feeds concurrently
-- Supports multiple news topics (tech, world, business, politics, sports)
-- Aggregates up to 15 most recent articles from multiple sources
-
-### 2. **Summarizer Agent**
-
-- Uses Gemini 2.5 Flash for intelligent summarization
-- Creates 300-word summaries optimized for 2-minute audio briefings
-- Structures content with opening hook, top 3 stories, and closing
-
-### 3. **Audio Generator Agent**
-
-- Converts text summaries to speech using MiniMax TTS
-- Generates high-quality MP3 audio files
-- Uses unique filenames to prevent collisions
-
-### Orchestrator
-
-Coordinates the workflow between all agents, ensuring smooth data flow from aggregation → summarization → audio generation.
-
-## 📦 Installation
-
-### Prerequisites
-
-- Python 3.13 or higher
-- pip package manager
-
-### Steps
-
-1. **Clone the repository** (or navigate to the project directory):
-
-   ```bash
-   cd news_summariser
-   ```
-
-2. **Create a virtual environment**:
-
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   ```
-
-3. **Install dependencies**:
-
-   ```bash
-   pip install -e .
-   ```
-
-   Or install manually:
-
-   ```bash
-   pip install openai google-generativeai feedparser gradio aiohttp aiofiles python-dotenv requests pydantic loguru
-   ```
-
-## ⚙️ Configuration
-
-Create a `.env` file in the project root with the following API keys:
-
-```env
-# Gemini API Configuration (for summarization)
-GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta
-
-# MiniMax API Configuration (for text-to-speech)
-MINIMAX_API_KEY=your_minimax_api_key_here
-```
-
-### Getting API Keys
-
-1. **Gemini API Key**:
-
-   - Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
-   - Create a new API key
-   - Set `GEMINI_BASE_URL` to the Gemini API endpoint
-
-2. **MiniMax API Key**:
-   - Visit [MiniMax Platform](https://www.minimaxi.com/)
-   - Sign up and obtain your API key
-
-## 🎯 Usage
-
-### Running the Application
-
-1. **Activate the virtual environment**:
-
-   ```bash
-   source .venv/bin/activate
-   ```
-
-2. **Run the application**:
-
-   ```bash
-   python main.py
-   ```
-
-3. **Access the web interface**:
-   - The Gradio interface will launch automatically
-   - Open the URL shown in the terminal (typically `http://127.0.0.1:7860`)
-   - Select a news topic from the dropdown
-   - Click submit to generate a summary and audio briefing
-
-### Supported News Topics
-
-- **Tech**: Technology news from TechCrunch, The Verge, Ars Technica
-- **World**: World news from BBC and New York Times
-- **Business**: Business news from BBC and CNBC
-- **Politics**: Political news from New York Times and BBC
-- **Sports**: Sports news from New York Times and BBC
-
-## 📁 Project Structure
-
-```
-news_summariser/
-├── agents/                      # Agent modules
-│   ├── __init__.py             # Agent exports
-│   ├── base.py                 # Base Agent class and function_tool decorator
-│   ├── news_aggregator.py      # News aggregation agent
-│   ├── summarizer.py           # Summarization agent
-│   └── audio_generator.py      # Audio generation agent
-├── config/                      # Configuration module
-│   └── __init__.py
-├── main.py                      # Main entry point (Gradio UI)
-├── orchestrator.py              # Workflow orchestrator
-├── pyproject.toml               # Project dependencies
-├── .env                         # Environment variables (create this)
-└── README.md                    # This file
-```
-
-## 🛠️ Technologies
-
-- **Python 3.13+**: Core programming language
-- **Gradio**: Web interface framework
-- **OpenAI SDK**: For Gemini API integration (OpenAI-compatible endpoint)
-- **aiohttp**: Asynchronous HTTP client for RSS feed fetching
-- **aiofiles**: Asynchronous file operations
-- **feedparser**: RSS feed parsing
-- **MiniMax TTS API**: Text-to-speech conversion
-- **python-dotenv**: Environment variable management
-
-## 🔑 API Keys Required
-
-This project requires the following API keys:
-
-1. **GEMINI_API_KEY**: For AI-powered news summarization
-2. **GEMINI_BASE_URL**: Gemini API endpoint URL
-3. **MINIMAX_API_KEY**: For text-to-speech audio generation
-
-## 🎨 Features in Detail
-
-### Agent Pattern
-
-Each agent follows the OpenAI Agents SDK pattern:
+- Agents use Google Gemini's function calling API
+- LLM decides when and how to use tools
+- Agents reason about tasks and autonomously choose tools
+- Proper agent loop: LLM → decides → calls tool → processes result → responds
 
 ```python
-Agent(
-    name="Agent Name",
-    instructions="Agent instructions",
-    tools=[tool_function],
-    model="gemini-2.5-flash",
+# NEW: Agent decides autonomously what to do
+articles_response = await self.aggregator.run(
+    f"Fetch the latest news articles about {topic}"
 )
+# ↑ The agent analyzes this request and decides to call aggregate_news
 ```
 
-### Function Tools
+## Technical Implementation
 
-Tools are decorated with `@function_tool` to mark them as agent capabilities:
+### 1. Agent Class with Real LLM Behavior
+
+**File:** `agents/base.py`
+
+The `Agent` class:
+
+1. Initializes Gemini with function declarations
+2. Runs an agent loop that handles function calling
+3. Executes tools when LLM requests them
+4. Returns final responses
+
+```python
+class Agent:
+    def __post_init__(self):
+        # Convert Python functions to Gemini function declarations
+        self.function_declarations = [
+            _convert_tool_to_function_declaration(tool)
+            for tool in self.tools
+        ]
+
+        # Initialize Gemini with tools
+        self.model_instance = genai.GenerativeModel(
+            model_name=self.model,
+            tools=self.function_declarations,
+            system_instruction=self.instructions
+        )
+
+    async def run(self, user_message: str) -> Any:
+        # Start chat and send user message
+        response = chat.send_message(user_message)
+
+        # Agent loop: LLM decides to call tools
+        while has_function_calls(response):
+            # Execute requested tools
+            tool_results = await execute_tools(response.function_calls)
+
+            # Send results back to LLM
+            response = chat.send_message(tool_results)
+
+        return final_response
+```
+
+### 2. Tool Schema Conversion
+
+**Function:** `_convert_tool_to_function_declaration()`
+
+Automatically converts Python functions to Gemini function declarations:
 
 ```python
 @function_tool
-async def my_tool(param: str) -> str:
-    """Tool description."""
-    # Implementation
-    return result
+async def aggregate_news(topic: str, num_sources: int = 5) -> Dict[str, Any]:
+    """Aggregate news from RSS feeds concurrently."""
+    # ...
+
+# Gets converted to:
+{
+    "name": "aggregate_news",
+    "description": "Aggregate news from RSS feeds concurrently.",
+    "parameters": {
+        "type": "OBJECT",
+        "properties": {
+            "topic": {"type": "STRING", "description": "Parameter topic"},
+            "num_sources": {"type": "INTEGER", "description": "Parameter num_sources"}
+        },
+        "required": ["topic"]
+    }
+}
 ```
 
-### Async Workflow
+### 3. Autonomous Orchestration
 
-The entire workflow is asynchronous for optimal performance:
+**File:** `orchestrator.py`
 
-- Concurrent RSS feed fetching
-- Non-blocking API calls
-- Efficient file I/O operations
+Instead of calling functions directly, the orchestrator now **delegates to agents**:
 
-## 📝 Example Output
+```python
+# Step 1: Aggregator agent autonomously fetches news
+articles_response = await self.aggregator.run(
+    f"Fetch the latest news articles about {topic}",
+    return_raw_tool_result=True
+)
+# The LLM sees this request, decides aggregate_news is needed, calls it
 
-When you select a topic and generate a summary, you'll receive:
+# Step 2: Summarizer agent autonomously creates summary
+summary = await self.summarizer.run(
+    f"Summarize these news articles: {json.dumps(articles)}"
+)
+# The LLM sees articles, decides summarize_articles is needed, calls it
 
-1. **Text Summary**: A 300-word engaging summary with:
+# Step 3: Audio generator agent autonomously creates audio
+audio_path = await self.audio_generator.run(
+    f"Convert this text to speech: {summary}"
+)
+# The LLM sees text, decides synthesize_speech is needed, calls it
+```
 
-   - Opening hook
-   - Top 3 stories with key details
-   - Brief closing
+## Key Features
 
-2. **Audio File**: An MP3 file containing the audio version of the summary, perfect for listening on the go
+### 1. Autonomous Tool Selection
 
-## 🤝 Contributing
+The LLM analyzes the user's request and decides which tool(s) to use:
 
-This project follows clean code principles:
+```
+User: "Fetch the latest news articles about tech"
+                     ↓
+    LLM analyzes: "I need to get tech news"
+                     ↓
+    LLM decides: "I should call aggregate_news with topic='tech'"
+                     ↓
+    Agent executes: aggregate_news(topic="tech")
+                     ↓
+    LLM processes result and responds
+```
 
-- Separation of concerns (each agent in its own file)
-- Type hints throughout
-- Comprehensive docstrings
-- Error handling
-- Async/await patterns
+### 2. Multi-Step Reasoning
 
-## 📄 License
+Agents can chain multiple tool calls:
 
-This project is open source and available for educational and personal use.
+```python
+# Agent could decide to:
+# 1. Call aggregate_news for "tech"
+# 2. See the results aren't enough
+# 3. Call aggregate_news again for "business"
+# 4. Combine and respond
+```
 
-## 🙏 Acknowledgments
+### 3. Error Handling
 
-- **Google Gemini**: For powerful AI summarization capabilities
-- **MiniMax**: For high-quality text-to-speech services
-- **Gradio**: For the beautiful web interface framework
-- **OpenAI**: For the Agents SDK pattern inspiration
+Agents handle tool errors gracefully:
 
----
+```python
+try:
+    result = await tool_func(**function_args)
+except Exception as e:
+    # Agent receives error message
+    # LLM can reason about the error and try alternative approaches
+    function_response = f"Error: {str(e)}"
+```
 
-**Note**: Make sure to keep your `.env` file secure and never commit it to version control. The `.gitignore` file is configured to exclude it automatically.
+### 4. Flexible Output Modes
+
+```python
+# Get LLM's natural language response
+result = await agent.run("Get tech news")
+# → "I've fetched 15 tech articles from 5 sources..."
+
+# Get raw tool result (for structured data)
+result = await agent.run("Get tech news", return_raw_tool_result=True)
+# → {"articles": [...]}
+```
+
+### Real Agent Pattern
+
+This follows the proper agent pattern used by frameworks like:
+
+- OpenAI Agents SDK
+- Anthropic Claude Agents
+
+Where agents:
+
+1. Receive high-level instructions
+2. Reason about how to accomplish tasks
+3. Decide which tools to use
+4. Execute tools autonomously
+5. Return results
+
+### Benefits
+
+1. **Flexibility**: Change agent behavior by updating instructions, not code
+2. **Extensibility**: Add new tools, agents automatically learn to use them
+3. **Robustness**: Agents can handle unexpected situations
+4. **Maintainability**: Less hardcoded logic, more declarative instructions
+
+## Testing
+
+To test the implementation:
+
+```bash
+# Ensure environment variables are set
+# GEMINI_API_KEY=your_key
+# GEMINI_BASE_URL=your_base_url
+# MINIMAX_API_KEY=your_key
+
+# Run the test suite
+python test_agents.py
+```
+
+The test will:
+
+1. Test each agent individually
+2. Verify autonomous tool calling
+3. Run the complete orchestrator workflow
+4. Show agent decision-making in action
+
+## Example Output
+
+```
+[News Aggregator] Calling tool: aggregate_news with args: {'topic': 'tech'}
+✓ Fetched 15 articles
+
+[News Summarizer] Calling tool: summarize_articles with args: {'articles_json': '[...]'}
+✓ Summary created (287 words)
+
+[Audio Generator] Calling tool: synthesize_speech with args: {'text': '...'}
+✓ Audio generated: news_summary_20251107_095453.mp3
+```
+
+## Architecture Diagram
+
+```
+User Request
+     ↓
+Orchestrator (Delegates to agents)
+     ↓
+┌────────────────────────────────────┐
+│  Agent (with LLM reasoning)        │
+│  ┌──────────────────────────────┐  │
+│  │ 1. Analyze user request      │  │
+│  │ 2. Decide which tool to use  │  │
+│  │ 3. Call tool with parameters │  │
+│  │ 4. Process tool result       │  │
+│  │ 5. Return final response     │  │
+│  └──────────────────────────────┘  │
+│                                    │
+│  Available Tools:                  │
+│  • aggregate_news                  │
+│  • summarize_articles              │
+│  • synthesize_speech               │
+└────────────────────────────────────┘
+```
+
+## Conclusion
+
+This implementation uses "autonomous agents with LLM-powered decision making". The agents reason about tasks and decide how to accomplish them, following industry-standard agent patterns.
+
+## Response to Code Review
+
+**Flow:**
+
+- ✅ Agents use Gemini's native function calling
+- ✅ `@function_tool` decorator enables tool schema generation
+- ✅ LLM autonomously decides which tools to call
+- ✅ Follows real agent patterns from OpenAI/LangChain/Anthropic
+- ✅ Agents are actually used in the workflow (not just their tools)
