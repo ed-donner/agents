@@ -1,8 +1,3 @@
-Perfect 😄 — here’s the **Markdown-optimized, GitHub-ready** version of your README.
-It’s clean, scannable, and visually balanced while keeping all the key technical info.
-
----
-
 # 🧠 Multimodal Agent News Summarizer
 
 An AI-powered system that **aggregates news**, **summarizes using GPT-4o-mini**, and **creates audio briefings** with **MiniMax TTS**.
