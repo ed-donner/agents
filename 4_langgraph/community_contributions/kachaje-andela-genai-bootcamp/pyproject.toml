@@ -1,0 +1,23 @@
+[project]
+name = "codebuilder"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "colorlog>=6.7.0",
+    "duckduckgo-search==4.1.1",
+    "fastapi>=0.115.0",
+    "gradio>=4.44.1",
+    "typer>=0.9.0",
+    "httpx==0.25.2",
+    "langgraph==0.0.20",
+    "ollama==0.1.7",
+    "pydantic>=2.7.0",
+    "pytest==7.4.3",
+    "pytest-asyncio==0.21.1",
+    "python-multipart>=0.0.6",
+    "uvicorn[standard]>=0.30.0",
+    "audioop-lts",
+    "setuptools",
+]
