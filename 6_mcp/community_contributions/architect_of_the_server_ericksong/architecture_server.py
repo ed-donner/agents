@@ -277,8 +277,15 @@ async def estimate_materials(
     Returns:
         Material quantities with waste factors applied
     """
+    # Validate unit
+    unit_lc = unit.lower()
+    if unit_lc not in ("sqft", "sqm"):
+        return {
+            "error": f"Unit '{unit}' not supported. Allowed units: 'sqft', 'sqm'.",
+            "available_units": ["sqft", "sqm"]
+        }
     # Convert to sqft if needed
-    if unit.lower() == "sqm":
+    if unit_lc == "sqm":
         area_sqft = area * 10.7639
     else:
         area_sqft = area
