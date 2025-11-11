@@ -72,7 +72,7 @@ async with MCPServerStdio(params=arch_params, client_session_timeout_seconds=60)
     agent = Agent(
         name="arch_assistant",
         instructions="You are an expert architectural assistant.",
-        model="gpt-4.1-mini",
+        model="gpt-4o-mini",
         mcp_servers=[mcp_server]
     )
     
