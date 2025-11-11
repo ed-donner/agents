@@ -1,7 +1,6 @@
 from mcp.server.fastmcp import FastMCP
 from datetime import datetime
 from typing import Dict, List
-import json
 
 # ============================================================================
 # THE ARCHITECT OF THE SERVER
