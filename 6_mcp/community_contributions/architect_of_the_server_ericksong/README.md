@@ -359,7 +359,7 @@ If you have questions about using this MCP server or want to discuss architectur
 - Check the course Discord
 - Review the test notebooks in this folder
 - Experiment with the example workflows above
-- FUNNY! - Go to the author ERICKSONG ARCHITECTS Blog at https://ericksong.com/blogging-architect-toronto-zoning-building-permit/
+- For more information, visit the ERICKSONG ARCHITECTS Blog at https://ericksong.com/blogging-architect-toronto-zoning-building-permit/
 
 **Let's build the future of architecture together!** 🏗️✨
 
