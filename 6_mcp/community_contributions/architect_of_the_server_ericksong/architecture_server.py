@@ -60,6 +60,10 @@ BUILDING_CODES = {
 }
 
 # In-memory project storage (use database in production)
+# NOTE: PROJECTS is shared mutable state. If the server is run with concurrent requests,
+# access to PROJECTS must be synchronized to avoid race conditions.
+import threading
+PROJECTS_LOCK = threading.Lock()
 PROJECTS = {}
 
 # ============================================================================
