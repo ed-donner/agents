@@ -16,43 +16,46 @@ mcp = FastMCP("architecture_server")
 
 # Building codes database (IBC standards)
 # In production, this would connect to a comprehensive code database
+# NOTE: All requirements below are based on IBC 2018 (example). Add more versions as needed.
 BUILDING_CODES = {
-    "residential": {
-        "bedroom": {
-            "min_area_sqft": 70,
-            "min_ceiling_height_ft": 7.5,
-            "min_width_ft": 7.0,
-            "window_area_ratio": 0.08
+    "IBC_2018": {
+        "residential": {
+            "bedroom": {
+                "min_area_sqft": 70,
+                "min_ceiling_height_ft": 7.5,
+                "min_width_ft": 7.0,
+                "window_area_ratio": 0.08
+            },
+            "living_room": {
+                "min_area_sqft": 120,
+                "min_ceiling_height_ft": 7.5
+            },
+            "bathroom": {
+                "min_area_sqft": 35,
+                "min_ceiling_height_ft": 7.5
+            },
+            "kitchen": {
+                "min_area_sqft": 50,
+                "min_ceiling_height_ft": 7.5
+            }
         },
-        "living_room": {
-            "min_area_sqft": 120,
-            "min_ceiling_height_ft": 7.5
-        },
-        "bathroom": {
-            "min_area_sqft": 35,
-            "min_ceiling_height_ft": 7.5
-        },
-        "kitchen": {
-            "min_area_sqft": 50,
-            "min_ceiling_height_ft": 7.5
-        }
-    },
-    "commercial": {
-        "office": {
-            "min_area_sqft": 100,
-            "min_ceiling_height_ft": 8.0,
-            "occupancy_sqft_per_person": 100
-        },
-        "corridor": {
-            "min_width_inches": 44,
-            "min_ceiling_height_ft": 8.0,
-            "exit_access_width_inches": 36
-        },
-        "stair": {
-            "min_width_inches": 36,
-            "min_ceiling_height_ft": 7.0,
-            "max_riser_height_inches": 7.0,
-            "min_tread_depth_inches": 11.0
+        "commercial": {
+            "office": {
+                "min_area_sqft": 100,
+                "min_ceiling_height_ft": 8.0,
+                "occupancy_sqft_per_person": 100
+            },
+            "corridor": {
+                "min_width_inches": 44,
+                "min_ceiling_height_ft": 8.0,
+                "exit_access_width_inches": 36
+            },
+            "stair": {
+                "min_width_inches": 36,
+                "min_ceiling_height_ft": 7.0,
+                "max_riser_height_inches": 7.0,
+                "min_tread_depth_inches": 11.0
+            }
         }
     }
 }
