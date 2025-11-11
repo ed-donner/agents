@@ -462,7 +462,10 @@ async def get_project_summary(project_id: str) -> Dict:
         "circulation_area_sqft": round(circulation, 2),
         "room_count": len(project["rooms"]),
         "rooms": project["rooms"],
-        "efficiency_ratio": round(total_room_area / project["total_area"] * 100, 1),
+        "efficiency_ratio": (
+            round(total_room_area / project["total_area"] * 100, 1)
+            if project["total_area"] > 0 else None
+        ),
         "created_at": project["created_at"]
     }
 
