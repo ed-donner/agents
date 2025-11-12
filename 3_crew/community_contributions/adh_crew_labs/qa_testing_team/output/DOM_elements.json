@@ -1,160 +1,2085 @@
 {
-  "page_title": "Gradio App",
-  "url": "http://127.0.0.1:7860",
-  "interactive_elements": [
+  "page_title": "Trading Simulation Platform Demo",
+  "page_metadata": {
+    "description": "",
+    "viewport": "width=device-width, initial-scale=1"
+  },
+  "element_statistics": {
+    "total_elements": 115,
+    "interactive_elements": 17,
+    "input_fields": 11,
+    "buttons": 6,
+    "links": 1
+  },
+  "interactive_elements_details": [
     {
-      "element_type": "input",
-      "id": "component-6",
-      "label": "Email",
-      "type": "textarea",
-      "placeholder": "user@example.com",
-      "action": "Input email for registration/login"
+      "tag": "textarea",
+      "attributes": {
+        "data-testid": "textbox",
+        "dir": "ltr",
+        "placeholder": "user@example.com",
+        "rows": "1",
+        "style": "overflow-y: scroll;",
+        "class": [
+          "svelte-1ae7ssi"
+        ]
+      },
+      "name": "Email Input",
+      "id": "component-6"
     },
     {
-      "element_type": "input",
-      "id": "component-7",
-      "label": "Password",
-      "type": "password",
-      "placeholder": "",
-      "action": "Input user password"
+      "tag": "input",
+      "attributes": {
+        "data-testid": "password",
+        "type": "password",
+        "class": [
+          "scroll-hide",
+          "svelte-1ae7ssi"
+        ],
+        "placeholder": "",
+        "autocomplete": ""
+      },
+      "name": "Password Input",
+      "id": "component-7"
     },
     {
-      "element_type": "input",
-      "id": "component-8",
-      "label": "Confirm Password",
-      "type": "password",
-      "placeholder": "",
-      "action": "Input password confirmation"
+      "tag": "input",
+      "attributes": {
+        "data-testid": "password",
+        "type": "password",
+        "class": [
+          "scroll-hide",
+          "svelte-1ae7ssi"
+        ],
+        "placeholder": "",
+        "autocomplete": ""
+      },
+      "name": "Confirm Password Input",
+      "id": "component-8"
     },
     {
-      "element_type": "button",
-      "id": "component-9",
-      "text": "Create Account",
-      "action": "Submit account creation form"
+      "tag": "button",
+      "attributes": {
+        "class": [
+          "lg",
+          "primary",
+          "svelte-o34uqh"
+        ],
+        "id": "component-9"
+      },
+      "name": "Create Account Button",
+      "id": "component-9"
     },
     {
-      "element_type": "input",
-      "id": "component-11",
-      "label": "Deposit Amount",
-      "type": "number",
-      "constraints": "min=0.01",
-      "action": "Input amount to deposit"
+      "tag": "input",
+      "attributes": {
+        "aria-label": "Deposit Amount",
+        "type": "number",
+        "min": "0.01",
+        "step": "1",
+        "placeholder": "",
+        "class": [
+          "svelte-1jkmaen"
+        ]
+      },
+      "name": "Deposit Amount Input",
+      "id": "component-11"
     },
     {
-      "element_type": "button",
-      "id": "component-12",
-      "text": "Deposit",
-      "action": "Execute deposit transaction"
+      "tag": "button",
+      "attributes": {
+        "class": [
+          "lg",
+          "secondary",
+          "svelte-o34uqh"
+        ],
+        "id": "component-12"
+      },
+      "name": "Deposit Button",
+      "id": "component-12"
     },
     {
-      "element_type": "input",
-      "id": "component-13",
-      "label": "Withdraw Amount",
-      "type": "number",
-      "constraints": "min=0.01",
-      "action": "Input amount to withdraw"
+      "tag": "input",
+      "attributes": {
+        "aria-label": "Withdraw Amount",
+        "type": "number",
+        "min": "0.01",
+        "step": "1",
+        "placeholder": "",
+        "class": [
+          "svelte-1jkmaen"
+        ]
+      },
+      "name": "Withdraw Amount Input",
+      "id": "component-13"
     },
     {
-      "element_type": "button",
-      "id": "component-14",
-      "text": "Withdraw",
-      "action": "Execute withdrawal transaction"
+      "tag": "button",
+      "attributes": {
+        "class": [
+          "lg",
+          "secondary",
+          "svelte-o34uqh"
+        ],
+        "id": "component-14"
+      },
+      "name": "Withdraw Button",
+      "id": "component-14"
     },
     {
-      "element_type": "input",
-      "id": "component-17",
-      "label": "Stock Symbol",
-      "type": "textarea",
-      "placeholder": "AAPL",
-      "action": "Input stock symbol for trading"
+      "tag": "textarea",
+      "attributes": {
+        "data-testid": "textbox",
+        "dir": "ltr",
+        "placeholder": "",
+        "rows": "2",
+        "disabled": "",
+        "style": "overflow-y: hidden; height: 59.2px;",
+        "class": [
+          "svelte-1ae7ssi"
+        ]
+      },
+      "name": "Messages Display",
+      "id": "component-28"
     },
     {
-      "element_type": "input",
-      "id": "component-18",
-      "label": "Quantity",
-      "type": "number",
-      "constraints": "min=1",
-      "action": "Input quantity of shares to trade"
+      "tag": "textarea",
+      "attributes": {
+        "data-testid": "textbox",
+        "dir": "ltr",
+        "placeholder": "",
+        "rows": "1",
+        "disabled": "",
+        "style": "overflow-y: scroll;",
+        "class": [
+          "svelte-1ae7ssi"
+        ]
+      },
+      "name": "Cash Balance Display",
+      "id": "component-29"
     },
     {
-      "element_type": "button",
-      "id": "component-21",
-      "text": "Buy Shares",
-      "action": "Execute buy transaction"
+      "tag": "textarea",
+      "attributes": {
+        "data-testid": "textbox",
+        "dir": "ltr",
+        "placeholder": "",
+        "rows": "5",
+        "disabled": "",
+        "style": "overflow-y: hidden; height: 118px;",
+        "class": [
+          "svelte-1ae7ssi"
+        ]
+      },
+      "name": "Holdings Display",
+      "id": "component-30"
     },
     {
-      "element_type": "button",
-      "id": "component-22",
-      "text": "Sell Shares",
-      "action": "Execute sell transaction"
+      "tag": "textarea",
+      "attributes": {
+        "data-testid": "textbox",
+        "dir": "ltr",
+        "placeholder": "",
+        "rows": "6",
+        "disabled": "",
+        "style": "overflow-y: hidden; height: 137.6px;",
+        "class": [
+          "svelte-1ae7ssi"
+        ]
+      },
+      "name": "Portfolio Summary Display",
+      "id": "component-31"
     },
     {
-      "element_type": "button",
-      "id": "component-33",
-      "text": "Refresh Transactions",
-      "action": "Refresh the transaction history view"
+      "tag": "textarea",
+      "attributes": {
+        "data-testid": "textbox",
+        "dir": "ltr",
+        "placeholder": "AAPL",
+        "rows": "1",
+        "style": "overflow-y: scroll;",
+        "class": [
+          "svelte-1ae7ssi"
+        ]
+      },
+      "name": "Stock Symbol Input",
+      "id": "component-17"
+    },
+    {
+      "tag": "input",
+      "attributes": {
+        "aria-label": "Quantity",
+        "type": "number",
+        "min": "1",
+        "step": "1",
+        "placeholder": "",
+        "class": [
+          "svelte-1jkmaen"
+        ]
+      },
+      "name": "Quantity Input",
+      "id": "component-18"
+    },
+    {
+      "tag": "button",
+      "attributes": {
+        "class": [
+          "lg",
+          "secondary",
+          "svelte-o34uqh"
+        ],
+        "id": "component-21"
+      },
+      "name": "Buy Shares Button",
+      "id": "component-21"
+    },
+    {
+      "tag": "button",
+      "attributes": {
+        "class": [
+          "lg",
+          "secondary",
+          "svelte-o34uqh"
+        ],
+        "id": "component-22"
+      },
+      "name": "Sell Shares Button",
+      "id": "component-22"
+    },
+    {
+      "tag": "button",
+      "attributes": {
+        "class": [
+          "lg",
+          "secondary",
+          "svelte-o34uqh"
+        ],
+        "id": "component-33"
+      },
+      "name": "Refresh Transactions Button",
+      "id": "component-33"
+    },
+    {
+      "tag": "textarea",
+      "attributes": {
+        "data-testid": "textbox",
+        "dir": "ltr",
+        "placeholder": "",
+        "rows": "8",
+        "disabled": "",
+        "style": "overflow-y: hidden; height: 176.8px;",
+        "class": [
+          "svelte-1ae7ssi"
+        ]
+      },
+      "name": "Recent Transactions Display",
+      "id": "component-34"
     }
   ],
-  "display_elements": [
-    {
-      "element_type": "output",
-      "id": "component-28",
-      "label": "Messages",
-      "purpose": "Displays status messages/errors (disabled input)"
+  "full_dom_tree": {
+    "tag": "body",
+    "attributes": {
+      "style": "\n\t\t\twidth: 100%;\n\t\t\tmargin: 0;\n\t\t\tpadding: 0;\n\t\t\tdisplay: flex;\n\t\t\tflex-direction: column;\n\t\t\tflex-grow: 1;\n\t\t"
     },
-    {
-      "element_type": "output",
-      "id": "component-29",
-      "label": "Cash Balance",
-      "purpose": "Displays current cash balance (disabled input)"
-    },
-    {
-      "element_type": "output",
-      "id": "component-30",
-      "label": "Holdings",
-      "purpose": "Displays current stock holdings (disabled input)"
-    },
-    {
-      "element_type": "output",
-      "id": "component-31",
-      "label": "Portfolio Summary",
-      "purpose": "Displays total portfolio value summary (disabled input)"
-    },
-    {
-      "element_type": "output",
-      "id": "component-34",
-      "label": "Recent Transactions",
-      "purpose": "Displays transaction history (disabled input)"
-    }
-  ],
-  "markdown_sections": [
-    {
-      "id": "component-1",
-      "content": "<h1>Trading Simulation Platform Demo</h1>"
-    },
-    {
-      "id": "component-2",
-      "content": "<p>This is a simple demo of the account management system. Create an account, deposit funds, and start trading!</p>"
-    },
-    {
-      "id": "component-5",
-      "content": "<h2>Account Creation</h2>"
-    },
-    {
-      "id": "component-10",
-      "content": "<h2>Fund Management</h2>"
-    },
-    {
-      "id": "component-15",
-      "content": "<h2>Trading (Available: AAPL, TSLA, GOOGL)</h2>"
-    },
-    {
-      "id": "component-27",
-      "content": "<h2>Account Status</h2>"
-    },
-    {
-      "id": "component-32",
-      "content": "<h2>Transaction History</h2>"
-    }
-  ]
+    "children": [
+      {
+        "tag": "gradio-app",
+        "attributes": {
+          "control_page_title": "true",
+          "embed": "false",
+          "eager": "true",
+          "style": "display: flex; flex-direction: column; flex-grow: 1; background: var(--body-background-fill);"
+        },
+        "children": [
+          {
+            "tag": "div",
+            "attributes": {
+              "class": [
+                "gradio-container",
+                "gradio-container-5-49-1",
+                "svelte-18evea3"
+              ],
+              "data-iframe-height": "",
+              "style": "min-height: initial; flex-grow: 1;"
+            },
+            "children": [
+              {
+                "tag": "main",
+                "attributes": {
+                  "class": [
+                    "fillable",
+                    "svelte-18evea3",
+                    "app"
+                  ]
+                },
+                "children": [
+                  {
+                    "tag": "div",
+                    "attributes": {
+                      "class": [
+                        "wrap",
+                        "svelte-czcr5b"
+                      ],
+                      "style": "min-height: 100%;"
+                    },
+                    "children": [
+                      {
+                        "tag": "div",
+                        "attributes": {
+                          "class": [
+                            "contain",
+                            "svelte-czcr5b"
+                          ],
+                          "style": "flex-grow: 1; margin-right: 0px;"
+                        },
+                        "children": [
+                          {
+                            "tag": "div",
+                            "attributes": {
+                              "id": "component-0",
+                              "class": [
+                                "column",
+                                "svelte-bnzux8"
+                              ],
+                              "style": "min-width: min(0px, 100%);"
+                            },
+                            "children": [
+                              {
+                                "tag": "div",
+                                "attributes": {
+                                  "id": "component-1",
+                                  "class": [
+                                    "block",
+                                    "svelte-1svsvh2",
+                                    "padded",
+                                    "hide-container",
+                                    "auto-margin"
+                                  ],
+                                  "dir": "ltr",
+                                  "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: auto; min-width: min(0px, 100%); border-width: var(--block-border-width);"
+                                },
+                                "children": [
+                                  {
+                                    "tag": "div",
+                                    "attributes": {
+                                      "class": [
+                                        "wrap",
+                                        "center",
+                                        "full",
+                                        "svelte-btia7y",
+                                        "hide"
+                                      ],
+                                      "style": "position: absolute; padding: 0px;"
+                                    },
+                                    "children": []
+                                  },
+                                  {
+                                    "tag": "div",
+                                    "attributes": {
+                                      "class": [
+                                        "svelte-vuh1yp"
+                                      ]
+                                    },
+                                    "children": [
+                                      {
+                                        "tag": "div",
+                                        "attributes": {
+                                          "class": [
+                                            "prose",
+                                            "svelte-lag733"
+                                          ],
+                                          "data-testid": "markdown",
+                                          "dir": "ltr",
+                                          "style": ""
+                                        },
+                                        "children": [
+                                          {
+                                            "tag": "span",
+                                            "attributes": {
+                                              "class": [
+                                                "md",
+                                                "svelte-7ddecg",
+                                                "prose"
+                                              ]
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "h1",
+                                                "attributes": {},
+                                                "children": [
+                                                  "Trading Simulation Platform Demo"
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "tag": "div",
+                                "attributes": {
+                                  "id": "component-2",
+                                  "class": [
+                                    "block",
+                                    "svelte-1svsvh2",
+                                    "padded",
+                                    "hide-container",
+                                    "auto-margin"
+                                  ],
+                                  "dir": "ltr",
+                                  "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: auto; min-width: min(0px, 100%); border-width: var(--block-border-width);"
+                                },
+                                "children": [
+                                  {
+                                    "tag": "div",
+                                    "attributes": {
+                                      "class": [
+                                        "wrap",
+                                        "center",
+                                        "full",
+                                        "svelte-btia7y",
+                                        "hide"
+                                      ],
+                                      "style": "position: absolute; padding: 0px;"
+                                    },
+                                    "children": []
+                                  },
+                                  {
+                                    "tag": "div",
+                                    "attributes": {
+                                      "class": [
+                                        "svelte-vuh1yp"
+                                      ]
+                                    },
+                                    "children": [
+                                      {
+                                        "tag": "div",
+                                        "attributes": {
+                                          "class": [
+                                            "prose",
+                                            "svelte-lag733"
+                                          ],
+                                          "data-testid": "markdown",
+                                          "dir": "ltr",
+                                          "style": ""
+                                        },
+                                        "children": [
+                                          {
+                                            "tag": "span",
+                                            "attributes": {
+                                              "class": [
+                                                "md",
+                                                "svelte-7ddecg",
+                                                "prose"
+                                              ]
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "p",
+                                                "attributes": {},
+                                                "children": [
+                                                  "This is a simple demo of the account management system. Create an account, deposit funds, and start trading!"
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "tag": "div",
+                                "attributes": {
+                                  "id": "component-3",
+                                  "class": [
+                                    "row",
+                                    "svelte-1xp0cw7",
+                                    "unequal-height"
+                                  ]
+                                },
+                                "children": [
+                                  {
+                                    "tag": "div",
+                                    "attributes": {
+                                      "id": "component-4",
+                                      "class": [
+                                        "column",
+                                        "svelte-bnzux8"
+                                      ],
+                                      "style": "flex-grow: 2; min-width: min(320px, 100%);"
+                                    },
+                                    "children": [
+                                      {
+                                        "tag": "div",
+                                        "attributes": {
+                                          "id": "component-5",
+                                          "class": [
+                                            "block",
+                                            "svelte-1svsvh2",
+                                            "padded",
+                                            "hide-container",
+                                            "auto-margin"
+                                          ],
+                                          "dir": "ltr",
+                                          "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: auto; min-width: min(0px, 100%); border-width: var(--block-border-width);"
+                                        },
+                                        "children": [
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "class": [
+                                                "wrap",
+                                                "center",
+                                                "full",
+                                                "svelte-btia7y",
+                                                "hide"
+                                              ],
+                                              "style": "position: absolute; padding: 0px;"
+                                            },
+                                            "children": []
+                                          },
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "class": [
+                                                "svelte-vuh1yp"
+                                              ]
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "div",
+                                                "attributes": {
+                                                  "class": [
+                                                    "prose",
+                                                    "svelte-lag733"
+                                                  ],
+                                                  "data-testid": "markdown",
+                                                  "dir": "ltr",
+                                                  "style": ""
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "span",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "md",
+                                                        "svelte-7ddecg",
+                                                        "prose"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "h2",
+                                                        "attributes": {},
+                                                        "children": [
+                                                          "Account Creation"
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "tag": "div",
+                                        "attributes": {
+                                          "class": [
+                                            "form",
+                                            "svelte-1vd8eap"
+                                          ],
+                                          "style": "flex-grow: 0; min-width: min(0px, 100%);"
+                                        },
+                                        "children": [
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "id": "component-6",
+                                              "class": [
+                                                "block",
+                                                "svelte-1svsvh2",
+                                                "padded",
+                                                "auto-margin"
+                                              ],
+                                              "dir": "ltr",
+                                              "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: hidden; min-width: min(160px, 100%); border-width: var(--block-border-width);"
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "label",
+                                                "attributes": {
+                                                  "class": [
+                                                    "svelte-1ae7ssi",
+                                                    "container",
+                                                    "show_textbox_border"
+                                                  ]
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "span",
+                                                    "attributes": {
+                                                      "data-testid": "block-info",
+                                                      "dir": "ltr",
+                                                      "class": [
+                                                        "svelte-g2oxp3"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      "Email"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "tag": "div",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "input-container",
+                                                        "svelte-1ae7ssi"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "textarea",
+                                                        "attributes": {
+                                                          "data-testid": "textbox",
+                                                          "dir": "ltr",
+                                                          "placeholder": "user@example.com",
+                                                          "rows": "1",
+                                                          "style": "overflow-y: scroll;",
+                                                          "class": [
+                                                            "svelte-1ae7ssi"
+                                                          ]
+                                                        },
+                                                        "children": []
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "id": "component-7",
+                                              "class": [
+                                                "block",
+                                                "svelte-1svsvh2",
+                                                "padded",
+                                                "auto-margin"
+                                              ],
+                                              "dir": "ltr",
+                                              "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: hidden; min-width: min(160px, 100%); border-width: var(--block-border-width);"
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "label",
+                                                "attributes": {
+                                                  "class": [
+                                                    "svelte-1ae7ssi",
+                                                    "container",
+                                                    "show_textbox_border"
+                                                  ]
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "span",
+                                                    "attributes": {
+                                                      "data-testid": "block-info",
+                                                      "dir": "ltr",
+                                                      "class": [
+                                                        "svelte-g2oxp3"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      "Password"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "tag": "div",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "input-container",
+                                                        "svelte-1ae7ssi"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "input",
+                                                        "attributes": {
+                                                          "data-testid": "password",
+                                                          "type": "password",
+                                                          "class": [
+                                                            "scroll-hide",
+                                                            "svelte-1ae7ssi"
+                                                          ],
+                                                          "placeholder": "",
+                                                          "autocomplete": ""
+                                                        },
+                                                        "children": []
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "id": "component-8",
+                                              "class": [
+                                                "block",
+                                                "svelte-1svsvh2",
+                                                "padded",
+                                                "auto-margin"
+                                              ],
+                                              "dir": "ltr",
+                                              "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: hidden; min-width: min(160px, 100%); border-width: var(--block-border-width);"
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "label",
+                                                "attributes": {
+                                                  "class": [
+                                                    "svelte-1ae7ssi",
+                                                    "container",
+                                                    "show_textbox_border"
+                                                  ]
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "span",
+                                                    "attributes": {
+                                                      "data-testid": "block-info",
+                                                      "dir": "ltr",
+                                                      "class": [
+                                                        "svelte-g2oxp3"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      "Confirm Password"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "tag": "div",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "input-container",
+                                                        "svelte-1ae7ssi"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "input",
+                                                        "attributes": {
+                                                          "data-testid": "password",
+                                                          "type": "password",
+                                                          "class": [
+                                                            "scroll-hide",
+                                                            "svelte-1ae7ssi"
+                                                          ],
+                                                          "placeholder": "",
+                                                          "autocomplete": ""
+                                                        },
+                                                        "children": []
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "tag": "button",
+                                        "attributes": {
+                                          "class": [
+                                            "lg",
+                                            "primary",
+                                            "svelte-o34uqh"
+                                          ],
+                                          "id": "component-9"
+                                        },
+                                        "children": [
+                                          "Create Account"
+                                        ]
+                                      },
+                                      {
+                                        "tag": "div",
+                                        "attributes": {
+                                          "id": "component-10",
+                                          "class": [
+                                            "block",
+                                            "svelte-1svsvh2",
+                                            "padded",
+                                            "hide-container",
+                                            "auto-margin"
+                                          ],
+                                          "dir": "ltr",
+                                          "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: auto; min-width: min(0px, 100%); border-width: var(--block-border-width);"
+                                        },
+                                        "children": [
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "class": [
+                                                "wrap",
+                                                "center",
+                                                "full",
+                                                "svelte-btia7y",
+                                                "hide"
+                                              ],
+                                              "style": "position: absolute; padding: 0px;"
+                                            },
+                                            "children": []
+                                          },
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "class": [
+                                                "svelte-vuh1yp"
+                                              ]
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "div",
+                                                "attributes": {
+                                                  "class": [
+                                                    "prose",
+                                                    "svelte-lag733"
+                                                  ],
+                                                  "data-testid": "markdown",
+                                                  "dir": "ltr",
+                                                  "style": ""
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "span",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "md",
+                                                        "svelte-7ddecg",
+                                                        "prose"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "h2",
+                                                        "attributes": {},
+                                                        "children": [
+                                                          "Fund Management"
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "tag": "div",
+                                        "attributes": {
+                                          "class": [
+                                            "form",
+                                            "svelte-1vd8eap"
+                                          ],
+                                          "style": "flex-grow: 0; min-width: min(0px, 100%);"
+                                        },
+                                        "children": [
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "id": "component-11",
+                                              "class": [
+                                                "block",
+                                                "svelte-1svsvh2",
+                                                "padded",
+                                                "auto-margin"
+                                              ],
+                                              "dir": "ltr",
+                                              "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: hidden; min-width: min(160px, 100%); border-width: var(--block-border-width);"
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "div",
+                                                "attributes": {
+                                                  "class": [
+                                                    "wrap",
+                                                    "default",
+                                                    "full",
+                                                    "svelte-btia7y",
+                                                    "hide"
+                                                  ],
+                                                  "style": "position: absolute; padding: 0px;"
+                                                },
+                                                "children": []
+                                              },
+                                              {
+                                                "tag": "label",
+                                                "attributes": {
+                                                  "class": [
+                                                    "block",
+                                                    "svelte-1jkmaen",
+                                                    "container"
+                                                  ]
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "span",
+                                                    "attributes": {
+                                                      "data-testid": "block-info",
+                                                      "dir": "ltr",
+                                                      "class": [
+                                                        "svelte-g2oxp3"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      "Deposit Amount"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "tag": "input",
+                                                    "attributes": {
+                                                      "aria-label": "Deposit Amount",
+                                                      "type": "number",
+                                                      "min": "0.01",
+                                                      "step": "1",
+                                                      "placeholder": "",
+                                                      "class": [
+                                                        "svelte-1jkmaen"
+                                                      ]
+                                                    },
+                                                    "children": []
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "tag": "button",
+                                        "attributes": {
+                                          "class": [
+                                            "lg",
+                                            "secondary",
+                                            "svelte-o34uqh"
+                                          ],
+                                          "id": "component-12"
+                                        },
+                                        "children": [
+                                          "Deposit"
+                                        ]
+                                      },
+                                      {
+                                        "tag": "div",
+                                        "attributes": {
+                                          "class": [
+                                            "form",
+                                            "svelte-1vd8eap"
+                                          ],
+                                          "style": "flex-grow: 0; min-width: min(0px, 100%);"
+                                        },
+                                        "children": [
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "id": "component-13",
+                                              "class": [
+                                                "block",
+                                                "svelte-1svsvh2",
+                                                "padded",
+                                                "auto-margin"
+                                              ],
+                                              "dir": "ltr",
+                                              "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: hidden; min-width: min(160px, 100%); border-width: var(--block-border-width);"
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "div",
+                                                "attributes": {
+                                                  "class": [
+                                                    "wrap",
+                                                    "default",
+                                                    "full",
+                                                    "svelte-btia7y",
+                                                    "hide"
+                                                  ],
+                                                  "style": "position: absolute; padding: 0px;"
+                                                },
+                                                "children": []
+                                              },
+                                              {
+                                                "tag": "label",
+                                                "attributes": {
+                                                  "class": [
+                                                    "block",
+                                                    "svelte-1jkmaen",
+                                                    "container"
+                                                  ]
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "span",
+                                                    "attributes": {
+                                                      "data-testid": "block-info",
+                                                      "dir": "ltr",
+                                                      "class": [
+                                                        "svelte-g2oxp3"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      "Withdraw Amount"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "tag": "input",
+                                                    "attributes": {
+                                                      "aria-label": "Withdraw Amount",
+                                                      "type": "number",
+                                                      "min": "0.01",
+                                                      "step": "1",
+                                                      "placeholder": "",
+                                                      "class": [
+                                                        "svelte-1jkmaen"
+                                                      ]
+                                                    },
+                                                    "children": []
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "tag": "button",
+                                        "attributes": {
+                                          "class": [
+                                            "lg",
+                                            "secondary",
+                                            "svelte-o34uqh"
+                                          ],
+                                          "id": "component-14"
+                                        },
+                                        "children": [
+                                          "Withdraw"
+                                        ]
+                                      },
+                                      {
+                                        "tag": "div",
+                                        "attributes": {
+                                          "id": "component-15",
+                                          "class": [
+                                            "block",
+                                            "svelte-1svsvh2",
+                                            "padded",
+                                            "hide-container",
+                                            "auto-margin"
+                                          ],
+                                          "dir": "ltr",
+                                          "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: auto; min-width: min(0px, 100%); border-width: var(--block-border-width);"
+                                        },
+                                        "children": [
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "class": [
+                                                "wrap",
+                                                "center",
+                                                "full",
+                                                "svelte-btia7y",
+                                                "hide"
+                                              ],
+                                              "style": "position: absolute; padding: 0px;"
+                                            },
+                                            "children": []
+                                          },
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "class": [
+                                                "svelte-vuh1yp"
+                                              ]
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "div",
+                                                "attributes": {
+                                                  "class": [
+                                                    "prose",
+                                                    "svelte-lag733"
+                                                  ],
+                                                  "data-testid": "markdown",
+                                                  "dir": "ltr",
+                                                  "style": ""
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "span",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "md",
+                                                        "svelte-7ddecg",
+                                                        "prose"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "h2",
+                                                        "attributes": {},
+                                                        "children": [
+                                                          "Trading (Available: AAPL, TSLA, GOOGL)"
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "tag": "div",
+                                        "attributes": {
+                                          "id": "component-16",
+                                          "class": [
+                                            "row",
+                                            "svelte-1xp0cw7",
+                                            "unequal-height"
+                                          ]
+                                        },
+                                        "children": [
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "class": [
+                                                "form",
+                                                "svelte-1vd8eap"
+                                              ],
+                                              "style": "flex-grow: 2; min-width: min(320px, 100%);"
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "div",
+                                                "attributes": {
+                                                  "id": "component-17",
+                                                  "class": [
+                                                    "block",
+                                                    "svelte-1svsvh2",
+                                                    "padded",
+                                                    "auto-margin"
+                                                  ],
+                                                  "dir": "ltr",
+                                                  "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: hidden; min-width: min(160px, 100%); border-width: var(--block-border-width);"
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "label",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "svelte-1ae7ssi",
+                                                        "container",
+                                                        "show_textbox_border"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "span",
+                                                        "attributes": {
+                                                          "data-testid": "block-info",
+                                                          "dir": "ltr",
+                                                          "class": [
+                                                            "svelte-g2oxp3"
+                                                          ]
+                                                        },
+                                                        "children": [
+                                                          "Stock Symbol"
+                                                        ]
+                                                      },
+                                                      {
+                                                        "tag": "div",
+                                                        "attributes": {
+                                                          "class": [
+                                                            "input-container",
+                                                            "svelte-1ae7ssi"
+                                                          ]
+                                                        },
+                                                        "children": [
+                                                          {
+                                                            "tag": "textarea",
+                                                            "attributes": {
+                                                              "data-testid": "textbox",
+                                                              "dir": "ltr",
+                                                              "placeholder": "AAPL",
+                                                              "rows": "1",
+                                                              "style": "overflow-y: scroll;",
+                                                              "class": [
+                                                                "svelte-1ae7ssi"
+                                                              ]
+                                                            },
+                                                            "children": []
+                                                          }
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "tag": "div",
+                                                "attributes": {
+                                                  "id": "component-18",
+                                                  "class": [
+                                                    "block",
+                                                    "svelte-1svsvh2",
+                                                    "padded",
+                                                    "auto-margin"
+                                                  ],
+                                                  "dir": "ltr",
+                                                  "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: hidden; min-width: min(160px, 100%); border-width: var(--block-border-width);"
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "div",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "wrap",
+                                                        "default",
+                                                        "full",
+                                                        "svelte-btia7y",
+                                                        "hide"
+                                                      ]
+                                                    },
+                                                    "children": []
+                                                  },
+                                                  {
+                                                    "tag": "label",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "block",
+                                                        "svelte-1jkmaen",
+                                                        "container"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "span",
+                                                        "attributes": {
+                                                          "data-testid": "block-info",
+                                                          "dir": "ltr",
+                                                          "class": [
+                                                            "svelte-g2oxp3"
+                                                          ]
+                                                        },
+                                                        "children": [
+                                                          "Quantity"
+                                                        ]
+                                                      },
+                                                      {
+                                                        "tag": "input",
+                                                        "attributes": {
+                                                          "aria-label": "Quantity",
+                                                          "type": "number",
+                                                          "min": "1",
+                                                          "step": "1",
+                                                          "placeholder": "",
+                                                          "class": [
+                                                            "svelte-1jkmaen"
+                                                          ]
+                                                        },
+                                                        "children": []
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "tag": "div",
+                                        "attributes": {
+                                          "id": "component-20",
+                                          "class": [
+                                            "row",
+                                            "svelte-1xp0cw7",
+                                            "unequal-height"
+                                          ]
+                                        },
+                                        "children": [
+                                          {
+                                            "tag": "button",
+                                            "attributes": {
+                                              "class": [
+                                                "lg",
+                                                "secondary",
+                                                "svelte-o34uqh"
+                                              ],
+                                              "id": "component-21"
+                                            },
+                                            "children": [
+                                              "Buy Shares"
+                                            ]
+                                          },
+                                          {
+                                            "tag": "button",
+                                            "attributes": {
+                                              "class": [
+                                                "lg",
+                                                "secondary",
+                                                "svelte-o34uqh"
+                                              ],
+                                              "id": "component-22"
+                                            },
+                                            "children": [
+                                              "Sell Shares"
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "tag": "div",
+                                    "attributes": {
+                                      "id": "component-26",
+                                      "class": [
+                                        "column",
+                                        "svelte-bnzux8"
+                                      ],
+                                      "style": "flex-grow: 3; min-width: min(320px, 100%);"
+                                    },
+                                    "children": [
+                                      {
+                                        "tag": "div",
+                                        "attributes": {
+                                          "id": "component-27",
+                                          "class": [
+                                            "block",
+                                            "svelte-1svsvh2",
+                                            "padded",
+                                            "hide-container",
+                                            "auto-margin"
+                                          ],
+                                          "dir": "ltr",
+                                          "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: auto; min-width: min(0px, 100%); border-width: var(--block-border-width);"
+                                        },
+                                        "children": [
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "class": [
+                                                "wrap",
+                                                "center",
+                                                "full",
+                                                "svelte-btia7y",
+                                                "hide"
+                                              ],
+                                              "style": "position: absolute; padding: 0px;"
+                                            },
+                                            "children": []
+                                          },
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "class": [
+                                                "svelte-vuh1yp"
+                                              ]
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "div",
+                                                "attributes": {
+                                                  "class": [
+                                                    "prose",
+                                                    "svelte-lag733"
+                                                  ],
+                                                  "data-testid": "markdown",
+                                                  "dir": "ltr",
+                                                  "style": ""
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "span",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "md",
+                                                        "svelte-7ddecg",
+                                                        "prose"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "h2",
+                                                        "attributes": {},
+                                                        "children": [
+                                                          "Account Status"
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "tag": "div",
+                                        "attributes": {
+                                          "class": [
+                                            "form",
+                                            "svelte-1vd8eap"
+                                          ],
+                                          "style": "flex-grow: 0; min-width: min(0px, 100%);"
+                                        },
+                                        "children": [
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "id": "component-28",
+                                              "class": [
+                                                "block",
+                                                "svelte-1svsvh2",
+                                                "padded",
+                                                "auto-margin"
+                                              ],
+                                              "dir": "ltr",
+                                              "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: hidden; min-width: min(160px, 100%); border-width: var(--block-border-width);"
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "label",
+                                                "attributes": {
+                                                  "class": [
+                                                    "svelte-1ae7ssi",
+                                                    "container",
+                                                    "show_textbox_border"
+                                                  ]
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "span",
+                                                    "attributes": {
+                                                      "data-testid": "block-info",
+                                                      "dir": "ltr",
+                                                      "class": [
+                                                        "svelte-g2oxp3"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      "Messages"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "tag": "div",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "input-container",
+                                                        "svelte-1ae7ssi"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "textarea",
+                                                        "attributes": {
+                                                          "data-testid": "textbox",
+                                                          "dir": "ltr",
+                                                          "placeholder": "",
+                                                          "rows": "2",
+                                                          "disabled": "",
+                                                          "style": "overflow-y: hidden; height: 59.2px;",
+                                                          "class": [
+                                                            "svelte-1ae7ssi"
+                                                          ]
+                                                        },
+                                                        "children": []
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "id": "component-29",
+                                              "class": [
+                                                "block",
+                                                "svelte-1svsvh2",
+                                                "padded",
+                                                "auto-margin"
+                                              ],
+                                              "dir": "ltr",
+                                              "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: hidden; min-width: min(160px, 100%); border-width: var(--block-border-width);"
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "label",
+                                                "attributes": {
+                                                  "class": [
+                                                    "svelte-1ae7ssi",
+                                                    "container",
+                                                    "show_textbox_border"
+                                                  ]
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "span",
+                                                    "attributes": {
+                                                      "data-testid": "block-info",
+                                                      "dir": "ltr",
+                                                      "class": [
+                                                        "svelte-g2oxp3"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      "Cash Balance"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "tag": "div",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "input-container",
+                                                        "svelte-1ae7ssi"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "textarea",
+                                                        "attributes": {
+                                                          "data-testid": "textbox",
+                                                          "dir": "ltr",
+                                                          "placeholder": "",
+                                                          "rows": "1",
+                                                          "disabled": "",
+                                                          "style": "overflow-y: scroll;",
+                                                          "class": [
+                                                            "svelte-1ae7ssi"
+                                                          ]
+                                                        },
+                                                        "children": []
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "id": "component-30",
+                                              "class": [
+                                                "block",
+                                                "svelte-1svsvh2",
+                                                "padded",
+                                                "auto-margin"
+                                              ],
+                                              "dir": "ltr",
+                                              "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: hidden; min-width: min(160px, 100%); border-width: var(--block-border-width);"
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "label",
+                                                "attributes": {
+                                                  "class": [
+                                                    "svelte-1ae7ssi",
+                                                    "container",
+                                                    "show_textbox_border"
+                                                  ]
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "span",
+                                                    "attributes": {
+                                                      "data-testid": "block-info",
+                                                      "dir": "ltr",
+                                                      "class": [
+                                                        "svelte-g2oxp3"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      "Holdings"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "tag": "div",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "input-container",
+                                                        "svelte-1ae7ssi"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "textarea",
+                                                        "attributes": {
+                                                          "data-testid": "textbox",
+                                                          "dir": "ltr",
+                                                          "placeholder": "",
+                                                          "rows": "5",
+                                                          "disabled": "",
+                                                          "style": "overflow-y: hidden; height: 118px;",
+                                                          "class": [
+                                                            "svelte-1ae7ssi"
+                                                          ]
+                                                        },
+                                                        "children": []
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "id": "component-31",
+                                              "class": [
+                                                "block",
+                                                "svelte-1svsvh2",
+                                                "padded",
+                                                "auto-margin"
+                                              ],
+                                              "dir": "ltr",
+                                              "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: hidden; min-width: min(160px, 100%); border-width: var(--block-border-width);"
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "label",
+                                                "attributes": {
+                                                  "class": [
+                                                    "svelte-1ae7ssi",
+                                                    "container",
+                                                    "show_textbox_border"
+                                                  ]
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "span",
+                                                    "attributes": {
+                                                      "data-testid": "block-info",
+                                                      "dir": "ltr",
+                                                      "class": [
+                                                        "svelte-g2oxp3"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      "Portfolio Summary"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "tag": "div",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "input-container",
+                                                        "svelte-1ae7ssi"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "textarea",
+                                                        "attributes": {
+                                                          "data-testid": "textbox",
+                                                          "dir": "ltr",
+                                                          "placeholder": "",
+                                                          "rows": "6",
+                                                          "disabled": "",
+                                                          "style": "overflow-y: hidden; height: 137.6px;",
+                                                          "class": [
+                                                            "svelte-1ae7ssi"
+                                                          ]
+                                                        },
+                                                        "children": []
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "tag": "div",
+                                        "attributes": {
+                                          "id": "component-32",
+                                          "class": [
+                                            "block",
+                                            "svelte-1svsvh2",
+                                            "padded",
+                                            "hide-container",
+                                            "auto-margin"
+                                          ],
+                                          "dir": "ltr",
+                                          "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: auto; min-width: min(0px, 100%); border-width: var(--block-border-width);"
+                                        },
+                                        "children": [
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "class": [
+                                                "wrap",
+                                                "center",
+                                                "full",
+                                                "svelte-btia7y",
+                                                "hide"
+                                              ],
+                                              "style": "position: absolute; padding: 0px;"
+                                            },
+                                            "children": []
+                                          },
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "class": [
+                                                "svelte-vuh1yp"
+                                              ]
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "div",
+                                                "attributes": {
+                                                  "class": [
+                                                    "prose",
+                                                    "svelte-lag733"
+                                                  ],
+                                                  "data-testid": "markdown",
+                                                  "dir": "ltr",
+                                                  "style": ""
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "span",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "md",
+                                                        "svelte-7ddecg",
+                                                        "prose"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "h2",
+                                                        "attributes": {},
+                                                        "children": [
+                                                          "Transaction History"
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "tag": "button",
+                                        "attributes": {
+                                          "class": [
+                                            "lg",
+                                            "secondary",
+                                            "svelte-o34uqh"
+                                          ],
+                                          "id": "component-33"
+                                        },
+                                        "children": [
+                                          "Refresh Transactions"
+                                        ]
+                                      },
+                                      {
+                                        "tag": "div",
+                                        "attributes": {
+                                          "class": [
+                                            "form",
+                                            "svelte-1vd8eap"
+                                          ],
+                                          "style": "flex-grow: 0; min-width: min(0px, 100%);"
+                                        },
+                                        "children": [
+                                          {
+                                            "tag": "div",
+                                            "attributes": {
+                                              "id": "component-34",
+                                              "class": [
+                                                "block",
+                                                "svelte-1svsvh2",
+                                                "padded",
+                                                "auto-margin"
+                                              ],
+                                              "dir": "ltr",
+                                              "style": "--start-top: 0px; --start-left: 0px; --start-width: 0px; --start-height: 0px; border-style: solid; overflow: hidden; min-width: min(160px, 100%); border-width: var(--block-border-width);"
+                                            },
+                                            "children": [
+                                              {
+                                                "tag": "label",
+                                                "attributes": {
+                                                  "class": [
+                                                    "svelte-1ae7ssi",
+                                                    "container",
+                                                    "show_textbox_border"
+                                                  ]
+                                                },
+                                                "children": [
+                                                  {
+                                                    "tag": "span",
+                                                    "attributes": {
+                                                      "data-testid": "block-info",
+                                                      "dir": "ltr",
+                                                      "class": [
+                                                        "svelte-g2oxp3"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      "Recent Transactions"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "tag": "div",
+                                                    "attributes": {
+                                                      "class": [
+                                                        "input-container",
+                                                        "svelte-1ae7ssi"
+                                                      ]
+                                                    },
+                                                    "children": [
+                                                      {
+                                                        "tag": "textarea",
+                                                        "attributes": {
+                                                          "data-testid": "textbox",
+                                                          "dir": "ltr",
+                                                          "placeholder": "",
+                                                          "rows": "8",
+                                                          "disabled": "",
+                                                          "style": "overflow-y: hidden; height: 176.8px;",
+                                                          "class": [
+                                                            "svelte-1ae7ssi"
+                                                          ]
+                                                        },
+                                                        "children": []
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tag": "footer",
+                "attributes": {
+                  "class": [
+                    "svelte-czcr5b"
+                  ],
+                  "style": "position: relative;"
+                },
+                "children": [
+                  {
+                    "tag": "button",
+                    "attributes": {
+                      "class": [
+                        "show-api",
+                        "svelte-czcr5b"
+                      ]
+                    },
+                    "children": [
+                      "Use via API",
+                      {
+                        "tag": "img",
+                        "attributes": {
+                          "src": "data:image/svg+xml,%3csvg%20width='28'%20height='28'%20viewBox='0%200%2028%2028'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M26.9425%202.94265C27.4632%202.42195%2027.4632%201.57773%2026.9425%201.05703C26.4218%200.536329%2025.5776%200.536329%2025.0569%201.05703L22.5713%203.54256C21.1213%202.59333%2019.5367%202.43378%2018.1753%202.64006C16.5495%202.88638%2015.1127%203.66838%2014.3905%204.39053L12.3905%206.39053C12.1405%206.64058%2012%206.97972%2012%207.33334C12%207.68697%2012.1405%208.0261%2012.3905%208.27615L19.7239%2015.6095C20.2446%2016.1302%2021.0888%2016.1302%2021.6095%2015.6095L23.6095%2013.6095C24.3316%2012.8873%2025.1136%2011.4505%2025.36%209.82475C25.5663%208.46312%2025.4066%206.87827%2024.4571%205.42807L26.9425%202.94265Z'%20fill='%233c4555'/%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M12.276%2012.9426C12.7967%2012.4219%2012.7967%2011.5777%2012.276%2011.057C11.7553%2010.5363%2010.9111%2010.5363%2010.3904%2011.057L8.66651%2012.7809L8.27615%2012.3905C8.0261%2012.1405%207.68697%2012%207.33334%2012C6.97972%2012%206.64058%2012.1405%206.39053%2012.3905L4.39053%2014.3905C3.66838%2015.1127%202.88638%2016.5495%202.64006%2018.1753C2.43377%2019.5367%202.59333%2021.1214%203.54262%2022.5714L1.05703%2025.057C0.536329%2025.5777%200.536329%2026.4219%201.05703%2026.9426C1.57773%2027.4633%202.42195%2027.4633%202.94265%2026.9426L5.42817%2024.4571C6.87835%2025.4066%208.46315%2025.5663%209.82475%2025.36C11.4505%2025.1136%2012.8873%2024.3316%2013.6095%2023.6095L15.6095%2021.6095C16.1302%2021.0888%2016.1302%2020.2446%2015.6095%2019.7239L15.2188%2019.3332L16.9426%2017.6093C17.4633%2017.0886%2017.4633%2016.2444%2016.9426%2015.7237C16.4219%2015.203%2015.5777%2015.203%2015.057%2015.7237L13.3332%2017.4475L10.5521%2014.6665L12.276%2012.9426Z'%20fill='%23FF7C00'/%3e%3c/svg%3e",
+                          "alt": "logo",
+                          "class": [
+                            "svelte-czcr5b"
+                          ]
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "div",
+                    "attributes": {
+                      "class": [
+                        "divider",
+                        "show-api-divider",
+                        "svelte-czcr5b"
+                      ]
+                    },
+                    "children": [
+                      "·"
+                    ]
+                  },
+                  {
+                    "tag": "a",
+                    "attributes": {
+                      "href": "https://gradio.app",
+                      "class": [
+                        "built-with",
+                        "svelte-czcr5b"
+                      ],
+                      "target": "_blank",
+                      "rel": [
+                        "noreferrer"
+                      ]
+                    },
+                    "children": [
+                      "Built with Gradio",
+                      {
+                        "tag": "img",
+                        "attributes": {
+                          "src": "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20width='576'%20height='576'%20viewBox='0%200%20576%20576'%20fill='none'%3e%3cpath%20d='M287.5%20229L86%20344.5L287.5%20460L489%20344.5L287.5%20229Z'%20stroke='url(%23paint0_linear_102_7)'%20stroke-width='59'%20stroke-linejoin='round'/%3e%3cpath%20d='M287.5%20116L86%20231.5L287.5%20347L489%20231.5L287.5%20116Z'%20stroke='url(%23paint1_linear_102_7)'%20stroke-width='59'%20stroke-linejoin='round'/%3e%3cpath%20d='M86%20344L288%20229'%20stroke='url(%23paint2_linear_102_7)'%20stroke-width='59'%20stroke-linejoin='bevel'/%3e%3cdefs%3e%3clinearGradient%20id='paint0_linear_102_7'%20x1='60'%20y1='341'%20x2='429.5'%20y2='344'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%23F9D100'/%3e%3cstop%20offset='1'%20stop-color='%23F97700'/%3e%3c/linearGradient%3e%3clinearGradient%20id='paint1_linear_102_7'%20x1='513.5'%20y1='231'%20x2='143.5'%20y2='231'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%23F9D100'/%3e%3cstop%20offset='1'%20stop-color='%23F97700'/%3e%3c/linearGradient%3e%3clinearGradient%20id='paint2_linear_102_7'%20x1='60'%20y1='344'%20x2='428.987'%20y2='341.811'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%23F9D100'/%3e%3cstop%20offset='1'%20stop-color='%23F97700'/%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e",
+                          "alt": "logo",
+                          "class": [
+                            "svelte-czcr5b"
+                          ]
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "div",
+                    "attributes": {
+                      "class": [
+                        "divider",
+                        "svelte-czcr5b",
+                        "hidden"
+                      ]
+                    },
+                    "children": [
+                      "·"
+                    ]
+                  },
+                  {
+                    "tag": "button",
+                    "attributes": {
+                      "class": [
+                        "record",
+                        "svelte-czcr5b",
+                        "hidden"
+                      ]
+                    },
+                    "children": [
+                      "Stop Recording",
+                      {
+                        "tag": "img",
+                        "attributes": {
+                          "src": "data:image/svg+xml,%3csvg%20viewBox='0%200%2020%2020'%20version='1.1'%20xmlns='http://www.w3.org/2000/svg'%20xmlns:xlink='http://www.w3.org/1999/xlink'%20fill='%23000000'%3e%3cg%20id='SVGRepo_bgCarrier'%20stroke-width='0'%3e%3c/g%3e%3cg%20id='SVGRepo_tracerCarrier'%20stroke-linecap='round'%20stroke-linejoin='round'%3e%3c/g%3e%3cg%20id='SVGRepo_iconCarrier'%3e%3ctitle%3erecord%20[%23982]%3c/title%3e%3cdesc%3eCreated%20with%20Sketch.%3c/desc%3e%3cdefs%3e%3c/defs%3e%3cg%20id='Page-1'%20stroke='none'%20stroke-width='1'%20fill='none'%20fill-rule='evenodd'%3e%3cg%20id='Dribbble-Light-Preview'%20transform='translate(-380.000000,%20-3839.000000)'%20fill='%23FF0000'%3e%3cg%20id='icons'%20transform='translate(56.000000,%20160.000000)'%20opacity='0.1'%3e%3cpath%20d='M338,3689%20C338,3691.209%20336.209,3693%20334,3693%20C331.791,3693%20330,3691.209%20330,3689%20C330,3686.791%20331.791,3685%20334,3685%20C336.209,3685%20338,3686.791%20338,3689%20M334,3697%20C329.589,3697%20326,3693.411%20326,3689%20C326,3684.589%20329.589,3681%20334,3681%20C338.411,3681%20342,3684.589%20342,3689%20C342,3693.411%20338.411,3697%20334,3697%20M334,3679%20C328.477,3679%20324,3683.477%20324,3689%20C324,3694.523%20328.477,3699%20334,3699%20C339.523,3699%20344,3694.523%20344,3689%20C344,3683.477%20339.523,3679%20334,3679'%20id='record-[%23982]'%3e%3c/path%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e",
+                          "alt": "Stop Recording",
+                          "class": [
+                            "svelte-czcr5b"
+                          ]
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "div",
+                    "attributes": {
+                      "class": [
+                        "divider",
+                        "svelte-czcr5b"
+                      ]
+                    },
+                    "children": [
+                      "·"
+                    ]
+                  },
+                  {
+                    "tag": "button",
+                    "attributes": {
+                      "class": [
+                        "settings",
+                        "svelte-czcr5b"
+                      ]
+                    },
+                    "children": [
+                      "Settings",
+                      {
+                        "tag": "img",
+                        "attributes": {
+                          "src": "data:image/svg+xml,%3csvg%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%20xmlns='http://www.w3.org/2000/svg'%3e%3c!--%20Outer%20gear%20teeth%20(gray)%20--%3e%3cpath%20d='M19.14%2012.94c.04-.3.06-.61.06-.94%200-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24%200-.43.17-.47.41l-.36%202.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47%200-.59.22L2.74%208.87c-.12.21-.08.47.12.61l2.03%201.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03%201.58c-.18.14-.23.41-.12.61l1.92%203.32c.12.22.37.29.59.22l2.39-.96c.5.38%201.03.7%201.62.94l.36%202.54c.05.24.24.41.48.41h3.84c.24%200%20.44-.17.47-.41l.36-2.54c.59-.24%201.13-.56%201.62-.94l2.39.96c.22.08.47%200%20.59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12%2015.6c-1.98%200-3.6-1.62-3.6-3.6s1.62-3.6%203.6-3.6%203.6%201.62%203.6%203.6-1.62%203.6-3.6%203.6z'%20fill='%23808080'/%3e%3c!--%20Inner%20circle%20(now%20gray)%20--%3e%3ccircle%20cx='12'%20cy='12'%20r='2.5'%20fill='%23808080'/%3e%3c/svg%3e",
+                          "alt": "Settings",
+                          "class": [
+                            "svelte-czcr5b"
+                          ]
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "iframe",
+                    "attributes": {
+                      "style": "display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border: 0; opacity: 0; pointer-events: none; z-index: -1;",
+                      "aria-hidden": "true",
+                      "tabindex": "-1",
+                      "src": "about:blank"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "tag": "div",
+                "attributes": {
+                  "class": [
+                    "toast-wrap",
+                    "svelte-1jktj9z"
+                  ],
+                  "style": "--toast-top: 0px;"
+                },
+                "children": []
+              },
+              {
+                "tag": "div",
+                "attributes": {},
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tag": "script",
+        "attributes": {},
+        "children": [
+          "const ce = document.getElementsByTagName(\"gradio-app\");\n\n\t\t\tif (ce[0]) {\n\t\t\t\tce[0].addEventListener(\"domchange\", () => {\n\t\t\t\t\tdocument.body.style.padding = \"0\";\n\t\t\t\t});\n\t\t\t\tdocument.body.style.padding = \"0\";\n\t\t\t}"
+        ]
+      }
+    ]
+  }
 }

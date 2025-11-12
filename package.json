@@ -1,0 +1,23 @@
+{
+  "name": "agents",
+  "version": "1.0.0",
+  "description": "![Autonomous Agent](assets/autonomy.png)",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anhdanghoang-it/agents.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/anhdanghoang-it/agents/issues"
+  },
+  "homepage": "https://github.com/anhdanghoang-it/agents#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.10.0"
+  }
+}

@@ -1,0 +1,26 @@
+[project]
+name = "tdd_engineering_team"
+version = "0.1.0"
+description = "tdd_engineering_team using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[google-genai,tools]==1.3.0",
+    "gradio>=5.49.1",
+    "playwright>=1.56.0",
+]
+
+[project.scripts]
+tdd_engineering_team = "tdd_engineering_team.main:run"
+run_crew = "tdd_engineering_team.main:run"
+train = "tdd_engineering_team.main:train"
+replay = "tdd_engineering_team.main:replay"
+test = "tdd_engineering_team.main:test"
+run_with_trigger = "tdd_engineering_team.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

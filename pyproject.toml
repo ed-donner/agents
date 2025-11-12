@@ -37,6 +37,7 @@ dependencies = [
     "setuptools>=78.1.0",
     "smithery>=0.1.0",
     "speedtest-cli>=2.1.3",
+    "tree>=0.2.4",
     "wikipedia>=1.4.0",
 ]
 

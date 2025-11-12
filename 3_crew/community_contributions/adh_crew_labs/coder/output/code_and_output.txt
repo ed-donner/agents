@@ -1,20 +1,30 @@
-Here is the Python code to calculate the first 10,000 terms of the series \( 1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \dots \), multiplying the total by 4, along with the output:
+--- Code ---
+```python
+def calculate_series(num_terms=10000):
+    """
+    Calculates the sum of the first num_terms of the series:
+    1 - 1/3 + 1/5 - 1/7 + ...
+    and multiplies the total by 4.
+    """
+    total_sum = 0.0
+    for i in range(num_terms):
+        # Calculate the ith term using the formula: (-1)^i / (2*i + 1)
+        term = ((-1)**i) / (2 * i + 1)
+        total_sum += term
+    
+    # The series approximates pi/4, so we multiply by 4
+    final_result = total_sum * 4
+    return final_result
 
-**Python Code and Output in a Text File (series_calculation_output.txt):**
+# Calculate the result for 10,000 terms
+result = calculate_series(10000)
 
+print("Result for 10,000 terms:")
+print(result)
 ```
-Python Code for the Calculation:
-# Initialize variables
-n_terms = 10000
-series_sum = 0.0
 
-# Calculate the sum of the first 10,000 terms of the series
-for i in range(n_terms):
-    term = (-1)**i / (2 * i + 1)  # Alternative term calculation with alternating signs
-    series_sum += term
-
-# Multiply the total sum by 4
-result = 4 * series_sum
-
-The calculated result for the first 10000 terms of the series, multiplied by 4, is: 3.1414926535900345
+--- Output ---
+```
+Result for 10,000 terms:
+3.1414926535900345
 ```

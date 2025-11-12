@@ -1,0 +1,116 @@
+# dom_scan_task:
+#   description: >
+#     Retrieve the full DOM elements string from the target URL {application_url} using the DomRawExtractTool.
+#   expected_output: >
+#     A text file containing the complete HTML DOM elements extracted from the webpage.
+#   agent: dom_scan_agent
+#   output_file: output/DOM_elements.txt
+
+# test_case_designer_task:
+#   description: >
+#     Using extracted requirements: {requirements_analysis} and DOM elements from dom_scan_agent, generate comprehensive test cases for {application_url}. 
+#     Create both positive and negative scenarios in Gherkin format with examples and test data. 
+#     Include preconditions, detailed steps, expected results, and unique test IDs. 
+#     Ensure coverage of edge cases, boundary conditions, happy paths, and error scenarios using data tables and scenario outlines where relevant.
+#   expected_output: >
+#     A single markdown file containing:
+#     - Test cases in BDD Gherkin format (Feature, Scenario, Given, When, Then)
+#     - Unique test IDs for each scenario
+#     - Preconditions, steps, and expected results
+#     - Positive and negative test scenarios with valid/invalid data
+#     - Example tables for data-driven testing
+#     - Traceability mapping to requirements
+#   agent: test_case_designer
+#   output_file: output/testcases.md
+#   context:
+#     - dom_scan_task
+
+# automation_test_script_task:
+#   description: >
+#     Generate executable Playwright test scripts in TypeScript using test cases from test_case_designer and DOM elements from dom_scan_agent.
+#     Utilize structured selectors from dom_scan_agent for reliability.
+#     Here is the application URL: {application_url}.
+#     Implement Playwright best practices including describe/it blocks, proper fixtures,
+#     page object patterns where applicable, and robust expect assertions.
+#     Ensure each locator uniquely identifies a single element.
+#     When multiple matches are possible (e.g., 'Password' and 'Confirm Password'),
+#     disambiguate using structured selectors from dom_scan_agent (like data-testid or aria-label).
+#     Never rely on ambiguous getByRole or text-based selectors.
+#     When verifying UI text that may contain dynamic data, prefer toContainText() or
+#     regex-based matching instead of exact toHaveText() equality.
+#     Always include the {application_url} as the base URL when navigating pages.
+#     Never use relative URLs (e.g. "/") directly in page.goto().
+#     Ensure every navigation command uses a full absolute URL derived from {application_url}.
+#     Validate that page.goto() is syntactically correct and executable.
+#     CRITICAL CODE GENERATION RULES:
+#     - Generate ONLY executable code, nothing else
+#     - NO explanations, comments, or descriptions before or after the code
+#     - NO markdown code blocks (no ```language syntax)
+#     - NO preambles like "Here's the code:" or "This code does..."
+#     - Start immediately with the actual code
+#     - The output must be directly executable/runnable without any modifications
+#     Utilize the Playwright tool to access the application website, perform the test cases, and develop the corresponding test scripts.
+#   expected_output: >
+#     Production-ready TypeScript Playwright spec file (.ts) containing properly structured
+#     test suites with describe/it blocks, type-safe selectors, appropriate fixtures, and
+#     comprehensive expect assertions.
+#     IMPORTANT: Code must be executable without modification. All page.goto() calls should reference a complete absolute URL.
+#     IMPORTANT: Output must be pure, runnable TypeScript code without markdown formatting, code fences, backticks, or
+#     explanatory text.
+#   agent: automation_test_script_designer
+#   output_file: output/account_registration_{time_stamp}.spec.ts
+#   context:
+#     - test_case_designer_task
+#     - dom_scan_task
+
+automation_test_script_task:
+  description: >
+    Generate executable Playwright test scripts in TypeScript using test cases from test_case_designer and DOM elements from dom_scan_agent.
+    Utilize structured selectors from dom_scan_agent for reliability.
+    Here is the application URL: {application_url}.
+    Here is the DOM elements: <DOMELEMENT>{dom_elements}</DOMELEMENT>.
+    Here is the testcases: <TESTCASES>{test_cases}</TESTCASES>.
+    Implement Playwright best practices including describe/it blocks, proper fixtures,
+    page object patterns where applicable, and robust expect assertions.
+    Always include the {application_url} as the base URL when navigating pages.
+    Never use relative URLs (e.g. "/") directly in page.goto().
+    Ensure every navigation command uses a full absolute URL derived from {application_url}.
+    Validate that page.goto() is syntactically correct and executable.
+    CRITICAL CODE GENERATION RULES:
+    - Generate ONLY executable code, nothing else
+    - NO explanations, comments, or descriptions before or after the code
+    - NO markdown code blocks (no ```language syntax)
+    - NO preambles like "Here's the code:" or "This code does..."
+    - Start immediately with the actual code
+    - The output must be directly executable/runnable without any modifications
+    Utilize the Playwright tool to access the application website, perform the test cases, and develop the corresponding test scripts.
+  expected_output: >
+    Production-ready TypeScript Playwright spec file (.ts) containing properly structured
+    test suites with describe/it blocks, type-safe selectors, appropriate fixtures, and
+    comprehensive expect assertions.
+    IMPORTANT: Code must be executable without modification. All page.goto() calls should reference a complete absolute URL.
+    IMPORTANT: Output must be pure, runnable TypeScript code without markdown formatting, code fences, backticks, or
+    explanatory text.
+  agent: automation_test_script_designer
+  output_file: output/account_registration_{time_stamp}.spec.ts
+
+script_writer_task:
+  description: >
+    Save the generated Playwright test scripts into properly named TypeScript files inside the 'output/tests/' directory.
+    Ensure the output files are ready for immediate execution without further modification.
+    CRITICAL CODE GENERATION RULES:
+    - Generate ONLY executable code, nothing else
+    - NO explanations, comments, or descriptions before or after the code
+    - NO markdown code blocks (no ```language syntax)
+    - NO preambles like "Here's the code:" or "This code does..."
+    - Start immediately with the actual code
+    - The output must be directly executable/runnable without any modifications
+  expected_output: >
+    Production-ready TypeScript Playwright spec file (.ts).
+    IMPORTANT: Code must be executable without modification. All page.goto() calls should reference a complete absolute URL.
+    IMPORTANT: Output must be pure, runnable TypeScript code without markdown formatting, code fences, backticks, or
+    explanatory text.
+  agent: script_writer_agent
+  output_file: tests/account_registration_{time_stamp}.spec.ts
+  context:
+    - automation_test_script_task    

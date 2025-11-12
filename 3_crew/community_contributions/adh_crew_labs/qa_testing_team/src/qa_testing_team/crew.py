@@ -37,12 +37,22 @@ class QaTestingTeam():
     def automation_test_script_designer(self) -> Agent:
         return Agent(
             config=self.agents_config['automation_test_script_designer'], # type: ignore[index]
-            allow_code_execution=True,
-            code_execution_mode="safe", 
-            max_execution_time=500, 
-            max_retry_limit=5,
+            # allow_code_execution=True,
+            # code_execution_mode="safe", 
+            # max_retry_limit=5,
             verbose=True
         )   
+    
+    @agent
+    def script_writer_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config['script_writer_agent'], # type: ignore[index]
+            # allow_code_execution=True,
+            # code_execution_mode="safe", 
+            # max_retry_limit=5,
+            temperature=0.0,
+            verbose=True
+        )    
               
 
     @task
@@ -66,8 +76,14 @@ class QaTestingTeam():
     @task
     def automation_test_script_task(self) -> Task:
         return Task(
-            config=self.tasks_config['automation_test_script_task']# type: ignore[index]
-        )        
+            config=self.tasks_config['automation_test_script_task']# type: ignore[index],
+        ) 
+
+    @task
+    def script_writer_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['script_writer_task']# type: ignore[index]
+        )             
 
     @crew
     def crew(self) -> Crew:

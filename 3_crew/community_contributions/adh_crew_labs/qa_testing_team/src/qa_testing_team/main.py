@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 import sys
 import warnings
-
-from datetime import datetime
+import time
 
 from qa_testing_team.crew import QaTestingTeam
 
@@ -15,9 +14,18 @@ def run():
     with open(f"output/stories/user_stories.md", "r", encoding="utf-8") as f:
         user_stories = f.read()    
 
+    with open(f"output/DOM_elements.json", "r", encoding="utf-8") as f:
+        dom_elements = f.read()    
+        
+    with open(f"output/testcases.md", "r", encoding="utf-8") as f:
+        test_cases = f.read()                    
+
     inputs = {
         'user_stories': user_stories,
-        'application_url': 'http://127.0.0.1:7860'
+        'application_url': 'http://127.0.0.1:7860',
+        'dom_elements': dom_elements,
+        'test_cases': test_cases,
+        'time_stamp': int(time.time()),
     }
 
     try:

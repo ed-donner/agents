@@ -1,0 +1,252 @@
+create_userstories_task:
+  description: >
+    Transform raw client requirements into complete, implementable user stories. 
+    The requirements are: {requirements}
+    Analyze the requirement, write clear user story format (As/Want/So that), 
+    define 5-8 testable acceptance criteria covering happy paths and edge cases, 
+    specify UI/UX needs, 
+    and ensure the story meets Definition of Ready so developers can estimate and implement without ambiguity.
+  expected_output: >
+    Complete user stories document in: {output_file} containing:
+      Story Header: ID, title, user story statement (As/Want/So that), business value, priority
+      Acceptance Criteria: 5-8 Given-When-Then scenarios (3 happy path, 3 edge cases, 2 error cases)
+      UI/UX Specs: Wireframes/mockups, design components, accessibility checklist (if applicable)
+      Test Scenarios: Table with input/expected output examples
+  agent: product_manager
+  output_file: '{output_file}'
+
+analyze_requirements:
+  description: >
+    Analyze the user story and extract testable requirements. Break down the user story into specific, 
+    measurable, and actionable requirements that can be validated through testing. Identify acceptance 
+    criteria, functional requirements, non-functional requirements, and any constraints or dependencies.
+    The user stories are provided in conext: create_userstories_task
+  expected_output: >
+    A structured document containing:
+    - List of functional requirements with clear acceptance criteria
+    - Non-functional requirements (performance, security, usability)
+    - Testable scenarios for each requirement
+    - Dependencies and constraints
+    - Priority levels for each requirement
+  agent: requirement_analyst
+  output_file: output/{time_stamp}/requirements_analysis.md
+  context:
+    - create_userstories_task
+
+test_case_designer_task:
+  description: >
+    Using extracted requirements from analyze_requirements, generate comprehensive test cases for {application_url}. 
+    Create both positive and negative scenarios in Gherkin format with examples and test data. 
+    Include preconditions, detailed steps, expected results, and unique test IDs. 
+    Ensure coverage of edge cases, boundary conditions, happy paths, and error scenarios using data tables and scenario outlines where relevant.
+  expected_output: >
+    A single markdown file containing:
+    - Test cases in BDD Gherkin format (Feature, Scenario, Given, When, Then)
+    - Unique test IDs for each scenario
+    - Preconditions, steps, and expected results
+    - Positive and negative test scenarios with valid/invalid data
+    - Example tables for data-driven testing
+    - Traceability mapping to requirements
+  agent: test_case_designer
+  output_file: output/{time_stamp}/testcases.md
+  context:
+    - analyze_requirements
+
+design_task:
+  description: >
+    Create a comprehensive technical design document for a self-contained Python module
+    based on inputs from multiple upstream tasks.
+    
+    INPUT SOURCES:
+    - User Stories: from create_userstories_task (Product Manager)
+    - Requirements Analysis: from analyze_requirements (Requirement Analyst)
+    - Test Cases: from test_case_designer_task (Test Case Designer)
+    - Original Requirements: {requirements}
+    
+    DESIGN REQUIREMENTS:
+    - Design a single, self-contained Python module named '{module_name}'
+    - Primary class must be named '{class_name}'
+    - Include all necessary classes, functions, and data structures
+    - Provide complete method signatures with type hints
+    - Describe functionality, parameters, returns, and exceptions for each component
+    - Ensure the module can be immediately tested and integrated with a UI/CLI
+    
+    OUTPUT FORMAT:
+    Produce a detailed markdown document with the following sections:
+    1. Overview & Architecture
+    2. Module Structure
+    3. Class Definitions (with all methods and properties)
+    4. Function Definitions (module-level utilities)
+    5. Data Models/Schemas
+    6. Error Handling Strategy
+    7. Usage Examples
+    8. Testing Recommendations
+    9. Integration Guidelines
+    
+    IMPORTANT: 
+    - Output ONLY the design document in markdown format
+    - Be specific and implementation-ready (developers should not need clarification)
+    - Include docstring templates for all classes and methods
+    - Ensure design aligns with provided test cases
+  expected_output: >
+    A comprehensive technical design document in markdown format containing:
+    - Complete module structure with '{module_name}' as the module name
+    - Primary class '{class_name}' with full method signatures
+    - All supporting classes, functions, and data structures
+    - Type hints for all parameters and return values
+    - Detailed descriptions of functionality, inputs, outputs, and error conditions
+    - Code examples demonstrating usage patterns
+    - Clear integration points for testing and UI development
+    - Alignment with user stories, requirements, and test cases
+  agent: engineering_lead
+  context:
+    - create_userstories_task
+    - analyze_requirements
+    - test_case_designer_task
+  output_file: output/{time_stamp}/{module_name}_design.md
+
+# code_task:
+#   description: >
+#     Write a python module that implements the design described by the engineering lead, in order to achieve all User Stories from Product Manager.
+#     Here are the original requirements: {requirements}
+#     The user stories are provided in conext: create_userstories_task
+#   expected_output: >
+#     A python module that implements the design and achieves all User Stories.
+#     Your entire response must consist ONLY of the requested code. DO NOT include any surrounding text, explanations, code block fences (```), or comments outside the function definition.
+#     IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks, or ```python
+#     The output should be valid Python code that can be directly saved to a file and executed.
+#   agent: backend_engineer
+#   context:
+#     - create_userstories_task
+#     - design_task
+
+code_task:
+  description: >
+    Implement the complete Python module '{module_name}.py' with primary class '{class_name}'
+    based on the Engineering Lead's design.
+    
+    INPUTS:
+    - Design: from design_task (PRIMARY - follow exactly)
+    - User Stories: from create_userstories_task
+    - Requirements: from analyze_requirements
+    - Test Cases: from test_case_designer_task
+    - Original: {requirements}
+    
+    REQUIREMENTS:
+    - Implement ALL classes and methods from design
+    - Include type hints and docstrings
+    - Self-contained, production-ready code
+    - No stubs, TODOs, or placeholders
+    - Proper error handling and validation
+    
+    ⚠️ OUTPUT FORMAT - CRITICAL:
+    - ONLY raw Python code
+    - NO markdown, backticks, or ```python
+    - NO text before/after code
+    - Start with import, docstring, or class/def
+    - Must be directly saveable as .py file
+  expected_output: >
+    Complete executable Python module with:
+    - Module docstring with usage examples
+    - All imports
+    - Primary class '{class_name}' fully implemented
+    - All supporting classes and functions
+    - Type hints and comprehensive docstrings
+    - Complete error handling
+    - No placeholder code
+  agent: backend_engineer
+  context:
+    - create_userstories_task
+    - create_userstories_task
+    - analyze_requirements
+    - test_case_designer_task
+    - design_task
+
+python_write_backend_task:
+  description: >
+    Save the generated python scripts into properly named Python files.
+    Ensure the output files are ready for immediate execution without further modification.
+    Output ONLY raw Python code without markdown formatting, code fences, backticks, explanations, or extraneous comments.
+    CRITICAL CODE GENERATION RULES:
+    - Generate ONLY executable code, nothing else
+    - NO explanations, comments, or descriptions before or after the code
+    - NO markdown code blocks (no ```language syntax)
+    - NO preambles like "Here's the code:" or "This code does..."
+    - Start immediately with the actual code
+    - The output must be directly executable/runnable without any modifications
+  expected_output: >
+    Production-ready python file (.py).
+    IMPORTANT: Code must be executable without modification. All imports and function calls should be valid.
+    IMPORTANT: Output must be pure, runnable Python code without markdown formatting, code fences, backticks, or
+    explanatory text.
+  agent: python_writer_agent
+  output_file: output/{time_stamp}/{module_name}.py
+  context:
+    - code_task
+
+# frontend_task:
+#   description: >
+#     Write a gradio UI in a module app.py that demonstrates the given backend class in {module_name}.
+#     The current version of Gradio is 5.49.1. Ensure compatibility.
+#     Assume there is only 1 user, and keep the UI very simple indeed - just a prototype or demo.
+#     Here are the original requirements: {requirements}
+#     The user stories are provided in conext: create_userstories_task
+#   expected_output: >
+#     A gradio UI in module app.py that demonstrates the given backend class.
+#     The file should be ready so that it can be run as-is, in the same directory as the backend module, and it should import the backend class from {module_name}.
+#     Your entire response must consist ONLY of the requested code. DO NOT include any surrounding text, explanations, code block fences (```), or comments outside the function definition.
+#     IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks. 
+#     IMPORTANT: Output ONLY the raw Python code, DO NOT include any surrounding text, explanations, code block fences (```), or comments outside the function definition.
+#     The output file should be valid Python code that can be directly saved to a file and executed.
+#   agent: frontend_engineer
+#   context:
+#     - create_userstories_task
+#     - code_task
+
+frontend_task:
+  description: >
+    Create a Gradio web interface in 'app.py' to demonstrate the backend module.
+    INPUTS:
+    - Backend Code: from code_task
+    - Design Document: from design_task (for understanding functionality)
+    - User Stories: from create_userstories_task (for UI flow)
+    
+    Create a Gradio interface that:
+    - Demonstrates all public methods of {class_name}
+    - Uses appropriate input components for each parameter
+    - Displays outputs in clear, formatted way
+    - Includes example inputs and usage instructions
+    - Handles errors gracefully
+    
+    File must be named 'app.py' and import from {module_name}.
+    OUTPUT: Raw Python code only - no markdown or explanations.
+  expected_output: >
+    Complete Gradio application file (app.py) that launches a web interface
+    demonstrating all functionality of the {module_name} backend.
+  agent: frontend_engineer
+  context:
+    - code_task
+    - design_task
+    - create_userstories_task
+
+python_write_frontend_task:
+  description: >
+    Save the generated python scripts into properly named Python files.
+    Ensure the output files are ready for immediate execution without further modification.
+    Output ONLY raw Python code without markdown formatting, code fences, backticks, explanations, or extraneous comments.
+    CRITICAL CODE GENERATION RULES:
+    - Generate ONLY executable code, nothing else
+    - NO explanations, comments, or descriptions before or after the code
+    - NO markdown code blocks (no ```language syntax)
+    - NO preambles like "Here's the code:" or "This code does..."
+    - Start immediately with the actual code
+    - The output must be directly executable/runnable without any modifications
+  expected_output: >
+    Production-ready python file (.py).
+    IMPORTANT: Code must be executable without modification. All imports and function calls should be valid.
+    IMPORTANT: Output must be pure, runnable Python code without markdown formatting, code fences, backticks, or
+    explanatory text.
+  agent: python_writer_agent
+  output_file: output/{time_stamp}/app.py
+  context:
+    - frontend_task  
