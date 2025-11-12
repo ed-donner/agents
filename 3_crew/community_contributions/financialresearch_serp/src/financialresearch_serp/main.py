@@ -1,8 +1,18 @@
 #!/usr/bin/env python
+
+from dotenv import load_dotenv
+
+load_dotenv()  # This reads .env into the environment
+
+import os
 import sys
 import warnings
 
 from datetime import datetime
+
+
+
+
 
 from financialresearch_serp.crew import FinancialresearchSerp
 
