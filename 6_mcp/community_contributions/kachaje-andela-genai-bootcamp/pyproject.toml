@@ -1,0 +1,18 @@
+[project]
+name = "kachaje-andela-genai-bootcamp"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ddgs>=9.9.0",
+    "flask>=3.1.2",
+    "gradio>=5.49.1",
+    "mcp>=1.21.0",
+    "openai-agents>=0.4.2",
+    "pandas>=2.3.3",
+    "pexpect>=4.9.0",
+    "plotly>=6.4.0",
+    "polygon-api-client==1.14.6",
+    "requests>=2.32.5",
+]

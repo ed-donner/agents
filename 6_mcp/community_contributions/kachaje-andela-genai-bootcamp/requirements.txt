@@ -1,0 +1,10 @@
+openai-agents
+mcp
+requests
+polygon-api-client==1.14.6
+flask
+pexpect
+gradio
+plotly
+pandas
+ddgs
