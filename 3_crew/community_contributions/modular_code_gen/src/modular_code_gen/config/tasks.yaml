@@ -1,0 +1,118 @@
+design_task:
+  description: >
+    Analyze the system {requirements} and produce a modular backend design.
+  agent: engineering_lead
+  expected_output: >
+    The number of modules.
+    A list of backend module names.
+    A description of each module's classes, methods, and interactions. 
+    Also a valid JSON object matching the provided schema.
+    Do not include any explanations, comments, or code outside the JSON.
+  output_variables:
+    - module_names
+    - module_specs
+  inputs:
+    - requirements
+  instructions: |
+    Each module must have a different name.
+
+code_task:
+  description: >
+    Implement the backend Python modules according to the design provided by the engineering lead.
+  agent: backend_engineer
+  expected_output: >
+    The number of modules.
+    The names of the modules source files.
+    The name of the modules test files. 
+    One Python code per module implementing the specified functionality.
+    One test code for each backend module using unittest framework.
+    Also a valid JSON object matching the provided schema.
+    Do not include any explanations, comments, or code outside the JSON.
+  inputs:
+    - module_names
+    - module_specs
+  output_variables:
+    - module_sources
+    - module_tests
+  context:
+    - design_task  
+  instructions: |
+    Only run the test files in the dedicated environment.  
+    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
+    The output should be valid Python code that can be directly saved to a file and executed. 
+    The number of modules and corresponding names must be exactly the same as in the design_task.
+
+writer_task_back:
+  description: >
+    Persist all generated backend modules and tests to disk as Python files.
+    Also write the description of the modules and functions in a README.md file.
+  agent: file_writer
+  expected_output: >
+    Files written to the output directory named {project_directory}.
+    For each of the modules, create two new Python files.
+    Use the module name as the filename, e.g., module_name.py and test_module_name.py.
+  inputs:
+    - module_specs
+    - module_sources
+    - module_tests
+    - project_directory
+  output_variables:
+    - saved_files
+  context:
+    - design_task
+    - code_task 
+  instructions: |
+    Using the provided tool, create or ensure the '{project_directory}/' directory exists.
+    For each received item, write its content to the appropriate file under '{project_directory}/'.
+    Output a list of all written files and their paths.
+
+frontend_task:
+  description: >
+    Build a simple Python API using the tool {API_tool} that connects to the backend modules
+    and exposes endpoints and a minimal UI to interact with the system.
+    Verify that the generated frontend module initializes correctly.
+  agent: frontend_engineer
+  expected_output: >
+    A python code containing the working API interface.
+    A python code containing a test attempting to create and launch the {API_tool} interface in headless mode.
+    Also a valid JSON object matching the provided schema.
+    Do not include any explanations, comments, or code outside the JSON.
+  inputs:
+    - module_names
+    - module_specs
+    - module_sources
+    - API_tool
+    - main_file_path
+  output_variables:
+    - fronted_source
+    - fronted_test
+  context:
+    - code_task
+    - writer_task_back
+  instructions: |
+    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
+    The outputs should be valid Python codes that can be directly saved to files.
+    Only run the test file in the dedicated environment. 
+    Attempt to create and launch the {API_tool} interface in headless mode importing all the created modules.
+    Return success if it initializes without errors.
+
+writer_task_front:
+  description: >
+    Write frontend modules and tests to disk as Python files.
+  agent: file_writer
+  expected_output: >
+    Files written to the output directory named {project_directory}.
+    Save the frontend source as {main_file_path}.  
+    Save the corresponding frontend test as test_{main_file_path}.
+  inputs:
+    - fronted_source
+    - fronted_test
+    - project_directory
+  output_variables:
+    - saved_files
+  context:
+    - frontend_task 
+  instructions: |
+    Using the provided tool, create or ensure the '{project_directory}/' directory exists.
+    For each received item, write its content to the appropriate file under '{project_directory}/'.
+    Output a list of all written files and their paths.
