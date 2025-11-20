@@ -1,0 +1,24 @@
+[project]
+name = "stock_picker"
+version = "0.1.0"
+description = "stock_picker using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=0.150.0,<1.0.0",
+    "boto3>=1.34,<2.0"
+]
+
+[project.scripts]
+stock_picker = "stock_picker.main:run"
+run_crew = "stock_picker.main:run"
+train = "stock_picker.main:train"
+replay = "stock_picker.main:replay"
+test = "stock_picker.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

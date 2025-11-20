@@ -1,0 +1,78 @@
+{
+  "searchParameters": {
+    "q": "sensitive data fields in healthcare databases",
+    "type": "search",
+    "num": 5,
+    "engine": "google"
+  },
+  "organic": [
+    {
+      "title": "Health Records Database and Inherent Security Concerns",
+      "link": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9647912/",
+      "snippet": "Health information databases contain sensitive patient information, including their names and addresses, tests, diagnoses, treatment, and ...",
+      "position": 1
+    },
+    {
+      "title": "Methods for De-identification of PHI - HHS.gov",
+      "link": "https://www.hhs.gov/hipaa/for-professionals/special-topics/de-identification/index.html",
+      "snippet": "This page provides guidance about methods and approaches to achieve de-identification in accordance with the Health Insurance Portability and Accountability ...",
+      "position": 2
+    },
+    {
+      "title": "Healthcare Data Security: A Comprehensive Guide",
+      "link": "https://online.champlain.edu/blog/healthcare-data-security-comprehensive-guide",
+      "snippet": "Healthcare data security refers to the measures taken to protect the patient records, health information, and financial information collected and stored as ...",
+      "position": 3
+    },
+    {
+      "title": "Data privacy in healthcare: Global challenges and solutions - PMC",
+      "link": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12138216/",
+      "snippet": "Challenges include inconsistent definitions of sensitive data, semantic discrepancies, a lack of standardized protocols, and limited information ...",
+      "position": 4
+    },
+    {
+      "title": "What Is Healthcare Data Security? A Complete Guide - NetSuite",
+      "link": "https://www.netsuite.com/portal/resource/articles/erp/healthcare-data-security.shtml",
+      "snippet": "Healthcare data security refers to the policies and technology organizations employ to protect health data from unauthorized access or use.",
+      "position": 5
+    }
+  ],
+  "peopleAlsoAsk": [
+    {
+      "question": "What are the four most common causes of healthcare data breaches?",
+      "snippet": "RESEARCH SHOWS THAT PHISHING ATTACKS AND RANSOMWARE ARE THE LEADING CULPRITS, FOLLOWED CLOSELY BY INSIDER THREATS AND SYSTEM VULNERABILITIES.\nCommon Causes of Healthcare Data Breaches.\nOutdated or Unpatched Systems and Software.\nCloud Misconfigurations.\nSocial Engineering Attacks.\nPhysical Theft of Devices.",
+      "title": "Healthcare Data Breaches: Causes & Prevention Guide - Fidelis Security",
+      "link": "https://fidelissecurity.com/cybersecurity-101/data-protection/healthcare-data-breaches/"
+    },
+    {
+      "question": "How to protect sensitive data in a database?",
+      "snippet": "1\nSeparate Database Servers and Web Servers.\n2\nDatabase Encryption At Rest And In Transit.\n3\nUse Strong Authentication.\n4\nContinuously Discover Sensitive Data.\n5\nSeparate Tests From Production.\n6\nRevoke Privileges Continuously.\n7\nDeploy Physical Database Security.\n8\nEnsure Database User Accounts are Secure.",
+      "title": "Top 10 Database Security Best Practices - Satori",
+      "link": "https://satoricyber.com/database-security/top-10-database-security-best-practices/"
+    },
+    {
+      "question": "What are the data security and privacy threats within a health care system?",
+      "snippet": "Top security threats to healthcare organizations Often initiated via phishing or exploiting unpatched vulnerabilities, ransomware encrypts critical systems and patient data, demanding a ransom.",
+      "title": "Healthcare Data Security: Best Practices, Challenges & Threats",
+      "link": "https://nordlayer.com/blog/healthcare-data-security/"
+    }
+  ],
+  "relatedSearches": [
+    {
+      "query": "Examples of sensitive data fields in healthcare databases"
+    },
+    {
+      "query": "Sensitive data fields in healthcare databases pdf"
+    },
+    {
+      "query": "Sensitive data fields in healthcare databases 2022"
+    },
+    {
+      "query": "Healthcare data breach examples"
+    },
+    {
+      "query": "Healthcare data breaches"
+    }
+  ],
+  "credits": 1
+}

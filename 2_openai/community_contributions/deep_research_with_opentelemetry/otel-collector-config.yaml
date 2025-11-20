@@ -1,0 +1,46 @@
+receivers:
+  # The OTLP receiver accepts OpenTelemetry Protocol (OTLP) formatted data.
+  # It can receive data over gRPC or HTTP.
+  # Default gRPC endpoint is 0.0.0.0:4317 and HTTP endpoint is 0.0.0.0:4318.
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "otel-collector:4317"
+      http:
+        endpoint: "otel-collector:4318"
+
+processors:
+  # The batch processor batches and compresses telemetry data (spans, metrics, logs)
+  # before sending them to exporters, improving efficiency.
+  batch:
+
+exporters:
+  # This exporter sends OTLP-formatted data to a Jaeger backend.
+  # Jaeger supports receiving OTLP data directly.
+  # The 'jaeger' in 'otlp/jaeger' here is a custom name for this specific OTLP exporter instance.
+  otlp/jaeger:
+    endpoint: "jaeger:4317" # use a non-default port to avoid conflict wtih the collector 
+    tls:
+      insecure: true # WARNING: Not recommended for production environments. Use for local testing.
+                     # This disables TLS verification. For production, configure proper TLS.
+
+  debug/normal:
+    verbosity: normal
+  debug/detailed:
+    verbosity: detailed
+
+service:
+  pipelines:
+    # Traces pipeline: Receives OTLP traces, processes them with batching, and exports to Zipkin (for Jaeger).
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp/jaeger,debug/detailed] 
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug/normal] 
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug/normal] 

@@ -1,0 +1,17 @@
+# Core dependencies
+openai==1.12.0
+pydantic==2.6.1
+python-dotenv==1.0.1
+requests==2.31.0
+
+# Web framework for Hugging Face deployment
+gradio==4.19.2
+
+# Additional dependencies
+typing-extensions==4.9.0
+
+# If agents is a custom package, replace this line with the correct package or git URL
+# agents>=0.1.0
+
+# Note: Remove ipython for production deployment unless specifically needed
+# ipython==8.21.0

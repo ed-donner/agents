@@ -1,0 +1,14 @@
+
+
+business_usecase_generation_task:
+  description: >
+    Give a business use case that you want to be added to your product.
+  expected_output: >
+    A concise paragraph detailing what eactly is the feature to be added in 
+    the product. 
+    Specifics if any, should be clearly called out.
+    Important facts and conditions should be mentioned immediate.
+    Your output should be a text and not a markdown.
+  agent:  business_personal
+  output_file: agent_output/business_usecase_generation_task.json
+

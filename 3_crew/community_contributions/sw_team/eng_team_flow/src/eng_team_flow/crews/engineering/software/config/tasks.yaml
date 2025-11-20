@@ -1,0 +1,18 @@
+
+
+generate_code:
+  description:  >
+    Generate code for the input task provided.
+    The task details are here: {task_details}
+    Follow the best practices in software design and
+    provide code that is modular and testable.
+    The final output code should be a gradio
+    app and fully ready to use out of the box.
+    Ensure that you do not add the gradio launch
+    code in the final output. 
+    It will be added by the deployer at the end.
+  expected_output:  >
+    Python code that successfully satisfies the 
+    requirements provided as a part of the task.
+  agent:  software_engineer
+

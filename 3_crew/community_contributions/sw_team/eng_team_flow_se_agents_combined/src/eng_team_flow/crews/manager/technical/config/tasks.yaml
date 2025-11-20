@@ -1,0 +1,34 @@
+generate_engineering_task_list:  
+  description:  >
+    Breakdown the details provided by the business_personal
+    into small technical tasks that can be understood by the
+    software_engineer agent. A simple example to understand 
+    would be, let's say you are a data-backed education company,
+    the business_personal comes and says, I want a student report
+    to be generated using data from Canvas. The report should include
+    student, course, enrollment, assignment and login details.\
+    A simple breakdown here would be:
+    1) Develop and ingestion mechanism to get details from Canvas.
+    2) Ingest data into Canvas
+    3) Develop the sql query to combine all of the needed details.
+    4) Generate the report.
+    Now, if you carefully observe, the above mentioned steps are still 
+    quite high level but all I want is to give you an essence of what it
+    would look like. You task is to generate such technical tasks which
+    are concise, idempotent and easily developable and testable. Do not 
+    club everything into one.
+    KINDLY KINDLY MAKE SURE THE TASK IS NOT A STORY IN ITSELF BUT LITERALLY TASKS.
+    IF IT TURNS OUT THAT YOU NEED MORE CLARIFICATIONS, REPLY BACK WITH "provide_more_clarity" 
+    and explain the reason what you seek clarifications for in clarification. 
+    Ensure to send task list empty.
+    Do not include documentation as a task. Requirement if needed, reask from the
+    business user as an additional clarity. 
+    You literally should be providing tasks such that it should be implementable
+    and the software engineer need not guess anything.
+    Lastly, do ensure to provide details on which framework to use and any additional
+    detail that will help up tie the implementation and ensure tasks tie upto each other.
+  expected_output:  >
+    A set of technical tasks to be worked on by the engineering team.
+    The tas should have title and description of exact feature development.
+  agent:  technical_manager
+  output_file: agent_output/generate_engineering_task_list.json

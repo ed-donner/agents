@@ -1,0 +1,1 @@
+{"status": "retry", "issues": ["No main-guard found (`if __name__ == '__main__':`).", "Required tabs (Overview, Audit & Clean, Visuals, Features, Report) not defined.", "Missing required input textboxes (csv upload, task_type, target, domain)."], "recommendation": "Add the main-guard and implement the required tabs and input textboxes.", "evidence": {"file":"outputs/app.py"}}

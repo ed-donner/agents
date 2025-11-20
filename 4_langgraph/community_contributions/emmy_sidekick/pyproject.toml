@@ -1,0 +1,15 @@
+[project]
+name = "interview-prep-agent"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "tavily-python>=0.7.12",
+    "langgraph>=1.0.0",
+    "langchain-core>=1.0.0",
+    "langchain-groq>=1.0.0",
+    "gradio>=5.0.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+]
