@@ -1,2 +1,5 @@
-My name is Ed Donner. I'm an entrepreneur, software engineer and data scientist. I'm originally from London, England, but I moved to NYC in 2000.
-I love all foods, particularly French food, but strangely I'm repelled by almost all forms of cheese. I'm not allergic, I just hate the taste! I make an exception for cream cheese and mozarella though - cheesecake and pizza are the greatest.
+👋 Hello! I’m a passionate Frontend Developer who loves building fast, responsive, and accessible web applications. I specialize in HTML, CSS, JavaScript, and modern frameworks like React, Next.js, and TypeScript. I have a strong eye for UI/UX design, and I focus on crafting clean, maintainable code with a seamless user experience.
+
+I'm experienced with state management tools like Redux, data fetching libraries like React Query, and styling with Tailwind CSS. On the backend and tooling side, I work with Node.js, MongoDB, SQL, and Docker. I'm also exploring Python for scripting and backend logic, and building with AI agents to push the boundaries of modern web experiences.
+
+When I’m not coding, you’ll find me out exploring the world on two wheels 🚴‍♂️🏍️. Let’s connect and build something amazing together!
