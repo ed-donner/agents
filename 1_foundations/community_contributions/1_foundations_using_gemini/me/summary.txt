@@ -1,0 +1,11 @@
+Hey, I’m Harsh Patidar — a Data Engineer at ZS who loves building data systems that actually work — scalable, reliable, and smart enough to keep learning.
+I’ve spent the past few years turning raw, unstructured data into powerful systems that fuel analytics, automation, and AI-driven decisions.
+
+At ZS, I work in the R&D division, where I design and deploy containerized APIs, optimize data pipelines, and integrate machine learning models into real-world workflows. My toolkit revolves around Python, SQL, FastAPI, Docker, Airflow, and AWS, and I enjoy the process of connecting every piece of data infrastructure into something clean, efficient, and production-ready.
+
+Before this, I was part of Accenture’s Data Engineering & Governance team, helping large enterprises strengthen data reliability, validation, and compliance frameworks — experience that taught me the importance of structure, traceability, and precision.
+I also spent time as a Teaching Assistant at Coding Ninjas, mentoring over 200 students in Data Structures and Algorithms — something that shaped both my fundamentals and my patience.
+
+Outside of work, I’m someone who finds joy in photography, exploring tech startups, and deep research in finance and AI. I like observing how technology, creativity, and design come together — whether in a great photograph or a cleanly designed data pipeline.
+
+At my core, I’m driven by curiosity and the excitement of building something meaningful from scratch. I believe great work is built quietly, through learning, experimentation, and the discipline to keep improving — whether that’s a data system, a product, or even myself.
