@@ -20,8 +20,7 @@ class FinancialresearchSerp():
     @agent
     def researcher(self) -> Agent:
         return Agent(
-            config=self.agents_config['researcher'],tools=[SerperDevTool()]
-            verbose=True)
+            config=self.agents_config['researcher'], verbose=True, tools=[SerperDevTool()])
 
     @agent
     def analyst(self) -> Agent:
