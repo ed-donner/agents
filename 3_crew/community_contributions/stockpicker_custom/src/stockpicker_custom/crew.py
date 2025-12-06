@@ -7,6 +7,19 @@ from pydantic import BaseModel, Field
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
+
+class Trendingcompany(BaseModel):
+    """A company that is in the news and attracting attention"""
+    name: str = Field(description="Company name")
+    ticker: str = Field(description="Stock tikcer symbol")
+    reason: str = Field(description="Reason this company is trending in the news")
+
+class Trendincompanylist(BaseModel):
+    """A list of multiple trending companies that are in the news"""
+    companies: List[Trendingcompany] = Field(description="List of companies trending in the news")
+
+
+
 @CrewBase
 class StockpickerCustom():
     """StockpickerCustom crew"""
