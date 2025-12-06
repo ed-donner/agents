@@ -1,0 +1,15 @@
+{
+    "name": "Gradio Dev",
+    "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  
+    "postStartCommand": "bash .devcontainer/setup-env.sh",
+  
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "ms-python.python",
+          "ms-toolsai.jupyter"
+        ]
+      }
+    }
+  }
