@@ -17,7 +17,7 @@ ollama = LLM(
 
 @CrewBase
 class DesignCrew:
-    """Poem Crew"""
+    """Design Crew"""
 
     agents: List[BaseAgent]
     tasks: List[Task]
