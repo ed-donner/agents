@@ -268,6 +268,10 @@ print(f"Number of answers: {len(answers)}")
 print("Competitors:", competitors)
 
 # %%
+print(question[:50], "...")
+print(len(competitors), len(answers), len(ranks))
+
+# %%
 judge_messages = [{"role": "user", "content": judge}]
 
 # %%
@@ -313,6 +317,221 @@ for index, result in enumerate(ranks):
 # - Parallelization (structural). While the examples run sequentially in the notebook, the competitor models are independent and could be executed in parallel, so the workflow is designed to support parallelization even if it isn’t exploited here.
 #
 # While the workflow includes an evaluator role, it does not implement a full evaluator–optimizer loop as depicted in the reference diagram, since no feedback-driven regeneration or iterative optimization occurs.
+#
+# ---
+#
+# I will attempt to add explicit feedback to the workflow, turning "judge" into an evaluator-optimizer, triggering a revision loop:
+#
+# - Evaluate - judge produces structured critique, including what to improve.
+# - Optimize - competitor models attempt to improve.
+# - Evaluate again - judge ranks again, or compares v1 and v2 improvement.
+#
+# Scratch that. To avoid turning this into prompt soup, I'm going to feed the ranking back to the model, and ask it to improve the response, to achieve a better ranking.
+
+# %% [markdown]
+# ## Evaluator-Optimizer Loop Implementation
+#
+# Feed the ranking back to each model and ask them to improve their response.
+#
+
+# %%
+# Store original answers and prepare for improvements
+original_answers = answers.copy()
+improved_answers = []
+
+def get_improvement_prompt(question, original_answer, rank, total):
+    """Create a prompt asking the model to improve its response based on ranking feedback."""
+    return f"""You previously answered this question:
+
+{question}
+
+Your answer was:
+{original_answer}
+
+You were ranked #{rank} out of {total} competitors.
+
+Please improve your response to achieve a better ranking. Focus on clarity and strength of argument."""
+
+def get_rank_for_competitor(competitor_idx, ranks):
+    """Find the rank position (1-based) for a given competitor index (0-based)."""
+    competitor_num = str(competitor_idx + 1)
+    if competitor_num in ranks:
+        return ranks.index(competitor_num) + 1
+    return len(ranks)  # If not found, assume last place
+
+print("Ready to generate improved answers!")
+
+
+# %%
+# Improve GPT-5-nano response
+competitor_idx = 0
+model_name = competitors[competitor_idx]
+rank = get_rank_for_competitor(competitor_idx, ranks)
+
+improvement_prompt = get_improvement_prompt(question, original_answers[competitor_idx], rank, len(competitors))
+improve_messages = [{"role": "user", "content": improvement_prompt}]
+
+response = openai.chat.completions.create(model=model_name, messages=improve_messages)
+improved_answer = response.choices[0].message.content
+
+display(Markdown(f"**{model_name} (was rank #{rank}) improved response:**"))
+display(Markdown(improved_answer))
+improved_answers.append(improved_answer)
+
+
+# %%
+# Improve Claude response
+competitor_idx = 1
+model_name = competitors[competitor_idx]
+rank = get_rank_for_competitor(competitor_idx, ranks)
+
+improvement_prompt = get_improvement_prompt(question, original_answers[competitor_idx], rank, len(competitors))
+improve_messages = [{"role": "user", "content": improvement_prompt}]
+
+response = claude.messages.create(model=model_name, messages=improve_messages, max_tokens=1000)
+improved_answer = response.content[0].text
+
+display(Markdown(f"**{model_name} (was rank #{rank}) improved response:**"))
+display(Markdown(improved_answer))
+improved_answers.append(improved_answer)
+
+
+# %%
+# Improve Gemini response
+competitor_idx = 2
+model_name = competitors[competitor_idx]
+rank = get_rank_for_competitor(competitor_idx, ranks)
+
+improvement_prompt = get_improvement_prompt(question, original_answers[competitor_idx], rank, len(competitors))
+improve_messages = [{"role": "user", "content": improvement_prompt}]
+
+response = gemini.chat.completions.create(model=model_name, messages=improve_messages)
+improved_answer = response.choices[0].message.content
+
+display(Markdown(f"**{model_name} (was rank #{rank}) improved response:**"))
+display(Markdown(improved_answer))
+improved_answers.append(improved_answer)
+
+
+# %%
+# Improve Ollama/Llama response
+competitor_idx = 3
+model_name = competitors[competitor_idx]
+rank = get_rank_for_competitor(competitor_idx, ranks)
+
+improvement_prompt = get_improvement_prompt(question, original_answers[competitor_idx], rank, len(competitors))
+improve_messages = [{"role": "user", "content": improvement_prompt}]
+
+response = ollama.chat.completions.create(model=model_name, messages=improve_messages)
+improved_answer = response.choices[0].message.content
+
+display(Markdown(f"**{model_name} (was rank #{rank}) improved response:**"))
+display(Markdown(improved_answer))
+improved_answers.append(improved_answer)
+
+
+# %%
+# Improve Groq (openai/gpt-oss-120b) response
+competitor_idx = 4
+model_name = competitors[competitor_idx]
+rank = get_rank_for_competitor(competitor_idx, ranks)
+
+improvement_prompt = get_improvement_prompt(question, original_answers[competitor_idx], rank, len(competitors))
+improve_messages = [{"role": "user", "content": improvement_prompt}]
+
+response = groq.chat.completions.create(model=model_name, messages=improve_messages)
+improved_answer = response.choices[0].message.content
+
+display(Markdown(f"**{model_name} (was rank #{rank}) improved response:**"))
+display(Markdown(improved_answer))
+improved_answers.append(improved_answer)
+
+
+# %%
+# Verify we have all improved answers
+print(f"Original answers: {len(original_answers)}")
+print(f"Improved answers: {len(improved_answers)}")
+print("Competitors:", competitors)
+
+
+# %%
+# Build the improved responses for re-judging
+improved_together = ""
+for index, answer in enumerate(improved_answers):
+    improved_together += f"# Response from competitor {index+1}\n\n"
+    improved_together += answer + "\n\n"
+
+print(f"Total improved response length: {len(improved_together)}")
+
+
+# %%
+# Re-judge the improved responses
+judge_v2 = f"""You are judging a competition between {len(competitors)} competitors.
+Each model has been given this question:
+
+{question}
+
+Your job is to evaluate each response for clarity and strength of argument, and rank them in order of best to worst.
+Respond with JSON, and only JSON, with the following format:
+{{"results": ["best competitor number", "second best competitor number", "third best competitor number", ...]}}
+
+Here are the IMPROVED responses from each competitor:
+
+{improved_together}
+
+Now respond with the JSON with the ranked order of the competitors, nothing else. Do not include markdown formatting or code blocks."""
+
+judge_v2_messages = [{"role": "user", "content": judge_v2}]
+
+
+# %%
+# Round 2 judgement!
+response = openai.chat.completions.create(
+    model="o3-mini",
+    messages=judge_v2_messages,
+)
+results_v2 = response.choices[0].message.content
+print(results_v2)
+
+
+# %%
+# Compare Round 1 vs Round 2 rankings
+results_v2_dict = json.loads(results_v2)
+ranks_v2 = results_v2_dict["results"]
+
+print("=" * 50)
+print("RANKING COMPARISON: Before vs After Improvement")
+print("=" * 50)
+
+print("\n📊 ROUND 1 (Original responses):")
+for index, result in enumerate(ranks):
+    competitor = competitors[int(result)-1]
+    print(f"  Rank {index+1}: {competitor}")
+
+print("\n📊 ROUND 2 (Improved responses):")
+for index, result in enumerate(ranks_v2):
+    competitor = competitors[int(result)-1]
+    print(f"  Rank {index+1}: {competitor}")
+
+print("\n🔄 CHANGES:")
+for i, comp in enumerate(competitors):
+    comp_num = str(i + 1)
+    old_rank = ranks.index(comp_num) + 1 if comp_num in ranks else "N/A"
+    new_rank = ranks_v2.index(comp_num) + 1 if comp_num in ranks_v2 else "N/A"
+    
+    if old_rank != "N/A" and new_rank != "N/A":
+        change = old_rank - new_rank
+        if change > 0:
+            emoji = "⬆️"
+            change_str = f"+{change}"
+        elif change < 0:
+            emoji = "⬇️"
+            change_str = str(change)
+        else:
+            emoji = "➡️"
+            change_str = "0"
+        print(f"  {comp}: {old_rank} → {new_rank} ({emoji} {change_str})")
+
 
 # %% [markdown]
 # <table style="margin: 0; text-align: left; width:100%">
