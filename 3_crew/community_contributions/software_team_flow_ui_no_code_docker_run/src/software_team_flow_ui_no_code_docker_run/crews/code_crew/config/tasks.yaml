@@ -1,0 +1,18 @@
+code_task:
+  description: >
+    Implement the backend module {module_name} with class {class_name}.
+    Retrieve the master design from {design_file_path} and follow it carefully.
+    The module must be self-contained and ready for testing.
+  expected_output: >
+    Raw Python code only, no markdown or fencing.
+  agent: backend_engineer
+  output_file: output/app/modules/{module_name}/{module_name}.py
+
+test_task:
+  description: >
+    Write unit tests for the backend module {module_name} and its class {class_name}.
+    Retrieve the master design from {design_file_path} for expected behaviors.
+  expected_output: >
+    Raw Python code only, no markdown or fencing.
+  agent: test_engineer
+  output_file: output/app/modules/{module_name}/test_{module_name}.py
