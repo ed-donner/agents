@@ -81,21 +81,20 @@ else:
     print("Groq API Key not set (and this is optional)")
 
 # %%
-request = "Please come up with a challenging, nuanced question that I can ask a number of LLMs to evaluate their intelligence. "
-request += "Answer only with the question, no explanation."
+request = "Produce one sentence that could serve as a challenging question. Do not include any constraints, rubrics, assumptions, or evaluation criteria."
 messages = [{"role": "user", "content": request}]
 
 # %%
 messages
-
-# %%
 openai = OpenAI()
 response = openai.chat.completions.create(
     model="gpt-5-mini",
     messages=messages,
+    max_completion_tokens=1000
 )
 question = response.choices[0].message.content
 print(question)
+display(Markdown(question))
 
 
 # %%
@@ -208,7 +207,7 @@ answers.append(answer)
 
 # %%
 ollama = OpenAI(base_url='http://localhost:11434/v1', api_key='ollama')
-model_name = "llama3.2"
+model_name = "llama3.1:8b"
 
 response = ollama.chat.completions.create(model=model_name, messages=messages)
 answer = response.choices[0].message.content
@@ -240,9 +239,7 @@ for index, answer in enumerate(answers):
 
 # %%
 print(together)
-
-# %% [markdown]
-#
+print(len(together))
 
 # %%
 judge = f"""You are judging a competition between {len(competitors)} competitors.
@@ -265,6 +262,12 @@ Now respond with the JSON with the ranked order of the competitors, nothing else
 print(judge)
 
 # %%
+# Add this cell anywhere to see what you've actually collected:
+print(f"Number of competitors: {len(competitors)}")
+print(f"Number of answers: {len(answers)}")
+print("Competitors:", competitors)
+
+# %%
 judge_messages = [{"role": "user", "content": judge}]
 
 # %%
@@ -272,7 +275,7 @@ judge_messages = [{"role": "user", "content": judge}]
 
 openai = OpenAI()
 response = openai.chat.completions.create(
-    model="gpt-5-mini",
+    model="o3-mini",
     messages=judge_messages,
 )
 results = response.choices[0].message.content
@@ -301,6 +304,15 @@ for index, result in enumerate(ranks):
 #         </td>
 #     </tr>
 # </table>
+
+# %% [markdown]
+# # Workflow design patterns
+#
+# - Sequential. Because the tasks are being run sequentially, one after the other.
+# - Prompt chaining. The first prompt is used to generate the second prompt.
+# - Parallelization (structural). While the examples run sequentially in the notebook, the competitor models are independent and could be executed in parallel, so the workflow is designed to support parallelization even if it isn’t exploited here.
+#
+# While the workflow includes an evaluator role, it does not implement a full evaluator–optimizer loop as depicted in the reference diagram, since no feedback-driven regeneration or iterative optimization occurs.
 
 # %% [markdown]
 # <table style="margin: 0; text-align: left; width:100%">
