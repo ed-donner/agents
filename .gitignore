@@ -187,3 +187,4 @@ memory.db
 6_mcp/accounts.db
 6_mcp/memory/*.db
 /docs_ez
+/.vscode
