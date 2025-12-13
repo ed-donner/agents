@@ -11,20 +11,25 @@ warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 # Create output directory if it doesn't exist
 os.makedirs('output', exist_ok=True)
 
-requirements = """
-A simple account management system for a trading simulation platform.
-The system should allow users to create an account, deposit funds, and withdraw funds.
-The system should allow users to record that they have bought or sold shares, providing a quantity.
-The system should calculate the total value of the user's portfolio, and the profit or loss from the initial deposit.
-The system should be able to report the holdings of the user at any point in time.
-The system should be able to report the profit or loss of the user at any point in time.
-The system should be able to list the transactions that the user has made over time.
-The system should prevent the user from withdrawing funds that would leave them with a negative balance, or
- from buying more shares than they can afford, or selling shares that they don't have.
- The system has access to a function get_share_price(symbol) which returns the current price of a share, and includes a test implementation that returns fixed prices for AAPL, TSLA, GOOGL.
+requirements= """
+A web page language validation system.
+The system should allow users to input a list of web pages (URLs starting with https://).
+The system should fetch the HTML content of each page and extract the visible text.
+The system should detect the language of the page text.
+The system should compare the detected language with the language specified in the HTML <html lang=""> attribute.
+The system should highlight pages where the detected language does not match the HTML lang attribute.
+The system should provide a dashboard that shows:
+    - The total number of links checked
+    - The percentage of pages with matching languages
+    - The percentage of pages with mismatched languages
+The system should allow users to see details of each page, including URL, detected language, HTML lang attribute, and whether it matches.
+The system should handle network errors gracefully and report pages that cannot be fetched.
+The system should support basic input validation to ensure only valid HTTPS URLs are processed.
 """
-module_name = "accounts.py"
-class_name = "Account"
+modules = [
+    {"module_name": "dashboard", "class_name": "Dashboard"},
+    {"module_name": "page_input", "class_name": "PageInput"}
+]
 
 
 def run():
@@ -33,8 +38,7 @@ def run():
     """
     inputs = {
         'requirements': requirements,
-        'module_name': module_name,
-        'class_name': class_name
+        'modules': modules
     }
 
     # Create and run the crew

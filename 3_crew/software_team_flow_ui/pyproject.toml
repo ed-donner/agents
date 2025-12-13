@@ -1,0 +1,23 @@
+[project]
+name = "software_team_flow_ui"
+version = "0.1.0"
+description = "software_team_flow_ui using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[anthropic,tools]==1.4.1",
+    "gradio>=6.0.1",
+]
+
+[project.scripts]
+kickoff = "software_team_flow_ui.main:kickoff"
+run_crew = "software_team_flow_ui.main:kickoff"
+plot = "software_team_flow_ui.main:plot"
+run_with_trigger = "software_team_flow_ui.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "flow"

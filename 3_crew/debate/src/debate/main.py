@@ -2,10 +2,15 @@
 import sys
 import warnings
 
+from dotenv import load_dotenv
+load_dotenv()
+from dotenv import load_dotenv
+import os
+load_dotenv(override=True)  # ensure .env keys override system vars
+print("DEBUG OPENAI_API_KEY:", os.getenv("OPENAI_API_KEY"))
+
 from datetime import datetime
-
 from debate.crew import Debate
-
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
 # This main file is intended to be a way for you to run your

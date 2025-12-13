@@ -1,0 +1,10 @@
+frontend_task:
+  description: >
+    Write a single Gradio app (app.py) demonstrating all modules in {modules}.
+    Retrieve the master design from {design_file_path}.
+    Import each module using: from modules.<module_name> import <class_name> 
+    app.py is in {app_folder} and allow users to exercise key methods.
+  expected_output: >
+    Raw Python code only, no markdown or fencing.
+  agent: frontend_engineer
+  output_file: output/app/app.py

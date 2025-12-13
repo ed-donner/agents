@@ -1,4 +1,5 @@
 # src/financial_researcher/crew.py
+from asyncio import tasks
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import SerperDevTool
@@ -6,7 +7,9 @@ from crewai_tools import SerperDevTool
 @CrewBase
 class ResearchCrew():
     """Research crew for comprehensive topic analysis and reporting"""
-
+    agents_config = 'config/agents.yaml'
+    tasks_config= 'config/tasks.yaml'
+    
     @agent
     def researcher(self) -> Agent:
         return Agent(

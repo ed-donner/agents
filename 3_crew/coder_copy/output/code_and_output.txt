@@ -1,0 +1,38 @@
+```python
+import requests
+from bs4 import BeautifulSoup
+from langdetect import detect
+
+# Step 1: Fetch the webpage
+url = 'https://www.pmi.com'
+response = requests.get(url)
+
+# Step 2: Parse the HTML content
+soup = BeautifulSoup(response.text, 'html.parser')
+
+# Step 3: Extract the text
+webpage_text = soup.get_text()
+
+# Step 4: Get the 'lang' attribute from the HTML tag
+html_lang = soup.html.get('lang')
+
+# Step 5: Detect the language of the extracted text
+detected_lang = detect(webpage_text)
+
+# Step 6: Compare detected language with lang attribute
+language_check = (detected_lang.split('-')[0] == html_lang)
+
+# Output results
+output = {
+    'HTML lang attribute': html_lang,
+    'Detected language': detected_lang,
+    'Language matches': language_check
+}
+
+print(output)
+```
+
+Output of the code:
+```
+{'HTML lang attribute': 'en', 'Detected language': 'en', 'Language matches': True}
+```

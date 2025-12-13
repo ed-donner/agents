@@ -2,7 +2,12 @@
 # src/financial_researcher/main.py
 import os
 from financial_researcher.crew import ResearchCrew
-
+from dotenv import load_dotenv
+load_dotenv()
+from dotenv import load_dotenv
+import os
+load_dotenv(override=True)  # ensure .env keys override system vars
+print("DEBUG OPENAI_API_KEY:", os.getenv("OPENAI_API_KEY"))
 # Create output directory if it doesn't exist
 os.makedirs('output', exist_ok=True)
 

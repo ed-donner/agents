@@ -20,7 +20,7 @@ code_task:
   agent: backend_engineer
   context:
     - design_task
-  output_file: output/{module_name}
+  output_file: output/{module_name}/{module_name}.py
 
 frontend_task:
   description: >
@@ -47,4 +47,4 @@ test_task:
   agent: test_engineer
   context:
     - code_task
-  output_file: output/test_{module_name}
+  output_file: output/{module_name}/test_{module_name}.py

@@ -1,0 +1,11 @@
+test_task:
+  description: >
+    Read ALL files from {output_folder} using FileReadTool.
+    Validate the code structure based on the design document at {design_file_path}.
+    Then attempt to execute the main file located at {app_file_path}.
+    If execution triggers ANY exception, return False.
+    If it runs successfully, return True and zip (using ZipFolderTool) all files of {output_folder} into app.zip file and place it into {output_folder}
+  expected_output: >
+    A boolean value: True if the app runs successfully and is zipped, False if any errors occur.
+  output_file: output/app.zip
+  agent: test_engineer

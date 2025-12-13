@@ -1,2 +1,12 @@
-My name is Ed Donner. I'm an entrepreneur, software engineer and data scientist. I'm originally from London, England, but I moved to NYC in 2000.
-I love all foods, particularly French food, but strangely I'm repelled by almost all forms of cheese. I'm not allergic, I just hate the taste! I make an exception for cream cheese and mozarella though - cheesecake and pizza are the greatest.
+<div >
+	<div style="height: 50px; width: 50px; border-radius: 50%; background-color: gray; display: flex; align-items: center; justify-content: center;margin: 0 auto">
+		<a href="https://www.linkedin.com/in/seb-wieczorek/" target="_blank" aria-label="LinkedIn Sebastian Wieczorek profile page">
+		<img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" width="30" height="30">
+		</a>
+	</div>
+	<div style="height: 50px; width: 50px; border-radius: 50%; background-color: gray; display: flex; align-items: center; justify-content: center;margin: 0 auto">
+		<a href="https://github.com/wieczoreksdev" target="_blank" aria-label="GitHub Sebastian Wieczorek profile page">
+		<img src="https://cdn.simpleicons.org/github" alt="GitHub" width="30" height="30">
+		</a>
+	</div>
+</div>

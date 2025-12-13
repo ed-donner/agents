@@ -1,0 +1,77 @@
+design_app:
+  description: >
+    Create a unified, high-level design document covering ALL modules listed in {modules}.
+    Create it based on {requirements}.
+  expected_output: A single coherent design document as a Markdown (.md) file.
+  agent: engineering_lead
+  markdown: true
+  output_file: output/app/design/master_design.md
+
+create_class_diagram:
+  description: >
+    Generate a PlantUML Class Diagram representing all modules in {modules}.
+    Create it based on {design_file}.
+    Requirements:
+      - Output MUST be raw PlantUML with NO code fences.
+      - Output MUST contain exactly one @startuml ... @enduml block.
+      - Do NOT include Python type hints or annotations.
+      - Represent all relevant classes, relationships, and responsibilities.
+  expected_output: Raw PlantUML class diagram (.puml)
+  output_file: output/app/design/class_diagram.puml
+  agent: business_engineer
+  markdown: false
+
+create_sequence_diagram:
+  description: >
+    Generate a PlantUML Sequence Diagram for the system interactions based on {modules}.
+    Create it based on {design_file}
+    Requirements:
+      - Output MUST be raw PlantUML with NO code fences.
+      - Output MUST contain exactly one @startuml ... @enduml block.
+      - Follow PlantUML sequence diagram conventions strictly.
+  expected_output: Raw PlantUML sequence diagram (.puml)
+  output_file: output/app/design/sequence_diagram.puml
+  agent: business_engineer
+  markdown: false
+  
+code_task:
+  description: >
+    Implement the backend code for a single module name/class name based on {modules}.
+    Retrieve the master design from {design_file} and follow it carefully.
+    The module must be self-contained and ready for testing.
+    Do not repeat models.
+  expected_output: >
+    Raw Python code only, no markdown or fencing.
+    The code MUST be saved as **{modules_folder}/module_name/module_name.py**.
+  agent: backend_engineer
+  
+test_task:
+  description: >
+    Write unit tests for the backend module created in {modules_folder} subfolders.
+    Retrieve the master design from {design_file} for expected behaviors.
+  expected_output: >
+    Raw Python code only, no markdown or fencing.
+    The test code MUST be saved as **{modules_folder}/module_name/test_module_name.py**.
+  agent: test_engineer
+  
+frontend_task:
+  description: >
+    Write a single Gradio app (app.py) demonstrating all modules that are placed inside {modules_folder}.
+    Retrieve the master design from {design_file} for reference.
+    Import each module placed in {modules_folder}.
+    Place created app.py in {app_folder} and allow users to exercise key methods.
+  expected_output: >
+    Raw Python code only, no markdown or fencing.
+  agent: frontend_engineer
+  output_file: output/app/app.py
+  
+zip_task:
+  description: >
+    Use ZipFolderTool to zip all files from {app_folder} into app.zip.
+    Place the resulting app.zip file inside {zip_folder}.
+  expected_output: >
+    A boolean value:
+      - True if the folder was zipped successfully
+      - False if any error occurred
+  output_file: output/zip/app.zip
+  agent: zip_engineer

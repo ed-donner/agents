@@ -1,0 +1,27 @@
+design_app:
+  description: >
+    Create a unified design document covering ALL modules: {modules}.
+    Describe architecture, classes, interfaces, API consistency rules.
+    Store the design in memory for retrieval by other agents.
+  expected_output: >
+    A single markdown design file describing all modules.
+  agent: engineering_lead
+  markdown: true
+  output_file: output/design/master_design.md
+
+create_diagrams:
+  description: >
+    Generate PlantUML diagrams (Sequence and Class) for all modules listed in {modules}.
+    Use the design document from the design_app task as reference to ensure accurate and consistent diagrams.
+    Produce at least:
+      - One Sequence Diagram
+      - One Class Diagram
+    You may create additional diagrams if needed for clarity.
+    IMPORTANT: Output raw PlantUML syntax only. Do NOT wrap in Markdown code fences.
+  expected_output: >
+    Raw PlantUML code in .puml format covering all modules, ready to be saved directly as a .puml file.
+  agent: business_engineer
+  markdown: false
+  context:
+    - design_app
+  output_file: output/design/diagrams.puml

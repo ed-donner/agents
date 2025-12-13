@@ -1,0 +1,57 @@
+design_task:
+  description: >
+    Create a unified high-level design document covering ALL modules in {modules}.
+    Describe system architecture, module responsibilities, classes, interfaces, and API consistency rules.
+    Store the design for retrieval by all other agents.
+  expected_output: >
+    A single markdown file containing the system’s master design.
+  agent: engineering_lead
+  markdown: true
+  output_file: output/design/master_design.md
+
+code_task:
+  description: >
+    Implement a backend module based on {modules}.
+    Use the master design from {design_markdown_file}.
+    Each output file must contain a complete, self-contained implementation.
+  expected_output: >
+    Raw Python code only (no markdown or code fencing).
+  agent: backend_engineer
+  context:
+    - design_task
+  output_file: output/modules/{module_name}.py
+
+test_task:
+  description: >
+    Write unit tests for the backend module {current_module[module_name]} and class {current_module[class_name]}.
+    Use the master design to ensure full behavior coverage.
+  expected_output: >
+    Raw Python code only (no markdown or fencing).
+  agent: test_engineer
+  context:
+    - code_task
+  output_file: output/modules/test_{module_name}.py
+
+frontend_task:
+  description: >
+    Create a single Gradio application (app.py) demonstrating all modules listed in {modules}.
+    Use the design from {design_markdown_file}.
+    Import modules from {modules_folder_path} and expose their core functionality.
+  expected_output: >
+    Raw Python code only (no markdown or fencing).
+  agent: frontend_engineer
+  context:
+    - design_task
+    - code_task
+  output_file: output/app.py
+
+zip_task:
+ description: >
+   Use ZipFolderTool to zip all files from {app_folder} into app.zip
+   Place the resulting zip file inside {zip_folder}.
+ expected_output: >
+    A boolean value:
+    - True if the folder was zipped successfully
+    - False if any error occurred
+ output_file: output/zip/app.zip
+ agent: zip_engineer

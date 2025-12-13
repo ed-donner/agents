@@ -1,0 +1,38 @@
+@startuml LanguageDetectionSequence
+actor User
+participant "Input Tab" as Input
+participant "Dashboard Tab" as Dashboard
+participant "Results Tab" as Results
+participant "Backend Handler" as Backend
+participant "HTML Fetcher" as Fetcher
+participant "Language Detector" as Detector
+participant "Data Processor" as Processor
+
+User -> Input: Enter URLs (comma-separated)
+Input -> Input: Validate URLs
+Input -> Backend: Submit URLs + Module List
+Backend -> Fetcher: Request HTML for each URL
+Fetcher -> Fetcher: Fetch HTML content
+Fetcher -> Fetcher: Extract visible text only
+Fetcher --> Backend: Return HTML content or Error
+Backend -> Detector: Extract declared language from <html lang>
+Backend -> Detector: Detect language from visible text
+Detector -> Detector: Analyze text with language detection library
+Detector --> Backend: Return detected language
+Backend -> Processor: Compare detected vs declared
+Processor -> Processor: Assign status (Match/Mismatch/Error)
+Processor --> Backend: Return processed results
+Backend --> Results: Send results table data
+Results -> Results: Populate table with columns
+Results -> Results: Display (checked_url, detected_language, declared_language, Status)
+Results --> User: Show results table
+
+Backend --> Dashboard: Send aggregated statistics
+Dashboard -> Dashboard: Calculate total URLs checked
+Dashboard -> Dashboard: Calculate % language match/mismatch
+Dashboard -> Dashboard: Count failed pages
+Dashboard --> User: Display dashboard metrics
+
+User -> Input: Change modules/tabs
+Input --> User: Switch to selected tab
+@enduml

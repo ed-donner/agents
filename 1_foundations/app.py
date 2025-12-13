@@ -77,7 +77,7 @@ class Me:
 
     def __init__(self):
         self.openai = OpenAI()
-        self.name = "Ed Donner"
+        self.name = "Sebastian Wieczorek"
         reader = PdfReader("me/linkedin.pdf")
         self.linkedin = ""
         for page in reader.pages:
@@ -130,5 +130,26 @@ If the user is engaging in discussion, try to steer them towards getting in touc
 
 if __name__ == "__main__":
     me = Me()
-    gr.ChatInterface(me.chat, type="messages").launch()
-    
+    with gr.Blocks() as demo:
+        gr.HTML("""
+        <div style="width: 100%; position:relative;height: 100%">
+        <div style="min-width:20rem; width: 80%; height: 100%; display: flex; flex-direction: column; align-items: start; justify-content: center;">
+            <h1 style='color: gray;'> Hello! My name is Sebastian Wieczorek</h1>
+            <h3 style='color: gray;'> You can ask me about my background, experience, skills, or interests.</h3>
+            </div>
+            <div style="height: 40px; width: 80px; display: flex; gap: 5px; align-items: center; justify-content: end; z-index: 1000; position: fixed; top: 0px; right: 5px;">
+                <div style="height: 30px; width: 30px; border-radius: 50%; background-color: gray; display: flex; align-items: center; justify-content: center;">
+                    <a href="https://www.linkedin.com/in/seb-wieczorek/" target="_blank">
+                        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn Sebastian Wieczorek profile page" width="30" height="30">
+                    </a>
+                </div>
+                <div style="height: 30px; width: 30px; border-radius: 50%; background-color: gray; display: flex; align-items: center; justify-content: center;">
+                    <a href="https://github.com/wieczoreksdev" target="_blank">
+                        <img src="https://cdn.simpleicons.org/github" alt="GitHub Sebastian Wieczorek profile page" width="30" height="30">
+                    </a>
+                </div>
+            </div>
+        </div>
+        """)
+        gr.ChatInterface(me.chat, type="messages")
+    demo.launch()
