@@ -268,8 +268,6 @@ print(f"Number of answers: {len(answers)}")
 print("Competitors:", competitors)
 
 # %%
-print(question[:50], "...")
-print(len(competitors), len(answers), len(ranks))
 
 # %%
 judge_messages = [{"role": "user", "content": judge}]
