@@ -308,7 +308,7 @@ for index, result in enumerate(ranks):
 # </table>
 
 # %% [markdown]
-# # Workflow design patterns
+# # Exercise solution - Workflow design patterns
 #
 # - Sequential. Because the tasks are being run sequentially, one after the other.
 # - Prompt chaining. The first prompt is used to generate the second prompt.
