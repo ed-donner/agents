@@ -268,8 +268,6 @@ print(f"Number of answers: {len(answers)}")
 print("Competitors:", competitors)
 
 # %%
-print(question[:50], "...")
-print(len(competitors), len(answers), len(ranks))
 
 # %%
 judge_messages = [{"role": "user", "content": judge}]
@@ -310,7 +308,7 @@ for index, result in enumerate(ranks):
 # </table>
 
 # %% [markdown]
-# # Workflow design patterns
+# # Exercise solution - Workflow design patterns
 #
 # - Sequential. Because the tasks are being run sequentially, one after the other.
 # - Prompt chaining. The first prompt is used to generate the second prompt.
