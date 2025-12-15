@@ -9,6 +9,35 @@ find_emerging_companies:
 
 
 
+reserach_emerging_companies:
+  description: >
+    Given a list of trending companies, provide detailed analysis of each company in a report by searching online
+  expected_output: >
+    A report containing detailed analysis of each company
+  agent: financial_researcher
+  context: 
+    - find_emerging_companies
+  output_file: output/research_report.json
+
+
+
+pick_best_companies:
+  description: >
+    Analyze the research findings and pick the best company for investment.
+    Send a push notification to the user with the decision and 1 sentence rationale.
+    Then respond with a detailed report on why you chose this company, and which companies were not selected.
+  expected_output: >
+    The chosen company and why it was chosen; the companies that were not selected and why they were not selected.
+  agent: stock_picker
+  context: find_emerging_companies
+  output_file: output/decision.md
+
+
+  
+  
+
+
+
 
 
 
