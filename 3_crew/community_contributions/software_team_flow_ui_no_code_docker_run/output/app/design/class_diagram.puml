@@ -1,0 +1,138 @@
+@startuml LanguageDetectionSystemClassDiagram
+!theme plain
+skinparam backgroundColor #FEFEFE
+skinparam classBorderColor #333333
+skinparam classBackgroundColor #FFFFFF
+
+class Dashboard {
+  -total_urls_checked: int
+  -match_percentage: float
+  -mismatch_percentage: float
+  -failed_pages_count: int
+  +display_statistics()
+  +update_metrics()
+  +render_dashboard()
+}
+
+class Input {
+  -url_input: str
+  -modules_input: str
+  -urls: list
+  -modules: list
+  +parse_urls()
+  +parse_modules()
+  +validate_urls()
+  +submit_input()
+  +get_urls()
+  +get_modules()
+}
+
+class Results {
+  -results_data: list
+  -table_columns: list
+  +add_result()
+  +display_table()
+  +export_results()
+  +clear_results()
+  +get_results()
+}
+
+class URLResult {
+  -checked_url: str
+  -detected_language: str
+  -declared_language: str
+  -status: str
+  +set_url()
+  +set_detected_language()
+  +set_declared_language()
+  +set_status()
+  +get_result_dict()
+}
+
+class HTMLFetcher {
+  -url: str
+  -html_content: str
+  -error: str
+  +fetch_html()
+  +extract_visible_text()
+  +handle_network_error()
+  +get_html_content()
+  +get_error_message()
+}
+
+class LanguageDetector {
+  -text: str
+  -detected_language: str
+  +detect_language()
+  +extract_declared_language()
+  +get_detected_language()
+}
+
+class LanguageAnalyzer {
+  -detected_language: str
+  -declared_language: str
+  -status: str
+  +compare_languages()
+  +assign_status()
+  +get_status()
+}
+
+class URLValidator {
+  -url: str
+  -is_valid: bool
+  +validate_url_format()
+  +is_valid_https()
+  +get_validation_result()
+}
+
+class ErrorHandler {
+  -error_messages: list
+  -error_count: int
+  +log_error()
+  +handle_network_error()
+  +handle_parsing_error()
+  +handle_missing_lang_error()
+  +get_errors()
+  +continue_execution()
+}
+
+class AnalysisEngine {
+  -results: list
+  -error_handler: ErrorHandler
+  +analyze_urls()
+  +process_url()
+  +generate_report()
+  +get_results()
+}
+
+class GradioUI {
+  -dashboard_tab: Dashboard
+  -input_tab: Input
+  -results_tab: Results
+  -blocks: object
+  +create_interface()
+  +launch()
+  +register_callbacks()
+}
+
+Input --> URLValidator : uses
+Input --> GradioUI : part of
+Dashboard --> AnalysisEngine : displays data from
+Results --> URLResult : displays
+Results --> GradioUI : part of
+GradioUI --> Input : contains
+GradioUI --> Dashboard : contains
+GradioUI --> Results : contains
+AnalysisEngine --> HTMLFetcher : uses
+AnalysisEngine --> LanguageDetector : uses
+AnalysisEngine --> LanguageAnalyzer : uses
+AnalysisEngine --> ErrorHandler : uses
+AnalysisEngine --> URLResult : creates
+HTMLFetcher --> ErrorHandler : reports errors to
+LanguageDetector --> HTMLFetcher : receives text from
+LanguageAnalyzer --> LanguageDetector : receives results from
+LanguageAnalyzer --> URLResult : populates
+AnalysisEngine --> Dashboard : updates
+AnalysisEngine --> Results : populates
+
+@enduml
