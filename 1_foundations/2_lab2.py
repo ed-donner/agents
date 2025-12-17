@@ -146,7 +146,7 @@ competitors.append(model_name)
 answers.append(answer)
 
 # %%
-deepseek = OpenAI(api_key=deepseek_api_key, base_url="https://api.deepseek.com/v1")
+""" deepseek = OpenAI(api_key=deepseek_api_key, base_url="https://api.deepseek.com/v1")
 model_name = "deepseek-chat"
 
 response = deepseek.chat.completions.create(model=model_name, messages=messages)
@@ -154,7 +154,7 @@ answer = response.choices[0].message.content
 
 display(Markdown(answer))
 competitors.append(model_name)
-answers.append(answer)
+answers.append(answer) """
 
 # %%
 # Updated with the latest Open Source model from OpenAI
@@ -275,19 +275,23 @@ judge_messages = [{"role": "user", "content": judge}]
 # %%
 # Judgement time!
 
+
 openai = OpenAI()
 response = openai.chat.completions.create(
     model="o3-mini",
     messages=judge_messages,
 )
 results = response.choices[0].message.content
+
+
 print(results)
 
 
 # %%
 # OK let's turn this into results!
-
+ # Add this before json.loads(results)
 results_dict = json.loads(results)
+
 ranks = results_dict["results"]
 for index, result in enumerate(ranks):
     competitor = competitors[int(result)-1]
@@ -412,7 +416,7 @@ improved_answers.append(improved_answer)
 
 
 # %%
-# Improve Ollama/Llama response
+# Improve Groq (openai/gpt-oss-120b) response
 competitor_idx = 3
 model_name = competitors[competitor_idx]
 rank = get_rank_for_competitor(competitor_idx, ranks)
@@ -420,7 +424,8 @@ rank = get_rank_for_competitor(competitor_idx, ranks)
 improvement_prompt = get_improvement_prompt(question, original_answers[competitor_idx], rank, len(competitors))
 improve_messages = [{"role": "user", "content": improvement_prompt}]
 
-response = ollama.chat.completions.create(model=model_name, messages=improve_messages)
+# Use groq client for openai/gpt-oss-120b model
+response = groq.chat.completions.create(model=model_name, messages=improve_messages)
 improved_answer = response.choices[0].message.content
 
 display(Markdown(f"**{model_name} (was rank #{rank}) improved response:**"))
@@ -429,7 +434,7 @@ improved_answers.append(improved_answer)
 
 
 # %%
-# Improve Groq (openai/gpt-oss-120b) response
+# Improve Ollama/Llama response
 competitor_idx = 4
 model_name = competitors[competitor_idx]
 rank = get_rank_for_competitor(competitor_idx, ranks)
@@ -437,7 +442,8 @@ rank = get_rank_for_competitor(competitor_idx, ranks)
 improvement_prompt = get_improvement_prompt(question, original_answers[competitor_idx], rank, len(competitors))
 improve_messages = [{"role": "user", "content": improvement_prompt}]
 
-response = groq.chat.completions.create(model=model_name, messages=improve_messages)
+# Use ollama client for llama3.1:8b model
+response = ollama.chat.completions.create(model=model_name, messages=improve_messages)
 improved_answer = response.choices[0].message.content
 
 display(Markdown(f"**{model_name} (was rank #{rank}) improved response:**"))
