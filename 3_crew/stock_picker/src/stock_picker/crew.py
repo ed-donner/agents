@@ -89,37 +89,5 @@ class StockPicker():
             tasks=self.tasks, 
             process=Process.hierarchical,
             verbose=True,
-            manager_agent=manager,
-            memory=True,
-            # Long-term memory for persistent storage across sessions
-            long_term_memory = LongTermMemory(
-                storage=LTMSQLiteStorage(
-                    db_path="./memory/long_term_memory_storage.db"
-                )
-            ),
-            # Short-term memory for current context using RAG
-            short_term_memory = ShortTermMemory(
-                storage = RAGStorage(
-                        embedder_config={
-                            "provider": "openai",
-                            "config": {
-                                "model": 'text-embedding-3-small'
-                            }
-                        },
-                        type="short_term",
-                        path="./memory/"
-                    )
-                ),            # Entity memory for tracking key information about entities
-            entity_memory = EntityMemory(
-                storage=RAGStorage(
-                    embedder_config={
-                        "provider": "openai",
-                        "config": {
-                            "model": 'text-embedding-3-small'
-                        }
-                    },
-                    type="short_term",
-                    path="./memory/"
-                )
-            ),
+            manager_agent=manager
         )
