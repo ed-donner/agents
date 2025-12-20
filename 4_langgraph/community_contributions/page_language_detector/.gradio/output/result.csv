@@ -1,0 +1,4 @@
+url,current_url,lang,lang_normilized,lang_from_translation,match,status_code
+https://www.pmi.com/,https://www.pmi.com/,en,en,en,True,200
+https://www.pmi.com/markets/algeria/fr/overview/,https://www.pmi.com/markets/algeria/fr/overview/,fr-dz,fr,fr,True,200
+https://www.pmi.com/markets/algeria/en/overview/,https://www.pmi.com/markets/algeria/en/overview/,en-dz,en,en,True,200
