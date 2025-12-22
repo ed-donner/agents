@@ -240,8 +240,8 @@ OUTPUT FORMAT:
   "file_name": "react-app", # The key must be the same 'file_name'
   "type": "directory",      # The key must be the same  'type'
   "path": "./react-app",    # The key must be the same  'path'
-  "content": null,          # The key must be the same 'content'
-  "children": [
+  "content": "content here base44 encoded",          # The key must be the same 'content', write the content 
+  "children": [           
     {
       "file_name": "package.json",
       "type": "file",
@@ -252,7 +252,7 @@ OUTPUT FORMAT:
       "file_name": "public",
       "type": "directory",
       "path": "react-app/public",
-      "content": null,
+      "content": "content here base44 encoded",            
       "children": [
         {
           "file_name": "index.html",
@@ -266,7 +266,7 @@ OUTPUT FORMAT:
       "file_name": "src",
       "type": "directory",
       "path": "react-app/src",
-      "content": null,
+      "content": ""content here base44 encoded"",
       "children": [...]
     }
   ]
@@ -306,7 +306,7 @@ you correct the structure without adding extra keys, or values.
 - Check: Does the structure follow these rules?
 OUTPUT STRUCTURE RULES:
 - Files: Include "type": "file" and base64-encoded "content"
-- Directories: Include "type": "directory", "content": null, and "children" array
+- Directories: Include "type": "directory", "content": "base64 encoded content...", and "children" array
 - DO NOT modify file names or paths from the input
 - DO NOT truncate base64 content - encode complete files
 - Ensure valid JSON with proper escaping
