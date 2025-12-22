@@ -1,8 +1,6 @@
 import json
 import os
 import base64
-from typing import Union
-from pathlib import Path
 from agents import function_tool
 
 @function_tool
@@ -30,37 +28,29 @@ def save_database_content(database_schema: str):
 
     return f"Database schema saved successfully to {database_file}"
 
-def write_structure(node):
+def save_structure(node):
     """
-    Recursively write files and directories
-    
-    node: dict with key file_name, type, path, content, children (optional)
+    Recursively creates directories and files from a JSON structure.
     """
+
     node_type = node.get("type")
     path = node.get("path")
-    
-    if node_type == "directory":
-        # Create directory
-        Path(path).mkdir(parents=True, exist_ok=True)
-        
-        # Process children
-        for child in node.get("children", []):
-            write_structure(child)
-    
-    elif node_type == "file":
-        # Ensure parent directory exists 
-        parent_dir = os.path.dirname(path)
-        if parent_dir:
-            Path(parent_dir).mkdir(parents=True, exist_ok=True)
-        
-        # Decode base64 content and write file 
-        content_base64 = node.get("content", "")
-        content = base64.b64decode(content_base64.encode("utf-8")).decode("utf-8")
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(content)
-        print(f"Created file :{path}")
-    else:
-        raise ValueError(f"Unknown node type: {node_type}")
+    content = node.get("content")
+    children = node.get("children", [])
 
-if __name__ == "__name__":
-    pass
+    if node_type == "directory":
+        # Create directory if it doesn't exist
+        os.makedirs(path, exist_ok=True)
+
+        # Process children
+        for child in children:
+            save_structure(child)
+
+    elif node_type == "file":
+        # Ensure parent directory exists
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+
+        # Write file content
+        with open(path, "w", encoding="utf-8") as f:
+            if content is not None:
+                f.write(content)
