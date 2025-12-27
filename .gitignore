@@ -188,3 +188,4 @@ memory.db
 6_mcp/memory/*.db
 /docs_ez
 /.vscode
+/.cursor
