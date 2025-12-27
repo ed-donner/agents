@@ -1,0 +1,36 @@
+design_app:
+  description: >
+    Create a unified, high-level design document covering ALL modules listed in {modules}.
+  expected_output: A single coherent design document as a Markdown (.md) file.
+  agent: engineering_lead
+  markdown: true
+  output_file: output/app/design/master_design.md
+
+create_class_diagram:
+  description: >
+    Generate a PlantUML Class Diagram representing all modules in {modules}.
+    Requirements:
+      - Output MUST be raw PlantUML with NO code fences.
+      - Output MUST contain exactly one @startuml ... @enduml block.
+      - Do NOT include Python type hints or annotations.
+      - Represent all relevant classes, relationships, and responsibilities.
+  expected_output: Raw PlantUML class diagram (.puml)
+  output_file: output/app/design/class_diagram.puml
+  agent: business_engineer
+  markdown: false
+  context:
+    - design_app
+
+create_sequence_diagram:
+  description: >
+    Generate a PlantUML Sequence Diagram for the system interactions based on {modules}.
+    Requirements:
+      - Output MUST be raw PlantUML with NO code fences.
+      - Output MUST contain exactly one @startuml ... @enduml block.
+      - Follow PlantUML sequence diagram conventions strictly.
+  expected_output: Raw PlantUML sequence diagram (.puml)
+  output_file: output/app/design/sequence_diagram.puml
+  agent: business_engineer
+  markdown: false
+  context:
+    - design_app
