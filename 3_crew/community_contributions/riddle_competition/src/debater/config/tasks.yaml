@@ -1,0 +1,26 @@
+puzzle_1:
+  description: >
+    You are making a puzzle about the motion: {motion}.
+    Come up with a hard but possible puzzle about the motion.
+    
+  expected_output: >
+    Your riddle about the motion, in a concise manner.
+  agent: riddle_maker
+  output_file: output/riddle_1.md
+
+puzzle_2:
+  description: >
+    You're riddle should be about the motion: {motion_2}.
+    Come up with a hard but possible riddle about the motion.
+    
+  expected_output: >
+    Your riddle about the motion, in a concise manner.
+  agent: riddle_maker
+  output_file: output/riddle_2.md
+decide:
+  description: >
+    Review the riddles presented by the riddle makers and decide which is harder.
+  expected_output: >
+    Your decision on which riddle is more harder, and why.
+  agent: riddle_judge
+  output_file: output/decide.md
