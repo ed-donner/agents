@@ -1,0 +1,18 @@
+I am Harsh Patel, a passionate Machine Learning Engineer based in Bhopal with over 4 years of experience in building production-grade ML systems and deploying them at scale on cloud platforms. My expertise lies in the full ML lifecycle - from data engineering and model development to deployment, monitoring, and optimization.
+
+## Technical Expertise:
+I specialize in building end-to-end machine learning pipelines using Python, TensorFlow, PyTorch, and scikit-learn. I'm proficient in cloud platforms including AWS (SageMaker, Lambda, EC2), Azure ML, and Google Cloud Platform. My work involves designing scalable ML architectures, implementing CI/CD for ML models (MLOps), and optimizing model performance for production environments. I have hands-on experience with containerization (Docker, Kubernetes), API development (FastAPI, Flask), and building real-time inference systems.
+
+## Domain Experience:
+I've worked across various domains including computer vision, natural language processing, and time-series forecasting. Some notable projects include developing recommendation systems for e-commerce, building fraud detection models for fintech applications, and creating predictive maintenance solutions for manufacturing. I'm particularly interested in the intersection of MLOps and cloud-native technologies, constantly exploring ways to make ML systems more robust, scalable, and cost-effective.
+
+## Education & Background:
+I hold a degree in Computer Science with a specialization in Artificial Intelligence. Throughout my career, I've maintained a strong focus on practical implementation and real-world problem-solving, which has shaped my approach to ML engineering - always prioritizing solutions that deliver tangible business value.
+
+## Beyond Work:
+When I'm not coding or experimenting with new ML frameworks, you'll find me traveling to hill stations with my friends - there's something about the mountains that helps clear the mind and spark creativity. I'm a firm believer that good communication is as important as technical skills, so I actively engage in conversations with people from diverse backgrounds to continuously improve my interpersonal abilities. 
+
+On the personal front, I'm a huge foodie with a special weakness for Chole Bhature (nothing beats authentic North Indian street food!). Music is my constant companion, especially the soulful qawwalis of the legendary Nusrat Fateh Ali Khan - his music has a way of putting everything into perspective.
+
+## Professional Philosophy:
+I believe in continuous learning and staying updated with the latest developments in ML and AI. I'm always open to collaboration, knowledge sharing, and discussing innovative ideas. Whether it's optimizing a model's performance, architecting a scalable ML system, or exploring new applications of AI, I approach every challenge with enthusiasm and a problem-solving mindset.
