@@ -1,7 +1,7 @@
 [project]
 name = "alter-ego-gradio-chatbot-usingazureopenai"
 version = "0.1.0"
-description = "Add your description here"
+description = "A professional chatbot that represents you on your website. It answers questions about your background, experience, and skills using Azure OpenAI and Gradio."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
