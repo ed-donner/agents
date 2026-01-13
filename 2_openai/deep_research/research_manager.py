@@ -1,20 +1,31 @@
 from agents import Runner, trace, gen_trace_id
 from search_agent import search_agent
-from planner_agent import planner_agent, WebSearchItem, WebSearchPlan
+from planner_agent import query_agent, planner_agent, FollowUpQuestions, WebSearchItem, WebSearchPlan
 from writer_agent import writer_agent, ReportData
 from email_agent import email_agent
 import asyncio
 
 class ResearchManager:
 
-    async def run(self, query: str):
-        """ Run the deep research process, yielding the status updates and the final report"""
+    async def generate_questions(self, query: str) -> list[str]:
+        """ Generate follow-up questions for the user to answer """
+        print("Generating follow-up questions...")
+        result = await Runner.run(
+            query_agent,
+            f"Query: {query}",
+        )
+        questions = result.final_output_as(FollowUpQuestions).questions
+        print(f"Generated {len(questions)} questions")
+        return questions
+
+    async def run(self, query: str, questions: list[str], answers: list[str]):
+        """ Run the deep research process with user's answers, yielding status updates and the final report """
         trace_id = gen_trace_id()
         with trace("Research trace", trace_id=trace_id):
             print(f"View trace: https://platform.openai.com/traces/trace?trace_id={trace_id}")
             yield f"View trace: https://platform.openai.com/traces/trace?trace_id={trace_id}"
-            print("Starting research...")
-            search_plan = await self.plan_searches(query)
+            print("Starting research with user answers...")
+            search_plan = await self.plan_searches(query, questions, answers)
             yield "Searches planned, starting to search..."     
             search_results = await self.perform_searches(search_plan)
             yield "Searches complete, writing report..."
@@ -25,12 +36,16 @@ class ResearchManager:
             yield report.markdown_report
         
 
-    async def plan_searches(self, query: str) -> WebSearchPlan:
-        """ Plan the searches to perform for the query """
-        print("Planning searches...")
+    async def plan_searches(self, query: str, questions: list[str], answers: list[str]) -> WebSearchPlan:
+        """ Plan the searches based on the query and user's answers """
+        print("Planning searches based on user answers...")
+        # Format Q&As for the planner
+        qa_text = "\n".join([f"Q: {q}\nA: {a}" for q, a in zip(questions, answers)])
+        input_text = f"Original Query: {query}\n\nFollow-up Questions and User's Answers:\n{qa_text}"
+        
         result = await Runner.run(
             planner_agent,
-            f"Query: {query}",
+            input_text,
         )
         print(f"Will perform {len(result.final_output.searches)} searches")
         return result.final_output_as(WebSearchPlan)
