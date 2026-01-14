@@ -1,5 +1,6 @@
 from fastmcp import FastMCP
 import os
+import aiosqlite
 import sqlite3
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "expenses.db")
@@ -23,22 +24,23 @@ def init_db():
 init_db()
 
 @mcp.tool()
-def add_expense(date, amount, category, subcategory="", note=""):
+async def add_expense(date, amount, category, subcategory="", note=""):
     '''Add a new expense entry to the database.'''
-    with sqlite3.connect(DB_PATH) as c:
-        cur = c.execute(
+    async with aiosqlite.connect(DB_PATH) as c:
+        cur = await c.execute(
             "INSERT INTO expenses(date, amount, category, subcategory, note) VALUES (?,?,?,?,?)",
             (date, amount, category, subcategory, note)
         )
+        await c.commit()
         return {"status": "ok", "id": cur.lastrowid}
     
 @mcp.tool()
-def edit_expense(expense_id, date=None, amount=None, category=None, subcategory=None, note=None):
+async def edit_expense(expense_id, date=None, amount=None, category=None, subcategory=None, note=None):
     '''Edit an existing expense entry. Only provided fields will be updated.'''
-    with sqlite3.connect(DB_PATH) as c:
+    async with aiosqlite.connect(DB_PATH) as c:
         # First check if expense exists
-        cur = c.execute("SELECT id FROM expenses WHERE id = ?", (expense_id,))
-        if not cur.fetchone():
+        cur = await c.execute("SELECT id FROM expenses WHERE id = ?", (expense_id,))
+        if not await cur.fetchone():
             return {"status": "error", "message": f"Expense {expense_id} not found"}
         
         # Build dynamic update query
@@ -66,26 +68,28 @@ def edit_expense(expense_id, date=None, amount=None, category=None, subcategory=
         
         params.append(expense_id)
         query = f"UPDATE expenses SET {', '.join(updates)} WHERE id = ?"
-        c.execute(query, params)
+        await c.execute(query, params)
+        await c.commit()
         return {"status": "ok", "id": expense_id, "updated_fields": len(updates)}
 
 @mcp.tool()
-def delete_expense(expense_id):
+async def delete_expense(expense_id):
     '''Delete an expense entry by ID.'''
-    with sqlite3.connect(DB_PATH) as c:
+    async with aiosqlite.connect(DB_PATH) as c:
         # Check if expense exists
-        cur = c.execute("SELECT id FROM expenses WHERE id = ?", (expense_id,))
-        if not cur.fetchone():
+        cur = await c.execute("SELECT id FROM expenses WHERE id = ?", (expense_id,))
+        if not await cur.fetchone():
             return {"status": "error", "message": f"Expense {expense_id} not found"}
         
-        c.execute("DELETE FROM expenses WHERE id = ?", (expense_id,))
+        await c.execute("DELETE FROM expenses WHERE id = ?", (expense_id,))
+        await c.commit()
         return {"status": "ok", "id": expense_id, "message": "Expense deleted"}
     
 @mcp.tool()
-def list_expenses(start_date, end_date):
+async def list_expenses(start_date, end_date):
     '''List expense entries within an inclusive date range.'''
-    with sqlite3.connect(DB_PATH) as c:
-        cur = c.execute(
+    async with aiosqlite.connect(DB_PATH) as c:
+        cur = await c.execute(
             """
             SELECT id, date, amount, category, subcategory, note
             FROM expenses
@@ -95,12 +99,13 @@ def list_expenses(start_date, end_date):
             (start_date, end_date)
         )
         cols = [d[0] for d in cur.description]
-        return [dict(zip(cols, r)) for r in cur.fetchall()]
+        rows = await cur.fetchall()
+        return [dict(zip(cols, r)) for r in rows]
 
 @mcp.tool()
-def summarize(start_date, end_date, category=None):
+async def summarize(start_date, end_date, category=None):
     '''Summarize expenses by category within an inclusive date range.'''
-    with sqlite3.connect(DB_PATH) as c:
+    async with aiosqlite.connect(DB_PATH) as c:
         query = (
             """
             SELECT category, SUM(amount) AS total_amount
@@ -116,12 +121,13 @@ def summarize(start_date, end_date, category=None):
 
         query += " GROUP BY category ORDER BY category ASC"
 
-        cur = c.execute(query, params)
+        cur = await c.execute(query, params)
         cols = [d[0] for d in cur.description]
-        return [dict(zip(cols, r)) for r in cur.fetchall()]
+        rows = await cur.fetchall()
+        return [dict(zip(cols, r)) for r in rows]
 
 @mcp.resource("expense://categories", mime_type="application/json")
-def categories():
+async def categories():
     # Read fresh each time so you can edit the file without restarting
     with open(CATEGORIES_PATH, "r", encoding="utf-8") as f:
         return f.read()
