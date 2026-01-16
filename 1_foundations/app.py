@@ -77,14 +77,17 @@ class Me:
 
     def __init__(self):
         self.openai = OpenAI()
-        self.name = "Ed Donner"
-        reader = PdfReader("me/linkedin.pdf")
+        self.name = "Xavier Van Ausloos"
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        pdf_path = os.path.join(script_dir, "me", "260116_xva_cv_linkedin.pdf")
+        reader = PdfReader(pdf_path)
         self.linkedin = ""
         for page in reader.pages:
             text = page.extract_text()
             if text:
                 self.linkedin += text
-        with open("me/summary.txt", "r", encoding="utf-8") as f:
+        summary_path = os.path.join(script_dir, "me", "summary.txt")
+        with open(summary_path, "r", encoding="utf-8") as f:
             self.summary = f.read()
 
 
