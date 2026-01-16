@@ -35,6 +35,7 @@ cp .env.example .env
 ### 2. Run in Docker
 
 ```bash
+uv lock
 cd 6_mcp/03_aiobot_mcp
 make dev
 ```
