@@ -1,0 +1,23 @@
+[project]
+name = "page-language-detector"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "gradio>=6.1.0",
+    "langchain>=1.2.0",
+    "langchain-community>=0.4.1",
+    "langchain-core>=1.2.2",
+    "langchain-experimental>=0.4.1",
+    "langchain-openai>=1.1.5",
+    "langdetect>=1.0.9",
+    "langgraph>=1.0.5",
+    "pandas>=2.3.3",
+    "playwright>=1.57.0",
+    "pydantic>=2.12.4",
+    "python-dotenv>=1.2.1",
+    "requests>=2.32.5",
+    "typing-extensions>=4.15.0",
+    "wikipedia>=1.4.0",
+]
