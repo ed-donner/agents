@@ -4,31 +4,38 @@ An AI agent that completes tasks step-by-step with intelligent evaluation feedba
 
 ## **Quick Start**
 
-### **1. Setup**
+### **1. Install Dependencies**
 ```bash
-# Clone and navigate to project
-cd projects
+# Using pip (recommended for all users)
+pip install -e .
 
-# Install dependencies
+# Or using uv (faster alternative)
 uv sync
+```
 
-# Copy environment file
+### **2. Configure Environment**
+```bash
+# Copy the example environment file
 cp .env.example .env
 
 # Add your API keys to .env
 ```
 
-### **2. Get API Keys**
-- **Azure OpenAI**: [Azure Portal](https://portal.azure.com)
-- **Google Serper**: [serper.dev](https://serper.dev)
-- **Pushover**: [pushover.net](https://pushover.net) (optional)
+**Required API Keys:**
+- **Azure OpenAI**: Get from [Azure Portal](https://portal.azure.com)
+- **Google Serper**: Get from [serper.dev](https://serper.dev)
+- **Pushover** (optional): Get from [pushover.net](https://pushover.net)
 
-### **3. Run**
+### **3. Run the App**
 ```bash
+# Using pip installation
+python app.py
+
+# Or using uv
 uv run app.py
 ```
 
-Then open `http://127.0.0.1:7860` in your browser.
+Open `http://127.0.0.1:7860` in your browser.
 
 ---
 
@@ -67,12 +74,13 @@ Then open `http://127.0.0.1:7860` in your browser.
 ## **Project Structure**
 
 ```
-projects/
-├── app.py              # Gradio UI interface
-├── sidekick.py         # LangGraph agent logic
+sidekick/
+├── app.py              # Gradio UI
+├── sidekick.py         # LangGraph agent
 ├── sidekick_tools.py   # Tool integrations
-├── .env.example        # Environment template
-└── sandbox/            # File storage
+├── pyproject.toml      # Dependencies
+├── .env.example        # Configuration template
+└── README.md           # Documentation
 ```
 
 ---

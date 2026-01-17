@@ -1,7 +1,7 @@
 [project]
-name = "projects"
+name = "sidekick"
 version = "0.1.0"
-description = "Add your description here"
+description = "AI agent that completes tasks step-by-step with intelligent evaluation feedback"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
