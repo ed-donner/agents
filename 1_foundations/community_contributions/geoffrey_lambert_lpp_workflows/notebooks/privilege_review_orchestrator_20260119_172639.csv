@@ -1,0 +1,2 @@
+doc_id,doc_type,subtasks_generated,subtasks_executed,classification,confidence_score,waiver_identified,legal_basis,reasoning,recommendation,reviewer_notes,reviewer_decision,reviewed_by,review_date
+DOC001,email_chain,10,5,PARTIAL_PRIVILEGE,85,Yes,,,,,,,
