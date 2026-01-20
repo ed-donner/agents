@@ -1,0 +1,36 @@
+research_task:
+  description: >
+    Conduct a thorough research about {company} in the year {current_year}. Focus on :
+    1. Analyzing the overall third party vendors associated with Organization as per Geography
+    2. Financial Data highlighting risk for the {company} (Example Bankruptcy filed by Organization, any Association with criminal organization or child labour practises)
+    3. Recent news and events
+    4. Any current Geopolitical event that can have impact on Third party Vendor and develops a new risk for {company}
+    5. Future Outlook and Prospects
+
+    Make sure to organize your findings in a structured format with clear sections.
+
+  expected_output: >
+    A comprehensive research document with well-organized sections covering
+    all the requested aspects of {company} for the year {current_year}. Include specific facts, figures,
+    and examples where relevant.
+  agent: researcher
+
+analysis_task:
+  description: >
+    Analyze the research findings and create a comprehensive report on {company} in the current year {current_year}
+    Your Report should:
+    1. Executive Summary
+    2. Statistics on Third Party Vendors for the Organization
+    3. Include all key information from the research
+    4. Categorize Risks (Critical, High, Medium, Low) for Vendors
+    5. List Top 5 Vendors as per the Criticality of the Risks
+    6. Highlight Top Trending news for the organization
+    7. Be Formatted in a professional, Easy to read Style with full section of information.
+
+  expected_output: >
+    A Polished professional visulization freindly report on {company} that presents the research findings with added analysis and insights.
+    The report should be well-structured with an executive summary, Vendor specific, Risk Specific sections, Latest news sections and Conclusions.
+  agent: analyst
+  context:
+    - research_task
+  output_file: output/ThirdPartyRiskReport.md
