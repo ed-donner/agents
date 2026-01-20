@@ -1,0 +1,10 @@
+gradio>=5.22.0
+openai>=1.68.2
+openai-agents>=0.0.6
+python-dotenv>=1.0.1
+sendgrid>=6.11.0
+requests>=2.32.3
+bs4>=0.0.2
+httpx>=0.28.1
+pydantic>=2.0.0
+typing-extensions>=4.0.0 
