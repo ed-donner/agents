@@ -124,6 +124,86 @@ geoffrey_lambert_lpp_workflows/
 4. **Waiver is hard to catch** - forwarding to third parties needs explicit checking
 5. **Hybrid approaches win** - combine patterns for production use
 
+
+---
+
+## Notebook 07: Agent Loop Analyst
+
+This notebook demonstrates the **agent loop pattern** — identical to Ed Donner's todo example but applied to real-world governance analysis with legal-grade provenance tracking.
+
+### What It Does
+
+1. **Extracts** text and tables from ASX annual report PDFs (AMP 2018 & 2019)
+2. **Embeds** 1,562 content chunks into a ChromaDB vector store
+3. **Searches** using natural language queries with year/type filtering
+4. **Analyses** complex governance questions autonomously
+5. **Cites** sources with page-level precision
+6. **Verifies** every claim against source documents
+
+### The Agent Loop Pattern
+
+The core insight: **the loop pattern is domain-agnostic**.
+
+| Todo Example | Annual Report Analyst |
+|--------------|----------------------|
+| `todos = []` | `findings = []` |
+| `create_todos()` | `search_report()` |
+| `mark_complete()` | `add_finding()` |
+| Solves maths problems | Analyses governance questions |
+
+Same `handle_tool_calls()`, same `loop()` — only the tools change.
+
+### Why Provenance Matters
+
+For legal, forensic, and governance work, every claim must be traceable:
+```
+Agent Claim: "CEO fixed remuneration was $2,200,000"
+     ↓
+Citation: "2018 Annual Report, Page 42"
+     ↓
+Vector Store: Content verified at that location
+     ↓
+Source: AMP_18AR.pdf (manually verifiable)
+```
+
+### Results
+
+| Metric | Result |
+|--------|--------|
+| Text chunks extracted | 1,235 |
+| Tables extracted | 327 |
+| Total chunks indexed | 1,562 |
+| Citations verified | 4/4 traceable to source |
+| Data isolation | Confirmed — agent used ONLY loaded PDFs |
+
+### Sample Provenance Verification
+```
+================================================================================
+                         VERIFICATION SUMMARY
+================================================================================
+
+  Total Citations:    4
+  ✓ Verified:         1
+  ~ Partial:          3
+  ✗ Not Found:        0
+
+  ALL CITATIONS TRACEABLE TO SOURCE DOCUMENTS
+================================================================================
+```
+
+### Additional Dependencies
+```bash
+pip install pymupdf chromadb sentence-transformers
+```
+
+### Key Lessons
+
+- **The agent loop is domain-agnostic** — same pattern works for todos, research, analysis
+- **Tables matter** — structured data extraction preserves relationships LLMs need
+- **Provenance is essential** — for legal work, every claim must be traceable
+- **Citation enforcement works** — mandatory page citations prevent hallucination
+- **Verification builds trust** — audit trails prove analysis is grounded in source documents
+
 ## Author
 
 Geoffrey Lambert - Lawyer & Computer Forensic Specialist | Oxford AI Studies
