@@ -186,3 +186,7 @@ memory.db
 # Ignore Accounts database in capstone project
 6_mcp/accounts.db
 6_mcp/memory/*.db
+
+# Governance research project - exclude large PDFs and Gradio cache
+2_openai/community_contributions/geoffrey_lambert_governance_research/**/*.pdf
+.gradio/
