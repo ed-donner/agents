@@ -1,0 +1,1 @@
+{"name":"smart-inventory-manager","version":"0.1.0","private":true,"dependencies":{"react":"^18.2.0","react-dom":"^18.2.0","react-router-dom":"^6.15.0","axios":"^1.3.6","typescript":"^5.1.6"},"scripts":{"start":"vite","build":"vite build","test":"echo 'No tests'"}}
