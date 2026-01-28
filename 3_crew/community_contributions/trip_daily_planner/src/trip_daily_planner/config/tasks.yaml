@@ -1,0 +1,58 @@
+personalized_activity_planning_task:
+  description: >
+    Research and find cool things to do at {destination}.
+    Focus on activities and events that match the traveler's personal interests.
+    Utilize internet search tools and recommendation engines to gather the information.
+
+
+    Traveler's information:
+
+    - destination: {destination}
+
+    - personal interests: {personal_interests}
+
+    - hotel localtion: {hotel_location}
+
+    - flight infromation: {flight_information}
+
+    - how long is the trip: {trip_duration}
+
+
+  expected_output: >
+    A list of recommended activities and events for each day of the trip.
+    Each entry should include the activity name, location, a brief description.
+    And potential reviews and ratings of the activities.
+  agent: personalized_activity_planner  
+    
+restaurant_location_scout_task:
+  description: >
+    Take {dining_preferences_restrictions} into consideration and find highly-rated restaurants that do not break the bank at {destination}.
+    Use internet search tools, restaurant review sites, and travel guides.
+
+  expected_output: >
+    A list of recommended restaurants for each day of the trip.
+    Each entry should include the name, location (address), type of cuisine or activity, and a brief description.
+  agent: restaurant_scout
+
+itinerary_compilation_task:
+  description: >
+    Compile all researched information into a comprehensive day-by-day itinerary for the trip in {destination}.
+    Use text formatting and document creation tools to organize the information.
+  expected_output: >
+    A detailed itinerary document, the itinerary should include a day-by-day
+  agent: itinerary_compiler
+  context:
+    - personalized_activity_planning_task
+    - restaurant_location_scout_task
+  output_file: output/itinerary.json
+
+format_send_email_task:
+  description: >
+    Given a day-by-day itinerary json, remove line feeds if any, convert it into a clean, well presented HTML body with an appropriate subject line and send the email
+    Then use the 'send email' tool to send {email_to} a comprehensive day-by-day itinerary for the trip in {destination}.
+  expected_output: >
+    An email of a clean, well presented HTML body with an appropriate subject line
+  agent: email_agent
+  context:
+    - itinerary_compilation_task
+  

@@ -1,0 +1,10 @@
+[project]
+name = "tools-usage-experiments"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "openai-agents>=0.5.0",
+    "python-dotenv>=1.2.1",
+]

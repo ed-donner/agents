@@ -1,0 +1,291 @@
+find_stores:
+  description: >
+    Search for grocery stores near {location} that are likely to have
+    good high-protein food options. Focus on well-known chains like
+    Trader Joe's, Whole Foods, Costco, Molly Stone's, and Target.
+  expected_output: >
+    Provide ONLY:
+    - Store names (exactly as they appear: "Trader Joe's", "Whole Foods", "Costco", "Molly Stone's", "Target")
+    - Approximate distance from {location}
+    - Brief note on their high-protein food reputation
+
+    Format as a simple list:
+    1. Store Name - Distance
+    2. Store Name - Distance
+    ...
+
+    Return 3-5 stores maximum. Be precise with store names for proper matching.
+  agent: store_locator
+
+# TEMPLATE for dynamically created store search tasks
+# This template is used by crew.py to create one task per store
+# Variables: {store_name}, {store_website}, {location}, {dietary_preferences}, {products_count}
+store_search_template:
+  description: >
+    Research and identify exactly {products_count} high-protein products (20g+ protein per serving)
+    available at {store_name} near {location}.
+
+    SEARCH STRATEGY:
+    1. Frozen & shelf-stable focus: "{store_name} frozen chicken", "{store_name} frozen fish", "{store_name} protein powder"
+    2. Ready-to-eat options: "{store_name} rotisserie chicken", "{store_name} protein bars", "{store_name} Greek yogurt"
+    3. Site-specific search: "site:{store_website} protein 20g frozen"
+    4. Convenience products: "{store_name} ready to eat high protein", "{store_name} meal prep protein"
+    5. Community reviews: "{store_name} best frozen protein foods site:reddit.com"
+
+    DIETARY FILTERS (MUST apply to ALL searches):
+    - Match preferences: {dietary_preferences}
+    - Exclude: beef, pork, turkey, tuna
+    - Include: chicken, fish (not tuna), salmon, shrimp, eggs, plant-based
+    - Prefer: gluten-free, reduced sugar (5-10g max), low sugar
+    - Look for: frozen and shelf-stable options
+
+    FOR EACH PRODUCT, gather complete information:
+    - Exact product name and brand
+    - Store: {store_name}
+    - Protein: grams per serving (MUST be 20g+)
+    - Serving size: (e.g., "1 cup", "3 oz", "1 container")
+    - Price: $ (search "[product name] {store_name} price" if needed)
+    - Category: (Greek Yogurt, Protein Powder, Protein Bars, Chicken, Salmon, Eggs, Shrimp, Other)
+    - Full nutrition: calories, fat, carbs, fiber, sugar
+    - Gluten-free: YES/NO/UNKNOWN
+    - Contains excluded items: Check for beef/pork/turkey/tuna
+    - Sugar content: grams (flag if >10g)
+
+    TARGET: Find exactly {products_count} products. If you can't find enough, note why.
+
+    QUALITY REQUIREMENTS:
+    - Verify 20g+ protein is per SERVING, not per package
+    - Confirm products are actually sold at {store_name}
+    - Prioritize products with complete nutritional data
+    - If data incomplete, clearly mark as "NEEDS VERIFICATION"
+  expected_output: >
+    A structured list of {products_count} high-protein products from {store_name}:
+
+    ## {store_name} High-Protein Products
+
+    1. [Product Name and Brand]
+       - Protein: Xg per serving (serving size)
+       - Price: $X.XX
+       - Category: [category]
+       - Nutrition: X cal, Xg fat, Xg carbs, Xg fiber, Xg sugar
+       - Gluten-free: YES/NO
+       - Sugar: Xg (FLAGGED if >10g)
+       - Excludes: beef/pork/turkey/tuna ✓
+       - Notes: [any relevant details, availability, flavors]
+
+    [Repeat for all {products_count} products]
+
+    If fewer than {products_count} products found, explain why (limited availability, dietary restrictions, etc.)
+
+research_protein_items:
+  description: >
+    Research and identify high-protein (20g+ protein per serving) products available at EACH store identified for {location}.
+
+    SEARCH STRATEGY FOR EACH STORE:
+    1. Search specifically: "[Store Name] high protein products 20g"
+    2. Search product categories: "[Store Name] protein powder" "[Store Name] Greek yogurt" "[Store Name] chicken breast"
+    3. Look for product reviews: "[Store Name] best high protein foods site:reddit.com"
+    4. Check store websites directly: "site:traderjoes.com protein" or "site:costco.com protein shake"
+
+    DIETARY PREFERENCE FILTERS (Apply to ALL searches):
+    - Match: {dietary_preferences}
+    - Exclude beef and pork products
+    - Prioritize chicken, fish, eggs, plant-based
+    - Look for gluten-free labels
+    - Avoid added sugar products
+    - Include frozen and shelf-stable options
+
+    For EACH product found, gather:
+    - Exact product name (not generic descriptions)
+    - Store where available
+    - Protein content in grams per serving (MUST be 20g+)
+    - Serving size (e.g., "1 cup", "3 oz", "1 container")
+    - Price (search for "[product name] price [store]" if not found)
+    - Category (dairy, plant-based, meat, seafood, supplements, whole-foods)
+    - Full nutrition: calories, fat, carbs, fiber, sugar
+    - Gluten-free status (YES/NO/UNKNOWN)
+    - Whether contains beef or pork (important for filtering)
+
+    MINIMUM TARGET: At least 5 products per store (aim for 7-10 if possible)
+
+    QUALITY REQUIREMENTS:
+    - Verify protein content is 20g+ per serving (not per package)
+    - Confirm products are actually sold at the specified store
+    - If information is incomplete, note it clearly
+  expected_output: >
+    A comprehensive, well-organized list of high-protein products grouped by store.
+
+    Format as:
+
+    ## STORE NAME 1
+    1. Product Name
+       - Protein: Xg per serving (serving size)
+       - Price: $X.XX
+       - Category: [category]
+       - Nutrition: X cal, Xg fat, Xg carbs, Xg fiber, Xg sugar
+       - Gluten-free: YES/NO
+       - Contains beef/pork: NO
+       - Notes: [any relevant details]
+
+    [Repeat for each product and store]
+
+    Include at minimum 5 products per store. Flag any products with incomplete data.
+  agent: nutrition_researcher
+  context:
+    - find_stores_task
+
+validate_products:
+  description: >
+    Validate ALL products from the research findings to ensure they meet requirements.
+
+    VALIDATION CHECKLIST for EACH product:
+    1. Protein content is 20g or higher per serving
+    2. Matches dietary preferences: {dietary_preferences}
+       - No beef or pork
+       - Gluten-free preferred
+       - No added sugar preferred
+    3. Nutritional information is complete (protein, calories, price)
+    4. Product is actually available at the specified store
+    5. Serving size is clearly specified
+
+    ACTIONS:
+    - Create a "VALIDATED PRODUCTS" list with only products that pass all checks
+    - Create a "FLAGGED PRODUCTS" list with products that fail any check (explain why)
+    - For products with incomplete data, flag them as "NEEDS MORE INFO"
+    - Calculate protein-per-dollar ratio for products with price info
+
+    QUALITY METRICS:
+    - Total validated products across all stores
+    - Average protein content
+    - Price range
+    - Category distribution (how many dairy, plant-based, meat, etc.)
+  expected_output: >
+    A validation report with two sections:
+
+    ## VALIDATED PRODUCTS (Ready for Recommendations)
+    [List of products that passed all checks, organized by store]
+
+    ## FLAGGED PRODUCTS (Issues Found)
+    [List of products with issues and reasons why they were flagged]
+
+    ## VALIDATION SUMMARY
+    - Total products validated: X
+    - Total products flagged: X
+    - Average protein content: Xg
+    - Price range: $X.XX - $X.XX
+    - Category breakdown: X dairy, X plant-based, X meat/seafood, X supplements
+
+    Only products in the VALIDATED section should be used for final recommendations.
+  agent: nutrition_validator
+  context:
+    - research_protein_items_task
+
+create_recommendations:
+  description: >
+    Create personalized high-protein food recommendations using ONLY the VALIDATED PRODUCTS
+    from the validation report. Base recommendations on {dietary_preferences} and location {location}.
+
+    RECOMMENDATION CRITERIA (in priority order):
+    1. Protein content - Prioritize highest protein per serving (20g+)
+    2. Dietary compliance - MUST match {dietary_preferences} (no beef/pork, gluten-free, no sugar)
+    3. Value - Calculate and consider protein-per-dollar ratio
+    4. Convenience - Prioritize ready-to-eat or minimal prep (frozen/shelf-stable OK)
+    5. Variety - Ensure different protein sources (dairy, plant-based, seafood, eggs)
+    6. Availability - Consider store proximity and accessibility
+
+    CREATE THE FOLLOWING SECTIONS:
+
+    1. TOP 3 ITEMS BY STORE (MUST INCLUDE!)
+       - Group recommendations by store
+       - Show exactly 3 best items from EACH store that was searched
+       - Format:
+         ### [Store Name]
+         1. [Product] - Protein: Xg, Price: $X, Why: [reason]
+         2. [Product] - Protein: Xg, Price: $X, Why: [reason]
+         3. [Product] - Protein: Xg, Price: $X, Why: [reason]
+       - Include ALL stores: Trader Joe's, Whole Foods, Molly Stone's, Costco, Target
+       - Prioritize: frozen items, protein powders, protein bars, ready-to-eat meals
+
+    2. FROZEN & SHELF-STABLE OPTIONS (Most Important!)
+       - Frozen chicken, fish, shrimp from all stores
+       - Protein powders and bars from all stores
+       - Shelf-stable protein shakes
+       - Highlight which store has best frozen options
+       - Long shelf-life convenience
+
+    3. MOST CONVENIENT OPTIONS
+       - Ready-to-eat or minimal prep items from all stores
+       - Rotisserie chicken, pre-cooked proteins
+       - Perfect for quick meals or on-the-go
+       - Compare convenience across stores
+
+    4. BEST VALUE OPTIONS
+       - Highest protein-per-dollar ratio from each store
+       - Budget-friendly choices comparison
+       - Show which store offers best value
+
+    5. SHOPPING STRATEGY
+       - List stores in visit priority order (based on product availability and proximity)
+       - For each store: exact products to buy and estimated cost
+       - Total estimated shopping time
+
+    5. VARIETY ANALYSIS
+       - Ensure recommendations cover different protein sources
+       - Suggest rotation strategy to avoid monotony
+
+    6. SUMMARY
+       - Total protein potential from recommendations
+       - Estimated weekly/monthly budget
+       - Key benefits of this shopping plan
+  expected_output: >
+    A well-formatted markdown report containing:
+
+    # High-Protein Food Recommendations for {location}
+
+    ## Top 3 Items By Store
+
+    ### Trader Joe's
+    1. [Product Name] - Protein: Xg per serving, Price: $X.XX, Why: [reason]
+    2. [Product Name] - Protein: Xg per serving, Price: $X.XX, Why: [reason]
+    3. [Product Name] - Protein: Xg per serving, Price: $X.XX, Why: [reason]
+
+    ### Whole Foods
+    1. [Product Name] - Protein: Xg per serving, Price: $X.XX, Why: [reason]
+    2. [Product Name] - Protein: Xg per serving, Price: $X.XX, Why: [reason]
+    3. [Product Name] - Protein: Xg per serving, Price: $X.XX, Why: [reason]
+
+    ### Molly Stone's
+    1. [Product Name] - Protein: Xg per serving, Price: $X.XX, Why: [reason]
+    2. [Product Name] - Protein: Xg per serving, Price: $X.XX, Why: [reason]
+    3. [Product Name] - Protein: Xg per serving, Price: $X.XX, Why: [reason]
+
+    ### Costco
+    1. [Product Name] - Protein: Xg per serving, Price: $X.XX, Why: [reason]
+    2. [Product Name] - Protein: Xg per serving, Price: $X.XX, Why: [reason]
+    3. [Product Name] - Protein: Xg per serving, Price: $X.XX, Why: [reason]
+
+    ### Target
+    1. [Product Name] - Protein: Xg per serving, Price: $X.XX, Why: [reason]
+    2. [Product Name] - Protein: Xg per serving, Price: $X.XX, Why: [reason]
+    3. [Product Name] - Protein: Xg per serving, Price: $X.XX, Why: [reason]
+
+    ## Frozen & Shelf-Stable Options
+    (Best frozen items, protein powders, bars from all stores)
+
+    ## Most Convenient Options
+    (Ready-to-eat items from all stores)
+
+    ## Best Value Options
+    (Highest protein-per-dollar from each store)
+
+    ## Shopping Strategy
+    (Which stores to visit, what to buy at each, estimated costs)
+
+    ## Summary
+    (Total protein potential, estimated budget, variety notes)
+  agent: recommendation_specialist
+  context:
+    - find_stores_task
+    - research_protein_items_task
+    - validate_products_task
+  output_file: output/protein_recommendations.md
