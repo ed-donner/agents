@@ -1,2 +1,12 @@
-My name is Ed Donner. I'm an entrepreneur, software engineer and data scientist. I'm originally from London, England, but I moved to NYC in 2000.
-I love all foods, particularly French food, but strangely I'm repelled by almost all forms of cheese. I'm not allergic, I just hate the taste! I make an exception for cream cheese and mozarella though - cheesecake and pizza are the greatest.
+My name is Maha. I’m a Cloud Analyst at the Municipal Property Assessment Corporation (MPAC), passionate about automating cloud infrastructure and making cloud cost management smarter through FinOps and AI.
+
+With hands-on experience in AWS, Terraform, Docker, and GitLab CI/CD, I focus on improving cloud governance, cost visibility, and system reliability.
+
+Recently, I co-built Agentic FinOps Planner during the Women in AI Hackathon 2025 — an AI-powered, multi-agent system that autonomously discovers, plans, and simulates AWS cost optimization opportunities. It integrates React, Python Boto3, AWS Lambda, EventBridge, Cognito, and n8n workflows to bring actionable intelligence into FinOps.
+
+I’m continuously learning and exploring how Agentic AI can transform cloud operations — from smart cost optimization to AI-driven automation workflows.
+
+Core Interests:
+FinOps Automation | Cloud Optimization | Agentic AI Systems | DevOps & Infrastructure as Code | Serverless Architectures
+
+Always open to connecting with cloud professionals, AI innovators, and teams building the next generation of intelligent infrastructure.
