@@ -30,13 +30,12 @@ class WebPageLangAuditor:
         """
         recommendation = None
         status = "Manual Check"
-        # 1️⃣ Content does not match declared language
         try:
             if not html_lang_raw:
                 status, recommendation = "Critical", "HTML lang attribute is missing."
             elif not match:
                 status, recommendation = "Critical", "The detected text language does not match the HTML tag."
-            # 2️⃣ Whitespace is always a syntax error
+            
             elif html_lang_raw != html_lang_raw.strip():
                 normalized = standardize_tag(html_lang_raw)
                 status, recommendation = "Fix", f"Syntax error (whitespace). Change '{html_lang_raw}' to '{normalized}'"
@@ -44,33 +43,25 @@ class WebPageLangAuditor:
             elif not iana_valid:
                 normalized = standardize_tag(html_lang_raw)
                 status, recommendation = "Fix", f"Invalid BCP 47 syntax. Change '{html_lang_raw}' to '{normalized}'"
-            # 4️⃣ Only consider canonicalization if IANA-valid
             elif iana_valid:
                 normalized = standardize_tag(html_lang_raw)
                 if html_lang_raw != normalized:
                     status, recommendation = "Keep", f"Valid, but standard suggests '{normalized}'"
                 else:
-                    # 5️⃣ Fully correct
+                    
                     status, recommendation = "Keep", "Perfect"
         except Exception as e:
             status = "Error"
             recommendation = f"Exception occurred: {type(e).__name__}"
         else:
-            # This runs if NO EXCEPTION was raised
-            # You can use this for logging successful audits
             print(f"Audit successful for: {html_lang_raw}")
         finally:
-            # This ALWAYS runs. Great for final cleanup or formatting.
-            # Ensure we always return a clean tuple
             return status, recommendation
 
 
     def get_url_lang_data_langcodes(self, url: str):
-        # Default values
         current_url = url
-        # FIX: removed trailing comma (it was creating a tuple!)
         html_lang_raw = lang_extracted = lang_detected = sp_pop = response_status = lang_obj = None
-
         match_found, iana_valid = False, False
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -82,20 +73,15 @@ class WebPageLangAuditor:
             if response.text:
                 soup = BeautifulSoup(response.text, "html.parser")
                 html_tag = soup.find("html")
-                # 1. RAW Tag Capture
                 if html_tag and html_tag.has_attr("lang"):
                     html_lang_raw = html_tag.get("lang", "") 
-                    # 2. Strict Validation
                     try:
                         lang_obj = Language.get(html_lang_raw, normalize=False)
                         iana_valid = lang_obj.is_valid()
-                        #print(f"en-DZ is valid?: {Language.get('en-DZ').is_valid()}")
-                        
                         lang_extracted = lang_obj.language 
                     except (LanguageTagError, Exception):
                         iana_valid, lang_extracted = False, "invalid"
 
-                # 3. Text Extraction
                 for tag in soup(["script", "style", "noscript"]):
                     tag.decompose()
                 text = soup.get_text(separator=" ", strip=True)
@@ -105,7 +91,6 @@ class WebPageLangAuditor:
                     try:
                         lang_detected = detect(text).lower()
                         print(lang_detected, "lang detected")
-                        # 4. Strict Distance Check (No stripping)
                         try:
                             dist = tag_distance(html_lang_raw, lang_detected)
                             print(f"dist: {dist}, html_lang_raw: {html_lang_raw}, lang_detected: {lang_detected}")
@@ -117,7 +102,6 @@ class WebPageLangAuditor:
                             match_found = (lang_extracted == lang_detected)
                     except LangDetectException:
                         lang_detected, match_found = "detection_error", False
-                # 5. Get Status and Recommendation
                 status, recommendation = self.get_technical_advice_red(match_found, iana_valid, html_lang_raw)
                 try:
                     sp_pop = Language.get(html_lang_raw, normalize=True).speaking_population()
@@ -142,15 +126,12 @@ class WebPageLangAuditor:
     def run_web_lang_auditor(self):
         csv_df = self.csv_data
         total = len(csv_df)
-        # Professional Loop Implementation
         for index, row in csv_df.iterrows():
             url = row['url']
             print(f"Progress: [{index + 1}/{total}] Processing: {url}")
-            # 1. Hit the page
             res = self.get_url_lang_data_langcodes(url)
             self.raw_results.append(res)
-            # 2. Random Delay to mimic human browsing (1.0 to 2.5 seconds)
-            if index < total - 1: # Don't wait after the very last one
+            if index < total - 1: 
                 delay = random.uniform(1.0, 2.5)
                 time.sleep(delay)
     
@@ -159,7 +140,6 @@ class WebPageLangAuditor:
         self.final_df = pd.concat([self.csv_data.reset_index(drop=True), results_df], axis=1)
 
     def write_output_file(self):
-        ### Save Output ###
         output_path = os.path.join(self.output_folder_path, f'{self.timestamp}_result.csv')
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         self.final_df.to_csv(output_path, index=False)
