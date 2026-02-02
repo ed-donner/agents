@@ -42,7 +42,10 @@ https://openai.github.io/openai-agents-python/handoffs/
 
 import logging
 
-from pydantic import BaseModel
+from pydantic import (
+    BaseModel,
+    Field,
+)
 
 from agents import (
     Agent,
@@ -50,6 +53,7 @@ from agents import (
     RunContextWrapper,
     handoff,
 )
+
 from .hook import MyAgentHook
 from .tool import send_contact_request_tool
 
@@ -71,14 +75,9 @@ class EscalationData(BaseModel):
     This model defines the information collected when the main agent
     decides to escalate a conversation to a supervisor. The LLM will
     populate these fields based on the conversation context.
-
-    Attributes:
-        reason: A description of why the escalation is occurring.
-                This helps the receiving agent understand the context
-                and handle the request appropriately.
     """
 
-    reason: str
+    reason: str = Field(..., description="A description of why the escalation is occurring.")
 
 
 # =============================================================================

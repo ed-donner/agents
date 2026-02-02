@@ -86,7 +86,10 @@ from typing import (
     Union,
 )
 
-from pydantic import BaseModel
+from pydantic import (
+    BaseModel,
+    Field,
+)
 
 from agents import (
     Agent,
@@ -116,27 +119,19 @@ logger = logging.getLogger(__name__)
 
 
 class FoulLanguage(BaseModel):
-    """Structured output model for foul language detection.
+    """Structured output model for foul language detection."""
 
-    Attributes:
-        is_foul_language: True if foul language was detected, False otherwise.
-        offense: Description of the detected offense, or empty if none found.
-    """
-
-    is_foul_language: bool
-    offense: str
+    is_foul_language: bool = Field(..., description="True if foul language detected, False otherwise.")
+    offense: str = Field(..., description="Description of the detected offense, or empty if none found.")
 
 
 class UnprofessionalResponse(BaseModel):
-    """Structured output model for unprofessional response detection.
+    """Structured output model for unprofessional response detection."""
 
-    Attributes:
-        is_not_professional: True if the response was unprofessional, False otherwise.
-        reasoning: Explanation of why the response was classified as unprofessional, or empty if none found.
-    """
-
-    is_not_professional: bool
-    reasoning: str
+    is_not_professional: bool = Field(..., description="True if response is unprofessional, False otherwise.")
+    reasoning: str = Field(
+        ..., description="Explanation of why the response was classified as unprofessional, or empty if none found."
+    )
 
 
 # =============================================================================

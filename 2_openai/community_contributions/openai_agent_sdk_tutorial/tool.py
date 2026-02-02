@@ -49,7 +49,10 @@ from typing import (
 )
 
 import requests
-from pydantic import BaseModel
+from pydantic import (
+    BaseModel,
+    Field,
+)
 
 from agents import (
     Agent,
@@ -107,15 +110,12 @@ logger = logging.getLogger(__name__)
 
 
 class ConfidentialInformation(BaseModel):
-    """Structured output model for confidential information detection.
+    """Structured output model for confidential information detection."""
 
-    Attributes:
-        is_confidential: True if confidential information was detected, False otherwise.
-        details: Description of the detected confidential information, or empty if none found.
-    """
-
-    is_confidential: bool
-    details: str
+    is_confidential: bool = Field(..., description="True if confidential information was detected, False otherwise.")
+    details: str = Field(
+        ..., description="Description of the detected confidential information, or empty if none found."
+    )
 
 
 tool_input_guardrail_agent = Agent(
