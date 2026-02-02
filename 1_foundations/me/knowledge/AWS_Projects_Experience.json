@@ -1,0 +1,104 @@
+{
+  "topic": "AWS Cloud Architecture - Production Learnings",
+  "date": "2024",
+  "projects": [
+    {
+      "name": "Multi-Region Disaster Recovery",
+      "technologies": ["AWS", "Terraform", "Route53", "RDS", "S3"],
+      "challenge": "Global e-commerce platformu için %99.99 uptime garantisi",
+      "solution": {
+        "architecture": "Active-active multi-region deployment",
+        "components": [
+          "Route53 health checks ile automatic failover",
+          "Cross-region RDS replication (lag < 1s)",
+          "S3 cross-region replication for assets",
+          "CloudFront global CDN distribution"
+        ],
+        "results": [
+          "Zero downtime deployments achieved",
+          "RTO < 5 minutes, RPO < 1 minute",
+          "%35 cost optimization with spot instances"
+        ]
+      },
+      "lessons_learned": [
+        "Cross-region networking her zaman test edilmeli (latency surprises)",
+        "Terraform state locking S3+DynamoDB ile şart (conflict prevention)",
+        "Spot instance termination handler her zaman implement et"
+      ]
+    },
+    {
+      "name": "Kubernetes Cost Optimization",
+      "technologies": ["EKS", "Karpenter", "Prometheus", "Grafana"],
+      "challenge": "$50K/month EKS cluster maliyeti çok yüksek",
+      "solution": {
+        "approach": "Right-sizing + autoscaling + spot instances",
+        "implementation": [
+          "Karpenter ile dynamic node provisioning",
+          "VPA (Vertical Pod Autoscaler) ile resource optimization",
+          "HPA + KEDA ile workload-based scaling",
+          "Spot instances for stateless workloads (%70 of cluster)"
+        ],
+        "results": [
+          "$50K → $18K monthly cost (%64 reduction)",
+          "Zero production incidents",
+          "Improved resource utilization from %23 to %67"
+        ]
+      },
+      "lessons_learned": [
+        "VPA ve HPA birlikte kullanma - conflict yaratıyor",
+        "Karpenter, Cluster Autoscaler'dan çok daha efficient",
+        "Spot termination handler critical - graceful shutdown şart",
+        "Monitoring without action waste - alerting + automation gerekli"
+      ]
+    },
+    {
+      "name": "Serverless Data Pipeline",
+      "technologies": ["Lambda", "Step Functions", "EventBridge", "Glue", "Athena"],
+      "challenge": "Günlük 10TB log processing, cost-effective ve scalable",
+      "solution": {
+        "architecture": "Event-driven serverless pipeline",
+        "flow": [
+          "S3 event → Lambda trigger → initial processing",
+          "Step Functions orchestration for complex workflows",
+          "Glue ETL jobs for heavy transformations",
+          "Athena for ad-hoc analysis",
+          "EventBridge for scheduling and routing"
+        ],
+        "results": [
+          "Processing time: 6 hours → 45 minutes",
+          "Cost: $12K/month → $3K/month (%75 reduction)",
+          "Zero infrastructure management"
+        ]
+      },
+      "lessons_learned": [
+        "Lambda cold start sorunu - provisioned concurrency gerekli critical path'lerde",
+        "Step Functions state machine design kritik - retry/error handling",
+        "S3 partitioning stratejisi query performance'ı 10x artırıyor",
+        "CloudWatch Insights > Splunk for serverless debugging"
+      ]
+    }
+  ],
+  "general_best_practices": {
+    "cost_optimization": [
+      "Reserved instances sadece predictable workload'lar için",
+      "Savings Plans daha flexible, %40+ discount",
+      "Spot instances where possible, always with fallback",
+      "S3 Intelligent-Tiering otomatik cost optimization",
+      "CloudWatch Logs retention policy - 30 days enough usually"
+    ],
+    "security": [
+      "IAM roles > access keys (her zaman)",
+      "Least privilege principle - start minimal, expand as needed",
+      "VPC endpoints for AWS services (no internet gateway needed)",
+      "Secrets Manager for credentials, parameter store for config",
+      "GuardDuty + Security Hub for threat detection"
+    ],
+    "observability": [
+      "Distributed tracing (X-Ray) critical microservices'de",
+      "Custom CloudWatch metrics > parsing logs",
+      "Prometheus + Grafana for container metrics",
+      "Structured logging (JSON) > plain text",
+      "Alerting fatigue real - tune thresholds carefully"
+    ]
+  }
+}

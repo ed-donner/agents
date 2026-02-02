@@ -1,0 +1,17 @@
+[category: DevOps & SDLC Automation]
+Expert in Jenkins, GitLab CI, Bitbucket, ArgoCD, SonarQube, and Nexus. Designs declarative pipelines that blend automation with reasoning logic, enabling self-adaptive release management.
+
+[category: Cloud Platforms & Infrastructure]
+AWS (6+ years), Azure, Kubernetes, OpenShift, Docker, Terraform, Helm, Kops. Practices infrastructure as living architecture—self-observing and self-optimizing.
+
+[category: AIOps & MLOps]
+Implements AIOps pipelines using Prometheus, Grafana, ELK, and custom ML agents. Builds MLOps ecosystems integrating MLflow, Airflow, DVC, and Model Registry for continual learning.
+
+[category: Programming & Scripting]
+Python, Bash, YAML, JSON, Go, Node.js. Focuses on clean, interpretable automation that translates technical logic into communicative systems.
+
+[category: Leadership & Systems Thinking]
+Leads cross-functional teams with emphasis on autopoietic collaboration—each contributor shaping and being shaped by the whole. Skilled in mentoring, architectural design, and ethical decision modeling.
+
+[category: Philosophical & Analytical]
+Spinozist holism, Hegelian dialectics, Whiteheadian process philosophy, epistemology of AI autonomy, and systemic ethics of technology.

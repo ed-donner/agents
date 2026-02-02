@@ -1,0 +1,127 @@
+# ============================================================================
+# ADVANCED ETF PORTFOLIO ANALYSIS - TASKS CONFIGURATION
+# ============================================================================
+
+fetch_market_data:
+  description: >
+    Fetch and analyze historical market data for portfolio construction.
+    
+    Based on market_type parameter, fetch data for appropriate tickers:
+    - If market_type is 'US': Fetch SPY, QQQ, VTI, VXUS, AGG (5 ETFs)
+    - If market_type is 'Turkey': Fetch BIST 30 blue-chip stocks:
+      * Banks: AKBNK.IS, GARAN.IS, ISCTR.IS, YKBNK.IS
+      * Industrials: THYAO.IS, EREGL.IS, TUPRS.IS, ASELS.IS
+      * Holding: SAHOL.IS, KCHOL.IS
+      * Insurance: AKGRT.IS
+      * Food/Retail: BIMAS.IS, MGROS.IS
+      * Energy: PETKM.IS, ENKAI.IS
+    
+    For the period from {start_date} to {end_date}:
+    
+    1. DATA ACQUISITION - Fetch daily adjusted close prices from Yahoo Finance, verify data completeness (>90% required for Turkey, >95% for US), handle missing data appropriately.
+    
+    2. RETURNS ANALYSIS - Calculate daily returns, compute annualized returns (mean_daily_return × 252), compute annualized volatility (std_daily_return × sqrt(252)), calculate Sharpe ratios using risk_free_rate of {risk_free_rate}%.
+    
+    3. CORRELATION ANALYSIS - Calculate correlation matrix for all asset pairs, identify diversification opportunities, compute covariance matrix (annualized).
+    
+    4. RISK METRICS - Calculate beta values (for US market vs SPY, for Turkey vs XU100 if available), compute downside deviation, calculate Sortino ratios.
+    
+    5. OUTPUT - Produce a comprehensive report (1000-1500 words) with data quality summary, price performance table, returns statistics table, correlation matrix with interpretation, risk metrics, and key insights for portfolio construction.
+    
+    Use professional language, include specific numbers with 2-4 decimal places, and explain what the metrics mean for investors. For Turkey market, note currency risk (TRY volatility) and liquidity considerations.
+  expected_output: >
+    A comprehensive market data analysis report containing executive summary with key findings, price performance table, statistical analysis table, correlation matrix with interpretation, risk metrics, and key insights for optimization.
+  agent: market_data_researcher
+
+optimize_portfolio:
+  description: >
+    Construct optimal portfolios using Modern Portfolio Theory (MPT).
+    
+    Using the market data from the previous task:
+    
+    1. PREPARE INPUTS - Extract expected returns vector (annualized), extract covariance matrix (annualized), use risk_free_rate of {risk_free_rate}%.
+    
+    2. OPTIMIZATION CONSTRAINTS - Budget constraint (weights sum to 100%), no short selling (all weights >= 0), diversification (max 25% in any single asset for Turkey market with 15 stocks, max 40% for US market with 5 ETFs), minimum meaningful allocation (>= 2%).
+    
+    3. SOLVE MAXIMUM SHARPE RATIO PORTFOLIO - Maximize (portfolio_return - risk_free_rate) / portfolio_volatility, extract optimal weights, calculate portfolio metrics.
+    
+    4. SOLVE MINIMUM VOLATILITY PORTFOLIO - Minimize portfolio_volatility, extract optimal weights, calculate portfolio metrics.
+    
+    5. GENERATE EFFICIENT FRONTIER - Create 50-100 portfolios with different target returns, for each target minimize volatility, create table with volatility, return, and Sharpe ratio.
+    
+    6. CREATE THREE RECOMMENDATIONS - Aggressive Portfolio (80th percentile, for young investors with 15+ year horizon), Moderate Portfolio (50th percentile, for middle-aged investors with 7-15 year horizon), Conservative Portfolio (20th percentile, for older investors with under 7 year horizon).
+    
+    7. IMPLEMENTATION GUIDANCE - Provide TRY/USD allocations for Turkey/US markets respectively for 50K, 250K, 500K portfolios, recommend rebalancing frequency (quarterly or 5% drift), suggest dollar-cost averaging over 3-6 months.
+    
+    8. OUTPUT - Produce detailed report (1500-2000 words) with optimization methodology, Max Sharpe portfolio, Min Volatility portfolio, efficient frontier data, three portfolio recommendations, comparison table, and implementation guide.
+  expected_output: >
+    A comprehensive portfolio optimization report containing optimization summary, Maximum Sharpe Ratio Portfolio, Minimum Volatility Portfolio, Efficient Frontier data table, three recommended portfolios, portfolio comparison table, and implementation guide with currency allocations.
+  agent: portfolio_optimizer
+  context:
+    - fetch_market_data
+
+assess_risks:
+  description: >
+    Conduct comprehensive risk assessment for all optimized portfolios (Maximum Sharpe Ratio, Minimum Volatility, Aggressive, Moderate, Conservative).
+    
+    1. VALUE AT RISK (VaR) - Calculate historical VaR at 95% and 99% confidence levels, find 5th and 1st percentile of historical returns, convert to currency terms (TRY for Turkey, USD for US) for 500,000 portfolio.
+    
+    2. CONDITIONAL VaR (CVaR) - Calculate average loss beyond VaR threshold, compute CVaR_95 (average of worst 5% of returns) and CVaR_99 (average of worst 1% of returns).
+    
+    3. MAXIMUM DRAWDOWN - Calculate cumulative returns over time, find largest peak-to-trough decline, identify peak date, trough date, recovery date, and duration.
+    
+    4. STRESS TESTING - Test each portfolio in historical crisis scenarios:
+      * For US market: 2008 Financial Crisis (Stocks -40%, Bonds +5%), 2020 COVID Crash (Stocks -35%, Bonds +8%), 1987 Black Monday (Stocks -22%, Bonds 0%), High Inflation 1970s (Stocks -10%, Bonds -15%), Geopolitical Crisis (Stocks -25%, Bonds +3%)
+      * For Turkey market: 2018 Currency Crisis (Stocks -40%, TRY -30%), 2001 Banking Crisis (Stocks -60%, TRY -50%), 2008 Global Crisis (Stocks -55%, TRY -25%), 2013 Taper Tantrum (Stocks -20%, TRY -15%), 2020 COVID (Stocks -30%, TRY -20%), High Inflation 2021-23 (Stocks +50% nominal but -30% real, TRY -50%)
+    
+    5. RISK DECOMPOSITION - Calculate portfolio beta (systematic risk), Herfindahl Index (concentration risk), effective number of assets, sector concentration, and currency risk exposure (especially for Turkey).
+    
+    6. TAIL RISK - Calculate skewness (asymmetry), kurtosis (fat tails), identify 5 worst historical days with dates and context.
+    
+    7. DOWNSIDE RISK - Calculate downside deviation (volatility of negative returns only), Sortino ratios, upside/downside capture vs benchmark.
+    
+    8. RISK MITIGATION - Recommend diversification improvements, hedging strategies (for Turkey: USD hedging, for US: put options), rebalancing rules (quarterly or 5% drift), stop-loss guidelines, and monitoring framework.
+    
+    9. OUTPUT - Produce comprehensive risk report (2000-2500 words) with executive risk summary, VaR analysis, CVaR tables, maximum drawdown analysis, stress test results, risk decomposition, tail risk metrics, downside risk analysis, liquidity assessment, risk mitigation recommendations, and comprehensive warnings.
+  expected_output: >
+    A comprehensive risk assessment report containing executive risk summary, VaR analysis (95% and 99% confidence), CVaR/Expected Shortfall, maximum drawdown table, stress test results for 5-6 crisis scenarios, risk decomposition, tail risk metrics, downside risk analysis, liquidity assessment, risk mitigation strategies, and comprehensive risk warnings.
+  agent: risk_analyst
+  context:
+    - fetch_market_data
+    - optimize_portfolio
+
+generate_investment_report:
+  description: >
+    Synthesize all analyses into a comprehensive investment report.
+    
+    Create a professional Markdown report with these sections:
+    
+    1. EXECUTIVE SUMMARY (500 words) - Key findings (5-7 bullet points), top recommendation with specific allocation, critical risks (3-4 bullet points), bottom-line advice.
+    
+    2. MARKET OVERVIEW (600-800 words) - Market environment during {start_date} to {end_date}, asset performance ranking table, correlation insights, market outlook. For Turkey market include TRY performance and inflation context.
+    
+    3. PORTFOLIO OPTIMIZATION (1000-1200 words) - MPT methodology explanation, Maximum Sharpe Ratio Portfolio (allocation, metrics, interpretation), Minimum Volatility Portfolio, Efficient Frontier description and data, three recommendations (Aggressive, Moderate, Conservative), portfolio comparison table with selection guidance.
+    
+    4. RISK ANALYSIS (800-1000 words) - VaR summary with currency interpretations, stress test results with scenario descriptions, maximum drawdown analysis, risk mitigation strategies. For Turkey emphasize currency and political risks.
+    
+    5. INVESTMENT RECOMMENDATIONS (800-1000 words) - Portfolio selection guide (questionnaire), implementation steps (open account, fund, place orders, DCA, rebalance), sample allocations for 50K, 250K, 500K in local currency, rebalancing strategy, monitoring framework, when to adjust portfolio.
+    
+    6. FAQ (400-500 words) - Answer 10 questions: How much to invest? When to invest? All at once or gradually? How often to check? What if market crashes? Can I customize? What about taxes? Should I use advisor? What if risk tolerance changes? Is this guaranteed?
+    
+    7. APPENDIX (600-800 words) - Methodology (MPT explanation, optimization process, assumptions), data sources (Yahoo Finance, risk-free rate, period, frequency), assumptions and limitations, important disclaimers, glossary, regulatory disclaimers, references.
+    
+    FORMAT: Professional Markdown with clear headers, well-formatted tables, bullet points, specific numbers (2-4 decimal places), total length 4000-5000 words, tone professional and realistic about risks.
+    
+    Save as: reports/investment_report_{report_date}.md
+  expected_output: >
+    A comprehensive investment report (4000-5000 words) saved as Markdown file with Executive Summary, Market Overview, Portfolio Optimization, Risk Analysis, Investment Recommendations, FAQ, and Appendix sections.
+  agent: report_writer
+  context:
+    - fetch_market_data
+    - optimize_portfolio
+    - assess_risks
+  output_file: 'reports/investment_report_{report_date}.md'
+
+# ============================================================================
+# END OF TASKS CONFIGURATION
+# ============================================================================

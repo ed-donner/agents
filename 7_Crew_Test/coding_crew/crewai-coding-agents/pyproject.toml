@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "crewai-coding-agents"
+version = "0.1.0"
+description = "AI-powered coding agent ecosystem using CrewAI"
+authors = ["Your Name <your.email@example.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+crewai = "^0.80.0"
+crewai-tools = "^0.12.0"
+langchain = "^0.2.0"
+langchain-openai = "^0.1.0"
+langchain-anthropic = "^0.1.0"
+langchain-community = "^0.2.0"
+pydantic = "^2.0.0"
+pydantic-settings = "^2.0.0"
+rich = "^13.0.0"
+typer = "^0.9.0"
+loguru = "^0.7.0"
+python-dotenv = "^1.0.0"
+pytest = "^8.0.0"
+pytest-asyncio = "^0.23.0"
+
+[project]
+name = "crewai-coding-agents"
+version = "0.1.0"
+description = "AI-powered coding agent ecosystem using CrewAI"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "crewai>=0.80.0",
+]
+
+[project.scripts]
+run_crew = "crewai_coding_agents.crew:run"
+train_crew = "crewai_coding_agents.crew:train"
+replay_crew = "crewai_coding_agents.crew:replay"
+test_crew = "crewai_coding_agents.crew:test"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.crewai]
+project_name = "crewai-coding-agents"

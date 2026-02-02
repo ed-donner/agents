@@ -1,0 +1,77 @@
+# Career Bot Specific .gitignore
+# Hassas bilgiler ve geliştirme dosyaları
+
+# Database files - production için
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+career_bot.db
+app.log
+
+# Environment variables ve secrets
+.env
+.env.local
+.env.production
+secrets.txt
+
+# Test outputs
+htmlcov/
+.coverage
+.pytest_cache/
+test_results/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
+temp/
+tmp/
+
+# User uploaded content (if any)
+uploads/
+user_files/
+
+# Logs
+*.log
+logs/
+app.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Deployment
+deployment_backup/
+old_versions/
+
+# Hugging Face specific
+.huggingface/
+
+# Local development
+local_test.py
+scratch.py
+debug_*.py

@@ -1,0 +1,2501 @@
+# ============================================================================
+# ADVANCED ETF PORTFOLIO ANALYSIS - TASKS CONFIGURATION
+# ============================================================================
+# This file defines detailed tasks for each agent in the analysis workflow
+# Tasks are executed sequentially with context passing between stages
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# TASK 1: FETCH AND ANALYZE MARKET DATA
+# ----------------------------------------------------------------------------
+fetch_market_data:
+  description: >
+    **TASK: Comprehensive Market Data Acquisition and Analysis**
+    
+    **Objective:**
+    Fetch, validate, and analyze historical market data for ETF portfolio construction.
+    
+    ---
+    
+    **STEP 1: DATA ACQUISITION**
+    
+    Based on market type parameter **{market_type}**, fetch data for:
+    
+    **IF market_type == 'global':**
+    ```
+    Tickers to fetch:
+    1. SPY   - SPDR S&P 500 ETF Trust
+       - Tracks: S&P 500 Index (500 largest US companies)
+       - Asset Class: US Large Cap Equity
+       - Expense Ratio: 0.09%
+       - AUM: ~$450 billion
+    
+    2. QQQ   - Invesco QQQ Trust
+       - Tracks: Nasdaq-100 Index (100 largest non-financial Nasdaq stocks)
+       - Asset Class: US Technology/Growth Equity
+       - Expense Ratio: 0.20%
+       - AUM: ~$250 billion
+    
+    3. VTI   - Vanguard Total Stock Market ETF
+       - Tracks: CRSP US Total Market Index (entire US stock market)
+       - Asset Class: US Total Market Equity
+       - Expense Ratio: 0.03%
+       - AUM: ~$400 billion
+    
+    4. VXUS  - Vanguard Total International Stock ETF
+       - Tracks: FTSE Global All Cap ex US Index (non-US stocks)
+       - Asset Class: International Equity (Developed + Emerging)
+       - Expense Ratio: 0.08%
+       - AUM: ~$70 billion
+    
+    5. AGG   - iShares Core U.S. Aggregate Bond ETF
+       - Tracks: Bloomberg US Aggregate Bond Index
+       - Asset Class: US Investment Grade Bonds
+       - Expense Ratio: 0.03%
+       - AUM: ~$100 billion
+    
+    Currency: USD
+    Risk-Free Rate: {risk_free_rate} (US 10-Year Treasury)
+    ```
+    
+    **IF market_type == 'turkey':**
+    ```
+    Tickers to fetch:
+    1. THYAO.IS - Türk Hava Yolları A.O.
+       - Sector: Aviation/Transportation
+       - Industry: Airlines
+       - Market Cap: Large Cap
+       - Description: Turkey's flag carrier, extensive route network
+    
+    2. AKBNK.IS - Akbank T.A.Ş.
+       - Sector: Financials
+       - Industry: Banking
+       - Market Cap: Large Cap
+       - Description: Major private bank, strong digital banking
+    
+    3. EREGL.IS - Ereğli Demir ve Çelik Fabrikaları T.A.Ş.
+       - Sector: Basic Materials
+       - Industry: Steel Production
+       - Market Cap: Large Cap
+       - Description: Turkey's largest steel producer
+    
+    4. SAHOL.IS - Hacı Ömer Sabancı Holding A.Ş.
+       - Sector: Conglomerate
+       - Industry: Diversified Holdings
+       - Market Cap: Large Cap
+       - Description: Multi-sector holding (finance, energy, retail)
+    
+    5. BIMAS.IS - BİM Birleşik Mağazalar A.Ş.
+       - Sector: Consumer Staples
+       - Industry: Discount Retail
+       - Market Cap: Large Cap
+       - Description: Leading discount supermarket chain
+    
+    Currency: TRY (Turkish Lira)
+    Risk-Free Rate: {risk_free_rate} (Turkey 10-Year Government Bond)
+    ```
+    
+    **Data Parameters:**
+    - Period: {period}
+    - Interval: Daily (1d)
+    - Adjust for: Stock splits, dividends (adjusted close prices)
+    - Source: Yahoo Finance API
+    
+    ---
+    
+    **STEP 2: DATA VALIDATION**
+    
+    Perform comprehensive data quality checks:
+    
+    1. **Completeness Check:**
+       - Count total trading days available
+       - Identify missing dates
+       - Calculate data completeness percentage
+       - Requirement: >95% completeness for each ticker
+    
+    2. **Consistency Check:**
+       - Verify all tickers have same date range
+       - Check for data alignment issues
+       - Identify any forward-fill or back-fill needs
+    
+    3. **Outlier Detection:**
+       - Identify returns > 3 standard deviations
+       - Flag potential data errors (e.g., 100% daily return)
+       - Investigate suspicious price movements
+    
+    4. **Corporate Actions:**
+       - Verify adjustment for stock splits
+       - Confirm dividend adjustments
+       - Check for any special distributions
+    
+    ---
+    
+    **STEP 3: PRICE ANALYSIS**
+    
+    Calculate and analyze price metrics:
+    
+    1. **Price Statistics:**
+       ```
+       For each ticker, calculate:
+       - Current Price (latest close)
+       - Period Start Price (first close)
+       - Period High Price (maximum)
+       - Period Low Price (minimum)
+       - Average Price (mean)
+       - Median Price
+       - Price Range (high - low)
+       - Price at 25th, 50th, 75th percentiles
+       ```
+    
+    2. **Price Changes:**
+       ```
+       - Absolute Change: Current - Start
+       - Percentage Change: (Current - Start) / Start * 100
+       - Annualized Change: Account for time period
+       ```
+    
+    3. **Price Trends:**
+       ```
+       - 50-day Moving Average
+       - 200-day Moving Average
+       - Price vs. MA50 (above/below)
+       - Price vs. MA200 (above/below)
+       - Golden Cross / Death Cross events
+       ```
+    
+    ---
+    
+    **STEP 4: RETURNS ANALYSIS**
+    
+    Calculate comprehensive return metrics:
+    
+    1. **Daily Returns:**
+       ```
+       Formula: (Price_t - Price_t-1) / Price_t-1
+       
+       For each ticker:
+       - Calculate daily percentage returns
+       - Remove first NaN value
+       - Verify no infinite values
+       ```
+    
+    2. **Return Statistics:**
+       ```
+       For each ticker, calculate:
+       
+       - Mean Daily Return (%)
+       - Median Daily Return (%)
+       - Standard Deviation of Daily Returns (%)
+       - Variance of Daily Returns
+       - Skewness (asymmetry measure)
+       - Kurtosis (tail thickness measure)
+       - Minimum Daily Return (worst day)
+       - Maximum Daily Return (best day)
+       - 5th Percentile Return (VaR proxy)
+       - 95th Percentile Return
+       ```
+    
+    3. **Annualized Metrics:**
+       ```
+       Assumptions:
+       - 252 trading days per year
+       - Continuous compounding
+       
+       For each ticker:
+       - Annualized Return = Mean Daily Return × 252
+       - Annualized Volatility = Std Dev Daily Returns × √252
+       - Sharpe Ratio = (Annualized Return - Risk Free Rate) / Annualized Volatility
+       ```
+    
+    4. **Cumulative Returns:**
+       ```
+       - Calculate cumulative return over entire period
+       - Identify drawdown periods
+       - Calculate recovery times
+       ```
+    
+    ---
+    
+    **STEP 5: CORRELATION ANALYSIS**
+    
+    Analyze relationships between assets:
+    
+    1. **Correlation Matrix:**
+       ```
+       Calculate Pearson correlation coefficients for all pairs:
+       
+       Correlation ranges from -1 to +1:
+       - +1.0: Perfect positive correlation (move together)
+       - 0.0: No correlation (independent)
+       - -1.0: Perfect negative correlation (move opposite)
+       
+       Create symmetric matrix showing all pairwise correlations
+       ```
+    
+    2. **Correlation Interpretation:**
+       ```
+       For each pair, interpret:
+       
+       - High Correlation (>0.7): Limited diversification benefit
+       - Moderate Correlation (0.3 to 0.7): Some diversification
+       - Low Correlation (<0.3): Good diversification
+       - Negative Correlation (<0): Excellent diversification
+       
+       Identify:
+       - Most correlated pairs (highest correlation)
+       - Least correlated pairs (lowest correlation)
+       - Negative correlations (hedging opportunities)
+       ```
+    
+    3. **Covariance Matrix:**
+       ```
+       Calculate covariance matrix:
+       - Covariance = Correlation × Std_Dev_i × Std_Dev_j
+       - Annualize: multiply by 252
+       - This matrix will be used in portfolio optimization
+       ```
+    
+    ---
+    
+    **STEP 6: RISK METRICS**
+    
+    Calculate preliminary risk indicators:
+    
+    1. **Volatility Analysis:**
+       ```
+       For each ticker:
+       - Daily Volatility (standard deviation of daily returns)
+       - Weekly Volatility (using weekly returns)
+       - Monthly Volatility (using monthly returns)
+       - Annualized Volatility (daily vol × √252)
+       - Rolling 30-day Volatility (time-varying risk)
+       - Rolling 90-day Volatility
+       ```
+    
+    2. **Downside Risk:**
+       ```
+       - Downside Deviation (volatility of negative returns only)
+       - Semi-Variance (variance of returns below mean)
+       - Sortino Ratio = (Return - Risk Free) / Downside Deviation
+       ```
+    
+    3. **Beta Calculation:**
+       ```
+       For each ticker (if market_type == 'global'):
+       - Calculate beta relative to SPY (market proxy)
+       - Beta = Covariance(Asset, Market) / Variance(Market)
+       - Beta > 1: More volatile than market
+       - Beta < 1: Less volatile than market
+       - Beta ≈ 0: Independent of market
+       ```
+    
+    ---
+    
+    **STEP 7: PERFORMANCE METRICS**
+    
+    Calculate risk-adjusted performance:
+    
+    1. **Sharpe Ratio:**
+       ```
+       Formula: (Return - Risk_Free_Rate) / Volatility
+       
+       Interpretation:
+       - Sharpe > 2.0: Excellent
+       - Sharpe 1.0-2.0: Good
+       - Sharpe 0.5-1.0: Acceptable
+       - Sharpe < 0.5: Poor
+       - Sharpe < 0: Losing money relative to risk-free rate
+       ```
+    
+    2. **Sortino Ratio:**
+       ```
+       Formula: (Return - Risk_Free_Rate) / Downside_Deviation
+       
+       Better than Sharpe for asymmetric returns
+       Only penalizes downside volatility
+       ```
+    
+    3. **Information Ratio:**
+       ```
+       For each ticker vs. benchmark:
+       - Excess Return = Ticker Return - Benchmark Return
+       - Tracking Error = Std Dev of Excess Returns
+       - Information Ratio = Excess Return / Tracking Error
+       ```
+    
+    ---
+    
+    **STEP 8: MARKET CONTEXT**
+    
+    Provide context for the data:
+    
+    1. **Market Environment:**
+       ```
+       - Identify bull vs. bear market periods
+       - Note major market events during analysis period
+       - Comment on volatility regime (high/low)
+       - Mention any structural breaks
+       ```
+    
+    2. **Asset Class Performance:**
+       ```
+       Rank assets by:
+       - Total return (best to worst)
+       - Risk-adjusted return (Sharpe ratio)
+       - Volatility (lowest to highest)
+       - Maximum drawdown (smallest to largest)
+       ```
+    
+    3. **Diversification Assessment:**
+       ```
+       - Overall portfolio correlation (average)
+       - Diversification ratio
+       - Effective number of assets
+       - Concentration risk indicators
+       ```
+    
+    ---
+    
+    **OUTPUT REQUIREMENTS:**
+    
+    Produce a structured report with:
+    
+    **Section 1: Data Summary**
+    - Total trading days: [number]
+    - Date range: [start] to [end]
+    - Tickers analyzed: [list]
+    - Data completeness: [percentage] for each ticker
+    - Data quality issues: [list any problems]
+    
+    **Section 2: Price Analysis**
+    Table with columns:
+    | Ticker | Start Price | End Price | Total Return | High | Low | Current vs MA50 | Current vs MA200 |
+    
+    **Section 3: Returns Statistics**
+    Table with columns:
+    | Ticker | Ann. Return | Ann. Volatility | Sharpe Ratio | Sortino Ratio | Skewness | Kurtosis | Min Return | Max Return |
+    
+    **Section 4: Correlation Matrix**
+    Full correlation matrix with interpretation:
+    - Highest correlations
+    - Lowest correlations
+    - Diversification opportunities
+    
+    **Section 5: Risk Analysis**
+    - Volatility ranking (lowest to highest)
+    - Beta values (if applicable)
+    - Downside risk metrics
+    
+    **Section 6: Key Insights**
+    - Best performing asset
+    - Most stable asset
+    - Best risk-adjusted performer
+    - Diversification assessment
+    - Data quality notes
+    - Recommendations for portfolio construction
+    
+    **Format:** Professional report with clear sections, tables, and bullet points.
+    **Length:** 1000-1500 words
+    **Numbers:** Include specific values with appropriate decimal places
+    **Context:** Explain what the numbers mean for investors
+  
+  expected_output: >
+    A comprehensive market data analysis report (1000-1500 words) containing:
+    
+    1. **Executive Summary** (100 words)
+       - Data period and tickers analyzed
+       - Key findings (3-5 bullet points)
+       - Data quality assessment
+    
+    2. **Price Performance Table**
+       - All tickers with start/end prices
+       - Total returns
+       - High/low prices
+       - Moving average positions
+    
+    3. **Statistical Analysis Table**
+       - Annualized returns and volatilities
+       - Sharpe and Sortino ratios
+       - Skewness and kurtosis
+       - Min/max daily returns
+    
+    4. **Correlation Matrix**
+       - Full matrix with all pairwise correlations
+       - Interpretation of key relationships
+       - Diversification insights
+    
+    5. **Risk Metrics**
+       - Volatility rankings
+       - Beta values (if applicable)
+       - Downside risk measures
+    
+    6. **Key Insights and Recommendations**
+       - Best performers
+       - Risk-adjusted winners
+       - Diversification opportunities
+       - Notes for portfolio optimization
+    
+    **Quality Standards:**
+    - All numbers accurate to 2-4 decimal places
+    - Clear table formatting
+    - Professional language
+    - Actionable insights
+    - No fabricated data
+  
+  agent: market_data_researcher
+
+# ----------------------------------------------------------------------------
+# TASK 2: PORTFOLIO OPTIMIZATION
+# ----------------------------------------------------------------------------
+optimize_portfolio:
+  description: >
+    **TASK: Advanced Portfolio Optimization Using Modern Portfolio Theory**
+    
+    **Objective:**
+    Construct optimal ETF portfolios using mean-variance optimization and generate efficient frontier.
+    
+    ---
+    
+    **CONTEXT:**
+    Use the market data analysis from the previous task, including:
+    - Expected returns (annualized)
+    - Covariance matrix (annualized)
+    - Risk-free rate: {risk_free_rate}
+    - Market type: {market_type}
+    
+    ---
+    
+    **STEP 1: PREPARE OPTIMIZATION INPUTS**
+    
+    1. **Expected Returns Vector:**
+       ```
+       Extract annualized returns for each ticker:
+       μ = [μ₁, μ₂, μ₃, μ₄, μ₅]
+       
+       Where μᵢ = mean daily return × 252
+       
+       Verify:
+       - All returns are realistic (-50% to +100% annually)
+       - No NaN or infinite values
+       - Returns are in decimal form (not percentage)
+       ```
+    
+    2. **Covariance Matrix:**
+       ```
+       Extract annualized covariance matrix:
+       Σ = covariance matrix of daily returns × 252
+       
+       Verify:
+       - Matrix is symmetric (Σᵢⱼ = Σⱼᵢ)
+       - Matrix is positive semi-definite
+       - Diagonal elements are variances (σᵢ²)
+       - Off-diagonal elements are covariances
+       ```
+    
+    3. **Risk-Free Rate:**
+       ```
+       Convert risk-free rate to decimal:
+       rf = {risk_free_rate} / 100
+       
+       Example: 4.5% → 0.045
+       ```
+    
+    ---
+    
+    **STEP 2: DEFINE OPTIMIZATION PROBLEM**
+    
+    **Objective Functions:**
+    
+    1. **Maximum Sharpe Ratio:**
+       ```
+       Maximize: (μᵀw - rf) / √(wᵀΣw)
+       
+       Where:
+       - w = weight vector [w₁, w₂, w₃, w₄, w₅]
+       - μ = expected returns vector
+       - Σ = covariance matrix
+       - rf = risk-free rate
+       
+       This is equivalent to minimizing:
+       -[(μᵀw - rf) / √(wᵀΣw)]
+       ```
+    
+    2. **Minimum Volatility:**
+       ```
+       Minimize: √(wᵀΣw)
+       
+       This is equivalent to minimizing:
+       wᵀΣw (variance)
+       ```
+    
+    **Constraints:**
+    ```
+    1. Budget Constraint (Full Investment):
+       Σwᵢ = 1 (weights sum to 100%)
+    
+    2. No Short Selling:
+       wᵢ ≥ 0 for all i (no negative weights)
+    
+    3. Upper Bound (Optional Diversification):
+       wᵢ ≤ 0.40 for all i (max 40% in single asset)
+    
+    4. Minimum Position (Optional):
+       If wᵢ > 0, then wᵢ ≥ 0.02 (avoid dust positions)
+    ```
+    
+    ---
+    
+    **STEP 3: SOLVE MAXIMUM SHARPE RATIO PORTFOLIO**
+    
+    1. **Optimization Setup:**
+       ```python
+       from scipy.optimize import minimize
+       
+       def negative_sharpe(weights, returns, cov_matrix, risk_free):
+           portfolio_return = np.dot(weights, returns)
+           portfolio_vol = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
+           sharpe = (portfolio_return - risk_free) / portfolio_vol
+           return -sharpe  # Minimize negative Sharpe
+       
+       # Initial guess: equal weights
+       x0 = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
+       
+       # Constraints
+       constraints = {'type': 'eq', 'fun': lambda x: np.sum(x) - 1}
+       
+       # Bounds
+       bounds = tuple((0, 0.4) for _ in range(5))
+       
+       # Optimize
+       result = minimize(negative_sharpe, x0, args=(returns, cov_matrix, risk_free),
+                        method='SLSQP', bounds=bounds, constraints=constraints)
+       ```
+    
+    2. **Extract Results:**
+       ```
+       Optimal weights: w* = result.x
+       
+       Calculate portfolio metrics:
+       - Portfolio Return: μₚ = Σ(wᵢ × μᵢ)
+       - Portfolio Volatility: σₚ = √(wᵀΣw)
+       - Sharpe Ratio: SR = (μₚ - rf) / σₚ
+       ```
+    
+    3. **Verify Solution:**
+       ```
+       Check:
+       - Weights sum to 1.0 (within 0.0001 tolerance)
+       - All weights between 0 and 0.4
+       - Sharpe ratio is positive
+       - Solution converged successfully
+       ```
+    
+    ---
+    
+    **STEP 4: SOLVE MINIMUM VOLATILITY PORTFOLIO**
+    
+    1. **Optimization Setup:**
+       ```python
+       def portfolio_volatility(weights, cov_matrix):
+           return np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
+       
+       # Same constraints and bounds as before
+       result = minimize(portfolio_volatility, x0, args=(cov_matrix,),
+                        method='SLSQP', bounds=bounds, constraints=constraints)
+       ```
+    
+    2. **Extract Results:**
+       ```
+       Optimal weights: w* = result.x
+       
+       Calculate portfolio metrics:
+       - Portfolio Return: μₚ = Σ(wᵢ × μᵢ)
+       - Portfolio Volatility: σₚ = √(wᵀΣw)
+       - Sharpe Ratio: SR = (μₚ - rf) / σₚ
+       ```
+    
+    ---
+    
+    **STEP 5: GENERATE EFFICIENT FRONTIER**
+    
+    1. **Define Target Returns:**
+       ```
+       Find range of feasible returns:
+       - Min Return: Return of minimum volatility portfolio
+       - Max Return: Maximum individual asset return × 0.9
+       
+       Create array of 100 target returns:
+       target_returns = np.linspace(min_return, max_return, 100)
+       ```
+    
+    2. **Optimize for Each Target:**
+       ```python
+       frontier_volatilities = []
+       frontier_returns = []
+       
+       for target_return in target_returns:
+           def portfolio_volatility(weights):
+               return np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
+           
+           constraints = [
+               {'type': 'eq', 'fun': lambda x: np.sum(x) - 1},
+               {'type': 'eq', 'fun': lambda x: np.dot(x, returns) - target_return}
+           ]
+           
+           result = minimize(portfolio_volatility, x0, method='SLSQP',
+                           bounds=bounds, constraints=constraints)
+           
+           if result.success:
+               frontier_volatilities.append(result.fun)
+               frontier_returns.append(target_return)
+       ```
+    
+    3. **Create Frontier DataFrame:**
+       ```
+       Create table with columns:
+       - Volatility (annualized %)
+       - Return (annualized %)
+       - Sharpe Ratio
+       ```
+    
+    ---
+    
+    **STEP 6: CREATE PORTFOLIO RECOMMENDATIONS**
+    
+    Generate three portfolios for different risk profiles:
+    
+    1. **Aggressive Portfolio (High Risk/High Return):**
+       ```
+       Target: 80th percentile of efficient frontier
+       
+       Find portfolio on efficient frontier where:
+       - Volatility is at 80th percentile of frontier range
+       - Or return is at 80th percentile
+       
+       Extract weights and calculate metrics
+       
+       Suitable for:
+       - Young investors (age < 40)
+       - Long time horizon (>15 years)
+       - High risk tolerance
+       - Growth-focused goals
+       ```
+    
+    2. **Moderate Portfolio (Balanced):**
+       ```
+       Target: 50th percentile of efficient frontier
+       
+       Find portfolio at midpoint of frontier:
+       - Balanced risk-return tradeoff
+       - Near maximum Sharpe ratio
+       
+       Extract weights and calculate metrics
+       
+       Suitable for:
+       - Middle-aged investors (age 40-60)
+       - Medium time horizon (7-15 years)
+       - Moderate risk tolerance
+       - Balanced growth and income
+       ```
+    
+    3. **Conservative Portfolio (Low Risk):**
+       ```
+       Target: 20th percentile of efficient frontier
+       
+       Find portfolio near minimum volatility:
+       - Low risk, stable returns
+       - Capital preservation focus
+       
+       Extract weights and calculate metrics
+       
+       Suitable for:
+       - Older investors (age > 60)
+       - Short time horizon (<7 years)
+       - Low risk tolerance
+       - Income and preservation focus
+       ```
+    
+    ---
+    
+    **STEP 7: CALCULATE ADDITIONAL METRICS**
+    
+    For each portfolio (Max Sharpe, Min Vol, Aggressive, Moderate, Conservative):
+    
+    1. **Return Metrics:**
+       ```
+       - Expected Annual Return (%)
+       - Expected Monthly Return (%)
+       - Expected 5-Year Total Return (%)
+       - Expected 10-Year Total Return (%)
+       ```
+    
+    2. **Risk Metrics:**
+       ```
+       - Annual Volatility (%)
+       - Monthly Volatility (%)
+       - Value at Risk (95%, 1-day)
+       - Value at Risk (99%, 1-day)
+       - Downside Deviation
+       ```
+    
+    3. **Risk-Adjusted Metrics:**
+       ```
+       - Sharpe Ratio
+       - Sortino Ratio (if downside deviation available)
+       - Calmar Ratio (if max drawdown available)
+       ```
+    
+    4. **Diversification Metrics:**
+       ```
+       - Number of positions (count of non-zero weights)
+       - Effective number of positions (1 / Σwᵢ²)
+       - Concentration (Herfindahl index)
+       - Diversification ratio
+       ```
+    
+    ---
+    
+    **STEP 8: COMPARE PORTFOLIOS**
+    
+    Create comparison table:
+    
+    | Portfolio | Return | Volatility | Sharpe | Max Weight | # Positions | Suitable For |
+    |-----------|--------|------------|--------|------------|-------------|--------------|
+    | Max Sharpe | X.XX% | X.XX% | X.XX | XX% | X | Growth investors |
+    | Min Volatility | X.XX% | X.XX% | X.XX | XX% | X | Conservative investors |
+    | Aggressive | X.XX% | X.XX% | X.XX | XX% | X | Young, high risk tolerance |
+    | Moderate | X.XX% | X.XX% | X.XX | XX% | X | Balanced approach |
+    | Conservative | X.XX% | X.XX% | X.XX | XX% | X | Capital preservation |
+    
+    ---
+    
+    **STEP 9: PROVIDE IMPLEMENTATION GUIDANCE**
+    
+    For each recommended portfolio:
+    
+    1. **Specific Allocations:**
+       ```
+       Example for $100,000 investment:
+       
+       Ticker | Weight | Dollar Amount | Shares (approx)
+       -------|--------|---------------|----------------
+       SPY    | 35.2%  | $35,200      | 80 shares
+       QQQ    | 28.5%  | $28,500      | 75 shares
+       VTI    | 20.1%  | $20,100      | 85 shares
+       VXUS   | 10.8%  | $10,800      | 175 shares
+       AGG    | 5.4%   | $5,400       | 50 shares
+       ```
+    
+    2. **Rebalancing Strategy:**
+       ```
+       - Frequency: Quarterly or when allocation drifts >5%
+       - Method: Sell overweight, buy underweight
+       - Tax considerations: Use tax-loss harvesting
+       ```
+    
+    3. **Expected Performance:**
+       ```
+       - 1-Year Expected Return: X.X% to Y.Y% (80% confidence)
+       - 5-Year Expected Return: X.X% to Y.Y%
+       - Probability of positive return: XX%
+       - Probability of >10% loss: XX%
+       ```
+    
+    ---
+    
+    **OUTPUT REQUIREMENTS:**
+    
+    Produce a detailed optimization report with:
+    
+    **Section 1: Optimization Summary**
+    - Optimization method used
+    - Constraints applied
+    - Number of assets considered
+    - Convergence status
+    
+    **Section 2: Maximum Sharpe Ratio Portfolio**
+    - Detailed weights table
+    - Expected return and volatility
+    - Sharpe ratio
+    - Interpretation and recommendation
+    
+    **Section 3: Minimum Volatility Portfolio**
+    - Detailed weights table
+    - Expected return and volatility
+    - Sharpe ratio
+    - Interpretation and recommendation
+    
+    **Section 4: Efficient Frontier**
+    - Table with 20-30 key points
+    - Volatility range
+    - Return range
+    - Location of optimal portfolios
+    
+    **Section 5: Three Portfolio Recommendations**
+    - Aggressive: weights, metrics, suitability
+    - Moderate: weights, metrics, suitability
+    - Conservative: weights, metrics, suitability
+    
+    **Section 6: Portfolio Comparison**
+    - Side-by-side comparison table
+    - Risk-return tradeoffs
+    - Selection guidance
+    
+    **Section 7: Implementation Guide**
+    - Dollar allocations for sample portfolio sizes
+    - Rebalancing recommendations
+    - Tax considerations
+    
+    **Format:** Professional report with clear tables and specific numbers
+    **Length:** 1500-2000 words
+    **Numbers:** Precise to 2 decimal places for percentages
+    **Tone:** Confident but realistic about expectations
+  
+  expected_output: >
+    A comprehensive portfolio optimization report (1500-2000 words) containing:
+    
+    1. **Optimization Summary** (150 words)
+       - Methods and constraints used
+       - Convergence and quality checks
+    
+    2. **Maximum Sharpe Ratio Portfolio**
+       - Weights table with percentages
+       - Return: X.XX%, Volatility: X.XX%, Sharpe: X.XX
+       - Interpretation and recommendation
+    
+    3. **Minimum Volatility Portfolio**
+       - Weights table with percentages
+       - Return: X.XX%, Volatility: X.XX%, Sharpe: X.XX
+       - Interpretation and recommendation
+    
+    4. **Efficient Frontier Data**
+       - Table with 20-30 risk-return points
+       - Visualization description
+    
+    5. **Three Recommended Portfolios**
+       - Aggressive: full details
+       - Moderate: full details
+       - Conservative: full details
+    
+    6. **Comparison Table**
+       - All portfolios side-by-side
+       - Selection guidance
+    
+    7. **Implementation Guide**
+       - Dollar allocations
+       - Rebalancing strategy
+       - Expected performance ranges
+    
+    **Quality Standards:**
+    - All weights sum to 100%
+    - All numbers realistic and verified
+    - Clear recommendations
+    - Actionable implementation steps
+  
+  agent: portfolio_optimizer
+  context:
+    - fetch_market_data
+
+# ----------------------------------------------------------------------------
+# TASK 3: COMPREHENSIVE RISK ASSESSMENT
+# ----------------------------------------------------------------------------
+assess_risks:
+  description: >
+    **TASK: Advanced Risk Analysis and Stress Testing**
+    
+    **Objective:**
+    Conduct comprehensive risk assessment for all optimized portfolios using multiple methodologies.
+    
+    ---
+    
+    **CONTEXT:**
+    Use data from previous tasks:
+    - Historical returns data
+    - Optimized portfolio weights
+    - Market type: {market_type}
+    
+    Analyze these portfolios:
+    1. Maximum Sharpe Ratio
+    2. Minimum Volatility
+    3. Aggressive
+    4. Moderate
+    5. Conservative
+    
+    ---
+    
+    **STEP 1: VALUE AT RISK (VaR) ANALYSIS**
+    
+    Calculate VaR using three methods:
+    
+    **Method 1: Historical VaR**
+    ```
+    For each portfolio:
+    
+    1. Calculate historical portfolio returns:
+       portfolio_returns = Σ(wᵢ × asset_returns_i)
+    
+    2. Sort returns from worst to best
+    
+    3. Find 5th percentile (95% VaR):
+       VaR_95 = 5th percentile of returns
+       Interpretation: "There is a 5% chance of losing more than X% in a day"
+    
+    4. Find 1st percentile (99% VaR):
+       VaR_99 = 1st percentile of returns
+       Interpretation: "There is a 1% chance of losing more than X% in a day"
+    
+    5. Convert to dollar terms:
+       For $100,000 portfolio:
+       Dollar VaR = Portfolio Value × VaR percentage
+    ```
+    
+    **Method 2: Parametric VaR (Variance-Covariance)**
+    ```
+    Assume returns are normally distributed:
+    
+    1. Calculate portfolio mean return (μₚ)
+    2. Calculate portfolio standard deviation (σₚ)
+    
+    3. VaR at 95% confidence:
+       VaR_95 = μₚ - 1.645 × σₚ
+    
+    4. VaR at 99% confidence:
+       VaR_99 = μₚ - 2.326 × σₚ
+    
+    Note: This method assumes normal distribution (may underestimate tail risk)
+    ```
+    
+    **Method 3: Monte Carlo VaR**
+    ```
+    Simulate 10,000 possible future returns:
+    
+    1. Use historical mean and covariance matrix
+    2. Generate random returns from multivariate normal distribution
+    3. Calculate portfolio returns for each simulation
+    4. Sort simulated returns
+    5. Find 5th and 1st percentiles
+    
+    This method accounts for correlation structure
+    ```
+    
+    **VaR Comparison Table:**
+    ```
+    | Portfolio | Historical VaR 95% | Parametric VaR 95% | Monte Carlo VaR 95% | Historical VaR 99% |
+    |-----------|-------------------|-------------------|--------------------|--------------------|
+    | Max Sharpe | -X.XX% | -X.XX% | -X.XX% | -X.XX% |
+    | Min Vol | -X.XX% | -X.XX% | -X.XX% | -X.XX% |
+    | Aggressive | -X.XX% | -X.XX% | -X.XX% | -X.XX% |
+    | Moderate | -X.XX% | -X.XX% | -X.XX% | -X.XX% |
+    | Conservative | -X.XX% | -X.XX% | -X.XX% | -X.XX% |
+    ```
+    
+    ---
+    
+    **STEP 2: CONDITIONAL VALUE AT RISK (CVaR)**
+    
+    Calculate Expected Shortfall:
+    
+    ```
+    CVaR answers: "If VaR is exceeded, how bad is the average loss?"
+    
+    For each portfolio:
+    
+    1. Identify all returns worse than VaR threshold
+    2. Calculate average of these worst returns
+    
+    CVaR_95 = Average of worst 5% of returns
+    CVaR_99 = Average of worst 1% of returns
+    
+    Example:
+    - VaR_95 = -2.5% (5% chance of losing more than 2.5%)
+    - CVaR_95 = -3.8% (average loss when VaR is exceeded is 3.8%)
+    
+    CVaR is always worse than VaR (larger loss)
+    ```
+    
+    **CVaR Table:**
+    ```
+    | Portfolio | VaR 95% | CVaR 95% | VaR 99% | CVaR 99% |
+    |-----------|---------|----------|---------|----------|
+    | Max Sharpe | -X.XX% | -X.XX% | -X.XX% | -X.XX% |
+    | Min Vol | -X.XX% | -X.XX% | -X.XX% | -X.XX% |
+    | Aggressive | -X.XX% | -X.XX% | -X.XX% | -X.XX% |
+    | Moderate | -X.XX% | -X.XX% | -X.XX% | -X.XX% |
+    | Conservative | -X.XX% | -X.XX% | -X.XX% | -X.XX% |
+    ```
+    
+    ---
+    
+    **STEP 3: MAXIMUM DRAWDOWN ANALYSIS**
+    
+    Calculate worst peak-to-trough declines:
+    
+    ```
+    For each portfolio:
+    
+    1. Calculate cumulative returns over time:
+       cumulative_returns = (1 + returns).cumprod()
+    
+    2. Calculate running maximum (peak):
+       running_max = cumulative_returns.cummax()
+    
+    3. Calculate drawdown at each point:
+       drawdown = (cumulative_returns - running_max) / running_max
+    
+    4. Find maximum drawdown:
+       max_drawdown = minimum value of drawdown series
+    
+    5. Identify drawdown period:
+       - Peak date (when maximum was reached)
+       - Trough date (when minimum was reached)
+       - Recovery date (when peak was exceeded again)
+       - Duration (peak to recovery in days)
+    
+    6. Calculate recovery time:
+       - Time from trough to recovery
+       - Time from peak to recovery
+    ```
+    
+    **Drawdown Table:**
+    ```
+    | Portfolio | Max Drawdown | Peak Date | Trough Date | Recovery Date | Duration (days) |
+    |-----------|--------------|-----------|-------------|---------------|-----------------|
+    | Max Sharpe | -XX.XX% | YYYY-MM-DD | YYYY-MM-DD | YYYY-MM-DD | XXX |
+    | Min Vol | -XX.XX% | YYYY-MM-DD | YYYY-MM-DD | YYYY-MM-DD | XXX |
+    | Aggressive | -XX.XX% | YYYY-MM-DD | YYYY-MM-DD | YYYY-MM-DD | XXX |
+    | Moderate | -XX.XX% | YYYY-MM-DD | YYYY-MM-DD | YYYY-MM-DD | XXX |
+    | Conservative | -XX.XX% | YYYY-MM-DD | YYYY-MM-DD | YYYY-MM-DD | XXX |
+    ```
+    
+    ---
+    
+    **STEP 4: STRESS TESTING**
+    
+    Test portfolio performance in historical crisis scenarios:
+    
+    **Scenario 1: 2008 Financial Crisis**
+    ```
+    Assumptions:
+    - US Equities (SPY, QQQ, VTI): -40%
+    - International Equities (VXUS): -45%
+    - Bonds (AGG): +5%
+    - Duration: 6 months
+    
+    Calculate portfolio loss:
+    Portfolio Loss = Σ(wᵢ × scenario_return_i)
+    
+    Example:
+    If portfolio is 60% stocks, 40% bonds:
+    Loss = 0.60 × (-40%) + 0.40 × (+5%) = -22%
+    ```
+    
+    **Scenario 2: 2020 COVID-19 Crash**
+    ```
+    Assumptions:
+    - US Equities: -35%
+    - International Equities: -30%
+    - Bonds: +8%
+    - Duration: 1 month (rapid crash)
+    
+    Calculate portfolio loss
+    ```
+    
+    **Scenario 3: 1987 Black Monday**
+    ```
+    Assumptions:
+    - All Equities: -22% (single day)
+    - Bonds: 0%
+    
+    Calculate portfolio loss
+    ```
+    
+    **Scenario 4: High Inflation (1970s style)**
+    ```
+    Assumptions:
+    - Equities: -10%
+    - Bonds: -15% (rising rates)
+    - Duration: 1 year
+    
+    Calculate portfolio loss
+    ```
+    
+    **Scenario 5: Geopolitical Crisis**
+    ```
+    Assumptions:
+    - US Equities: -25%
+    - International Equities: -35%
+    - Bonds: +3% (flight to safety)
+    
+    Calculate portfolio loss
+    ```
+    
+    **IF market_type == 'turkey', add:**
+    
+    **Scenario 6: 2018 Turkey Currency Crisis**
+    ```
+    Assumptions:
+    - Turkish Lira depreciation: -30%
+    - Turkish Stocks: -40%
+    - Banking sector: -50%
+    - Defensive sectors: -25%
+    
+    Calculate portfolio loss
+    ```
+    
+    **Stress Test Results Table:**
+    ```
+    | Portfolio | 2008 Crisis | COVID Crash | Black Monday | High Inflation | Geopolitical | Turkey Crisis* |
+    |-----------|-------------|-------------|--------------|----------------|--------------|----------------|
+    | Max Sharpe | -XX.X% | -XX.X% | -XX.X% | -XX.X% | -XX.X% | -XX.X% |
+    | Min Vol | -XX.X% | -XX.X% | -XX.X% | -XX.X% | -XX.X% | -XX.X% |
+    | Aggressive | -XX.X% | -XX.X% | -XX.X% | -XX.X% | -XX.X% | -XX.X% |
+    | Moderate | -XX.X% | -XX.X% | -XX.X% | -XX.X% | -XX.X% | -XX.X% |
+    | Conservative | -XX.X% | -XX.X% | -XX.X% | -XX.X% | -XX.X% | -XX.X% |
+    
+    * Only for Turkey market portfolios
+    ```
+    
+    ---
+    
+    **STEP 5: RISK FACTOR DECOMPOSITION**
+    
+    Break down portfolio risk by source:
+    
+    **1. Systematic Risk (Beta):**
+    ```
+    For each portfolio:
+    
+    Calculate portfolio beta:
+    βₚ = Σ(wᵢ × βᵢ)
+    
+    Where βᵢ is each asset's beta to market
+    
+    Interpretation:
+    - β > 1: Portfolio is more volatile than market
+    - β = 1: Portfolio moves with market
+    - β < 1: Portfolio is less volatile than market
+    - β ≈ 0: Portfolio is market-neutral
+    ```
+    
+    **2. Concentration Risk:**
+    ```
+    Calculate Herfindahl-Hirschman Index (HHI):
+    HHI = Σ(wᵢ²)
+    
+    Interpretation:
+    - HHI = 1
+    - HHI = 1.0: All weight in one asset (maximum concentration)
+    - HHI = 0.2: Equal weight across 5 assets (1/5 = 0.2)
+    - HHI < 0.25: Well diversified
+    - HHI > 0.4: Concentrated portfolio
+    
+    Calculate Effective Number of Assets:
+    N_eff = 1 / HHI
+    
+    Example:
+    - HHI = 0.2 → N_eff = 5 (like 5 equal positions)
+    - HHI = 0.5 → N_eff = 2 (like 2 equal positions)
+    ```
+    
+    **3. Sector/Asset Class Concentration:**
+    ```
+    For global portfolios:
+    - US Equity exposure: % (SPY + QQQ + VTI)
+    - International Equity: % (VXUS)
+    - Fixed Income: % (AGG)
+    
+    For Turkey portfolios:
+    - Financial sector: % (AKBNK + SAHOL)
+    - Industrial: % (EREGL)
+    - Transportation: % (THYAO)
+    - Retail: % (BIMAS)
+    ```
+    
+    **4. Currency Risk:**
+    ```
+    For global portfolios with VXUS:
+    - USD exposure: % (all except VXUS)
+    - Foreign currency exposure: % (VXUS weight)
+    
+    For Turkey portfolios:
+    - TRY exposure: 100%
+    - USD earnings exposure: % (THYAO has USD revenues)
+    ```
+    
+    **Risk Decomposition Table:**
+    ```
+    | Portfolio | Portfolio Beta | HHI | N_eff | Max Single Position | Largest Sector |
+    |-----------|----------------|-----|-------|---------------------|----------------|
+    | Max Sharpe | X.XX | 0.XX | X.X | XX% | Sector (XX%) |
+    | Min Vol | X.XX | 0.XX | X.X | XX% | Sector (XX%) |
+    | Aggressive | X.XX | 0.XX | X.X | XX% | Sector (XX%) |
+    | Moderate | X.XX | 0.XX | X.X | XX% | Sector (XX%) |
+    | Conservative | X.XX | 0.XX | X.X | XX% | Sector (XX%) |
+    ```
+    
+    ---
+    
+    **STEP 6: TAIL RISK ANALYSIS**
+    
+    Analyze extreme events:
+    
+    **1. Skewness:**
+    ```
+    Calculate skewness of portfolio returns:
+    
+    Skewness = E[(R - μ)³] / σ³
+    
+    Interpretation:
+    - Skewness > 0: Positive skew (more extreme gains than losses)
+    - Skewness = 0: Symmetric distribution
+    - Skewness < 0: Negative skew (more extreme losses than gains)
+    
+    Most equity portfolios have negative skewness (crash risk)
+    ```
+    
+    **2. Kurtosis:**
+    ```
+    Calculate excess kurtosis:
+    
+    Kurtosis = E[(R - μ)⁴] / σ⁴ - 3
+    
+    Interpretation:
+    - Kurtosis > 0: Fat tails (more extreme events than normal)
+    - Kurtosis = 0: Normal distribution
+    - Kurtosis < 0: Thin tails (fewer extreme events)
+    
+    Most financial returns have positive kurtosis (fat tails)
+    ```
+    
+    **3. Worst Historical Days:**
+    ```
+    For each portfolio, identify:
+    - 5 worst single-day returns
+    - Dates when they occurred
+    - Market context (what happened)
+    
+    Example:
+    1. -8.5% on 2020-03-16 (COVID panic)
+    2. -6.2% on 2020-03-12 (Market crash)
+    3. -5.8% on 2022-06-13 (Inflation fears)
+    etc.
+    ```
+    
+    **Tail Risk Table:**
+    ```
+    | Portfolio | Skewness | Kurtosis | Worst Day | 2nd Worst | 3rd Worst |
+    |-----------|----------|----------|-----------|-----------|-----------|
+    | Max Sharpe | -X.XX | X.XX | -X.XX% | -X.XX% | -X.XX% |
+    | Min Vol | -X.XX | X.XX | -X.XX% | -X.XX% | -X.XX% |
+    | Aggressive | -X.XX | X.XX | -X.XX% | -X.XX% | -X.XX% |
+    | Moderate | -X.XX | X.XX | -X.XX% | -X.XX% | -X.XX% |
+    | Conservative | -X.XX | X.XX | -X.XX% | -X.XX% | -X.XX% |
+    ```
+    
+    ---
+    
+    **STEP 7: DOWNSIDE RISK METRICS**
+    
+    Focus on negative returns only:
+    
+    **1. Downside Deviation:**
+    ```
+    Calculate standard deviation of returns below target (usually 0%):
+    
+    1. Filter returns: keep only returns < 0
+    2. Calculate standard deviation of negative returns
+    3. Annualize: multiply by √252
+    
+    Downside Deviation = √(Σ(min(R-0, 0)²) / n)
+    
+    This measures "bad" volatility only
+    ```
+    
+    **2. Sortino Ratio:**
+    ```
+    Sortino Ratio = (Return - Risk_Free_Rate) / Downside_Deviation
+    
+    Better than Sharpe for asymmetric returns
+    Higher Sortino = better downside risk-adjusted returns
+    ```
+    
+    **3. Upside/Downside Capture:**
+    ```
+    For each portfolio vs. market benchmark:
+    
+    Upside Capture = Portfolio return in up months / Benchmark return in up months
+    Downside Capture = Portfolio return in down months / Benchmark return in down months
+    
+    Ideal: High upside capture, low downside capture
+    ```
+    
+    **Downside Risk Table:**
+    ```
+    | Portfolio | Downside Dev | Sortino Ratio | Upside Capture | Downside Capture |
+    |-----------|--------------|---------------|----------------|------------------|
+    | Max Sharpe | X.XX% | X.XX | XXX% | XX% |
+    | Min Vol | X.XX% | X.XX | XXX% | XX% |
+    | Aggressive | X.XX% | X.XX | XXX% | XX% |
+    | Moderate | X.XX% | X.XX | XXX% | XX% |
+    | Conservative | X.XX% | X.XX | XXX% | XX% |
+    ```
+    
+    ---
+    
+    **STEP 8: LIQUIDITY RISK ASSESSMENT**
+    
+    Evaluate ease of trading:
+    
+    **1. Average Daily Volume:**
+    ```
+    For each asset in portfolio:
+    - Calculate average daily trading volume
+    - Calculate average daily dollar volume
+    - Estimate days to liquidate position
+    
+    Example:
+    SPY: $50B daily volume → Highly liquid
+    Small cap stock: $5M daily volume → Less liquid
+    ```
+    
+    **2. Bid-Ask Spread:**
+    ```
+    Estimate transaction costs:
+    - ETFs: typically 0.01-0.05%
+    - Large cap stocks: 0.05-0.10%
+    - Small cap stocks: 0.10-0.50%
+    
+    Portfolio liquidity score:
+    - High liquidity: Can trade full position in 1 day
+    - Medium liquidity: 2-5 days to trade
+    - Low liquidity: >5 days to trade
+    ```
+    
+    **3. Market Impact:**
+    ```
+    Estimate price impact of large trades:
+    
+    For $1M portfolio:
+    - SPY: Negligible impact (<0.01%)
+    - Small position: Minimal impact
+    
+    For $100M portfolio:
+    - May need to split orders
+    - Estimate 0.1-0.5% impact
+    ```
+    
+    ---
+    
+    **STEP 9: RISK MITIGATION STRATEGIES**
+    
+    Provide actionable recommendations:
+    
+    **1. Diversification Improvements:**
+    ```
+    If concentration risk is high:
+    - Recommend adding more assets
+    - Suggest sector diversification
+    - Consider international exposure
+    - Add alternative asset classes
+    ```
+    
+    **2. Hedging Strategies:**
+    ```
+    For downside protection:
+    
+    Option 1: Put Options
+    - Buy put options on SPY or QQQ
+    - Cost: 1-2% annually
+    - Protection: Limits downside to strike price
+    
+    Option 2: Inverse ETFs (short-term only)
+    - Small allocation to inverse ETF
+    - Acts as portfolio insurance
+    - Warning: Not for long-term holding
+    
+    Option 3: Increase Bond Allocation
+    - Shift 10-20% from stocks to bonds
+    - Reduces volatility
+    - Lowers expected return
+    ```
+    
+    **3. Rebalancing Rules:**
+    ```
+    Risk-based rebalancing:
+    
+    Trigger rebalancing when:
+    - Any position drifts >5% from target
+    - Portfolio volatility exceeds threshold
+    - Correlation structure changes significantly
+    
+    Frequency:
+    - Minimum: Annually
+    - Recommended: Quarterly
+    - Maximum: Monthly (avoid overtrading)
+    ```
+    
+    **4. Stop-Loss Rules:**
+    ```
+    Consider implementing:
+    
+    Portfolio-level stop-loss:
+    - If portfolio drops >15% from peak, reduce equity exposure
+    - If portfolio drops >25% from peak, move to defensive allocation
+    
+    Asset-level stop-loss:
+    - If individual position drops >30%, review fundamentals
+    - Consider tax-loss harvesting opportunities
+    ```
+    
+    **5. Monitoring Guidelines:**
+    ```
+    Daily monitoring:
+    - Portfolio value
+    - Major market moves (>2%)
+    
+    Weekly monitoring:
+    - Portfolio return vs. benchmark
+    - Volatility trends
+    
+    Monthly monitoring:
+    - Full performance review
+    - Rebalancing needs
+    - Risk metrics update
+    
+    Quarterly monitoring:
+    - Comprehensive risk assessment
+    - Strategy review
+    - Tax planning
+    ```
+    
+    ---
+    
+    **STEP 10: RISK WARNINGS AND DISCLAIMERS**
+    
+    Provide clear risk disclosures:
+    
+    **1. General Investment Risks:**
+    ```
+    ⚠️ Market Risk: All investments can lose value
+    ⚠️ Volatility Risk: Prices fluctuate, sometimes dramatically
+    ⚠️ Inflation Risk: Returns may not keep pace with inflation
+    ⚠️ Interest Rate Risk: Rising rates hurt bonds and some stocks
+    ⚠️ Currency Risk: Foreign investments subject to FX fluctuations
+    ⚠️ Liquidity Risk: May not be able to sell quickly at fair price
+    ⚠️ Concentration Risk: Over-allocation to single asset/sector
+    ⚠️ Systemic Risk: Entire market can decline simultaneously
+    ```
+    
+    **2. Model Limitations:**
+    ```
+    ⚠️ Historical returns may not predict future performance
+    ⚠️ Correlations can change during crises (diversification fails)
+    ⚠️ Normal distribution assumption may underestimate tail risk
+    ⚠️ Optimization based on historical data (backward-looking)
+    ⚠️ Transaction costs and taxes not fully modeled
+    ⚠️ Assumes continuous rebalancing (not realistic)
+    ⚠️ Does not account for behavioral biases
+    ```
+    
+    **3. Specific Warnings:**
+    ```
+    For Aggressive Portfolio:
+    ⚠️ High volatility - expect large swings
+    ⚠️ Potential for significant losses (>30%)
+    ⚠️ Requires strong emotional discipline
+    ⚠️ Not suitable for short time horizons
+    
+    For Turkey Market:
+    ⚠️ Emerging market risks (political, economic instability)
+    ⚠️ Currency volatility (TRY depreciation risk)
+    ⚠️ Lower liquidity than developed markets
+    ⚠️ Regulatory and governance risks
+    ```
+    
+    ---
+    
+    **OUTPUT REQUIREMENTS:**
+    
+    Produce a comprehensive risk assessment report with:
+    
+    **Section 1: Executive Risk Summary** (200 words)
+    - Key risk findings for each portfolio
+    - Most significant risks identified
+    - Critical warnings for investors
+    - Overall risk assessment (Low/Medium/High)
+    
+    **Section 2: Value at Risk Analysis**
+    - VaR table (all methods, all portfolios)
+    - Interpretation in dollar terms
+    - Comparison across portfolios
+    - Confidence level explanations
+    
+    **Section 3: Expected Shortfall (CVaR)**
+    - CVaR table for all portfolios
+    - Tail risk assessment
+    - Comparison to VaR
+    - Worst-case scenario implications
+    
+    **Section 4: Maximum Drawdown Analysis**
+    - Drawdown table with dates
+    - Historical context for worst periods
+    - Recovery time analysis
+    - Implications for investor psychology
+    
+    **Section 5: Stress Test Results**
+    - Full stress test table
+    - Scenario descriptions
+    - Portfolio resilience ranking
+    - Crisis preparedness assessment
+    
+    **Section 6: Risk Factor Decomposition**
+    - Beta and systematic risk
+    - Concentration metrics
+    - Sector/asset class breakdown
+    - Currency exposure analysis
+    
+    **Section 7: Tail Risk Analysis**
+    - Skewness and kurtosis table
+    - Worst historical days
+    - Fat tail implications
+    - Black swan preparedness
+    
+    **Section 8: Downside Risk Metrics**
+    - Downside deviation and Sortino ratios
+    - Upside/downside capture
+    - Asymmetric risk assessment
+    
+    **Section 9: Liquidity Assessment**
+    - Liquidity scores for each portfolio
+    - Trading cost estimates
+    - Market impact analysis
+    
+    **Section 10: Risk Mitigation Recommendations**
+    - Specific hedging strategies
+    - Rebalancing rules
+    - Stop-loss guidelines
+    - Monitoring framework
+    
+    **Section 11: Risk Warnings**
+    - Comprehensive risk disclosures
+    - Model limitations
+    - Portfolio-specific warnings
+    
+    **Format:** Professional risk report with tables and clear explanations
+    **Length:** 2000-2500 words
+    **Tone:** Serious and cautious, emphasizing risks honestly
+    **Numbers:** Precise and verified
+    **Emphasis:** Make risks crystal clear to investors
+  
+  expected_output: >
+    A comprehensive risk assessment report (2000-2500 words) containing:
+    
+    1. **Executive Risk Summary**
+       - Overall risk assessment for each portfolio
+       - Key risk metrics summary
+       - Critical warnings
+    
+    2. **VaR Analysis Tables**
+       - Historical, Parametric, and Monte Carlo VaR
+       - 95% and 99% confidence levels
+       - Dollar amount interpretations
+    
+    3. **CVaR/Expected Shortfall**
+       - Average loss beyond VaR
+       - Tail risk quantification
+       - Portfolio comparisons
+    
+    4. **Maximum Drawdown**
+       - Worst peak-to-trough declines
+       - Historical dates and context
+       - Recovery time analysis
+    
+    5. **Stress Test Results**
+       - Performance in 5-6 crisis scenarios
+       - Portfolio resilience rankings
+       - Scenario interpretations
+    
+    6. **Risk Decomposition**
+       - Beta, concentration, sector exposure
+       - Currency risk breakdown
+       - Diversification metrics
+    
+    7. **Tail Risk Metrics**
+       - Skewness and kurtosis
+       - Worst historical days
+       - Fat tail implications
+    
+    8. **Downside Risk**
+       - Sortino ratios
+       - Upside/downside capture
+       - Asymmetric risk assessment
+    
+    9. **Liquidity Analysis**
+       - Trading ease assessment
+       - Cost estimates
+    
+    10. **Risk Mitigation Strategies**
+        - Hedging recommendations
+        - Rebalancing rules
+        - Monitoring guidelines
+    
+    11. **Risk Warnings**
+        - Comprehensive disclaimers
+        - Model limitations
+        - Specific portfolio warnings
+    
+    **Quality Standards:**
+    - All risk metrics calculated correctly
+    - Conservative risk estimates (err on side of caution)
+    - Clear explanations of technical terms
+    - Honest about limitations
+    - Actionable mitigation strategies
+  
+  agent: risk_analyst
+  context:
+    - fetch_market_data
+    - optimize_portfolio
+
+# ----------------------------------------------------------------------------
+# TASK 4: GENERATE COMPREHENSIVE INVESTMENT REPORT
+# ----------------------------------------------------------------------------
+generate_investment_report:
+  description: >
+    **TASK: Create Professional Investment Report with Actionable Recommendations**
+    
+    **Objective:**
+    Synthesize all previous analyses into a comprehensive, easy-to-understand investment report.
+    
+    ---
+    
+    **CONTEXT:**
+    You have access to:
+    - Market data analysis (prices, returns, correlations)
+    - Portfolio optimization results (weights, metrics, efficient frontier)
+    - Risk assessment (VaR, stress tests, risk factors)
+    
+    **Report Parameters:**
+    - Market Type: {market_type}
+    - Analysis Period: {period}
+    - Report Date: {report_date}
+    - Risk-Free Rate: {risk_free_rate}
+    
+    ---
+    
+    **REPORT STRUCTURE:**
+    
+    ## 1. EXECUTIVE SUMMARY (500 words)
+    
+    Write a compelling executive summary that includes:
+    
+    **A. Key Findings (5-7 bullet points):**
+    ```
+    Example format:
+    • Analyzed 5 ETFs/stocks over {period} period with historical trading data
+    • Identified optimal portfolio with calculated expected return and calculated volatility
+    • Maximum Sharpe Ratio portfolio achieves optimal risk-adjusted return
+    • Diversification reduces risk significantly compared to single-asset investment
+    • Stress testing shows portfolio resilience with maximum potential loss in worst scenario
+    • Three portfolio options provided for different risk tolerances
+    • Implementation requires minimum ${X},000 investment for proper diversification
+    ```
+    
+    **B. Top Recommendation (1 paragraph):**
+    ```
+    Clearly state which portfolio you recommend and why:
+    
+    "For most investors with moderate risk tolerance and 10+ year time horizon,
+    we recommend the **Moderate Portfolio** with the following allocation:
+    - [Ticker 1]: XX.X%
+    - [Ticker 2]: XX.X%
+    - [Ticker 3]: XX.X%
+    - [Ticker 4]: XX.X%
+    - [Ticker 5]: XX.X%
+    
+    This portfolio offers an expected annual return of X.X% with X.X% volatility,
+    providing an attractive risk-adjusted return (Sharpe ratio: X.XX) while
+    maintaining adequate diversification."
+    ```
+    
+    **C. Critical Risks (3-4 bullet points):**
+    ```
+    • Market risk: Portfolio can decline XX-XX% in severe market downturn
+    • Volatility: Expect daily fluctuations of ±X-X%
+    • [Specific risk based on market type]
+    • Past performance does not guarantee future results
+    ```
+    
+    **D. Bottom-Line Advice (2-3 sentences):**
+    ```
+    Clear, actionable recommendation:
+    
+    "Investors should implement this portfolio through dollar-cost averaging
+    over 3-6 months to reduce timing risk. Rebalance quarterly or when any
+    position drifts more than 5% from target. Maintain a long-term perspective
+    and avoid emotional reactions to short-term market volatility."
+    ```
+    
+    ---
+    
+    ## 2. MARKET OVERVIEW (600-800 words)
+    
+    **A. Current Market Environment:**
+    ```
+    Describe the market conditions during analysis period:
+    
+    - Overall market trend (bull/bear/sideways)
+    - Volatility regime (high/low/normal)
+    - Key market drivers and themes
+    - Economic backdrop
+    - Interest rate environment
+    
+    Example:
+    "The {period} analysis period captured a [describe market environment].
+    The [market index] returned X.X% with volatility of X.X%, [above/below]
+    historical averages. Key themes included [list 2-3 major market drivers].
+    This environment [favored/challenged] [certain asset classes]."
+    ```
+    
+    **B. Asset Performance Summary:**
+    ```
+    Create a performance ranking table:
+    
+    | Rank | Ticker | Name | Total Return | Ann. Return | Ann. Volatility | Sharpe Ratio |
+    |------|--------|------|--------------|-------------|-----------------|--------------|
+    | 1 | XXX | Name | +XX.X% | +XX.X% | XX.X% | X.XX |
+    | 2 | XXX | Name | +XX.X% | +XX.X% | XX.X% | X.XX |
+    | 3 | XXX | Name | +XX.X% | +XX.X% | XX.X% | X.XX |
+    | 4 | XXX | Name | +XX.X% | +XX.X% | XX.X% | X.XX |
+    | 5 | XXX | Name | +XX.X% | +XX.X% | XX.X% | X.XX |
+    
+    Provide 2-3 sentences interpreting the table:
+    "XXX was the top performer with XX.X% return, driven by [reason].
+    XXX provided the best risk-adjusted returns (Sharpe: X.XX) due to [reason].
+    XXX showed the lowest volatility at XX.X%, making it suitable for conservative investors."
+    ```
+    
+    **C. Correlation Insights:**
+    ```
+    Explain diversification opportunities:
+    
+    "Correlation analysis reveals important diversification benefits:
+    
+    • [Asset A] and [Asset B] show low correlation (X.XX), providing excellent diversification
+    • [Asset C] exhibits negative correlation (-X.XX) with [Asset D], offering hedging potential
+    • [Asset E] is highly correlated (X.XX) with [Asset F], limiting diversification benefits
+    
+    The average pairwise correlation of X.XX suggests [good/moderate/limited] diversification
+    potential across this asset universe. Combining these assets in a portfolio can reduce
+    overall risk by approximately XX% compared to holding a single asset."
+    ```
+    
+    **D. Market Outlook:**
+    ```
+    Provide forward-looking context (2-3 paragraphs):
+    
+    - Key factors that may affect future performance
+    - Potential opportunities and risks ahead
+    - How current valuations compare to history
+    - Any structural changes in the market
+    
+    Note: Be cautious and balanced, avoid making specific predictions
+    
+    Example:
+    "Looking forward, several factors warrant attention. [Factor 1] may [impact].
+    [Factor 2] presents both opportunities and risks. Investors should monitor
+    [specific indicators] for signs of [potential change].
+    
+    While past performance provides useful context, future returns may differ
+    significantly due to [changing conditions]. The portfolio construction
+    methodology is designed to be robust across different market environments."
+    ```
+    
+    ---
+    
+    ## 3. PORTFOLIO OPTIMIZATION RESULTS (1000-1200 words)
+    
+    **A. Optimization Methodology:**
+    ```
+    Explain the approach (2-3 paragraphs):
+    
+    "We employed Modern Portfolio Theory (MPT), developed by Nobel laureate
+    Harry Markowitz, to construct optimal portfolios. MPT seeks to maximize
+    expected return for a given level of risk, or minimize risk for a target return.
+    
+    The optimization process used:
+    • Historical returns over {period} as proxy for expected returns
+    • Covariance matrix to capture asset relationships
+    • Risk-free rate of {risk_free_rate} (based on [benchmark])
+    • Constraints: No short selling, full investment, maximum 40% per position
+    
+    We generated an efficient frontier representing all optimal risk-return
+    combinations and identified key portfolios along this frontier."
+    ```
+    
+    **B. Maximum Sharpe Ratio Portfolio:**
+    ```
+    **Portfolio Allocation:**
+    
+    | Ticker | Name | Weight | Dollar Amount* |
+    |--------|------|--------|----------------|
+    | XXX | Full Name | XX.X% | $XX,XXX |
+    | XXX | Full Name | XX.X% | $XX,XXX |
+    | XXX | Full Name | XX.X% | $XX,XXX |
+    | XXX | Full Name | XX.X% | $XX,XXX |
+    | XXX | Full Name | XX.X% | $XX,XXX |
+    | **TOTAL** | | **100.0%** | **$100,000** |
+    
+    *Based on $100,000 portfolio
+    
+    **Performance Metrics:**
+    • Expected Annual Return: X.X%
+    • Annual Volatility: X.X%
+    • Sharpe Ratio: X.XX
+    • Expected 5-Year Return: XX-XX% (range)
+    • Expected 10-Year Return: XX-XX% (range)
+    
+    **Interpretation (2-3 paragraphs):**
+    
+    "The Maximum Sharpe Ratio portfolio represents the optimal balance between
+    risk and return, achieving the highest risk-adjusted returns. With a Sharpe
+    ratio of X.XX, this portfolio generates X.XX units of excess return for each
+    unit of risk taken.
+    
+    The allocation is [describe concentration - diversified/concentrated] with
+    the largest position (XX.X%) in [Ticker]. This reflects [explain reasoning].
+    The portfolio's expected return of X.X% with volatility of X.X% positions it
+    [describe risk-return profile].
+    
+    This portfolio is suitable for investors seeking optimal risk-adjusted returns
+    with [moderate/high] risk tolerance and a time horizon of [X]+ years."
+    ```
+    
+    **C. Minimum Volatility Portfolio:**
+    ```
+    [Same format as Maximum Sharpe, with allocation table, metrics, and interpretation]
+    
+    Emphasize:
+    - Lowest risk characteristics
+    - Defensive positioning
+    - Suitable for conservative investors
+    - Trade-off: Lower expected return for stability
+    ```
+    
+    **D. Efficient Frontier:**
+    ```
+    **Description:**
+    
+    "The efficient frontier represents all optimal portfolios - those offering
+    the maximum return for each level of risk. Any portfolio below the frontier
+    is sub-optimal (dominated by a frontier portfolio with better risk-return profile).
+    
+    Key points on the frontier:
+    • Minimum Volatility: X.X% volatility, X.X% return
+    • Maximum Sharpe: X.X% volatility, X.X% return
+    • Aggressive: X.X% volatility, X.X% return
+    
+    The frontier demonstrates the fundamental risk-return tradeoff: higher returns
+    require accepting higher volatility. Investors should select a point on the
+    frontier matching their risk tolerance and investment goals."
+    
+    **Efficient Frontier Data (sample 10-15 points):**
+    
+    | Volatility | Return | Sharpe Ratio |
+    |------------|--------|--------------|
+    | X.X% | X.X% | X.XX |
+    | X.X% | X.X% | X.XX |
+    | ... | ... | ... |
+    ```
+    
+    **E. Three Portfolio Recommendations:**
+    ```
+    ### AGGRESSIVE PORTFOLIO
+    
+    **Target Investor:**
+    - Age: Under 40
+    - Time Horizon: 15+ years
+    - Risk Tolerance: High
+    - Goal: Maximum growth
+    
+    **Allocation:**
+    [Table with weights]
+    
+    **Metrics:**
+    - Expected Return: X.X%
+    - Volatility: X.X%
+    - Sharpe Ratio: X.XX
+    - Max Drawdown Estimate: -XX%
+    
+    **Interpretation:**
+    "This portfolio targets maximum growth with XX.X% allocation to [higher-risk assets].
+    Investors should expect significant volatility, including potential drawdowns of
+    XX-XX%. Suitable only for those who can tolerate large swings and maintain
+    long-term discipline."
+    
+    ---
+    
+    ### MODERATE PORTFOLIO
+    
+    [Same format as Aggressive]
+    
+    **Target Investor:**
+    - Age: 40-60
+    - Time Horizon: 7-15 years
+    - Risk Tolerance: Moderate
+    - Goal: Balanced growth and stability
+    
+    ---
+    
+    ### CONSERVATIVE PORTFOLIO
+    
+    [Same format as Aggressive]
+    
+    **Target Investor:**
+    - Age: 60+
+    - Time Horizon: Under 7 years
+    - Risk Tolerance: Low
+    - Goal: Capital preservation with modest growth
+    ```
+    
+    **F. Portfolio Comparison:**
+    ```
+    | Metric | Aggressive | Moderate | Conservative | Max Sharpe | Min Vol |
+    |--------|------------|----------|--------------|------------|---------|
+    | Expected Return | X.X% | X.X% | X.X% | X.X% | X.X% |
+    | Volatility | X.X% | X.X% | X.X% | X.X% | X.X% |
+    | Sharpe Ratio | X.XX | X.XX | X.XX | X.XX | X.XX |
+    | Max Position | XX% | XX% | XX% | XX% | XX% |
+    | Equity Exposure | XX% | XX% | XX% | XX% | XX% |
+    | Suitable For | Growth | Balanced | Preservation | Optimal | Defensive |
+    
+    **Selection Guidance:**
+    
+    "Choose your portfolio based on:
+    
+    1. **Risk Tolerance Test:**
+       - If you can tolerate -30% decline without panic → Aggressive
+       - If you can tolerate -20% decline → Moderate
+       - If you want to limit declines to -10% → Conservative
+    
+    2. **Time Horizon:**
+       - 15+ years → Aggressive or Moderate
+       - 7-15 years → Moderate
+       - Under 7 years → Conservative or Min Vol
+    
+    3. **Financial Situation:**
+       - Stable income, no near-term needs → Aggressive
+       - Some flexibility → Moderate
+       - Need stability, approaching retirement → Conservative
+    
+    When in doubt, start with Moderate and adjust based on experience."
+    ```
+    
+    ---
+    
+    ## 4. RISK ANALYSIS (800-1000 words)
+    
+    **A. Value at Risk Summary:**
+    ```
+    "Value at Risk (VaR) estimates the maximum expected loss over a given time
+    period at a specified confidence level. For example, a 95% VaR of -2.5%
+    means there is only a 5% chance of losing more than 2.5% in a single day.
+    
+    **VaR Summary Table:**
+    
+    | Portfolio | 1-Day VaR (95%) | 1-Day VaR (99%) | 1-Month VaR (95%) |
+    |-----------|-----------------|-----------------|-------------------|
+    | Aggressive | -X.X% | -X.X% | -X.X% |
+    | Moderate | -X.X% | -X.X% | -X.X% |
+    | Conservative | -X.X% | -X.X% | -X.X% |
+    
+    **Dollar Terms (for $100,000 portfolio):**
+    
+    | Portfolio | Max Daily Loss (95%) | Max Daily Loss (99%) |
+    |-----------|---------------------|---------------------|
+    | Aggressive | -$X,XXX | -$X,XXX |
+    | Moderate | -$X,XXX | -$X,XXX |
+    | Conservative | -$X,XXX | -$X,XXX |
+    
+    Interpretation: [Explain what these numbers mean for investors]"
+    ```
+    
+    **B. Stress Test Results:**
+    ```
+    "We tested each portfolio against historical crisis scenarios:
+    
+    **Stress Test Summary:**
+    
+    | Portfolio | 2008 Crisis | COVID Crash | Black Monday | High Inflation |
+    |-----------|-------------|-------------|--------------|----------------|
+    | Aggressive | -XX.X% | -XX.X% | -XX.X% | -XX.X% |
+    | Moderate | -XX.X% | -XX.X% | -XX.X% | -XX.X% |
+    | Conservative | -XX.X% | -XX.X% | -XX.X% | -XX.X% |
+    
+    **Key Insights:**
+    
+    • [Portfolio X] showed best resilience in [scenario], losing only XX%
+    • Worst-case scenario for [Portfolio Y] was [scenario] with -XX% loss
+    • [Asset Z] provided valuable diversification during [crisis]
+    • Recovery times ranged from [X] to [Y] months depending on scenario
+    
+    These stress tests demonstrate that even well-diversified portfolios can
+    experience significant losses during extreme events. Investors must be
+    prepared emotionally and financially for such scenarios."
+    ```
+    
+    **C. Maximum Drawdown:**
+    ```
+    "Maximum drawdown measures the largest peak-to-trough decline:
+    
+    | Portfolio | Max Drawdown | Duration | Recovery Time |
+    |-----------|--------------|----------|---------------|
+    | Aggressive | -XX.X% | XX days | XX days |
+    | Moderate | -XX.X% | XX days | XX days |
+    | Conservative | -XX.X% | XX days | XX days |
+    
+    Historical context: [Explain when these drawdowns occurred and why]"
+    ```
+    
+    **D. Risk Mitigation Strategies:**
+    ```
+    **1. Diversification:**
+    - Current portfolios are well-diversified across [X] assets
+    - Consider adding [asset class] for further diversification
+    - International exposure provides geographic diversification
+    
+    **2. Rebalancing:**
+    - Rebalance quarterly or when positions drift >5%
+    - Systematic rebalancing enforces "buy low, sell high" discipline
+    - Tax-loss harvesting opportunities during rebalancing
+    
+    **3. Dollar-Cost Averaging:**
+    - Invest gradually over 3-6 months to reduce timing risk
+    - Automatic monthly investments reduce emotional decision-making
+    - Particularly important during volatile markets
+    
+    **4. Emergency Fund:**
+    - Maintain 6-12 months expenses in cash before investing
+    - Prevents forced selling during market downturns
+    - Provides peace of mind to stay invested
+    
+    **5. Long-Term Perspective:**
+    - Historical data shows markets recover from all crashes
+    - Time in market beats timing the market
+    - Avoid checking portfolio daily - reduces emotional reactions
+    ```
+    
+    ---
+    
+    ## 5. INVESTMENT RECOMMENDATIONS (800-1000 words)
+    
+    **A. Portfolio Selection Guide:**
+    ```
+    **Step 1: Assess Your Risk Tolerance**
+    
+    Answer these questions:
+    1. If your portfolio dropped 25% in a month, would you:
+       a) Sell everything (→ Conservative)
+       b) Feel anxious but hold (→ Moderate)
+       c) Buy more (→ Aggressive)
+    
+    2. Your investment time horizon is:
+       a) Under 5 years (→ Conservative)
+       b) 5-15 years (→ Moderate)
+       c) Over 15 years (→ Aggressive)
+    
+    3. Your primary goal is:
+       a) Preserve capital (→ Conservative)
+       b) Balanced growth (→ Moderate)
+       c) Maximum growth (→ Aggressive)
+    
+    **Step 2: Select Your Portfolio**
+    
+    Based on your answers, choose the portfolio that matches your profile.
+    ```
+    
+    **B. Implementation Steps:**
+    ```
+    **Step 1: Open Brokerage Account**
+    - Choose low-cost broker (Vanguard, Fidelity, Schwab, Interactive Brokers)
+    - Look for $0 commissions on ETFs/stocks
+    - Ensure access to all required tickers
+    
+    **Step 2: Fund Your Account**
+    - Transfer funds via ACH (3-5 business days)
+    - Start with amount you're comfortable investing
+    - Keep 6-12 months expenses in emergency fund
+    
+    **Step 3: Place Orders**
+    - Use limit orders (not market orders) for better prices
+    - Buy during market hours (9:30 AM - 4:00 PM ET)
+    - For ETFs: Check bid-ask spread before buying
+    - For stocks: Use limit orders within 1-2% of current price
+    
+    **Step 4: Implement Dollar-Cost Averaging**
+    - Month 1: Invest 33% of total amount
+    - Month 2: Invest another 33%
+    - Month 3: Invest final 34%
+    - This reduces timing risk and emotional stress
+    
+    **Step 5: Set Up Automatic Rebalancing**
+    - Many brokers offer automatic rebalancing
+    - Or set calendar reminder for quarterly review
+    - Rebalance when any position drifts >5% from target
+    ```
+    
+    **C. Sample Portfolio Sizes:**
+    ```
+    **For $10,000 Investment (Moderate Portfolio):**
+    
+    | Ticker | Weight | Dollar Amount | Shares | Order Type |
+    |--------|--------|---------------|--------|------------|
+    | XXX | XX.X% | $X,XXX | XX | Limit |
+    | XXX | XX.X% | $X,XXX | XX | Limit |
+    | XXX | XX.X% | $X,XXX | XX | Limit |
+    | XXX | XX.X% | $X,XXX | XX | Limit |
+    | XXX | XX.X% | $X,XXX | XX | Limit |
+    
+    **For $50,000 Investment:**
+    [Similar table with larger amounts]
+    
+    **For $100,000 Investment:**
+    [Similar table with larger amounts]
+    
+    Note: Adjust shares to whole numbers; small cash remainder is acceptable.
+    ```
+    
+    **D. Rebalancing Strategy:**
+    ```
+    **When to Rebalance:**
+    
+    1. **Calendar-Based:**
+       - Quarterly: March 31, June 30, Sept 30, Dec 31
+       - Or Semi-Annual: June 30, Dec 31
+       - Or Annual: Dec 31 (simplest, lowest costs)
+    
+    2. **Threshold-Based:**
+       - When any position drifts >5% from target
+       - Example: 30% target becomes 35% → rebalance
+       - More responsive but may trigger more often
+    
+    3. **Hybrid Approach (Recommended):**
+       - Check quarterly
+       - Rebalance only if drift >5%
+       - Balances responsiveness and transaction costs
+    
+    **How to Rebalance:**
+    
+    1. Calculate current weights
+    2. Compare to target weights
+    3. Sell overweight positions
+    4. Buy underweight positions
+    5. Consider tax implications (use tax-loss harvesting)
+    
+    **Tax-Efficient Rebalancing:**
+    - In taxable accounts: Harvest losses when rebalancing
+    - Use new contributions to buy underweight positions
+    - Avoid selling positions with large gains if possible
+    - In retirement accounts: Rebalance freely (no tax impact)
+    ```
+    
+    **E. Monitoring and Maintenance:**
+    ```
+    **Daily (Optional):**
+    - Check portfolio value
+    - Note major market moves (>2%)
+    - Avoid obsessive checking (causes anxiety)
+    
+    **Weekly:**
+    - Review portfolio return vs. benchmark
+    - Check for any major news affecting holdings
+    - 5-minute review is sufficient
+    
+    **Monthly:**
+    - Full performance review
+    - Calculate month-to-date return
+    - Compare to target allocation
+    - Review any rebalancing needs
+    
+    **Quarterly:**
+    - Comprehensive review
+    - Rebalance if needed
+    - Review risk metrics
+    - Assess if portfolio still matches goals
+    
+    **Annually:**
+    - Full strategy review
+    - Tax planning (harvest losses, plan distributions)
+    - Update financial plan
+    - Consider life changes affecting risk tolerance
+    ```
+    
+    **F. When to Adjust Your Portfolio:**
+    ```
+    **Reasons to Change Allocation:**
+    
+    ✅ Life changes:
+    - Getting married/divorced
+    - Having children
+    - Approaching retirement
+    - Change in income/expenses
+    
+    ✅ Risk tolerance changes:
+    - Can't sleep due to volatility → more conservative
+    - Comfortable with swings → more aggressive
+    
+    ✅ Time horizon changes:
+    - Moving closer to goal → more conservative
+    - Goal delayed → can take more risk
+    
+    ❌ DON'T change due to:
+    - Short-term market volatility
+    - News headlines
+    - Fear or greed
+    - Recent performance (chasing returns)
+    ```
+    
+    ---
+    
+    ## 6. FREQUENTLY ASKED QUESTIONS (400-500 words)
+    
+    ```
+    **Q1: How much should I invest?**
+    A: Only invest money you won't need for [X]+ years. Keep 6-12 months of
+    expenses in an emergency fund. Start with an amount you're comfortable with,
+    even if it's small. You can always add more later.
+    
+    **Q2: When is the best time to invest?**
+    A: The best time was yesterday; the second best is today. Trying to time
+    the market usually backfires. Use dollar-cost averaging (invest gradually
+    over 3-6 months) to reduce timing risk.
+    
+    **Q3: Should I invest all at once or gradually?**
+    A: Research shows lump-sum investing performs better 2/3 of the time, but
+    dollar-cost averaging feels less risky. For large amounts (>$50K), consider
+    DCA over 3-6 months for emotional comfort.
+    
+    **Q4: How often should I check my portfolio?**
+    A: Monthly is sufficient. Daily checking increases anxiety and temptation
+    to make emotional decisions. Set it and (mostly) forget it.
+    
+    **Q5: What if the market crashes after I invest?**
+    A: Market crashes are normal and expected. Historically, markets recover
+    from all crashes given enough time. If you have a long time horizon, crashes
+    are buying opportunities. Stick to your plan and rebalance as scheduled.
+    
+    **Q6: Can I customize the recommended allocation?**
+    A: Yes, but understand the tradeoffs. Increasing one position means decreasing
+    others, which affects risk-return profile. Small adjustments (±5%) are fine;
+    major changes may move you off the efficient frontier.
+    
+    **Q7: What about taxes?**
+    A: In taxable accounts, you'll pay taxes on dividends and capital gains.
+    ETFs are generally tax-efficient. Consider holding in tax-advantaged accounts
+    (IRA, 401k) when possible. Harvest losses during rebalancing to offset gains.
+    
+    **Q8: Should I use a financial advisor?**
+    A: For portfolios >$500K or complex situations (business ownership, estate
+    planning), a fee-only fiduciary advisor can add value. For straightforward
+    situations, self-management using this analysis is reasonable.
+    
+    **Q9: What if my risk tolerance changes?**
+    A: That's normal! Life changes, markets change, and your comfort level may
+    change. Adjust your allocation to match your current risk tolerance. Moving
+    from Aggressive → Moderate or Moderate → Conservative is fine.
+    
+    **Q10: Is this guaranteed to make money?**
+    A: NO. All investments carry risk. Past performance doesn't guarantee future
+    results. This analysis provides a framework, not a guarantee. You can lose
+    money, especially in the short term.
+    ```
+    
+    ---
+    
+    ## 7. APPENDIX (600-800 words)
+    
+    **A. Methodology:**
+    ```
+    **Modern Portfolio Theory (MPT):**
+    
+    Developed by Harry Markowitz (Nobel Prize, 1990), MPT is the foundation
+    of modern portfolio construction. Key principles:
+    
+    1. **Diversification reduces risk:** Combining assets with low correlation
+       reduces portfolio volatility without sacrificing expected return.
+    
+    2. **Efficient frontier:** Represents optimal portfolios that maximize
+       return for each level of risk.
+    
+    3. **Risk-return tradeoff:** Higher returns require accepting higher risk.
+       There is no "free lunch" in investing.
+    
+    **Optimization Process:**
+    
+    1. Estimate expected returns (using historical averages)
+    2. Calculate covariance matrix (asset relationships)
+    3. Define constraints (no short selling, diversification limits)
+    4. Solve quadratic optimization problem
+    5. Generate efficient frontier
+    6. Identify key portfolios (Max Sharpe, Min Vol, etc.)
+    
+    **Assumptions:**
+    - Returns are normally distributed (may underestimate tail risk)
+    - Historical relationships persist (correlations can change)
+    - No transaction costs (small impact in practice)
+    - Continuous rebalancing (approximated by periodic rebalancing)
+    ```
+    
+    **B. Data Sources:**
+    ```
+    - **Price Data:** Yahoo Finance (adjusted for splits and dividends)
+    - **Risk-Free Rate:** {risk_free_rate} based on [10-Year Treasury/Gov Bond]
+    - **Analysis Period:** {period} ({start_date} to {end_date})
+    - **Data Frequency:** Daily closing prices
+    - **Trading Days:** {X} days of data
+    ```
+    
+    **C. Assumptions and Limitations:**
+    ```
+    **Key Assumptions:**
+    1. Historical returns proxy for expected future returns
+    2. Historical correlations remain stable
+    3. Markets are reasonably efficient
+    4. No major structural changes in economy
+    5. Investors can trade at closing prices without impact
+    
+    **Limitations:**
+    1. **Estimation Error:** Expected returns are uncertain; actual returns may differ significantly
+    2. **Correlation Breakdown:** Assets can become highly correlated during crises
+    3. **Black Swans:** Model doesn't predict unprecedented events
+    4. **Behavioral Factors:** Assumes rational behavior (investors often aren't)
+    5. **Transaction Costs:** Small costs not fully modeled (typically <0.1%)
+    6. **Taxes:** Individual tax situations vary; not fully modeled
+    7. **Liquidity:** Assumes ability to trade any amount instantly
+    8. **Model Risk:** All models are simplifications of reality
+    ```
+    
+    **D. Glossary:**
+    ```
+    **Sharpe Ratio:** Risk-adjusted return measure. Higher is better. Formula: (Return - Risk_Free) / Volatility
+    
+    **Volatility:** Standard deviation of returns. Measures price fluctuation. Higher = more risk.
+    
+    **Correlation:** Measure of how two assets move together. Range: -1 to +1. Low correlation = good diversification.
+    
+    **VaR (Value at Risk):** Maximum expected loss at given confidence level. Example: 95% VaR of -2% means 5% chance of losing >2%.
+    
+    **CVaR (Conditional VaR):** Average loss when VaR is exceeded. Always worse than VaR.
+    
+    **Drawdown:** Peak-to-trough decline. Maximum drawdown = worst historical decline.
+    
+    **Efficient Frontier:** Set of optimal portfolios offering best return for each risk level.
+    
+    **Beta:** Sensitivity to market movements. Beta > 1 = more volatile than market.
+    
+    **Rebalancing:** Adjusting portfolio back to target weights. Enforces discipline.
+    ```
+    
+    **E. Regulatory Disclaimers:**
+    ```
+    ⚠️ IMPORTANT DISCLAIMERS:
+    
+    • This report is for educational and informational purposes only
+    • NOT financial advice or a recommendation to buy/sell securities
+    • Past performance does not guarantee future results
+    • All investments carry risk of loss, including loss of principal
+    • Consult a qualified financial advisor before making investment decisions
+    • This analysis does not consider your specific financial situation
+    • Tax implications vary by individual; consult a tax professional
+    • The author/analyst has no financial interest in recommended securities
+    • Market conditions can change rapidly; this analysis may become outdated
+    • No warranty or guarantee of accuracy is provided
+    • You are solely responsible for your investment decisions
+    
+    By using this report, you acknowledge these limitations and agree that
+    the author/analyst is not liable for any losses resulting from following
+    this analysis.
+    ```
+    
+    **F. References and Further Reading:**
+    ```
+    **Academic Papers:**
+    1. Markowitz, H. (1952). "Portfolio Selection." Journal of Finance.
+    2. Sharpe, W. (1964). "Capital Asset Prices: A Theory of Market Equilibrium."
+    3. Black, F. & Litterman, R. (1992). "Global Portfolio Optimization."
+    
+    **Books:**
+    1. "A Random Walk Down Wall Street" by Burton Malkiel
+    2. "The Intelligent Investor" by Benjamin Graham
+    3. "Common Sense on Mutual Funds" by John Bogle
+    
+    **Online Resources:**
+    1. Vanguard Research: investor.vanguard.com/research
+    2. Morningstar Portfolio Tools: morningstar.com
+    3. Portfolio Visualizer: portfoliovisualizer.com
+    ```
+    
+    ---
+    
+    **OUTPUT REQUIREMENTS:**
+    
+    - **Format:** Professional Markdown document
+    - **Length:** 4000-5000 words (comprehensive but readable)
+    - **Tone:** Professional, confident, but realistic about risks
+    - **Structure:** Clear headers, tables, bullet points
+    - **Numbers:** Specific and accurate (2-4 decimal places)
+    - **Emphasis:** Bold for key points, italics for terms
+    - **Tables:** Well-formatted with clear labels
+    - **Actionable:** Every section should help investor make decisions
+    - **Balanced:** Explain both opportunities and risks honestly
+    - **Accessible:** Technical terms explained, jargon minimized
+    
+    Save as: `reports/investment_report_{market_type}_{report_date}.md`
+  
+  expected_output: >
+    A comprehensive, professional investment report (4000-5000 words) saved as
+    Markdown file containing:
+    
+    1. **Executive Summary** (500 words)
+       - Key findings, top recommendation, risks, bottom-line advice
+    
+    2. **Market Overview** (600-800 words)
+       - Market environment, asset performance, correlations, outlook
+    
+    3. **Portfolio Optimization Results** (1000-1200 words)
+       - Methodology, Max Sharpe, Min Vol, Efficient Frontier
+       - Three recommendations (Aggressive, Moderate, Conservative)
+       - Comparison and selection guidance
+    
+    4. **Risk Analysis** (800-1000 words)
+       - VaR, stress tests, drawdowns, mitigation strategies
+    
+    5. **Investment Recommendations** (800-1000 words)
+       - Selection guide, implementation steps, sample allocations
+       - Rebalancing strategy, monitoring framework
+    
+    6. **FAQ** (400-500 words)
+       - 10 common questions with clear answers
+    
+    7. **Appendix** (600-800 words)
+       - Methodology, data sources, assumptions, limitations
+       - Glossary, disclaimers, references
+    
+    **Quality Standards:**
+    - All numbers accurate and verified
+    - Clear, professional writing
+    - Actionable recommendations
+    - Honest about risks and limitations
+    - Suitable for presentation to investors
+    - Well-formatted Markdown with tables
+    - Comprehensive disclaimers
+  
+  agent: report_writer
+  context:
+    - fetch_market_data
+    - optimize_portfolio
+    - assess_risks
+  output_file: 'reports/investment_report_{market_type}_{report_date}.md'
+
+# ============================================================================
+# END OF TASKS CONFIGURATION
+# ============================================================================

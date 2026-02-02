@@ -1,0 +1,5 @@
+# requirements.txt
+crewai[tools]
+yfinance>=0.2.18
+pandas>=2.0.0
+requests>=2.31.0

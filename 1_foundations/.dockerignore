@@ -1,0 +1,49 @@
+# Test files
+test_*.py
+run_tests.sh
+htmlcov/
+.coverage
+.pytest_cache/
+requirements_test.txt
+
+# Development files
+*.pyc
+__pycache__/
+.DS_Store
+.vscode/
+.idea/
+
+# Database (will be created fresh)
+career_bot.db
+*.db
+*.db-journal
+*.db-wal
+
+# Logs
+*.log
+app.log
+
+# Documentation (not needed for deployment)
+DEPLOYMENT_*.md
+HUGGINGFACE_DEPLOYMENT.md
+README_DEPLOYMENT.md
+README_NEW_FEATURES.md
+README_HF.md
+APPROVAL_*.md
+FEATURES_V2.md
+YENI_OZELLIKLER.md
+
+# Old versions
+app.py
+app_old.py
+app_new_backup.py
+app_new_broken.py
+app_new_old.py
+
+# Community contributions (if not needed)
+community_contributions/
+
+# Backup files
+*.backup
+*.bak
+*.tmp

@@ -1,0 +1,17 @@
+[achievement: Certifications]
+- AWS Certified Solutions Architect
+- Machine Learning Feature Engineering (Coursera)
+- VMware vSphere: Install, Configure, Manage
+- Fundamentals of Machine Learning and Artificial Intelligence
+- ITIL Certification
+
+[achievement: Key Results]
+- 40% improvement in deployment velocity through agentic CI/CD optimization
+- 20% cost reduction via predictive resource management
+- 25% increase in customer engagement through LLM-driven systems
+
+[achievement: Leadership]
+Led and mentored multi-disciplinary teams across continents, fostering psychological safety, creativity, and collective learning.
+
+[achievement: Publications & Talks]
+Contributor to internal research on AI autonomy, multi-agent orchestration, and philosophy of technology. Speaker on responsible AI adoption and autopoietic organizational design.

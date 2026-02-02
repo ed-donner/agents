@@ -1,0 +1,93 @@
+{
+    "SPY": {
+      "name": "SPDR S&P 500 ETF Trust",
+      "sector": "Broad Market",
+      "expense_ratio": 0.0009,
+      "aum": "450B",
+      "description": "Tracks the S&P 500 index, representing 500 largest US companies. Most liquid ETF globally.",
+      "inception_date": "1993-01-22",
+      "website": "https://www.ssga.com/us/en/individual/etfs/funds/spdr-sp-500-etf-trust-spy"
+    },
+    "QQQ": {
+      "name": "Invesco QQQ Trust",
+      "sector": "Technology",
+      "expense_ratio": 0.0020,
+      "aum": "250B",
+      "description": "Tracks Nasdaq-100 index. Heavy technology exposure with companies like Apple, Microsoft, Amazon.",
+      "inception_date": "1999-03-10",
+      "website": "https://www.invesco.com/qqq-etf/en/home.html"
+    },
+    "VTI": {
+      "name": "Vanguard Total Stock Market ETF",
+      "sector": "Total Market",
+      "expense_ratio": 0.0003,
+      "aum": "400B",
+      "description": "Entire US stock market exposure including large, mid, and small-cap stocks. Ultra-low cost.",
+      "inception_date": "2001-05-24",
+      "website": "https://investor.vanguard.com/etf/profile/VTI"
+    },
+    "VXUS": {
+      "name": "Vanguard Total International Stock ETF",
+      "sector": "International",
+      "expense_ratio": 0.0008,
+      "aum": "70B",
+      "description": "Non-US developed and emerging markets exposure. Complements US equity holdings.",
+      "inception_date": "2011-01-26",
+      "website": "https://investor.vanguard.com/etf/profile/VXUS"
+    },
+    "AGG": {
+      "name": "iShares Core U.S. Aggregate Bond ETF",
+      "sector": "Bonds",
+      "expense_ratio": 0.0003,
+      "aum": "100B",
+      "description": "US investment-grade bond market including Treasury, corporate, and mortgage-backed securities.",
+      "inception_date": "2003-09-22",
+      "website": "https://www.ishares.com/us/products/239458/ishares-core-total-us-bond-market-etf"
+    },
+    "THYAO.IS": {
+      "name": "Türk Hava Yolları",
+      "sector": "Havacılık",
+      "expense_ratio": null,
+      "aum": null,
+      "description": "Türkiye'nin bayrak taşıyıcı havayolu şirketi. Geniş uçuş ağı ve güçlü marka değeri.",
+      "inception_date": "1990-01-11",
+      "website": "https://investor.turkishairlines.com"
+    },
+    "AKBNK.IS": {
+      "name": "Akbank T.A.Ş.",
+      "sector": "Bankacılık",
+      "expense_ratio": null,
+      "aum": null,
+      "description": "Türkiye'nin önde gelen özel bankalarından. Güçlü dijital bankacılık altyapısı.",
+      "inception_date": "1998-04-27",
+      "website": "https://www.akbank.com/tr-tr/yatirimci-iliskileri"
+    },
+    "EREGL.IS": {
+      "name": "Ereğli Demir ve Çelik Fabrikaları T.A.Ş.",
+      "sector": "Sanayi/Çelik",
+      "expense_ratio": null,
+      "aum": null,
+      "description": "Türkiye'nin en büyük çelik üreticisi. İnşaat ve altyapı sektörüne bağlı.",
+      "inception_date": "1991-07-09",
+      "website": "https://www.erdemir.com.tr/tr/yatirimci-iliskileri"
+    },
+    "SAHOL.IS": {
+      "name": "Hacı Ömer Sabancı Holding A.Ş.",
+      "sector": "Holding",
+      "expense_ratio": null,
+      "aum": null,
+      "description": "Çok sektörlü holding yapısı. Finans, enerji, perakende ve sanayi alanlarında faaliyet.",
+      "inception_date": "1997-01-13",
+      "website": "https://www.sabanci.com/tr/yatirimci-iliskileri"
+    },
+    "BIMAS.IS": {
+      "name": "BİM Birleşik Mağazalar A.Ş.",
+      "sector": "Perakende",
+      "expense_ratio": null,
+      "aum": null,
+      "description": "Discount perakende zinciri. Hızlı büyüme ve yüksek operasyonel verimlilik.",
+      "inception_date": "2005-07-06",
+      "website": "https://www.bim.com.tr/yatirimci-iliskileri"
+    }
+  }
+  

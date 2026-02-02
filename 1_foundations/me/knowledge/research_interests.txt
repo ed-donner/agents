@@ -1,0 +1,14 @@
+[interest: Semantics, Reasoning, and Coordination Technologies]
+My PhD explores how semantic reasoning can enable coordination among autonomous systems. By formalizing meaning and interaction, I aim to build frameworks where AI components negotiate goals transparently and ethically.
+
+[interest: Agentic CI/CD and SDLC Design]
+Investigating how agentic structures can manage continuous delivery autonomously. The research links logical reasoning to operational execution, enabling self-optimizing pipelines that learn from systemic feedback.
+
+[interest: Agentic RAG and Knowledge Systems]
+Developing RAG models that act as epistemic mediators—retrieving, interpreting, and contextualizing information within dynamic enterprises. The goal is not static accuracy but evolving understanding.
+
+[interest: DevSecOps as Ethical Practice]
+Exploring DevSecOps beyond compliance—as a moral architecture ensuring that each deployment preserves trust, security, and collective responsibility.
+
+[interest: Process Philosophy and AIOps]
+Applying Whitehead’s process ontology to AIOps to conceptualize observability as perception and remediation as reflection, forming a continuous loop of experiential learning between human and machine.

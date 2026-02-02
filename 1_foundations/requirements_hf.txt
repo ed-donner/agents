@@ -1,0 +1,10 @@
+# AI Career Assistant - Intellecta Solutions
+# Copyright © 2024-2025 Gönenç Aydın
+# Patent Pending Technology
+
+gradio==4.44.1
+openai==1.54.3
+pypdf==4.3.1
+python-dotenv==1.0.1
+requests==2.32.3
+numpy==1.26.4

@@ -1,0 +1,106 @@
+# ============================================================
+# CrewAI Coding Agents - Requirements
+# Python 3.11+ required
+# Last Updated: 2024
+# ============================================================
+
+# ====================
+# Core Framework
+# ====================
+crewai==0.80.0
+crewai-tools==0.14.0
+
+# ====================
+# LangChain Ecosystem (Compatible versions)
+# ====================
+langchain==0.3.7
+langchain-openai==0.2.6
+langchain-anthropic==0.2.4
+langchain-community==0.3.7
+langchain-core==0.3.17
+
+# ====================
+# LLM Providers
+# ====================
+openai==1.54.3
+anthropic==0.39.0
+
+# ====================
+# Data Validation
+# ====================
+pydantic==2.9.2
+pydantic-settings==2.6.1
+
+# ====================
+# CLI & Terminal UI
+# ====================
+typer==0.13.1
+rich==13.9.4
+click==8.1.7
+
+# ====================
+# HTTP & Networking
+# ====================
+httpx==0.27.2
+aiohttp==3.11.2
+requests==2.32.3
+
+# ====================
+# Async Support
+# ====================
+aiofiles==24.1.0
+
+# ====================
+# Logging
+# ====================
+loguru==0.7.2
+
+# ====================
+# Configuration
+# ====================
+python-dotenv==1.0.1
+PyYAML==6.0.2
+
+# ====================
+# Templating
+# ====================
+Jinja2==3.1.4
+
+# ====================
+# Date/Time
+# ====================
+python-dateutil==2.9.0.post0
+
+# ====================
+# Testing
+# ====================
+pytest==8.3.3
+pytest-cov==6.0.0
+pytest-asyncio==0.24.0
+
+# ====================
+# Code Quality (Optional)
+# ====================
+black==24.10.0
+isort==5.13.2
+ruff==0.7.3
+
+# ====================
+# Embeddings
+# ====================
+tiktoken==0.8.0
+
+# ====================
+# Retry Logic
+# ====================
+tenacity==9.0.0
+
+# ====================
+# Progress Bars
+# ====================
+tqdm==4.67.0
+
+# ====================
+# JSON Schema
+# ====================
+jsonschema==4.23.0

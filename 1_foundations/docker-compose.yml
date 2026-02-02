@@ -1,0 +1,20 @@
+services:
+  intellapersona:
+    build: .
+    container_name: intellapersona
+    ports:
+      - "7860:7860"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PUSHOVER_USER_KEY=${PUSHOVER_USER_KEY:-}
+      - PUSHOVER_API_TOKEN=${PUSHOVER_API_TOKEN:-}
+    volumes:
+      # Mount database to persist data
+      - ./data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7860/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

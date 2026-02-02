@@ -1,6 +1,27 @@
-requests
-python-dotenv
-gradio
-pypdf
-openai
-openai-agents
+# Production Dependencies for IntellaPersona
+# ==========================================
+# Fixed versions to avoid compatibility issues
+
+# Core Framework - Using 4.x for stability
+gradio==4.16.0
+
+# AI/ML - Using older stable version
+openai==1.12.0
+
+# Security
+bcrypt==4.1.1
+
+# Utilities
+requests==2.31.0
+python-dotenv==1.0.0
+pypdf==3.17.4
+
+# Hugging Face Hub - Compatible with Gradio 4.16
+huggingface-hub==0.20.3
+
+# HTTP Client - Pin for OpenAI compatibility
+httpx==0.27.0
+
+# Database (SQLite comes with Python)
+
+# Note: For testing, install from requirements_test.txt

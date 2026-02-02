@@ -1,0 +1,103 @@
+signoff_tool = FunctionTool(
+    name="add_signoff",
+    description="Append the consultant name, title, company, and contact to the email body",
+    params_json_schema={
+        "type": "object",
+        "properties": {
+            "body": {"type": "string"},
+            "name": {"type": "string"},
+            "title": {"type": "string"},
+            "company": {"type": "string"},
+            "contact": {"type": "string"}
+        },
+        "required": ["body", "name", "title", "company", "contact"],
+        "additionalProperties": False
+    },
+    # Async lambda kullanıyoruz, await ile çalışacak
+    on_invoke_tool=lambda tool_context, args: asyncio.create_task(
+        asyncio.sleep(0, result=f"{args['body']}\n\n{args['name']}\n{args['title']}\n{args['company']}\n{args['contact']}")
+    ),
+    strict_json_schema=True,
+    is_enabled=True
+)
+
+description = (
+    "Write a cold email as a Solutions Consultant for Intellecta Solutions. "
+    "Introduce our enterprise AI solutions including DevSecOps automation, RAG-powered knowledge bases, "
+    "and AI assistants. Advise the client on potential solutions, technical roadmap, and next steps, "
+    "tailored to their interests or behavior."
+)
+
+tool1 = solutions_agent1.as_tool(tool_name="solutions_agent1", tool_description=description)
+tool2 = solutions_agent2.as_tool(tool_name="solutions_agent2", tool_description=description)
+tool3 = solutions_agent3.as_tool(tool_name="solutions_agent3", tool_description=description)
+
+tools = [tool1, tool2, tool3, signoff_tool, send_email]
+
+tools
+
+instructions = """
+You are a Solutions Manager at Intellecta Solutions.
+Your goal is to orchestrate the workflow to produce a single best cold email.
+
+Steps:
+
+1. Generate Drafts:
+   Use all three solutions_agent tools to generate three different cold email drafts.
+   Each draft must reflect the Solutions Consultant role defined in the tools.
+
+2. Evaluate and Select:
+   Compare the drafts and select the single best email based on clarity, value communication, strategic insight, and alignment with client behavior.
+
+3. Append Sign-Off:
+   Use the add_signoff tool and provide a dict with keys: body, name, title, company, contact.
+   Append sign-off info to the selected email.
+
+4. Send Email:
+   Use the send_email tool to send the final email.
+   Send exactly ONE email. Do not send drafts.
+
+Crucial Rules:
+- Use solutions_agent tools to generate drafts; do not generate drafts yourself.
+- Append sign-off using add_signoff tool.
+- Send only ONE final email using send_email tool.
+- Your final response should only contain tool call(s) for sign-off and sending the email.
+"""
+
+
+
+
+solutions_manager = Agent(
+    name="Solutions Manager",
+    instructions=instructions,   # Bir önceki turda güncellediğimiz büyük instructions bloğu
+    tools=tools,                 # solutions_agent1, solutions_agent2, solutions_agent3, send_email vs.
+    model="gpt-4o-mini"
+)
+
+
+
+email_content = {
+    "body": "Seçilen e-posta taslağı buraya...",
+    "name": "Gonench Aydin",
+    "title": "Solutions Consultant",
+    "company": "Intellecta Solutions",
+    "contact": "gonench@intellecta.solutions"
+}
+
+# Mesaj listesi
+message_list = [
+    {
+        "role": "user",
+        "content": f"{email_content['body']}"
+    }
+]
+
+# 3️⃣ Runner çalıştırma
+with trace("Solutions Manager Pipeline"):
+    result = await Runner.run(
+        solutions_manager,
+        message_list,
+        max_turns=10  # tur sayısını makul bir seviyeye çekiyoruz
+    )
+
+print(result.final_output)

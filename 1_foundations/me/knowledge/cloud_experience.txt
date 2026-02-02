@@ -1,0 +1,14 @@
+[cloud: AWS]
+Over six years architecting EC2, S3, IAM, and EKS-based environments. Designed multi-region, fault-tolerant systems with automated scaling and policy governance through Terraform and CloudFormation.
+
+[cloud: Azure]
+Implemented Azure DevOps pipelines, AKS clusters, and ARM-templated infrastructures, focusing on interoperability within hybrid ecosystems.
+
+[automation: Infrastructure as Code]
+Specialized in Terraform, Helm, and Kops orchestration for reproducible deployments. Emphasizes idempotent design and semantic versioning of environments.
+
+[observability: AIOps & Monitoring]
+Integrated Prometheus, Grafana, ELK, and custom LLM agents for predictive observability and self-healing. Treats monitoring not as afterthought but as continuous conversation between system and maintainer.
+
+[security: DevSecOps]
+Embedded security as ontology—automating compliance with OWASP, Snyk, and Vault while framing safety as emergent trust rather than restriction.

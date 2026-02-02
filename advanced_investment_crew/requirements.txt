@@ -1,0 +1,31 @@
+crewai>=0.28.8
+crewai-tools>=0.3.0
+yfinance>=0.2.50
+pandas>=2.2.2
+numpy>=1.26.4
+scikit-learn>=1.4.2
+langchain-openai>=0.2.2
+chromadb>=0.5.4
+langchain-community>=0.3.0
+PyYAML>=6.0.1
+streamlit>=1.34.0
+forex-python>=1.8
+pycountry>=22.3.0
+plotly>=5.20.0
+
+
+# Financial data
+yfinance>=0.2.32
+
+# Data analysis
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.11.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Additional tools
+requests>=2.31.0
+beautifulsoup4>=4.12.0

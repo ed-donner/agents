@@ -1,0 +1,20 @@
+# Production Dependencies for Career Bot
+# ==========================================
+
+# Core Framework
+gradio==4.44.0
+
+# AI/ML
+openai==1.54.3
+
+# Security
+bcrypt==4.1.1
+
+# Utilities
+requests==2.31.0
+python-dotenv==1.0.0
+pypdf==3.17.4
+
+# Database (SQLite comes with Python)
+
+# Note: For testing, install from requirements_test.txt

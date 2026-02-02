@@ -1,0 +1,101 @@
+# tasks.yaml - Genişletilmiş versiyon
+research_task:
+  description: >
+    Conduct thorough research on company {company}. Focus on:
+    1. Current company status and business model
+    2. Recent financial performance and earnings
+    3. Industry position and competitive landscape
+    4. Recent news, events, and developments
+    5. Management changes and strategic initiatives
+  expected_output: >
+    Comprehensive research document with structured sections covering
+    all aspects of {company} with specific facts and figures.
+  agent: researcher
+
+market_data_task:
+  description: >
+    Analyze market data and stock performance for {company}:
+    1. Historical stock price analysis (1, 3, 5 years)
+    2. Trading volume and liquidity analysis
+    3. Technical indicators and chart patterns
+    4. Comparison with sector and market indices
+    5. Institutional ownership and insider trading
+  expected_output: >
+    Detailed market analysis report with charts, trends, and
+    technical analysis insights for {company}.
+  agent: market_analyst
+  context:
+    - research_task
+
+financial_analysis_task:
+  description: >
+    Perform comprehensive financial analysis of {company}:
+    1. Revenue, profit, and cash flow analysis
+    2. Key financial ratios (P/E, P/B, ROE, ROA, etc.)
+    3. Balance sheet strength and debt analysis
+    4. Comparison with industry peers
+    5. Dividend history and yield analysis
+  expected_output: >
+    Complete financial health assessment with ratios,
+    comparisons, and financial strength evaluation.
+  agent: financial_analyst
+  context:
+    - research_task
+    - market_data_task
+
+risk_assessment_task:
+  description: >
+    Evaluate investment risks for {company}:
+    1. Market risk and beta analysis
+    2. Industry and sector risks
+    3. Company-specific risks
+    4. Regulatory and compliance risks
+    5. ESG (Environmental, Social, Governance) factors
+  expected_output: >
+    Comprehensive risk assessment report identifying and
+    quantifying various risk factors.
+  agent: risk_analyst
+  context:
+    - research_task
+    - market_data_task
+    - financial_analysis_task
+
+forecast_task:
+  description: >
+    Create detailed investment forecasts for {company}:
+    1. 1-month short-term outlook
+    2. 3-month quarterly forecast
+    3. 6-month mid-term projection
+    4. 1-year annual forecast
+    5. 3-year long-term projection
+    Include price targets, growth expectations, and scenario analysis.
+  expected_output: >
+    Multi-timeframe forecast report with specific price targets,
+    growth projections, and scenario analysis.
+  agent: forecast_analyst
+  context:
+    - research_task
+    - market_data_task
+    - financial_analysis_task
+    - risk_assessment_task
+
+investment_recommendation_task:
+  description: >
+    Synthesize all analyses to provide investment recommendation for {company}:
+    1. Overall investment thesis
+    2. Buy/Hold/Sell recommendation with rationale
+    3. Target price ranges for different timeframes
+    4. Portfolio allocation suggestions
+    5. Entry and exit strategies
+    Include clear disclaimers about investment risks.
+  expected_output: >
+    Comprehensive investment report with clear recommendation,
+    rationale, and actionable investment strategy.
+  agent: investment_advisor
+  context:
+    - research_task
+    - market_data_task
+    - financial_analysis_task
+    - risk_assessment_task
+    - forecast_task
+  output_file: output/investment_report.md

@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "financial-researcher"
+version = "0.1.0"
+description = "Advanced financial analysis crew for comprehensive investment research"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "crewai[tools]>=0.70.0",
+    "yfinance>=0.2.18",
+    "pandas>=2.0.0",
+    "requests>=2.31.0"
+]
+
+[project.scripts]
+run_crew = "financial_researcher.main:run"
+
+[tool.crewai]
+project_name = "financial-researcher"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/financial_researcher"]
+
+[tool.hatch.build.targets.wheel.sources]
+"src" = ""

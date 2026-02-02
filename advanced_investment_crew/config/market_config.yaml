@@ -1,0 +1,27 @@
+markets:
+  global:
+    enabled: true
+    tickers:
+      - SPY
+      - QQQ
+      - VTI
+      - VXUS
+      - AGG
+    currency: USD
+    risk_free_rate: 0.045
+    
+  turkey:
+    enabled: true
+    tickers:
+      - THYAO.IS
+      - AKBNK.IS
+      - EREGL.IS
+      - SAHOL.IS
+      - BIMAS.IS
+    currency: TRY
+    risk_free_rate: 0.25
+
+data_settings:
+  period: 2y
+  interval: 1d
+  auto_adjust: true

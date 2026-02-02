@@ -1,0 +1,27 @@
+# Production Dependencies for IntellaPersona (Docker Deployment)
+# =================================================================
+# Using latest stable versions with all features
+
+# Core Framework - Latest Gradio with all features
+gradio>=5.0.0
+
+# AI/ML - Latest OpenAI SDK
+openai>=1.50.0
+
+# Security
+bcrypt>=4.1.0
+
+# Utilities
+requests>=2.31.0
+python-dotenv>=1.0.0
+pypdf>=3.17.0
+
+# HTTP Client
+httpx>=0.27.0
+
+# Hugging Face Hub - Latest
+huggingface-hub>=0.20.0
+
+# Database (SQLite comes with Python)
+
+# Note: This is for Docker deployment with full features

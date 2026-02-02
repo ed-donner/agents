@@ -1,0 +1,63 @@
+{
+    "SPY": {
+      "name": "SPDR S&P 500 ETF",
+      "sector": "Broad Market",
+      "expense_ratio": 0.09,
+      "description": "Tracks S&P 500 - 500 largest US companies"
+    },
+    "QQQ": {
+      "name": "Invesco QQQ Trust",
+      "sector": "Technology",
+      "expense_ratio": 0.20,
+      "description": "Tracks Nasdaq-100 - Tech-heavy index"
+    },
+    "VTI": {
+      "name": "Vanguard Total Stock Market ETF",
+      "sector": "Total Market",
+      "expense_ratio": 0.03,
+      "description": "Entire US stock market exposure"
+    },
+    "VXUS": {
+      "name": "Vanguard Total International Stock",
+      "sector": "International",
+      "expense_ratio": 0.08,
+      "description": "Non-US developed and emerging markets"
+    },
+    "AGG": {
+      "name": "iShares Core US Aggregate Bond",
+      "sector": "Bonds",
+      "expense_ratio": 0.03,
+      "description": "US investment-grade bond market"
+    },
+    "THYAO.IS": {
+      "name": "Turkish Airlines",
+      "sector": "Aviation",
+      "expense_ratio": null,
+      "description": "Turkey's flag carrier airline"
+    },
+    "AKBNK.IS": {
+      "name": "Akbank",
+      "sector": "Banking",
+      "expense_ratio": null,
+      "description": "Major Turkish private bank"
+    },
+    "EREGL.IS": {
+      "name": "Eregli Demir Celik",
+      "sector": "Steel/Industrial",
+      "expense_ratio": null,
+      "description": "Turkey's largest steel producer"
+    },
+    "SAHOL.IS": {
+      "name": "Sabanci Holding",
+      "sector": "Conglomerate",
+      "expense_ratio": null,
+      "description": "Multi-sector Turkish holding company"
+    },
+    "BIMAS.IS": {
+      "name": "BIM Magazalari",
+      "sector": "Retail",
+      "expense_ratio": null,
+      "description": "Discount retail chain leader"
+    }
+  }
+  

@@ -1,0 +1,39 @@
+# Market Configuration File
+# Defines settings for different markets
+
+markets:
+  global:
+    enabled: true
+    tickers:
+      - SPY    # SPDR S&P 500 ETF Trust
+      - QQQ    # Invesco QQQ Trust (Nasdaq-100)
+      - VTI    # Vanguard Total Stock Market ETF
+      - VXUS   # Vanguard Total International Stock ETF
+      - AGG    # iShares Core U.S. Aggregate Bond ETF
+    currency: USD
+    risk_free_rate: 0.045  # 4.5% (US 10-Year Treasury)
+    market_name: "Global Markets"
+    
+  turkey:
+    enabled: true
+    tickers:
+      - THYAO.IS   # Turkish Airlines
+      - AKBNK.IS   # Akbank
+      - EREGL.IS   # Eregli Demir Celik
+      - SAHOL.IS   # Sabanci Holding
+      - BIMAS.IS   # BIM Magazalari
+    currency: TRY
+    risk_free_rate: 0.25   # 25% (Turkey 10-Year Bond)
+    market_name: "Türkiye Piyasası"
+
+# Data fetching settings
+data_settings:
+  period: 2y           # Default period
+  interval: 1d         # Daily data
+  auto_adjust: true    # Adjust for splits/dividends
+  
+# Analysis settings
+analysis_settings:
+  min_history_days: 252    # Minimum 1 year of data
+  frontier_points: 50      # Points on efficient frontier
+  monte_carlo_sims: 10000  # Monte Carlo simulations

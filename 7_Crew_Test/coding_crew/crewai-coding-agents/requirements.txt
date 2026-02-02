@@ -1,0 +1,50 @@
+# CrewAI Core
+crewai==0.30.11
+crewai-tools==0.2.6
+
+# LangChain
+langchain>=0.1.0
+langchain-openai>=0.0.8
+langchain-anthropic>=0.1.1
+langchain-community>=0.0.20
+
+# Pydantic
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# Async Support
+asyncio>=3.4.3
+aiohttp>=3.9.1
+aiofiles>=23.2.1
+
+# HTTP Client
+httpx>=0.26.0
+requests>=2.31.0
+
+# CLI & UI
+rich>=13.7.0
+typer>=0.9.0
+click>=8.1.7
+
+# YAML & Templates
+PyYAML>=6.0.1
+Jinja2>=3.1.2
+
+# Testing
+pytest>=7.4.3
+pytest-asyncio>=0.23.2
+pytest-cov>=4.1.0
+pytest-mock>=3.12.0
+
+# Utilities
+python-dotenv>=1.0.0
+tenacity>=8.2.3
+
+# Optional: Redis for caching
+redis>=5.0.1
+
+# Optional: Database
+sqlalchemy>=2.0.23
+
+# Logging
+loguru>=0.7.2
