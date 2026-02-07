@@ -10,8 +10,9 @@ from agents import Agent, function_tool
 def send_email(subject: str, html_body: str) -> Dict[str, str]:
     """Send an email with the given subject and HTML body"""
     sg = sendgrid.SendGridAPIClient(api_key=os.environ.get("SENDGRID_API_KEY"))
-    from_email = Email("shivam.kumar@gmail.com")  # put your verified sender here
-    to_email = To("shivam@gmail.com")  # put your recipient here
+    # Configure via environment variables (avoid committing personal addresses)
+    from_email = Email(os.environ.get("SENDGRID_FROM_EMAIL", "your_verified_sender@example.com"))
+    to_email = To(os.environ.get("SENDGRID_TO_EMAIL", "recipient@example.com"))
     content = Content("text/html", html_body)
     mail = Mail(from_email, to_email, subject, content).get()
     response = sg.client.mail.send.post(request_body=mail)
