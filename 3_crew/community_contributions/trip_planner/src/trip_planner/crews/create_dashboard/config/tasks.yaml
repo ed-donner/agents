@@ -1,0 +1,40 @@
+backend_code:
+  description: >
+    Write a backend code to create a simple dashboard based on the requirements given to you: {dashboard_requirements}
+  expected_output: >
+    A python code that is ready to run. Output should consist of only python raw code that is ready to be executed as is. Ensure that the code is executable as is.
+  agent: backend_coder
+  output_file: output/{module_name}
+
+frontend_code:
+  description: >
+    Write an executable frontend gradio based code based on the backend_code given to you. Modify the submit callback function to collect the inputs by the user and save it in a dictionary format in a text file.
+    Ensure that the frontend code is executable as is. The requirements for dashboard for which you are writing a frontend code are {dashboard_requirements}
+  expected_output: >
+    A gradio UI in module app.py that demonstrates the given backend class. Output should be a raw python code that is executable as is.
+    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
+    
+    Non-negotiable requirements:
+    User inputs MUST be logged.
+    
+    Logged data MUST include:
+    Source location
+    Trip start date (Use TextBox feature strictly)
+    Trip end date (Use TextBox feature strictly)
+    Type of trip
+    Preferred destination weather
+    Trip preferences
+    
+    Use placeholder indicating the date format - YYYY-MM-DD to be strictly used by the user while filling in trip start date and trip end date.
+    Logging MUST be implemented in pure Python using a reusable function named log_event.
+    Events MUST be appended as JSON Lines to a file named events.jsonl.
+    Logging code MUST be part of the generated Gradio app (not pseudocode).
+    The app MUST run standalone with no external services.
+    IMPORTANT: If all the above components are not logged, then the output is considered incorrect.
+    Ensure the code do not have any syntax errors, proof read the code after writing the code.
+  agent: frontend_coder
+  context: 
+    - backend_code
+  output_file: output/app.py
+
+
