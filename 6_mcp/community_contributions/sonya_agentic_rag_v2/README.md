@@ -59,3 +59,12 @@ https://github.com/threecuptea/agentic_rag_v2
 ### The PR:
 
 https://github.com/ed-donner/agents/pull/588
+
+### References:
+
+[Build Agentic RAG using LangGraph](https://ai.plainenglish.io/build-agentic-rag-using-langgraph-b568aa26d710)
+
+[RAG System in 5 levels of Difficulty](https://medium.com/data-science-collective/rag-systems-in-5-levels-of-difficulty-with-full-code-443180a7dc59)
+
+[LangGraph Adaptive RAG](https://github.com/langchain-ai/langgraph/blob/main/examples/rag/langgraph_adaptive_rag.ipynb)
+

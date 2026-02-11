@@ -302,7 +302,6 @@ if __name__ == '__main__':
     asyncio.run(instance.setup(HYBRID_RETRIEVAL_RERANK))
     # asyncio.run(instance.run_query({"query": "What are the treatments for Kawasaki disease?"}))
     # asyncio.run(instance.run_query({"query": "What's the incubation period of measles?"}))
-    # asyncio.run(instance.run_query({"query": "What's the incubation period of brain tumor?"}))
     # asyncio.run(instance.run_query({"query": "When will a measles patient have the first appearance symptons after he or she is exposed to a pathogen?"}))
     # asyncio.run(instance.run_query({"query": "How do patients contract hantavirus pulmonary syndrome?"}))
     asyncio.run(instance.run_query({"query": "what is the most aggressive form of brain tumor?"}))
