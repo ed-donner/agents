@@ -57,3 +57,5 @@ You can the execute with
 https://github.com/threecuptea/agentic_rag_v2
 
 ### The PR:
+
+https://github.com/ed-donner/agents/pull/588
