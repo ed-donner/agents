@@ -1,10 +1,10 @@
 # Agentic RAG equipped w/ Chunking, Hybrid Retriever and MRR (Re-Ranker)
 
-### Simulate Intelligent RAG system in Health Industry
+### Simulate An Intelligent RAG system in Health Care Industry
 
 I got this idea from my niece.  She works as an oncologist in Kaiser Permanente.  Most Health Care industry have documents of internal treatment guideline for cost effective or other reasons.  They might scatter around and have not been systemized as an Intelligent RAG system.
 
-The Inteligent Agentic RAG system serves as a Q & A assistant: Router agent will route to one of VectorDB retrievers: `Medical Q & A` or `Medical Device Manuals`  based upon the nature of the question.  The VectorDBs cannot cover the full scope of medical knowledge.  Therefore, a Relevance Checker will verify if the answer is relevant. Go ahead to send to the generator to generate the answer based upon the provided context if pass relevance test; otherwise fallback to web search using Serper API as a tool. Always go through the Relevance Checker.  However, do set a maximum itertaion limit.  I got synthesized data from [Kaggle Comprehensive Medical Q&A Dataset](https://www.kaggle.com/datasets/thedevastator/comprehensive-medical-q-a-dataset) and [Kaggle Medical Device Manuals Dataset](https://www.kaggle.com/datasets/pratyushpuri/global-medical-device-manuals-dataset-2025)
+The Intelligent Agentic RAG system serves as a Q & A assistant: Router agent will route to one of VectorDB retrievers: `Medical Q & A` or `Medical Device Manuals`  based upon the nature of the question.  The VectorDBs cannot cover the full scope of medical knowledge.  Therefore, a Relevance Checker will verify if the answer is relevant. Go ahead to send to the generator to generate the answer based upon the provided context if pass relevance test; otherwise fallback to web search using Serper API as a tool. Always go through the Relevance Checker.  However, do set a maximum itertaion limit.  I got synthesized data from [Kaggle Comprehensive Medical Q&A Dataset](https://www.kaggle.com/datasets/thedevastator/comprehensive-medical-q-a-dataset) and [Kaggle Medical Device Manuals Dataset](https://www.kaggle.com/datasets/pratyushpuri/global-medical-device-manuals-dataset-2025)
 
 In general, both VectorDB retriever classes implements Semantic Retriever and Hybrid Retriever (Semantic plus Keyword search) plus Re-ranking.  In Gradio app, users can choose the retriever.
 
@@ -36,7 +36,6 @@ There is an [Adaptive RAG](https://github.com/langchain-ai/langgraph/blob/main/e
 
   Most of time, we use llm with structured out or llm with tools. However, LangGraph does allow to use LangChain Tool directly if you only have a standalone tool and do not use LLM function at all.  It's better to use Serper as a LangChain tool instead of `serper.run` call because the former will be part of history of StateSnapshot that we can set checkpoint at it to replay.  Also, we can use LangGraph standard invoke function to keep things consistent.
 
-
 ### To try your self:
 
 Python 3.14 or the above is not compatible with pydatic-core here.  I am using Python 3.12.12 and use it to create a virtual environment and install requirements.txt.
@@ -67,4 +66,3 @@ https://github.com/ed-donner/agents/pull/588
 [RAG System in 5 levels of Difficulty](https://medium.com/data-science-collective/rag-systems-in-5-levels-of-difficulty-with-full-code-443180a7dc59)
 
 [LangGraph Adaptive RAG](https://github.com/langchain-ai/langgraph/blob/main/examples/rag/langgraph_adaptive_rag.ipynb)
-
