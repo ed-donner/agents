@@ -11,8 +11,19 @@ set_tracing_disabled(True)
 
 GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
 
-# On Streamlit Cloud: add GOOGLE_API_KEY and OPENAI_API_KEY in Manage app → Settings → Secrets
+# Env for local; Streamlit Cloud uses Secrets (st.secrets), not always set as env
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+try:
+    import streamlit as st
+    if not GOOGLE_API_KEY:
+        GOOGLE_API_KEY = st.secrets.get("GOOGLE_API_KEY") or ""
+    if not OPENAI_API_KEY:
+        OPENAI_API_KEY = st.secrets.get("OPENAI_API_KEY") or ""
+        if OPENAI_API_KEY:
+            os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+except Exception:
+    pass
 if not GOOGLE_API_KEY:
     raise ValueError(
         "GOOGLE_API_KEY not set. Use .env locally, or on Streamlit Cloud: "
