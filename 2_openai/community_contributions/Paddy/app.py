@@ -11,11 +11,24 @@ _APP_DIR = Path(__file__).resolve().parent
 if str(_APP_DIR) not in sys.path:
     sys.path.insert(0, str(_APP_DIR))
 
+import os
 import streamlit as st
 from dotenv import load_dotenv
-from research_manager import ResearchManager
 
 load_dotenv(override=True)
+
+# Inject Streamlit Cloud secrets into env before config is loaded (config is imported via research_manager)
+try:
+    for key in ("GOOGLE_API_KEY", "OPENAI_API_KEY"):
+        if not os.getenv(key) and getattr(st, "secrets", None):
+            val = st.secrets.get(key)
+            if val:
+                os.environ[key] = val
+except Exception:
+    pass
+
+from research_manager import ResearchManager
+from config import GOOGLE_API_KEY, OPENAI_API_KEY
 
 st.set_page_config(
     page_title="Content Research | Paddy",
@@ -23,6 +36,14 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+if not GOOGLE_API_KEY or not OPENAI_API_KEY:
+    st.error(
+        "**API keys not set.** Use a `.env` file locally with `GOOGLE_API_KEY` and `OPENAI_API_KEY`. "
+        "On **Streamlit Cloud**: open **Manage app** (bottom right) → **Settings** → **Secrets** and add:\n\n"
+        "`GOOGLE_API_KEY = \"your-gemini-key\"`  \n`OPENAI_API_KEY = \"your-openai-key\"`"
+    )
+    st.stop()
 
 # Custom CSS — elegant light theme with visible, readable text
 st.markdown("""
