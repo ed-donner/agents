@@ -108,6 +108,16 @@ flowchart TB
 2. In `.env`: set `GOOGLE_API_KEY` (Gemini) and `OPENAI_API_KEY` (for WebSearchTool).
 3. Install Streamlit if needed: `pip install streamlit`.
 
+### Streamlit Cloud
+
+Deploy with **Main file path**: `2_openai/community_contributions/Paddy/app.py`.  
+In **Manage app → Settings → Secrets**, add:
+
+```toml
+GOOGLE_API_KEY = "your-gemini-api-key"
+OPENAI_API_KEY = "your-openai-api-key"
+```
+
 ## Run
 
 From this folder (or with `PYTHONPATH` including the parent so `config` and agents resolve):

@@ -3,6 +3,14 @@ Content Management System — Deep Research with Streamlit.
 Uses 3 questions to optimize the result; Gemini 2.5 Flash for planning and writing.
 """
 import asyncio
+import sys
+from pathlib import Path
+
+# Ensure Paddy folder is on path when run from repo root (e.g. Streamlit Cloud)
+_APP_DIR = Path(__file__).resolve().parent
+if str(_APP_DIR) not in sys.path:
+    sys.path.insert(0, str(_APP_DIR))
+
 import streamlit as st
 from dotenv import load_dotenv
 from research_manager import ResearchManager

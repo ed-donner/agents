@@ -10,9 +10,14 @@ load_dotenv(override=True)
 set_tracing_disabled(True)
 
 GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+
+# On Streamlit Cloud: add GOOGLE_API_KEY and OPENAI_API_KEY in Manage app → Settings → Secrets
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
-    raise ValueError("GOOGLE_API_KEY not set in .env")
+    raise ValueError(
+        "GOOGLE_API_KEY not set. Use .env locally, or on Streamlit Cloud: "
+        "Manage app → Settings → Secrets (add GOOGLE_API_KEY and OPENAI_API_KEY)."
+    )
 
 gemini_client = AsyncOpenAI(base_url=GEMINI_BASE_URL, api_key=GOOGLE_API_KEY)
 gemini_model = OpenAIChatCompletionsModel(model="gemini-2.5-flash", openai_client=gemini_client)
