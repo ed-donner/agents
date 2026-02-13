@@ -1,0 +1,5 @@
+crewai[google-genai,tools]>=0.70.0
+litellm>=1.30.0
+streamlit>=1.28.0
+python-dotenv>=1.0.0
+requests>=2.28.0

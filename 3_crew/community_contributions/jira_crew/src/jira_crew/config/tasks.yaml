@@ -1,0 +1,29 @@
+jira_task:
+  description: >
+    The user asked: {user_question}
+    Use the Jira tools to list epics, list sprints, list boards, create an epic, or create a sprint as needed.
+    Return a short summary of what you found or did.
+  expected_output: >
+    A concise summary of Jira data (epics, sprints, boards) or confirmation of an action (epic/sprint created).
+  agent: jira_specialist
+
+docs_task:
+  description: >
+    The user asked: {user_question}
+    If this is a conceptual or "how to" question about Jira (what is an epic, how do sprints work, etc.),
+    answer from documentation knowledge. Otherwise say "No documentation answer needed."
+  expected_output: >
+    A short, clear explanation or "No documentation answer needed."
+  agent: docs_agent
+
+synthesize_task:
+  description: >
+    User question: {user_question}
+    Use the outputs from the Jira specialist and docs agent (in your context) to produce one clear, friendly answer.
+    Combine or choose the relevant parts; use simple language.
+  expected_output: >
+    One coherent paragraph or bullet list that fully answers the user.
+  agent: synthesizer
+  context:
+    - jira_task
+    - docs_task
