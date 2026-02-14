@@ -42,7 +42,6 @@ class DoctorsRecruiter(RoutedAgent):
         try:
             data = json.loads(doctors_list)
             validated = Doctors.model_validate(data)    
-            print(validated.model_dump_json(), "VALIDATED DOCTORS")
             return messages.Message(content=validated.model_dump_json())
         except (json.JSONDecodeError, ValidationError) as e:
             print(f"❌ Error processing Recruiter output: {e}")

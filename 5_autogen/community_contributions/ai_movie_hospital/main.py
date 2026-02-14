@@ -7,6 +7,7 @@ import messages
 import asyncio
 import json
 import os
+import glob
     
 class MedicalPipeline:
     def __init__(self, symptoms: str, host_address="localhost:50051"):
@@ -15,6 +16,19 @@ class MedicalPipeline:
         self.runtime = SingleThreadedAgentRuntime()
         self.is_runtime = False
         self.doctors = []
+
+    def clean_up_files(self):
+        if os.path.exists(self.output_folder):
+            for file_path in glob.glob(os.path.join(self.output_folder, "*")):
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+                    print(f"Deleted: {file_path}")
+        else:
+            print("Output folder does not exist.")
+        for file_path in glob.glob("doctor*"):
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+                print(f"Deleted: {file_path}")
 
     def start_runtime(self):
         if not self.is_runtime:
@@ -27,7 +41,6 @@ class MedicalPipeline:
             return ("🏥 AI Hospital is closed...\n")
 
     async def create_and_message(self, creator_id, doctor: dict):
-        print(self.doctors, "self.doctors DOCTORS")
         os.makedirs("./output", exist_ok=True)
         doctor_name = doctor["doctor_name"].replace(" ", "")
         speciality = doctor["speciality"].replace(" ", "")
@@ -41,6 +54,7 @@ class MedicalPipeline:
             f.write(result.content)
 
     async def run(self) -> str:
+        self.clean_up_files()
         status = self.start_runtime()
         yield {
             "content": {"evaluations": [], "chosen": {}}, 
