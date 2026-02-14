@@ -1,6 +1,22 @@
 import gradio as gr
 import json
 from main import MedicalPipeline
+import os
+import glob
+
+output_folder = "./output" 
+def clean_up_files():
+    if os.path.exists(output_folder):
+        for file_path in glob.glob(os.path.join(output_folder, "*")):
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+                print(f"Deleted: {file_path}")
+    else:
+        print("Output folder does not exist.")
+    for file_path in glob.glob("doctor*"):
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+            print(f"Deleted: {file_path}")
 
 def format_evaluations(data):
     if "evaluations" not in data:
@@ -14,6 +30,7 @@ def format_evaluations(data):
     ] for e in data['evaluations']]
 
 async def handle_diagnosis(symptoms):
+    yield "", "", [], "",""
     if not symptoms.strip():
         yield "", "", [], "","### ⚠️ WarningPlease enter symptoms."
 
@@ -38,7 +55,7 @@ async def handle_diagnosis(symptoms):
             yield f"### ❌ Error\n{str(e)}", "The agent pipeline failed to complete.", [], progress_log
 
 with gr.Blocks() as demo:
-    gr.Markdown("# 🏥 AI Movie Hospital Dashboard")
+    gr.Markdown("# 🏥 AI Hospital Dashboard")
     gr.Markdown("Input patient symptoms to receive a multi-agent diagnostic evaluation. If you wish to play again refresh the browser")
     
     with gr.Row():
@@ -67,4 +84,5 @@ with gr.Blocks() as demo:
     )
 
 if __name__ == "__main__":
+    clean_up_files() 
     demo.launch(theme=gr.themes.Soft())

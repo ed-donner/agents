@@ -1,3 +1,5 @@
+
+
 from autogen_core import SingleThreadedAgentRuntime
 from autogen_core import AgentId
 from creator import Creator
@@ -7,7 +9,6 @@ import messages
 import asyncio
 import json
 import os
-import glob
     
 class MedicalPipeline:
     def __init__(self, symptoms: str, host_address="localhost:50051"):
@@ -16,19 +17,6 @@ class MedicalPipeline:
         self.runtime = SingleThreadedAgentRuntime()
         self.is_runtime = False
         self.doctors = []
-
-    def clean_up_files(self):
-        if os.path.exists(self.output_folder):
-            for file_path in glob.glob(os.path.join(self.output_folder, "*")):
-                if os.path.isfile(file_path):
-                    os.remove(file_path)
-                    print(f"Deleted: {file_path}")
-        else:
-            print("Output folder does not exist.")
-        for file_path in glob.glob("doctor*"):
-            if os.path.isfile(file_path):
-                os.remove(file_path)
-                print(f"Deleted: {file_path}")
 
     def start_runtime(self):
         if not self.is_runtime:
@@ -41,6 +29,7 @@ class MedicalPipeline:
             return ("🏥 AI Hospital is closed...\n")
 
     async def create_and_message(self, creator_id, doctor: dict):
+        
         os.makedirs("./output", exist_ok=True)
         doctor_name = doctor["doctor_name"].replace(" ", "")
         speciality = doctor["speciality"].replace(" ", "")
@@ -54,7 +43,6 @@ class MedicalPipeline:
             f.write(result.content)
 
     async def run(self) -> str:
-        self.clean_up_files()
         status = self.start_runtime()
         yield {
             "content": {"evaluations": [], "chosen": {}}, 
@@ -74,12 +62,12 @@ class MedicalPipeline:
                 doctors_names+= f"""\nDoctor Name: {doctor["doctor_name"]}, Movie: {doctor["movie"]} \n"""
             yield {
                 "content": {"evaluations": [], "chosen": {}}, 
-                "status": "Hired doctors: \n" + doctors_names + "\n"
+                "status": "🏥 Hired doctors: \n" + doctors_names + "\n"
             }
             await Creator.register(self.runtime,  "Creator", lambda: Creator("Creator"))
             yield {
                 "content": {"evaluations": [], "chosen": {}}, 
-                "status": "Doctors focus on diagnosis..."
+                "status": "🏥 Doctors focus on diagnosis..."
             }
             creator_id = AgentId("Creator", "default")
             await asyncio.gather(*[
@@ -88,7 +76,7 @@ class MedicalPipeline:
             ])
             yield {
                 "content": {"evaluations": [], "chosen": {}}, 
-                "status": "\nHospital director is choosing the best diagnosis...\n"
+                "status": "\n🏥 Hospital director is choosing the best diagnosis...\n"
             }
             await DoctorsDiagnoseEvaluator.register(self.runtime, "DoctorsDiagnoseEvaluator", 
                 lambda: DoctorsDiagnoseEvaluator("DoctorsDiagnoseEvaluator"))
@@ -97,7 +85,7 @@ class MedicalPipeline:
                 messages.Message( content=f"Assign the best doctor for {self.symptoms} provided"),evaluator_id)
             yield {
                 "content": response.content, 
-                "status":"\nDiagnose selection completed \n"
+                "status":"\n🏥 Diagnose selection completed \n"
             }
         finally:
             current_status = await self.stop_runtime()
