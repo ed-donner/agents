@@ -1,0 +1,89 @@
+fetch_market_data_task:
+  description: >
+    Use the search tool to find current USD SOFR swap rates for tenors ({tenors}).
+    Search for "USD SOFR 2Y 5Y 10Y 30Y swap rates current" and extract the rates from the results.
+    Once you find the rates, store them in the database using the store_market_rates tool.
+    Make sure to get all 4 tenors: 2Y, 5Y, 10Y, 30Y.
+    Currency: {currency}, Float Index: SOFR
+
+    CRITICAL: When calling store_market_rates, pass rates as numeric values (floats), NOT strings with "%".
+    Format: {{"tenor": "5Y", "currency": "USD", "float_index": "SOFR", "mid_rate": 4.35, "bid_rate": 4.34, "ask_rate": 4.36}}
+    DO NOT use: "mid_rate": "4.35%" - use: "mid_rate": 4.35
+  expected_output: >
+    A JSON object with the stored rates in this exact format:
+    {{
+      "status": "success",
+      "rates_stored": 4,
+      "rates": [
+        {{"tenor": "2Y", "mid_rate": 4.15, "bid_rate": 4.14, "ask_rate": 4.16}},
+        {{"tenor": "5Y", "mid_rate": 4.35, "bid_rate": 4.34, "ask_rate": 4.36}},
+        {{"tenor": "10Y", "mid_rate": 4.52, "bid_rate": 4.51, "ask_rate": 4.53}},
+        {{"tenor": "30Y", "mid_rate": 4.68, "bid_rate": 4.67, "ask_rate": 4.69}}
+      ]
+    }}
+  output_file: 'output/market_data_output.txt'
+  agent: market_data_agent
+
+load_positions_task:
+  description: >
+    Load all active swap positions from the database.
+    Retrieve position details including: position_id, notional, fixed_rate, maturity_date,
+    pay_receive direction, and currency.
+    Provide a complete portfolio summary.
+  expected_output: >
+    A list of all trader swap positions with complete details for risk calculation.
+  output_file: 'output/positions_output.txt'
+  agent: position_manager_agent
+
+set_thresholds_task:
+  description: >
+    Analyze current market volatility and position sizes to determine optimal profit targets
+    and stop losses for each position. Consider:
+    - Position notional size (larger positions = tighter stops)
+    - Recent rate volatility
+    - Years to maturity
+    Output dynamic thresholds for each position.
+  expected_output: >
+    Dynamic thresholds for each position_id with custom profit_target and stop_loss values.
+  output_file: 'output/thresholds_output.txt'
+  agent: risk_manager_agent
+  context:
+    - load_positions_task
+    - fetch_market_data_task
+
+calculate_risk_task:
+  description: >
+    For each position loaded by the position manager, you MUST:
+    1. First, use "Get Latest Market Rate" tool to fetch the current market rate for each position's tenor
+    2. Then, use "Calculate Swap PnL" tool with the position AND the current_rate you just fetched
+
+    IMPORTANT: You must fetch the market rate for each position's tenor BEFORE calculating P&L.
+    Match each position to the appropriate tenor rate (2Y, 5Y, 10Y, 30Y) based on years to maturity.
+  expected_output: >
+    Detailed P&L report for each position showing: position_id, entry_rate, current_rate,
+    rate_change_bps, and P&L amount.
+  output_file: 'output/risk_calculation_output.txt'
+  agent: risk_calculator_agent
+  context:
+    - fetch_market_data_task
+    - load_positions_task
+    - set_thresholds_task
+
+make_trading_decision_task:
+  description: >
+    Analyze the P&L for each position and determine if any trading signals should be triggered.
+    Use the DYNAMIC thresholds calculated by the Risk Manager Agent for each position.
+    Apply the following rules:
+    - If P&L >= position's profit_target: Signal CLOSE to take profit
+    - If P&L <= position's stop_loss: Signal CLOSE to cut losses
+    - Otherwise: Signal HOLD
+    For ALL signals (both CLOSE and HOLD), save them to the trade_signals table with reasoning
+    Provide a summary of all recommendations.
+  expected_output: >
+    A trading decision report listing all positions with their signals (CLOSE/HOLD),
+    reasoning, recommended actions, and the dynamic thresholds used. Include count of positions to close vs hold.
+  output_file: 'output/trading_decisions_output.txt'
+  agent: trading_decision_agent
+  context:
+    - set_thresholds_task
+    - calculate_risk_task
