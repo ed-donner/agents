@@ -38,7 +38,7 @@ async def handle_diagnosis(symptoms):
             yield f"### ❌ Error\n{str(e)}", "The agent pipeline failed to complete.", [], progress_log
 
 with gr.Blocks() as demo:
-    gr.Markdown("# 🏥 AI Hospital Dashboard")
+    gr.Markdown("# 🏥 AI Movie Hospital Dashboard")
     gr.Markdown("Input patient symptoms to receive a multi-agent diagnostic evaluation. If you wish to play again refresh the browser")
     
     with gr.Row():
