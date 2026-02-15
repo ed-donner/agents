@@ -8,6 +8,7 @@ dependencies = [
     "aiosqlite>=0.21.0",
     "beautifulsoup4>=4.14.2",
     "gradio>=5.22.0",
+    "langchain==0.3.27",
     "langchain-community>=0.3.31",
     "langchain-experimental>=0.3.4",
     "langchain-openai>=0.3.34",
