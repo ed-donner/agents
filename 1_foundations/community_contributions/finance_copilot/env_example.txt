@@ -1,0 +1,26 @@
+# Finance Copilot Environment Configuration
+# Copy this file to .env and fill in your actual API keys
+
+# OpenAI API Key (Required for AI assistant features)
+# Get from: https://platform.openai.com/api-keys
+OPENAI_API_KEY=sk-your-openai-api-key-here
+
+# Pushover Configuration (Required for push notifications)
+# Get from: https://pushover.net/
+PUSHOVER_USER_KEY=your-pushover-user-key-here
+PUSHOVER_APP_TOKEN=your-pushover-app-token-here
+
+# Alpha Vantage API Key (Optional - for news sentiment analysis)
+# Get from: https://www.alphavantage.co/support/#api-key
+ALPHA_VANTAGE_API_KEY=your-alpha-vantage-api-key-here
+
+# Optional: Custom Configuration
+# DATABASE_PATH=/tmp/finance_copilot.db  # Use /tmp for Hugging Face Spaces
+# DEFAULT_RISK_PROFILE=moderate
+# DEFAULT_ALERT_THRESHOLD=0.05
+# MONTE_CARLO_SIMULATIONS=10000
+# FORECAST_YEARS=5
+
+
+
+
