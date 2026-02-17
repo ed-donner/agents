@@ -6,9 +6,9 @@ based on his CV, summary, and skills data. The agent implements an Evaluator pat
 to ensure response quality.
 
 Architecture:
-- Main Agent (Me class): Uses OpenAI GPT-4o-mini to generate professional responses
+- Main Agent (Me class): Uses Ollama (Local llama3.2) to generate professional responses
 - Skills Tool: Retrieves Daniel's technical skills and experience levels
-- Evaluator Agent: Uses Ollama (llama3.2) to review and validate responses
+- Evaluator Agent: Uses OpenAI GPT-4o-mini to review and validate responses
 - Quality Control: Implements retry mechanism when responses don't meet standards
 
 The agent is designed to represent Daniel on his website, engaging with potential 
