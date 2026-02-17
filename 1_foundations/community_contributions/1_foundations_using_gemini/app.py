@@ -1,3 +1,4 @@
+from pathlib import Path
 from dotenv import load_dotenv
 from openai import OpenAI
 import json
@@ -76,18 +77,24 @@ tools = [{"type": "function", "function": record_user_details_json},
 class Me:
 
     def __init__(self):
-        self.GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
-        self.GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-        self.openai = OpenAI(base_url=self.GEMINI_BASE_URL, api_key=self.GOOGLE_API_KEY)
-        self.name = "Harsh Patidar"
-        reader = PdfReader("me/linkedin.pdf")
-        self.linkedin = ""
+        #self.GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+        #self.GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+        self.openai = OpenAI()
+        self.name = "Dev Sahu"
+
+        base_dir = Path(__file__).parent.resolve()
+        pdf_path = base_dir / "me" / "linkedin.pdf"
+
+        reader = PdfReader(str(pdf_path))  # ✅ convert Path to string
+
+        self.linkedin = ""  # pyright: ignore[reportUndefinedVariable]
         for page in reader.pages:
             text = page.extract_text()
             if text:
-                self.linkedin += text
+                self.linkedin += text  # pyright: ignore[reportUndefinedVariable]
+
         with open("me/summary.txt", "r", encoding="utf-8") as f:
-            self.summary = f.read()
+            self.summary = f.read()  # pyright: ignore[reportUndefinedVariable]
 
 
     def handle_tool_call(self, tool_calls):
@@ -118,7 +125,7 @@ If the user is engaging in discussion, try to steer them towards getting in touc
         messages = [{"role": "system", "content": self.system_prompt()}] + history + [{"role": "user", "content": message}]
         done = False
         while not done:
-            response = self.openai.chat.completions.create(model="gemini-2.5-flash-preview-05-20", messages=messages, tools=tools)
+            response = self.openai.chat.completions.create(model="gpt-4o-mini", messages=messages, tools=tools)
             if response.choices[0].finish_reason=="tool_calls":
                 message = response.choices[0].message
                 tool_calls = message.tool_calls

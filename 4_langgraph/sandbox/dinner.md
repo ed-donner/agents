@@ -1,24 +1,31 @@
-# Dinner Report: Le Bernardin
+# Restaurant Report: Vidyarthi Bhavan
 
-## Restaurant Overview
-- **Name**: Le Bernardin
-- **Address**: 155 W 51st St, New York, NY 10019
-- **Phone**: (212) 554-1515
-- **Website**: [le-bernardin.com](http://le-bernardin.com)
+### Overview
+Vidyarthi Bhavan is a renowned vegetarian restaurant located in Gandhi Bazaar, Basavanagudi, Bangalore. Established in 1943, it has become an iconic establishment known for its simple yet delicious South Indian food.
 
-## Cuisine
-Le Bernardin specializes in refined seafood dishes, crafted with the utmost respect for the ingredients. The menu includes a variety of seafood preparations, with an emphasis on freshness and simplicity.
+### Address
+**No 32, Gandhi Bazar Main Road, Near Gandhi Bazaar Circle, Bengaluru 560 004, India**
 
-## Menu Highlights
-- **Tuna Tartare**: Diced raw tuna, served with toasted sesame and avocado.
-- **Wild Salmon**: Lightly cooked, served with a warm ginger-soy emulsion and bok choy.
-- **Poached Lobster**: Accompanied by truffle butter and a delicate sauce.
-- **Chocolate Soufflé**: A classic dessert, rich and airy.
+### Menu Highlights
+- Crispy Butter Masala Dosa
+- Vidyarthi Bhavan Dosa
+- Rava Vada
+- Vada Sambhar
+- Poori Saagu
+- Coffee
 
-## Ambiance
-The atmosphere at Le Bernardin is elegant and serene, characterized by minimalist decor and a focus on the dining experience.
+### Reviews
+1. **User Review:** "I enjoyed it thoroughly... the food is top class and priced extremely well!"
+2. **User Review:** "The Masala Dosa with chutney and sambar, was delicious and crispy, lived up to its reputation."
+3. **Overall Ratings:** 
+   - Ambiance: 4.5/5 
+   - Service: 4.6/5 
+   - Food: 4.8/5
 
-## Summary of Reviews
-Le Bernardin has consistently received rave reviews for its exceptional cuisine and impeccable service. It is a three-Michelin star restaurant, recognized as one of the best seafood restaurants not only in New York but also in the world. Diners emphasize the harmonious flavors and the artistry of the dishes, making it a top choice for special occasions.
+### Operating Hours
+- **Monday to Sunday:** 6:30 AM – 12:00 Noon, 2:30 PM – 8:00 PM
 
-**In conclusion**, Le Bernardin represents the pinnacle of fine dining, offering diners an unforgettable experience centered around seafood excellence.
+### Contact
+- Phone: Not available in reviews
+
+For a classic South Indian experience, Vidyarthi Bhavan is a must-visit for vegetarian food lovers in Bangalore!

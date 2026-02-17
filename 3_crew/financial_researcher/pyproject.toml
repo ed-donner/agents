@@ -3,9 +3,9 @@ name = "financial_researcher"
 version = "0.1.0"
 description = "financial_researcher using crewAI"
 authors = [{ name = "Your Name", email = "you@example.com" }]
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.10,<3.14"
 dependencies = [
-    "crewai[tools]>=0.108.0,<1.0.0"
+    "crewai[tools]==1.7.1"
 ]
 
 [project.scripts]
@@ -14,6 +14,7 @@ run_crew = "financial_researcher.main:run"
 train = "financial_researcher.main:train"
 replay = "financial_researcher.main:replay"
 test = "financial_researcher.main:test"
+run_with_trigger = "financial_researcher.main:run_with_trigger"
 
 [build-system]
 requires = ["hatchling"]
