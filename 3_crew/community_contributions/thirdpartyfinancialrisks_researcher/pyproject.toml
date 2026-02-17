@@ -1,0 +1,23 @@
+[project]
+name = "thirdpartyfinancialrisks_researcher"
+version = "0.1.0"
+description = "ThirdPartyFinancialRisks_researcher using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=0.152.0,<1.0.0"
+]
+
+[project.scripts]
+thirdpartyfinancialrisks_researcher = "thirdpartyfinancialrisks_researcher.main:run"
+run_crew = "thirdpartyfinancialrisks_researcher.main:run"
+train = "thirdpartyfinancialrisks_researcher.main:train"
+replay = "thirdpartyfinancialrisks_researcher.main:replay"
+test = "thirdpartyfinancialrisks_researcher.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
