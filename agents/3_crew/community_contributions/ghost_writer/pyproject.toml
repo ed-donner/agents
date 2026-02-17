@@ -1,0 +1,25 @@
+[project]
+name = "ghost_writer"
+version = "0.1.0"
+description = "ghost-writer using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "crewai[tools]>=0.118.0,<1.0.0",
+    "markdown-pdf>=1.7",
+    "pytest>=8.3.5",
+]
+
+[project.scripts]
+ghost_writer = "ghost_writer.main:run"
+run_crew = "ghost_writer.main:run"
+train = "ghost_writer.main:train"
+replay = "ghost_writer.main:replay"
+test = "ghost_writer.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
