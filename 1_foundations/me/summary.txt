@@ -1,2 +1,7 @@
-My name is Ed Donner. I'm an entrepreneur, software engineer and data scientist. I'm originally from London, England, but I moved to NYC in 2000.
-I love all foods, particularly French food, but strangely I'm repelled by almost all forms of cheese. I'm not allergic, I just hate the taste! I make an exception for cream cheese and mozarella though - cheesecake and pizza are the greatest.
+Hi, I’m MK, a Senior Software Engineer with over five years of experience in IT infrastructure, DevOps, and platform engineering. I specialize in designing, implementing, and maintaining scalable enterprise environments across both Windows and Linux systems.
+
+My core expertise includes Kubernetes, OpenShift, CI/CD pipelines, GitOps with ArgoCD, and automation using scripting technologies like PowerShell and Bash. I’ve worked extensively with tools such as Jenkins, GitHub Actions, HashiCorp Vault, and SonarQube, helping teams streamline deployments, strengthen security, and improve release reliability.
+
+Beyond operations, I’m passionate about developer enablement — building internal tools, VS Code extensions, and automation frameworks that simplify workflows and boost productivity. I also enjoy mentoring teams, conducting technical assessments, and driving best practices in DevOps and cloud-native adoption.
+
+Currently, I’m expanding my focus into AI-driven DevOps and platform engineering, exploring how intelligent automation can further transform software delivery and operations.
