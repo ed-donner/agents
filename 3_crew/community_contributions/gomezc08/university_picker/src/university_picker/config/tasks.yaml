@@ -31,6 +31,7 @@ pick_best_university_task:
     universities that offer the absolute best fit for the student. 
     Draft a personalized "Acceptance Strategy" for each, explaining 
     how the student's specific background makes them a strong candidate.
+    Do not pick the same University more than once.
   expected_output: >
     A professional Markdown report for the student containing:
     1. The "Top Pick" with a 1-sentence headline rationale.

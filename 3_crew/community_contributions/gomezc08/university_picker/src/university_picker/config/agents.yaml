@@ -33,7 +33,8 @@ university_picker:
   goal: >
     Compare the researched universities against the student's profile 
     to provide a final, prioritized list of the top 3 best-fit colleges 
-    with a clear "Why this school" justification for each.
+    with a clear "Why this school" justification for each. Do not pick
+    the same University more than once.
   backstory: >
     With 20 years of experience in college admissions, you understand 
     the "vibe" of different campuses better than anyone. You provide 

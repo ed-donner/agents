@@ -55,7 +55,12 @@ class UniversityPicker():
     
     @agent
     def university_picker(self) -> Agent:
-        return Agent(config=self.agents_config['university_picker'], verbose=True, tools = [PushNotificationTool()])
+        return Agent(
+            config=self.agents_config['university_picker'], 
+            verbose=True, 
+            tools = [PushNotificationTool()], 
+            memory=True,
+        )
 
     @task
     def find_suitable_universities_task(self) -> Task:
@@ -84,10 +89,44 @@ class UniversityPicker():
             allow_delegation=True
         )
 
+        # define memory.
+        short_term_memory = ShortTermMemory(
+            storage=RAGStorage(
+                embedder_config={
+                    "provider": "openai",
+                    "config": {
+                        "model": 'text-embedding-3-small'
+                    }
+                },
+                type="short_term",
+                path="./memory/"
+            )
+        )
+        long_term_memory = LongTermMemory(
+            storage=LTMSQLiteStorage(
+                db_path="./memory/long_term_memory_storage.db"
+            )
+        )
+        entity_memory = EntityMemory(
+            storage=RAGStorage(
+                embedder_config={
+                    "provider": "openai",
+                    "config": {
+                        "model": 'text-embedding-3-small'
+                    }
+                },
+                type="short_term",
+                path="./memory/"
+            )
+        )
+
         return Crew(
             agents=self.agents, 
             tasks=self.tasks, 
             process=Process.hierarchical,
             verbose=True,
-            manager_agent = manager
+            manager_agent = manager,
+            short_term_memory = short_term_memory,
+            long_term_memory = long_term_memory,
+            entity_memory = entity_memory
         )
