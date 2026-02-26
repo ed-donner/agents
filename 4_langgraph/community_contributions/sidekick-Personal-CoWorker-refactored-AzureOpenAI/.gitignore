@@ -1,0 +1,30 @@
+# Environment
+.env
+.venv
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.db
+*.db-shm
+*.db-wal
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+*.swp
+*.swo
+
+# Project-specific
+ms-playwright/
+memory.db
+memory.db-shm
+memory.db-wal
+
+#uv lock
+uv.lock
