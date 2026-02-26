@@ -48,7 +48,6 @@ autogen-core==0.6.1
     #   autogen-ext
 autogen-ext==0.6.1
     # via agents (pyproject.toml)
-av==14.4.0
     # via aiortc
 azure-ai-agents==1.0.1
     # via
@@ -141,9 +140,9 @@ fsspec==2025.5.1
     #   huggingface-hub
 google-crc32c==1.7.1
     # via aiortc
-gradio==5.33.1
+gradio==6.7.0
     # via agents (pyproject.toml)
-gradio-client==1.10.3
+gradio-client==2.2.0
     # via gradio
 greenlet==3.2.3
     # via playwright
@@ -681,6 +680,9 @@ widgetsnbextension==4.0.14
 wikipedia==1.4.0
     # via agents (pyproject.toml)
 xxhash==3.5.0
+sendgrid==6.12.5
+    # added for email_agent
+
     # via langgraph
 yarl==1.20.1
     # via aiohttp
@@ -688,3 +690,6 @@ zipp==3.23.0
     # via importlib-metadata
 zstandard==0.23.0
     # via langsmith
+google-api-python-client>=2.0.0
+google-auth-httplib2>=0.1.0
+google-auth-oauthlib>=1.0.0

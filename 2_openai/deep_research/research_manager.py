@@ -5,6 +5,7 @@ from writer_agent import writer_agent, ReportData
 from email_agent import email_agent
 import asyncio
 
+
 class ResearchManager:
 
     async def run(self, query: str):
