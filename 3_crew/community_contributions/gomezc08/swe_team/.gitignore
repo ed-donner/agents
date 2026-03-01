@@ -2,6 +2,3 @@
 __pycache__/
 .DS_Store
 uv.lock
-output/
-README.md
-uv.lock
