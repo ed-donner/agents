@@ -1,7 +1,8 @@
-"""Coordinates deep research: clarifying questions first, then agentic manager (tools + handoffs) with streaming."""
+"""Coordinates deep research: guardrails, clarifying questions, then agentic manager (tools + handoffs) with streaming."""
 from agents import Runner, trace, gen_trace_id
 from clarifier_agent import clarifier_agent
 from manager_agent import manager_agent
+from guardrails import run_guardrails, GuardrailResult
 
 
 class ResearchManager:
@@ -33,8 +34,28 @@ class ResearchManager:
             parts.append("Recipient email: " + str(recipient_email).strip())
         return "\n\n".join(parts)
 
-    async def run(self, refined_query: str):
-        """Run the agentic manager on the (refined) query; yields status updates and final report."""
+    def _intent_query_from_refined(self, refined_query: str) -> str:
+        """Extract the topic part for intent check (before Clarifications / Recipient email)."""
+        q = (refined_query or "").split("Clarifications:")[0].split("Recipient email:")[0].strip()
+        return q
+
+    async def run(self, refined_query: str, skip_guardrails: bool = False):
+        """Run the agentic manager on the (refined) query; yields status updates and final report.
+        Runs input guardrails first unless skip_guardrails=True."""
+        if not skip_guardrails:
+            intent_query = self._intent_query_from_refined(refined_query)
+            gr = run_guardrails(
+                refined_query,
+                answers=[],
+                intent_query=intent_query,
+                check_pii=True,
+                check_intent=True,
+                check_length=True,
+            )
+            if not gr.passed:
+                yield f"**Input guardrail:** {gr.message}"
+                return
+
         trace_id = gen_trace_id()
         with trace("Deep research trace", trace_id=trace_id):
             yield f"View trace: https://platform.openai.com/traces/trace?trace_id={trace_id}\n\n"

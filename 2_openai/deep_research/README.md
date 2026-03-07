@@ -4,9 +4,11 @@ app_file: app.py
 sdk: gradio
 sdk_version: 5.49.1
 ---
-# Deep Research (Gradio)
+# Deep Research — Capstone Project (2_openai)
 
-Agentic deep research: clarifying questions → plan → search → write → evaluate → optimize → optional email.
+Production-style **Deep Research** agent: input guardrails → clarifying questions → autonomous manager (plan → search → write → evaluate → optimize) → optional email. Uses **citation layer** ([1], [2] + Sources section) and **OpenAI SDK** (guardrails + openai-agents). See **CAPSTONE.md** for how every 2_openai lab idea maps into this project.
+
+**Features:** Input guardrails (intent, PII, length) · Clarifying questions (3) · Agentic manager (agents as tools + handoff) · Evaluator–optimizer · Citation layer · Recipient email · Streaming UI · Gradio share + Hugging Face Space.
 
 ## Run locally
 
@@ -43,7 +45,9 @@ From your repo, the Space needs the contents of `2_openai/deep_research/`:
 - `search_agent.py`
 - `writer_agent.py`
 - `email_agent.py`
+- `guardrails.py`
 - `requirements.txt`
+- `.env.example` (optional; copy to `.env`)
 
 You can:
 

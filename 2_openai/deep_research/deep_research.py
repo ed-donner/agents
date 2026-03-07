@@ -1,7 +1,8 @@
-"""Gradio app: clarifying questions first (OpenAI-style), then autonomous deep research with streaming and optional recipient email."""
+"""Gradio app: guardrails, clarifying questions, then autonomous deep research with streaming and optional recipient email."""
 import gradio as gr
 from dotenv import load_dotenv
 from research_manager import ResearchManager
+from guardrails import run_guardrails
 
 load_dotenv(override=True)
 
@@ -9,11 +10,15 @@ manager = ResearchManager()
 
 
 async def get_clarifying_questions(query: str):
-    """Phase 1: generate 3 clarifying questions and show them + answer boxes."""
-    if not (query or "").strip():
+    """Phase 1: run guardrails, then generate 3 clarifying questions and show them + answer boxes."""
+    query = (query or "").strip()
+    if not query:
         return "Please enter a research topic first.", "", "", "", gr.update(visible=True)
+    gr_result = run_guardrails(query, answers=[], check_pii=True, check_intent=True, check_length=True)
+    if not gr_result.passed:
+        return f"**Input guardrail:** {gr_result.message}", "", "", "", gr.update(visible=True)
     try:
-        questions = await manager.get_clarifying_questions(query.strip())
+        questions = await manager.get_clarifying_questions(query)
         q1, q2, q3 = (questions + [""] * 3)[:3]
         return (
             "**Answer these to focus the research (optional). You can leave blanks and click Run.**",
