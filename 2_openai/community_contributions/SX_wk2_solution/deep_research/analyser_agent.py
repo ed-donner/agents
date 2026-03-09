@@ -4,10 +4,11 @@ from agents import Agent
 ANALYSER_INSTRUCTIONS = """
 You are a senior research analyst.
 Evaluate the research results given to you.
+
 Return:
-- research_complete: True if you think the research looks complete
-- research_complete: False if you think the research is not complete
-Also provide your reason.
+- research_complete: True if you think the research looks complete.
+- research_complete: False if you think the research is not complete.
+- reason: Briefly explain why you think the research is complete or what information is missing.
 """
 
 

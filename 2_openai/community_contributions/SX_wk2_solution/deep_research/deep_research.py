@@ -2,31 +2,31 @@ import gradio as gr
 from dotenv import load_dotenv
 from agents import Runner, trace, gen_trace_id
 from research_manager import research_manager_agent
-from planner_agent import planner_agent
+from clarifier_agent import clarifier_agent
 
 load_dotenv(override=True)
 
 
 async def get_clarification_questions(topic: str) -> str:
-    """Use the planner_agent to generate exactly three clarification questions."""
-    clarifier_prompt = f"Ask exactly three clarifying questions for the research topic: {topic}"
-    clarifier = await Runner.run(planner_agent, clarifier_prompt)
-    # planner_agent returns a WebSearchPlan; we just want the text it produced
-    return str(clarifier.final_output)
+    """Use a dedicated clarifier agent to generate exactly three clarification questions."""
+    clarifier_prompt = f"Research topic: {topic}\n\nAsk exactly three clarifying questions."
+    result = await Runner.run(clarifier_agent, clarifier_prompt)
+    # clarifier_agent returns plain text as final_output
+    return str(result.final_output)
 
 
 async def research_interface(topic: str, user_answers: str):
     trace_id = gen_trace_id()
     print(f"View trace: https://platform.openai.com/traces/trace?trace_id={trace_id}")
     yield f"## 🔎 Starting Research\nView trace: https://platform.openai.com/traces/trace?trace_id={trace_id}"
-    async with trace("Deep Research Trace", trace_id=trace_id):
+    with trace("Deep Research Trace", trace_id=trace_id):
         # Call the research_workflow tool via the Research Manager agent
         result = await Runner.run(
             research_manager_agent,
-            {"topic": topic, "user_answers": user_answers},
+            f"Research topic: {topic}\n\nUser clarification answers:\n{user_answers}",
         )
     # research_workflow returns the writer_result.final_output (ReportData)
-    yield result.final_output.markdown_report
+    yield result.final_output
 
 
 with gr.Blocks(title="Deep Research Agent", theme=gr.themes.Default(primary_hue="sky")) as ui:
@@ -44,8 +44,8 @@ with gr.Blocks(title="Deep Research Agent", theme=gr.themes.Default(primary_hue=
         placeholder="Answer each question clearly here.",
     )
 
-    get_questions_button = gr.Button("Generate Clarification Questions")
-    run_button = gr.Button("Start Research", variant="primary")
+    get_questions_button = gr.Button("First Step: Generate Clarification Questions", variant="secondary")
+    run_button = gr.Button("Second Step: Start Research", variant="primary")
     report = gr.Markdown(label="Report")
 
     # Step 1: generate questions

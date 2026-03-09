@@ -8,56 +8,77 @@ import asyncio
 RESEARCH_MANAGER_INSTRUCTIONS = """
 You manage a deep research workflow.
 
-Steps:
-1) Ask 3 clarification questions
-2) Plan searches
-3) Execute searches
-4) Analyse findings
-5) When ready handoff to writer agent
+Assume the user has already been asked and answered three clarification questions
+via the UI layer. You will receive both the topic and the user's answers.
+
+Your workflow:
+
+1) Use the topic + user answers as research context
+2) Plan searches using the Planner Agent
+3) Execute searches using the Search Agent
+4) Analyse findings using the Analyser Agent
+   - Loop until research is complete or max iterations reached
+5) When ready, hand off to the Writer Agent to produce a full research report
 """
+
 
 @function_tool
 async def research_workflow(topic: str, user_answers: str):
-    """Coordinate the research workflow until it is complete"""
-    research_context = f"{topic}\nUser answers:\n{user_answers}\n"
+    """
+    Coordinate the research workflow until it is complete.
+    This tool is invoked directly by the Research Manager agent.
+    """
+    # Initial context includes topic + user clarification answers
+    research_context = (
+        f"Research Topic:\n{topic}\n\n"
+        f"User Clarification Answers:\n{user_answers}\n\n"
+    )
+
     combined_results = []
-
     iteration = 0
-    max_iterations = 3
+    max_iterations = 2
 
-    # search_agent - analyser_agent loop until the research is deemed complete, max 3 iterations
+    # Loop: plan → search → analyse
     while iteration < max_iterations:
+        # 1. Plan searches
         planner_result = await Runner.run(planner_agent, research_context)
         searches = planner_result.final_output
+
+        # 2. Execute searches concurrently
         tasks = [Runner.run(search_agent, q.query) for q in searches.searches]
         search_results = await asyncio.gather(*tasks)
+
+        # 3. Collect summaries
         combined_results.extend([r.final_output for r in search_results])
+
+        # 4. Analyse completeness
         analysis = await Runner.run(analyser_agent, str(combined_results))
-        analysis_outcome = analysis.final_output.research_complete
-        if analysis_outcome:
+        if analysis.final_output.research_complete:
             break
-        research_context += analysis.final_output.reason
+
+        # If incomplete, append reason to context and iterate again
+        research_context += f"\nAdditional research needed: {analysis.final_output.reason}\n"
         iteration += 1
-    
-    writer_input = f"Write a full research report based on:{combined_results}"
+
+    # Prepare clean text for writer
+    summaries_text = "\n\n---\n\n".join(combined_results)
+
+    writer_input = (
+        "You are writing a full research report.\n\n"
+        f"Original Topic:\n{topic}\n\n"
+        f"User Clarification Answers:\n{user_answers}\n\n"
+        f"Initial Research Summaries:\n{summaries_text}\n"
+    )
+
     writer_result = await Runner.run(writer_agent, writer_input)
     return writer_result.final_output
 
 
-@function_tool
-def ask_user_clarifications(questions: str) -> str:
-    """
-    Present the clarification questions to the user and return their answers.
-    The UI layer (Gradio) will display the questions and collect the user's response.
-    """
-    return questions
-
-
-# Research Manager as an agent with handoffs to writer_agent
+# Research Manager agent definition
 research_manager_agent = Agent(
     name="Research Manager",
     instructions=RESEARCH_MANAGER_INSTRUCTIONS,
-    tools=[research_workflow, ask_user_clarifications],
+    tools=[research_workflow],
     handoffs=[writer_agent],
     model="gpt-4o-mini",
     model_settings=ModelSettings(tool_choice="required"),
