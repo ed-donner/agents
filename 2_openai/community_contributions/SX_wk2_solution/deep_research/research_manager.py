@@ -41,17 +41,21 @@ async def research_workflow(topic: str, user_answers: str):
     # Loop: plan → search → analyse
     while iteration < max_iterations:
         # 1. Plan searches
+        yield f"Planning web search... iteration {iteration}"
         planner_result = await Runner.run(planner_agent, research_context)
         searches = planner_result.final_output
-
+        
         # 2. Execute searches concurrently
+        yield f"Starting web search... iteration {iteration}"
         tasks = [Runner.run(search_agent, q.query) for q in searches.searches]
         search_results = await asyncio.gather(*tasks)
 
         # 3. Collect summaries
+        yield f"Collating web search results... iteration {iteration}"
         combined_results.extend([r.final_output for r in search_results])
 
         # 4. Analyse completeness
+        yield f"Analysing quality of search results... iteration {iteration}"
         analysis = await Runner.run(analyser_agent, str(combined_results))
         if analysis.final_output.research_complete:
             break
@@ -70,6 +74,7 @@ async def research_workflow(topic: str, user_answers: str):
         f"Initial Research Summaries:\n{summaries_text}\n"
     )
 
+    yield "Searchs complete, writing report..."
     writer_result = await Runner.run(writer_agent, writer_input)
     return writer_result.final_output
 

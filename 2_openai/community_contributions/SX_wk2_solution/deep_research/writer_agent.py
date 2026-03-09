@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from agents import Agent
+from agents import Agent, ModelSettings
 from reviewer_agent import reviewer_agent
 
 WRITER_INSTRUCTIONS = (
@@ -27,4 +27,5 @@ writer_agent = Agent(
     model="gpt-4o-mini",
     output_type=ReportData,
     handoffs=[reviewer_agent],
+    model_settings=ModelSettings(tool_choice="required"),
 )

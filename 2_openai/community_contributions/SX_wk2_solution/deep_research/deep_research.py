@@ -26,7 +26,7 @@ async def research_interface(topic: str, user_answers: str):
             f"Research topic: {topic}\n\nUser clarification answers:\n{user_answers}",
         )
     # research_workflow returns the writer_result.final_output (ReportData)
-    yield result.final_output
+    yield result.final_output.markdown_report
 
 
 with gr.Blocks(title="Deep Research Agent", theme=gr.themes.Default(primary_hue="sky")) as ui:

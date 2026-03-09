@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 import sendgrid
 from sendgrid.helpers.mail import Email, Mail, Content, To
-from agents import Agent, function_tool
+from agents import Agent, function_tool, ModelSettings
 
 load_dotenv(override=True)
 
@@ -35,4 +35,5 @@ email_agent = Agent(
     instructions=EMAIL_INSTRUCTIONS,
     tools=[send_email],
     model="gpt-4o-mini",
+    model_settings=ModelSettings(tool_choice="required"),
 )
