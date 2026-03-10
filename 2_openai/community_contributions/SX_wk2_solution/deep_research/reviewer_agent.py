@@ -1,6 +1,5 @@
 from pydantic import BaseModel, Field
-from agents import Agent, ModelSettings
-from email_agent import email_agent
+from agents import Agent
 
 # Note there is NO writer_agent - reviewer_agent loop to keep it simple
 REVIEWER_INSTRUCTIONS = """
@@ -31,6 +30,4 @@ reviewer_agent = Agent(
     instructions=REVIEWER_INSTRUCTIONS,
     model="gpt-4o-mini",
     output_type=ReportData,
-    handoffs=[email_agent],
-    model_settings=ModelSettings(tool_choice="required"),
 )

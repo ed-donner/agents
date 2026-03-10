@@ -1,6 +1,5 @@
 from pydantic import BaseModel, Field
-from agents import Agent, ModelSettings
-from reviewer_agent import reviewer_agent
+from agents import Agent
 
 WRITER_INSTRUCTIONS = (
     "You are a senior researcher tasked with writing a cohesive report for a research query. "
@@ -26,6 +25,4 @@ writer_agent = Agent(
     instructions=WRITER_INSTRUCTIONS,
     model="gpt-4o-mini",
     output_type=ReportData,
-    handoffs=[reviewer_agent],
-    model_settings=ModelSettings(tool_choice="required"),
 )
