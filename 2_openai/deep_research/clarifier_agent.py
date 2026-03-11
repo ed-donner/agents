@@ -1,4 +1,3 @@
-"""Generates exactly 3 clarifying questions to focus the research query (OpenAI-style)."""
 from pydantic import BaseModel, Field
 from agents import Agent
 

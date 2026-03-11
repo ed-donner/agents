@@ -6,7 +6,6 @@ from sendgrid.helpers.mail import Email, Mail, Content, To
 from agents import Agent, function_tool
 
 
-# Default recipient if none provided (e.g. from env or fallback)
 DEFAULT_TO_EMAIL = os.environ.get("DEFAULT_RECIPIENT_EMAIL", "sankari.s2009@gmail.com")
 DEFAULT_FROM_EMAIL = os.environ.get("SENDGRID_FROM_EMAIL", "sankari.s2009@gmail.com")
 

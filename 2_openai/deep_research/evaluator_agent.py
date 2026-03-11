@@ -12,9 +12,12 @@ Evaluate on:
 3. **Clarity & structure**: Is it clear, well-structured, and easy to follow?
 4. **Depth**: Sufficient analysis and substance (not surface-level)?
 5. **Relevance**: All content relevant to the query?
+6. **Source diversity (guardrail)**: Check the `## Sources and References` section. Prefer at least 3 distinct sources and avoid over-reliance on a single site or domain.
+   - If there are fewer than 3 distinct sources, or if one source/domain clearly accounts for the majority of citations, treat this as a serious weakness.
+   - In such cases, lower the overall_score accordingly and set needs_refinement=True, with explicit suggestions to broaden and diversify the sources.
 
-Scoring: 9-10 Excellent, 7-8 Good, 5-6 Adequate, 1-4 Poor. A report without proper source citations should not score above 6.
-If needs_refinement is True, provide specific, actionable suggestions.
+Scoring: 9-10 Excellent, 7-8 Good, 5-6 Adequate, 1-4 Poor. A report without proper source citations or with very weak source diversity should not score above 6.
+If needs_refinement is True, provide specific, actionable suggestions (including, when relevant, how to diversify sources).
 """
 
 
