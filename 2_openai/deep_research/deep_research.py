@@ -184,24 +184,67 @@ def export_report_bundle(report_markdown: str) -> str:
 
 
 async def get_clarifying_questions(query: str):
+    """Phase 1: guardrails + clarifying questions. Everything except the Get button stays hidden until this succeeds."""
     query = (query or "").strip()
     if not query:
-        return "Please enter a research topic first.", "", "", "", gr.update(visible=True)
+        # Keep everything else hidden.
+        hidden = gr.update(visible=False)
+        return (
+            "Please enter a research topic first.",
+            hidden,
+            hidden,
+            hidden,
+            hidden,
+            hidden,
+            hidden,
+            hidden,
+            hidden,
+        )
     gr_result = run_guardrails(query, answers=[], check_pii=True, check_intent=True, check_length=True)
     if not gr_result.passed:
-        return f"**Input guardrail:** {gr_result.message}", "", "", "", gr.update(visible=True)
+        hidden = gr.update(visible=False)
+        return (
+            f"**Input guardrail:** {gr_result.message}",
+            hidden,
+            hidden,
+            hidden,
+            hidden,
+            hidden,
+            hidden,
+            hidden,
+            hidden,
+        )
     try:
         questions = await manager.get_clarifying_questions(query)
         q1, q2, q3 = (questions + [""] * 3)[:3]
+        # Show the rest of the form only after successful clarification.
         return (
-            "**Answer these to focus the research (optional). You can leave blanks and click Run.**",
-            q1,
-            q2,
-            q3,
+            gr.update(
+                value="**Answer these to focus the research (optional). You can leave blanks and click Run.**",
+                visible=True,
+            ),
+            gr.update(value=q1, visible=True),
+            gr.update(value=q2, visible=True),
+            gr.update(value=q3, visible=True),
+            gr.update(visible=True),
+            gr.update(visible=True),
+            gr.update(visible=True),
+            gr.update(visible=True),
             gr.update(visible=True),
         )
     except Exception as e:
-        return f"Could not generate questions: {e}", "", "", "", gr.update(visible=True)
+        hidden = gr.update(visible=False)
+        return (
+            f"Could not generate questions: {e}",
+            hidden,
+            hidden,
+            hidden,
+            hidden,
+            hidden,
+            hidden,
+            hidden,
+            hidden,
+        )
 
 
 async def run_research(
@@ -286,20 +329,21 @@ with gr.Blocks(theme=gr.themes.Default(primary_hue="sky"), title="Deep Research"
     )
     get_questions_btn = gr.Button("Get clarifying questions", variant="primary")
 
-    clar_section = gr.Markdown(value="", label="Clarifications")
-    q1_box = gr.Textbox(label="Question 1", interactive=False)
-    q2_box = gr.Textbox(label="Question 2", interactive=False)
-    q3_box = gr.Textbox(label="Question 3", interactive=False)
-    a1_box = gr.Textbox(label="Your answer (optional)")
-    a2_box = gr.Textbox(label="Your answer (optional)")
-    a3_box = gr.Textbox(label="Your answer (optional)")
+    clar_section = gr.Markdown(value="", label="Clarifications", visible=False)
+    q1_box = gr.Textbox(label="Question 1", interactive=False, visible=False)
+    q2_box = gr.Textbox(label="Question 2", interactive=False, visible=False)
+    q3_box = gr.Textbox(label="Question 3", interactive=False, visible=False)
+    a1_box = gr.Textbox(label="Your answer (optional)", visible=False)
+    a2_box = gr.Textbox(label="Your answer (optional)", visible=False)
+    a3_box = gr.Textbox(label="Your answer (optional)", visible=False)
 
     recipient_email_box = gr.Textbox(
         label="Recipient email (optional — report will be sent here after research; leave blank to skip email or use default)",
         placeholder="e.g. colleague@example.com",
+        visible=False,
     )
 
-    run_btn = gr.Button("Run deep research", variant="secondary")
+    run_btn = gr.Button("Run deep research", variant="secondary", visible=False)
     report = gr.Markdown(label="Report")
     report_state = gr.State("")
 
@@ -322,7 +366,17 @@ with gr.Blocks(theme=gr.themes.Default(primary_hue="sky"), title="Deep Research"
     get_questions_btn.click(
         fn=get_clarifying_questions,
         inputs=query_textbox,
-        outputs=[clar_section, q1_box, q2_box, q3_box, run_btn],
+        outputs=[
+            clar_section,
+            q1_box,
+            q2_box,
+            q3_box,
+            a1_box,
+            a2_box,
+            a3_box,
+            recipient_email_box,
+            run_btn,
+        ],
     )
     run_btn.click(
         fn=run_research,
@@ -341,7 +395,17 @@ with gr.Blocks(theme=gr.themes.Default(primary_hue="sky"), title="Deep Research"
     query_textbox.submit(
         fn=get_clarifying_questions,
         inputs=query_textbox,
-        outputs=[clar_section, q1_box, q2_box, q3_box, run_btn],
+        outputs=[
+            clar_section,
+            q1_box,
+            q2_box,
+            q3_box,
+            a1_box,
+            a2_box,
+            a3_box,
+            recipient_email_box,
+            run_btn,
+        ],
     )
 
     send_email_btn.click(
