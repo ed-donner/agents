@@ -51,6 +51,7 @@ class ResearchManager:
                 check_pii=True,
                 check_intent=True,
                 check_length=True,
+                allow_recipient_email=True,
             )
             if not gr.passed:
                 yield f"**Input guardrail:** {gr.message}"

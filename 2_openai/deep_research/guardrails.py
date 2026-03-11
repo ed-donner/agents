@@ -98,6 +98,7 @@ def run_guardrails(
     check_length: bool = True,
     sensitive_topics: list[str] | None = None,
     openai_api_key: str | None = None,
+    allow_recipient_email: bool = False,
 ) -> GuardrailResult:
     """
     Run all enabled input guardrails. Returns GuardrailResult(passed, message).
@@ -117,6 +118,14 @@ def run_guardrails(
 
     if check_pii:
         full = query + " " + " ".join(answers or [])
+        if allow_recipient_email:
+            # Allow a single 'Recipient email: someone@example.com' line without failing PII checks.
+            full = re.sub(
+                r"Recipient email:\s*[^\s]+",
+                "Recipient email: [redacted]",
+                full,
+                flags=re.IGNORECASE,
+            )
         pii = _check_pii(full)
         if pii:
             return GuardrailResult(

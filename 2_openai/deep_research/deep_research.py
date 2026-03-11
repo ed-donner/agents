@@ -125,15 +125,24 @@ def create_pdf_from_report(report_markdown: str) -> str:
     x_margin, y_margin = 72, 72
     y = height - y_margin
 
-    for line in report_markdown.splitlines():
+    line_height = 14
+    max_width_chars = 100
+
+    for raw_line in report_markdown.splitlines():
+        line = raw_line.rstrip()
         if not line:
-            y -= 14
+            y -= line_height
             continue
-        if y < y_margin:
-            c.showPage()
-            y = height - y_margin
-        c.drawString(x_margin, y, line[:120])
-        y -= 14
+
+        # Wrap long lines instead of truncating so the full report appears.
+        while line:
+            if y < y_margin:
+                c.showPage()
+                y = height - y_margin
+            chunk = line[:max_width_chars]
+            c.drawString(x_margin, y, chunk)
+            y -= line_height
+            line = line[max_width_chars:]
 
     c.save()
     tmp.close()
@@ -218,8 +227,8 @@ async def run_research(
     last_chunk = ""
     async for chunk in manager.run(refined):
         last_chunk = chunk
-        # Stream status + report to UI; don't persist report yet.
-        yield chunk, ""
+        # Stream status + report to UI; keep advanced options hidden until done.
+        yield chunk, "", gr.update(visible=False)
 
     # After the stream finishes, store just the report body for email/PDF and history.
     report_only = _extract_report_from_output(last_chunk)
@@ -234,7 +243,8 @@ async def run_research(
     }
     _append_history_entry(entry)
 
-    yield last_chunk, report_only
+    # Final yield shows full report and reveals advanced options.
+    yield last_chunk, report_only, gr.update(visible=True)
 
 
 def refresh_history():
@@ -293,20 +303,21 @@ with gr.Blocks(theme=gr.themes.Default(primary_hue="sky"), title="Deep Research"
     report = gr.Markdown(label="Report")
     report_state = gr.State("")
 
-    send_email_btn = gr.Button("Send report as email")
-    download_pdf_btn = gr.Button("Download report as PDF")
-    export_bundle_btn = gr.Button("Download report bundle (ZIP)")
-    email_status = gr.Markdown(label="Email status")
-    pdf_file = gr.File(label="Report PDF")
-    bundle_file = gr.File(label="Report bundle (.zip)")
+    with gr.Group(visible=False) as post_section:
+        send_email_btn = gr.Button("Send report as email")
+        download_pdf_btn = gr.Button("Download report as PDF")
+        export_bundle_btn = gr.Button("Download report bundle (ZIP)")
+        email_status = gr.Markdown(label="Email status")
+        pdf_file = gr.File(label="Report PDF")
+        bundle_file = gr.File(label="Report bundle (.zip)")
 
-    review_btn = gr.Button("Generate team review checklist")
-    review_checklist = gr.Markdown(label="Team review checklist")
+        review_btn = gr.Button("Generate team review checklist")
+        review_checklist = gr.Markdown(label="Team review checklist")
 
-    history_state = gr.State([])
-    history_refresh_btn = gr.Button("Refresh history")
-    history_dropdown = gr.Dropdown(label="Previous runs", choices=[], interactive=True)
-    history_load_btn = gr.Button("Load selected run")
+        history_state = gr.State([])
+        history_refresh_btn = gr.Button("Refresh history")
+        history_dropdown = gr.Dropdown(label="Previous runs", choices=[], interactive=True)
+        history_load_btn = gr.Button("Load selected run")
 
     get_questions_btn.click(
         fn=get_clarifying_questions,
@@ -325,7 +336,7 @@ with gr.Blocks(theme=gr.themes.Default(primary_hue="sky"), title="Deep Research"
             a3_box,
             recipient_email_box,
         ],
-        outputs=[report, report_state],
+        outputs=[report, report_state, post_section],
     )
     query_textbox.submit(
         fn=get_clarifying_questions,
