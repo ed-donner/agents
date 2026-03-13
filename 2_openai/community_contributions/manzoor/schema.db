@@ -1,0 +1,228 @@
+DROP TABLE IF EXISTS alerts;
+DROP TABLE IF EXISTS forecasts;
+DROP TABLE IF EXISTS sales;
+DROP TABLE IF EXISTS purchases;
+DROP TABLE IF EXISTS inventory;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS suppliers;
+DROP TABLE IF EXISTS warehouses;
+DROP TABLE IF EXISTS role_permissions;
+DROP TABLE IF EXISTS permissions;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE roles (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL UNIQUE,
+  description TEXT,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE permissions (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(100) NOT NULL UNIQUE,
+  description TEXT,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE role_permissions (
+  role_id BIGINT UNSIGNED NOT NULL,
+  permission_id BIGINT UNSIGNED NOT NULL,
+  PRIMARY KEY (role_id, permission_id),
+  FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
+  FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE
+);
+
+CREATE TABLE users (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  role_id BIGINT UNSIGNED,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE SET NULL
+);
+
+CREATE TABLE warehouses (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(100) NOT NULL UNIQUE,
+  location VARCHAR(255),
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE suppliers (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  contact_name VARCHAR(255),
+  contact_email VARCHAR(255),
+  phone VARCHAR(50),
+  address VARCHAR(255),
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE products (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  sku VARCHAR(100) NOT NULL UNIQUE,
+  description TEXT,
+  unit VARCHAR(50),
+  price_cost DECIMAL(18,2) NOT NULL,
+  price_selling DECIMAL(18,2) NOT NULL,
+  supplier_id BIGINT UNSIGNED,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE SET NULL
+);
+
+CREATE TABLE inventory (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  product_id BIGINT UNSIGNED NOT NULL,
+  warehouse_id BIGINT UNSIGNED NOT NULL,
+  quantity INT NOT NULL DEFAULT 0,
+  min_threshold INT DEFAULT 0,
+  max_threshold INT DEFAULT 999999,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY unique_inventory (product_id, warehouse_id),
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+  FOREIGN KEY (warehouse_id) REFERENCES warehouses(id) ON DELETE CASCADE
+);
+
+CREATE TABLE purchases (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  supplier_id BIGINT UNSIGNED,
+  product_id BIGINT UNSIGNED NOT NULL,
+  quantity INT NOT NULL,
+  unit_cost DECIMAL(18,2) NOT NULL,
+  total_cost DECIMAL(18,2) NOT NULL,
+  purchase_date DATE NOT NULL,
+  status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE SET NULL,
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+
+CREATE TABLE sales (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  product_id BIGINT UNSIGNED NOT NULL,
+  quantity INT NOT NULL,
+  unit_price DECIMAL(18,2) NOT NULL,
+  total_price DECIMAL(18,2) NOT NULL,
+  sale_date DATE NOT NULL,
+  customer_name VARCHAR(255),
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+
+CREATE TABLE forecasts (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  product_id BIGINT UNSIGNED NOT NULL,
+  forecast_quantity INT NOT NULL,
+  forecast_date DATE NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+
+CREATE TABLE alerts (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  product_id BIGINT UNSIGNED,
+  alert_type VARCHAR(100) NOT NULL,
+  message VARCHAR(500),
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  issued_at DATETIME NOT NULL,
+  resolved_at DATETIME NULL,
+  is_resolved BOOLEAN NOT NULL DEFAULT FALSE,
+  PRIMARY KEY (id),
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL
+);
+
+CREATE INDEX idx_inventory_product ON inventory (product_id);
+CREATE INDEX idx_inventory_warehouse ON inventory (warehouse_id);
+CREATE INDEX idx_purchases_product ON purchases (product_id);
+CREATE INDEX idx_purchases_supplier ON purchases (supplier_id);
+CREATE INDEX idx_sales_product ON sales (product_id);
+CREATE INDEX idx_forecasts_product ON forecasts (product_id);
+CREATE INDEX idx_alerts_product ON alerts (product_id);
+
+INSERT INTO roles (id, name, description, created_at, updated_at) VALUES
+(1, 'admin', 'Full access with manage users', NOW(), NOW()),
+(2, 'manager', 'Inventory and purchases management', NOW(), NOW()),
+(3, 'staff', 'Sales and inventory viewing', NOW(), NOW());
+
+INSERT INTO permissions (id, name, description, created_at, updated_at) VALUES
+(1, 'VIEW_PRODUCTS', 'View product information', NOW(), NOW()),
+(2, 'EDIT_PRODUCTS', 'Edit product information', NOW(), NOW()),
+(3, 'CREATE_PRODUCTS', 'Create new products', NOW(), NOW()),
+(4, 'DELETE_PRODUCTS', 'Delete products', NOW(), NOW()),
+(5, 'VIEW_INVENTORY', 'View inventory levels', NOW(), NOW()),
+(6, 'UPDATE_INVENTORY', 'Update inventory quantities', NOW(), NOW()),
+(7, 'CREATE_PURCHASE', 'Create purchase orders', NOW(), NOW()),
+(8, 'APPROVE_PURCHASE', 'Approve purchase orders', NOW(), NOW()),
+(9, 'VIEW_SALES', 'View sales data', NOW(), NOW()),
+(10, 'CREATE_SALES', 'Create new sales', NOW(), NOW()),
+(11, 'VIEW_FORECAST', 'View forecasts', NOW(), NOW()),
+(12, 'CREATE_FORECAST', 'Create forecasts', NOW(), NOW()),
+(13, 'VIEW_ALERTS', 'View alerts', NOW(), NOW()),
+(14, 'RESOLVE_ALERTS', 'Resolve alerts', NOW(), NOW()),
+(15, 'MANAGE_USERS', 'Manage users and roles', NOW(), NOW());
+
+INSERT INTO role_permissions (role_id, permission_id) VALUES
+(1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(1,9),(1,10),(1,11),(1,12),(1,13),(1,14),(1,15),
+(2,1),(2,5),(2,6),(2,7),(2,8),(2,9),(2,11),(2,12),
+(3,1),(3,5),(3,9),(3,10),(3,13);
+
+INSERT INTO warehouses (id, name, location, created_at, updated_at) VALUES
+(1, 'Main Warehouse', '123 Warehouse Ave', NOW(), NOW()),
+(2, 'Secondary Warehouse', '456 Storage Rd', NOW(), NOW());
+
+INSERT INTO suppliers (id, name, contact_name, contact_email, phone, address, created_at, updated_at) VALUES
+(1, 'Acme Suppliers', 'Jane Doe', 'jane@acme.example', '+1-555-0100', '100 Industrial Way', NOW(), NOW()),
+(2, 'Global Parts', 'John Smith', 'john@global.example', '+1-555-0101', '200 Commerce St', NOW(), NOW());
+
+INSERT INTO products (id, name, sku, description, unit, price_cost, price_selling, supplier_id, created_at, updated_at) VALUES
+(1, 'Widget A', 'WIDGET-A', 'Standard widget', 'pcs', 5.00, 9.99, 1, NOW(), NOW()),
+(2, 'Gadget B', 'GADGET-B', 'Advanced gadget', 'pcs', 7.50, 14.99, 2, NOW(), NOW()),
+(3, 'Thingamajig C', 'THING-C', 'Multi-purpose thingamajig', 'pcs', 10.00, 19.99, 1, NOW(), NOW());
+
+INSERT INTO inventory (id, product_id, warehouse_id, quantity, min_threshold, max_threshold, created_at, updated_at) VALUES
+(1, 1, 1, 100, 10, 1000, NOW(), NOW()),
+(2, 2, 1, 50, 5, 500, NOW(), NOW()),
+(3, 3, 1, 0, 5, 500, NOW(), NOW()),
+(4, 1, 2, 20, 10, 500, NOW(), NOW());
+
+INSERT INTO purchases (id, supplier_id, product_id, quantity, unit_cost, total_cost, purchase_date, status, created_at, updated_at) VALUES
+(1, 1, 1, 100, 5.00, 500.00, '2025-01-15', 'RECEIVED', NOW(), NOW()),
+(2, 2, 2, 60, 7.50, 450.00, '2025-02-01', 'SHIPPED', NOW(), NOW());
+
+INSERT INTO sales (id, product_id, quantity, unit_price, total_price, sale_date, customer_name, created_at, updated_at) VALUES
+(1, 1, 2, 9.99, 19.98, '2025-02-10', 'Acme Corp', NOW(), NOW()),
+(2, 2, 1, 14.99, 14.99, '2025-02-12', 'Globex LLC', NOW(), NOW());
+
+INSERT INTO forecasts (id, product_id, forecast_quantity, forecast_date, created_at, updated_at) VALUES
+(1, 1, 200, '2025-02-01', NOW(), NOW()),
+(2, 3, 150, '2025-02-01', NOW(), NOW());
+
+INSERT INTO alerts (id, product_id, alert_type, message, created_at, issued_at, resolved_at, is_resolved) VALUES
+(1, 3, 'STOCK_LOW', 'Stock below minimum threshold', NOW(), NOW(), NULL, FALSE);
+
+INSERT INTO users (id, username, email, password_hash, role_id, is_active, created_at, updated_at) VALUES
+(1, 'admin', 'admin@example.com', 'hashed_admin_pw', 1, TRUE, NOW(), NOW());
