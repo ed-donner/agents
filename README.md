@@ -64,6 +64,6 @@ Details are [here](guides/09_ai_apis_and_ollama.ipynb).
 
 Be sure to monitor your API costs to ensure you are totally happy with any spend. For OpenAI, the dashboard is [here](https://platform.openai.com/usage).
 
-### ABOVE ALL ELSE -
+### ABOVE ALL ELSE
 
 Be sure to have fun with the course! You could not have picked a better time to be learning about Agentic AI. I hope you enjoy every single minute! And if you get stuck at any point - [contact me](https://www.linkedin.com/in/eddonner/).
