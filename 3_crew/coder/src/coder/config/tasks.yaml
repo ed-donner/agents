@@ -1,6 +1,6 @@
 coding_task:
   description: >
-    Write python code to achieve this: {assignment}
+    Write python code to achieve this: {assignment}  
   expected_output: >
     A text file that includes the code itself, along with the output of the code.
   agent: coder
