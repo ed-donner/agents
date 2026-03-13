@@ -21,8 +21,3 @@ planner_agent = Agent(
     model="gpt-4o-mini",
     output_type=WebSearchPlan,
 )
-
-planner_agent_tool = planner_agent.as_tool(
-    tool_name="search_planner",
-    tool_description="Plan web searches for a research query. Call with the (refined) query; returns a list of search terms and reasons.",
-)
