@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.env
+*.env
+.venv/
+google_credentials.json
+user_interest.csv
+*.db
+*.sqlite3
+*.log
+.DS_Store
+career_db/
+.career_db/
