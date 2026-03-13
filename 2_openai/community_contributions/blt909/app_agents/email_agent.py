@@ -1,4 +1,5 @@
 from typing import Dict
+import os
 
 from agents import Agent, function_tool
 from brevo import Brevo
