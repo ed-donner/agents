@@ -1,12 +1,21 @@
 import os
 from typing import Dict
+from dotenv import load_dotenv
 
 import sendgrid
 from sendgrid.helpers.mail import Email, Mail, Content, To
-from agents import Agent, function_tool
+from agents import Agent, function_tool, ModelSettings
 
-SENDFROM = "ed@edwarddonner.com"  # put your verified sender here
-SENDTO = "ed.donner@gmail.com"  # put your recipient here
+load_dotenv(override=True)
+
+# Email addresses are stored in .env file
+SENDFROM = os.environ.get('EMAIL_FROM')  # stored as secrets
+SENDTO = os.environ.get('EMAIL_TO')  # stored as secrets
+
+EMAIL_INSTRUCTIONS = """You are able to send a nicely formatted HTML email based on a detailed report.
+You will be provided with a detailed report. You should use your tool to send one email, providing the 
+report converted into clean, well presented HTML with an appropriate subject line."""
+
 
 @function_tool
 def send_email(subject: str, html_body: str) -> Dict[str, str]:
@@ -21,13 +30,10 @@ def send_email(subject: str, html_body: str) -> Dict[str, str]:
     return "success"
 
 
-INSTRUCTIONS = """You are able to send a nicely formatted HTML email based on a detailed report.
-You will be provided with a detailed report. You should use your tool to send one email, providing the 
-report converted into clean, well presented HTML with an appropriate subject line."""
-
 email_agent = Agent(
     name="Email agent",
-    instructions=INSTRUCTIONS,
+    instructions=EMAIL_INSTRUCTIONS,
     tools=[send_email],
     model="gpt-4o-mini",
+    model_settings=ModelSettings(tool_choice="required"),
 )
