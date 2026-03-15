@@ -194,3 +194,6 @@ With this context, please chat with the user, always staying in character as {se
 if __name__ == "__main__":
     me = Me()
     gr.ChatInterface(me.chat, type="messages").launch()
+
+
+## deployed to https://huggingface.co/spaces/CynthiaOmovoiye/career_conversation
