@@ -182,30 +182,31 @@ With this context, please chat with the user, always staying in character as {se
         return response.choices[0].message.parsed
 
     def chat(self, message, history):
-        docs = fetch_context(message)
+        user_message = message  # preserve; loop overwrites message
+        docs = fetch_context(user_message)
         relevant_context = "\n\n".join(doc.page_content for doc in docs)
         messages = [{"role": "system", "content": self.system_prompt(
-            relevant_context)}] + normalize_history(history) + [{"role": "user", "content": message}]
+            relevant_context)}] + normalize_history(history) + [{"role": "user", "content": user_message}]
         done = False
         while not done:
             response = self.openai.chat.completions.create(
                 model="gpt-4o-mini", messages=messages, tools=tools)
             if response.choices[0].finish_reason == "tool_calls":
-                message = response.choices[0].message
-                tool_calls = message.tool_calls
+                assistant_message = response.choices[0].message
+                tool_calls = assistant_message.tool_calls
                 results = self.handle_tool_call(tool_calls)
-                messages.append(message)
+                messages.append(assistant_message)
                 messages.extend(results)
             else:
                 done = True
         reply = response.choices[0].message.content
-        evaluation = self.evaluate(reply, message, history, relevant_context)
+        evaluation = self.evaluate(reply, user_message, history, relevant_context)
         if evaluation.is_acceptable:
             return reply
         else:
             print("Failed evaluation - retrying")
             print(evaluation.feedback)
-            reply = self.rerun(reply, message, history,
+            reply = self.rerun(reply, user_message, history,
                                relevant_context, evaluation.feedback)
             return reply
 
