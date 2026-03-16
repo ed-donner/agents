@@ -80,6 +80,25 @@ tools = [{"type": "function", "function": record_user_details_json},
          {"type": "function", "function": record_unknown_question_json}]
 
 
+def normalize_history(history):
+    """Strip Gradio history to only role and content for OpenAI API (avoids 400 Invalid input)."""
+    if not history:
+        return []
+    out = []
+    for msg in history:
+        if isinstance(msg, dict):
+            content = msg.get("content")
+            if content is not None and not isinstance(content, str):
+                content = str(content) if content else ""
+            out.append({"role": msg["role"], "content": content or ""})
+        else:
+            # Legacy tuple format (user_msg, assistant_msg)
+            if isinstance(msg, (list, tuple)) and len(msg) >= 2:
+                out.append({"role": "user", "content": msg[0] if isinstance(msg[0], str) else str(msg[0])})
+                out.append({"role": "assistant", "content": msg[1] if isinstance(msg[1], str) else str(msg[1])})
+    return out
+
+
 class Me:
 
     def __init__(self):
@@ -131,7 +150,7 @@ With this context, please chat with the user, always staying in character as {se
         updated_system_prompt += f"## Your attempted answer:\n{reply}\n\n"
         updated_system_prompt += f"## Reason for rejection:\n{feedback}\n\n"
         messages = [{"role": "system", "content": updated_system_prompt}
-                    ] + history + [{"role": "user", "content": message}]
+                    ] + normalize_history(history) + [{"role": "user", "content": message}]
         rerun_done = False
         while not rerun_done:
             response = self.openai.chat.completions.create(
@@ -166,7 +185,7 @@ With this context, please chat with the user, always staying in character as {se
         docs = fetch_context(message)
         relevant_context = "\n\n".join(doc.page_content for doc in docs)
         messages = [{"role": "system", "content": self.system_prompt(
-            relevant_context)}] + history + [{"role": "user", "content": message}]
+            relevant_context)}] + normalize_history(history) + [{"role": "user", "content": message}]
         done = False
         while not done:
             response = self.openai.chat.completions.create(
