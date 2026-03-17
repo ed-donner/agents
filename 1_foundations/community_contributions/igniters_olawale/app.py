@@ -1,23 +1,36 @@
 """
-Digital twin for Olawale Adeogun.
+Digital twin for Olawale Adeogun. Docs here - https://drive.google.com/drive/folders/1VNMK1Ce7zkNPH7Q6TFnCgMDpZKNbVmdb?usp=sharing
 Chat from summary + LinkedIn PDF, collect contact info, log unanswered questions.
 FAQ database (SQLite) for common Q&A the model can read and write.
-OpenAI chat + function calling + Gradio.
+Quality evaluator: reject poor replies and rerun with feedback.
+Input guardrails: reject empty or overly long messages.
+Uses OpenRouter (or OpenAI if OpenRouter env not set). Gradio + function calling.
 """
+import re
 import sqlite3
 from pathlib import Path
 from dotenv import load_dotenv
 from openai import OpenAI
+from pydantic import BaseModel
 import json
 import os
 import requests
 from pypdf import PdfReader
 import gradio as gr
 
+MAX_USER_MESSAGE_LENGTH = 2000
+
+
+class Evaluation(BaseModel):
+    is_acceptable: bool
+    feedback: str
+
 APP_DIR = Path(__file__).resolve().parent
 FAQ_DB = APP_DIR / "data" / "faq.db"
 load_dotenv(APP_DIR.parent.parent.parent / ".env", override=True)
 
+OPENROUTER_BASE_URL = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 def _init_faq_db():
     FAQ_DB.parent.mkdir(parents=True, exist_ok=True)
@@ -160,9 +173,17 @@ TOOLS = [
 ]
 
 
+def openai_client():
+    """Use OpenRouter when OPENROUTER_API_KEY is set; otherwise default OpenAI."""
+    if OPENROUTER_API_KEY:
+        return OpenAI(base_url=OPENROUTER_BASE_URL, api_key=OPENROUTER_API_KEY)
+    return OpenAI()
+
+
 class Me:
     def __init__(self):
-        self.openai = OpenAI()
+        self.openai = openai_client()
+        self.model = os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini")
         self.name = "Olawale Adeogun"
         me_dir = APP_DIR / "me"
         self.linkedin = ""
@@ -186,7 +207,6 @@ class Me:
         for tool_call in tool_calls:
             tool_name = tool_call.function.name
             arguments = json.loads(tool_call.function.arguments)
-            print(f"Tool called: {tool_name}", flush=True)
             tool = globals().get(tool_name)
             result = tool(**arguments) if tool else {}
             results.append({
@@ -206,13 +226,75 @@ class Me:
             "If you don't know the answer to any question, use your record_unknown_question tool to record it. "
             "If the user is engaging, steer them towards getting in touch via email and use record_user_details. "
             "You have access to a FAQ database: use search_faq to look up common questions before answering when relevant; "
-            "use add_faq to store a question and your answer when you have given a clear, reusable reply (avoid duplicates)."
+            "use add_faq to store a question and your answer when you have given a clear, reusable reply (avoid duplicates). "
+            "If the user's message is vague or very short, you may ask one brief clarifying question before answering."
         )
         prompt += f"\n\n## Summary:\n{self.summary}\n\n## LinkedIn Profile:\n{self.linkedin}\n\n"
         prompt += f"With this context, please chat with the user, always staying in character as {self.name}."
         return prompt
 
+    def _evaluator_system_prompt(self) -> str:
+        prompt = (
+            f"You are an evaluator that decides whether a response to a question is acceptable. "
+            "You are provided with a conversation between a User and an Agent. "
+            f"The Agent is playing the role of {self.name} and is representing {self.name} on their website. "
+            "The Agent has been instructed to be professional and engaging, as if talking to a potential client or future employer. "
+            f"Context on {self.name} (summary and LinkedIn) is below. "
+            "Evaluate whether the Agent's latest response is acceptable quality: accurate, relevant, and in character."
+        )
+        prompt += f"\n\n## Summary:\n{self.summary}\n\n## LinkedIn Profile:\n{self.linkedin}\n\n"
+        prompt += "Respond with a JSON object only, with two keys: is_acceptable (boolean) and feedback (string). No other text."
+        return prompt
+
+    def _evaluator_user_prompt(self, reply: str, message: str, history: list) -> str:
+        history_text = "\n".join(
+            f"{m['role']}: {m['content']}" for m in history if isinstance(m.get("content"), str)
+        )
+        return (
+            f"Conversation so far:\n\n{history_text}\n\n"
+            f"Latest user message:\n{message}\n\n"
+            f"Agent's latest response:\n{reply}\n\n"
+            "Evaluate the response. Reply with JSON only: {\"is_acceptable\": true/false, \"feedback\": \"...\"}"
+        )
+
+    def evaluate(self, reply: str, message: str, history: list) -> Evaluation:
+        messages = [
+            {"role": "system", "content": self._evaluator_system_prompt()},
+            {"role": "user", "content": self._evaluator_user_prompt(reply, message, history)},
+        ]
+        response = self.openai.chat.completions.create(
+            model=self.model, messages=messages, temperature=0.2
+        )
+        raw = response.choices[0].message.content.strip()
+        json_str = re.sub(r"^```(?:json)?\s*|\s*```$", "", raw)
+        return Evaluation.model_validate_json(json_str)
+
+    def rerun(self, reply: str, message: str, history: list, feedback: str) -> str:
+        extra = (
+            "\n\n## Previous answer rejected\n"
+            "Quality control rejected your last reply. Try again with the feedback below.\n"
+            f"## Your attempted answer:\n{reply}\n\n"
+            f"## Reason for rejection:\n{feedback}\n\n"
+        )
+        system = self.system_prompt() + extra
+        messages = [
+            {"role": "system", "content": system},
+            *history,
+            {"role": "user", "content": message},
+        ]
+        response = self.openai.chat.completions.create(
+            model=self.model, messages=messages, temperature=0.7
+        )
+        return response.choices[0].message.content
+
     def chat(self, message, history):
+        # Input guardrails
+        if not message or not str(message).strip():
+            return "Please type a question or message and I'll get back to you."
+        msg_str = str(message).strip()
+        if len(msg_str) > MAX_USER_MESSAGE_LENGTH:
+            return f"Your message is too long (max {MAX_USER_MESSAGE_LENGTH} characters). Please shorten it and try again."
+
         # Normalize Gradio history to list of {role, content}
         if history:
             normalized = []
@@ -234,7 +316,7 @@ class Me:
         done = False
         while not done:
             response = self.openai.chat.completions.create(
-                model="gpt-4o-mini", messages=messages, tools=TOOLS
+                model=self.model, messages=messages, tools=TOOLS
             )
             if response.choices[0].finish_reason == "tool_calls":
                 msg = response.choices[0].message
@@ -243,7 +325,16 @@ class Me:
                 messages.extend(results)
             else:
                 done = True
-        return response.choices[0].message.content
+        reply = response.choices[0].message.content
+
+        # Evaluator: accept or rerun once with feedback
+        try:
+            evaluation = self.evaluate(reply, message, history)
+            if not evaluation.is_acceptable:
+                reply = self.rerun(reply, message, history, evaluation.feedback)
+        except Exception as e:
+            print(f"Evaluation failed, returning original reply: {e}", flush=True)
+        return reply
 
 
 if __name__ == "__main__":
