@@ -1,8 +1,10 @@
 """
 Digital twin for Olawale Adeogun.
 Chat from summary + LinkedIn PDF, collect contact info, log unanswered questions.
+FAQ database (SQLite) for common Q&A the model can read and write.
 OpenAI chat + function calling + Gradio.
 """
+import sqlite3
 from pathlib import Path
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -13,8 +15,62 @@ from pypdf import PdfReader
 import gradio as gr
 
 APP_DIR = Path(__file__).resolve().parent
-# .env at repo root (agents/)
+FAQ_DB = APP_DIR / "data" / "faq.db"
 load_dotenv(APP_DIR.parent.parent.parent / ".env", override=True)
+
+
+def _init_faq_db():
+    FAQ_DB.parent.mkdir(parents=True, exist_ok=True)
+    with sqlite3.connect(FAQ_DB) as conn:
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS faq (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                question TEXT NOT NULL,
+                answer TEXT NOT NULL,
+                created_at TEXT NOT NULL DEFAULT (datetime('now')),
+                source TEXT DEFAULT 'assistant'
+            )
+            """
+        )
+        conn.commit()
+
+
+def search_faq(query: str, limit: int = 5) -> dict:
+    """Search FAQ by question or answer text. Returns matching rows."""
+    _init_faq_db()
+    pattern = f"%{query.strip()}%"
+    with sqlite3.connect(FAQ_DB) as conn:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            """
+            SELECT id, question, answer, created_at
+            FROM faq
+            WHERE question LIKE ? OR answer LIKE ?
+            ORDER BY created_at DESC
+            LIMIT ?
+            """,
+            (pattern, pattern, limit),
+        ).fetchall()
+    results = [dict(row) for row in rows]
+    return {"success": True, "count": len(results), "results": results}
+
+
+def add_faq(question: str, answer: str, source: str = "assistant") -> dict:
+    """Add a Q&A pair to the FAQ. Use when you give a good answer worth reusing."""
+    _init_faq_db()
+    question = question.strip()
+    answer = answer.strip()
+    if not question or not answer:
+        return {"success": False, "message": "question and answer must be non-empty"}
+    with sqlite3.connect(FAQ_DB) as conn:
+        cur = conn.execute(
+            "INSERT INTO faq (question, answer, source) VALUES (?, ?, ?)",
+            (question, answer, source),
+        )
+        conn.commit()
+        row_id = cur.lastrowid
+    return {"success": True, "id": row_id, "message": "FAQ added"}
 
 
 def push(text: str) -> None:
@@ -68,9 +124,39 @@ record_unknown_question_json = {
     },
 }
 
+search_faq_json = {
+    "name": "search_faq",
+    "description": "Search the FAQ database for common questions and answers. Use when the user asks something that might already have a stored answer, or to check before answering.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "query": {"type": "string", "description": "Search phrase (e.g. key words from the user's question)"},
+            "limit": {"type": "integer", "description": "Max number of results to return", "default": 5},
+        },
+        "required": ["query"],
+        "additionalProperties": False,
+    },
+}
+
+add_faq_json = {
+    "name": "add_faq",
+    "description": "Add a question and answer to the FAQ database. Use when you have just given a clear, reusable answer that could help for similar future questions. Do not add duplicates for the same question.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "question": {"type": "string", "description": "The question that was asked"},
+            "answer": {"type": "string", "description": "The answer you gave (summary is fine)"},
+        },
+        "required": ["question", "answer"],
+        "additionalProperties": False,
+    },
+}
+
 TOOLS = [
     {"type": "function", "function": record_user_details_json},
     {"type": "function", "function": record_unknown_question_json},
+    {"type": "function", "function": search_faq_json},
+    {"type": "function", "function": add_faq_json},
 ]
 
 
@@ -118,7 +204,9 @@ class Me:
             "You are given a summary and LinkedIn profile which you can use to answer questions. "
             "Be professional and engaging, as if talking to a potential client or future employer. "
             "If you don't know the answer to any question, use your record_unknown_question tool to record it. "
-            "If the user is engaging, steer them towards getting in touch via email and use record_user_details."
+            "If the user is engaging, steer them towards getting in touch via email and use record_user_details. "
+            "You have access to a FAQ database: use search_faq to look up common questions before answering when relevant; "
+            "use add_faq to store a question and your answer when you have given a clear, reusable reply (avoid duplicates)."
         )
         prompt += f"\n\n## Summary:\n{self.summary}\n\n## LinkedIn Profile:\n{self.linkedin}\n\n"
         prompt += f"With this context, please chat with the user, always staying in character as {self.name}."
