@@ -708,7 +708,7 @@ if __name__ == "__main__":
         with gr.Row():
             audio_output = gr.Audio(autoplay=True)
         with gr.Row():
-            message = gr.Textbox(label="Chat with our AI Assistant:")
+            message = gr.Textbox(label="Chat with my AI Assistant:")
 
     # Hooking up events to callbacks
         message.submit(put_message_in_chatbot, inputs=[message, chatbot], outputs=[message, chatbot]).then(
