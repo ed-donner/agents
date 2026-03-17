@@ -76,9 +76,9 @@ tools = [{"type": "function", "function": record_user_details_json},
 class Me:
 
     def __init__(self):
-        self.openai = OpenAI()
-        self.name = "Ed Donner"
-        reader = PdfReader("me/linkedin.pdf")
+        self.openai = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=os.getenv("OPENAI_API_KEY"))
+        self.name = "Philip Muhire"
+        reader = PdfReader("me/Profile.pdf")
         self.linkedin = ""
         for page in reader.pages:
             text = page.extract_text()
