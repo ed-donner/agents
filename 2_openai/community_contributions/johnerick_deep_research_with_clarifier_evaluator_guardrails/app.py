@@ -36,12 +36,17 @@ async def chat_turn(message: str, history: list[list[str]], refined_query: str):
 
 
 async def run_research(refined_query: str):
-    """Run the full research pipeline and stream output."""
+    """Run the full research pipeline and stream output. Disables Send/Start research while running."""
+    disabled = gr.update(interactive=False)
+    enabled = gr.update(interactive=True)
     if not refined_query or not refined_query.strip():
-        yield "Please use the chat above to clarify your research topic first. Once the assistant confirms readiness, click **Start research**."
+        yield "Please use the chat above to clarify your research topic first. Once the assistant confirms readiness, click **Start research**.", enabled, enabled
         return
+    report_so_far = ""
     async for chunk in ResearchManager().run(refined_query):
-        yield chunk
+        report_so_far += chunk
+        yield report_so_far, disabled, disabled
+    yield report_so_far, enabled, enabled
 
 
 with gr.Blocks(theme=gr.themes.Default(primary_hue="sky"), title="Deep Research") as ui:
@@ -56,6 +61,7 @@ with gr.Blocks(theme=gr.themes.Default(primary_hue="sky"), title="Deep Research"
     )
     submit_btn = gr.Button("Send", variant="secondary")
     start_research_btn = gr.Button("Start research", variant="primary", interactive=False)
+    new_research_btn = gr.Button("New research", variant="secondary")
 
     report = gr.Markdown(label="Report")
 
@@ -79,7 +85,23 @@ with gr.Blocks(theme=gr.themes.Default(primary_hue="sky"), title="Deep Research"
     start_research_btn.click(
         fn=run_research,
         inputs=refined_query_state,
-        outputs=report,
+        outputs=[report, submit_btn, start_research_btn],
+    )
+
+    def on_new_research():
+        """Clear chat, report, and refined query; disable Start research."""
+        return (
+            [],  # chat
+            "",  # msg
+            "",  # report
+            "",  # refined_query_state
+            gr.update(interactive=False),  # start_research_btn
+        )
+
+    new_research_btn.click(
+        fn=on_new_research,
+        inputs=[],
+        outputs=[chat, msg, report, refined_query_state, start_research_btn],
     )
 
 ui.launch(inbrowser=True)
