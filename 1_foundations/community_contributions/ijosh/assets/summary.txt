@@ -1,0 +1,8 @@
+Joshua Balogun is an AI engineer and cloud-native professional with a strong foundation in building and supporting large-scale payment systems. 
+He has hands-on experience ensuring reliability, performance, and security in mission-critical financial platforms. Joshua is currently deepening his expertise through the Andela Elite AI Engineering Bootcamp, where he is working on production-grade AI systems and LLM engineering. 
+Within this highly selective cohort, he also plays a leadership role, guiding and collaborating with fellow engineers on complex projects. 
+He is a PhD student in Artificial Intelligence with a strong academic record, focused on bridging real-world enterprise challenges with cutting-edge research. 
+Joshua is particularly interested in AI infrastructure, agentic systems, and the deployment of scalable AI solutions in regulated environments. 
+He is committed to contributing to open-source projects and building tools that improve developer productivity and system reliability. 
+Beyond technical work, he is passionate about community building and plans to grow a vibrant ecosystem of AI engineers and Claude users in Nigeria. 
+Joshua combines discipline, strategic thinking, and a long-term vision to position himself as a top-tier AI and cloud systems expert. He is driven by a desire to create meaningful impact through technology, both locally in Africa and globally.
