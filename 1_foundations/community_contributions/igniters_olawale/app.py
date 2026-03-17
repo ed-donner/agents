@@ -32,7 +32,7 @@ load_dotenv(APP_DIR.parent.parent.parent / ".env", override=True)
 OPENROUTER_BASE_URL = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
-def _init_faq_db():
+def init_faq_db():
     FAQ_DB.parent.mkdir(parents=True, exist_ok=True)
     with sqlite3.connect(FAQ_DB) as conn:
         conn.execute(
@@ -51,7 +51,7 @@ def _init_faq_db():
 
 def search_faq(query: str, limit: int = 5) -> dict:
     """Search FAQ by question or answer text. Returns matching rows."""
-    _init_faq_db()
+    init_faq_db()
     pattern = f"%{query.strip()}%"
     with sqlite3.connect(FAQ_DB) as conn:
         conn.row_factory = sqlite3.Row
@@ -71,7 +71,7 @@ def search_faq(query: str, limit: int = 5) -> dict:
 
 def add_faq(question: str, answer: str, source: str = "assistant") -> dict:
     """Add a Q&A pair to the FAQ. Use when you give a good answer worth reusing."""
-    _init_faq_db()
+    init_faq_db()
     question = question.strip()
     answer = answer.strip()
     if not question or not answer:
@@ -233,7 +233,7 @@ class Me:
         prompt += f"With this context, please chat with the user, always staying in character as {self.name}."
         return prompt
 
-    def _evaluator_system_prompt(self) -> str:
+    def evaluator_system_prompt(self) -> str:
         prompt = (
             f"You are an evaluator that decides whether a response to a question is acceptable. "
             "You are provided with a conversation between a User and an Agent. "
@@ -246,7 +246,7 @@ class Me:
         prompt += "Respond with a JSON object only, with two keys: is_acceptable (boolean) and feedback (string). No other text."
         return prompt
 
-    def _evaluator_user_prompt(self, reply: str, message: str, history: list) -> str:
+    def evaluator_user_prompt(self, reply: str, message: str, history: list) -> str:
         history_text = "\n".join(
             f"{m['role']}: {m['content']}" for m in history if isinstance(m.get("content"), str)
         )
@@ -259,8 +259,8 @@ class Me:
 
     def evaluate(self, reply: str, message: str, history: list) -> Evaluation:
         messages = [
-            {"role": "system", "content": self._evaluator_system_prompt()},
-            {"role": "user", "content": self._evaluator_user_prompt(reply, message, history)},
+            {"role": "system", "content": self.evaluator_system_prompt()},
+            {"role": "user", "content": self.evaluator_user_prompt(reply, message, history)},
         ]
         response = self.openai.chat.completions.create(
             model=self.model, messages=messages, temperature=0.2
