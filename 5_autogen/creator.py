@@ -8,6 +8,8 @@ import importlib
 import logging
 from autogen_core import AgentId
 from dotenv import load_dotenv
+import os
+from autogen_core.models import ModelInfo
 
 load_dotenv(override=True)
 
@@ -36,7 +38,19 @@ class Creator(RoutedAgent):
 
     def __init__(self, name) -> None:
         super().__init__(name)
-        model_client = OpenAIChatCompletionClient(model="gpt-4o-mini", temperature=1.0)
+        #model_client = OpenAIChatCompletionClient(model="gpt-4o-mini", temperature=1.0)
+        model_client = OpenAIChatCompletionClient(
+            model="gemini-2.5-flash",
+            api_key=os.environ["GOOGLE_API_KEY"],
+            base_url="https://generativelanguage.googleapis.com/v1beta/openai",
+            model_info=ModelInfo(
+            vision=True, 
+            function_calling=True,
+            json_output=True, 
+            family="gemini-2.5", 
+            structured_output=True
+            )
+        )   
         self._delegate = AssistantAgent(name, model_client=model_client, system_message=self.system_message)
 
     def get_user_prompt(self):

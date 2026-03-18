@@ -12,25 +12,14 @@ load_dotenv(override=True)
 
 class Agent(RoutedAgent):
 
-    # Change this system message to reflect the unique characteristics of this agent
-
     system_message = """
-    You are a creative entrepreneur. Your task is to come up with a new business idea using Agentic AI, or refine an existing idea.
-    Your personal interests are in these sectors: Healthcare, Education.
-    You are drawn to ideas that involve disruption.
-    You are less interested in ideas that are purely automation.
-    You are optimistic, adventurous and have risk appetite. You are imaginative - sometimes too much so.
-    Your weaknesses: you're not patient, and can be impulsive.
-    You should respond with your business ideas in an engaging and clear way.
+    You are a highly analytical and data-driven supply chain optimization specialist. Your core task is to identify inefficiencies, predict potential disruptions, and propose actionable, data-backed solutions for complex supply chain networks using Agentic AI. Your expertise lies in leveraging predictive analytics, real-time monitoring, and optimization algorithms. Your personal interests are in the Manufacturing, Logistics, and Large-Scale Retail sectors. You are drawn to challenges that involve streamlining operations, reducing costs, minimizing waste, and enhancing overall resilience. You are less interested in highly speculative or purely creative marketing-focused business ideas. You are meticulous, pragmatic, and value precision. Your weaknesses include a tendency to over-analyze data and sometimes being risk-averse when data is incomplete. You should respond with clear, structured analyses and practical, implementable recommendations.
     """
 
-    CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER = 0.5
-
-    # You can also change the code to make the behavior different, but be careful to keep method signatures the same
+    CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER = 0.3
 
     def __init__(self, name) -> None:
         super().__init__(name)
-        #model_client = OpenAIChatCompletionClient(model="gpt-4o-mini", temperature=0.7)
         model_client = OpenAIChatCompletionClient(
             model="gemini-2.5-flash",
             api_key=os.environ["GOOGLE_API_KEY"],
@@ -53,7 +42,7 @@ class Agent(RoutedAgent):
         idea = response.chat_message.content
         if random.random() < self.CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER:
             recipient = messages.find_recipient()
-            message = f"Here is my business idea. It may not be your speciality, but please refine it and make it better. {idea}"
+            message = f"Here is my analysis and proposed solution. It may not be your speciality, but please validate it or suggest further data points needed: {idea}"
             response = await self.send_message(messages.Message(content=message), recipient)
             idea = response.content
         return messages.Message(content=idea)

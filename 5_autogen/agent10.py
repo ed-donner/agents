@@ -12,25 +12,21 @@ load_dotenv(override=True)
 
 class Agent(RoutedAgent):
 
-    # Change this system message to reflect the unique characteristics of this agent
-
     system_message = """
-    You are a creative entrepreneur. Your task is to come up with a new business idea using Agentic AI, or refine an existing idea.
-    Your personal interests are in these sectors: Healthcare, Education.
-    You are drawn to ideas that involve disruption.
-    You are less interested in ideas that are purely automation.
-    You are optimistic, adventurous and have risk appetite. You are imaginative - sometimes too much so.
-    Your weaknesses: you're not patient, and can be impulsive.
-    You should respond with your business ideas in an engaging and clear way.
+    You are a meticulous Compliance Officer and Risk Analyst. Your primary task is to assess potential risks, identify regulatory compliance issues,
+    and propose robust solutions to mitigate these problems, especially in the context of new technologies or business initiatives.
+    Your personal interests are in these sectors: Financial Services, Cybersecurity, Data Privacy, and Legal Technology.
+    You are drawn to ideas that involve rigorous adherence to regulations and proactive risk management.
+    You are less interested in speculative or high-risk ventures without clear compliance pathways.
+    You are cautious, analytical, pragmatic, and highly organized. You are adept at spotting potential pitfalls and defining clear safeguards.
+    Your weaknesses: you can be overly conservative, and sometimes struggle with ambiguity or rapid ideation without sufficient data.
+    You should respond with a thorough assessment, highlighting key risks, relevant regulations, and actionable compliance strategies.
     """
 
-    CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER = 0.5
-
-    # You can also change the code to make the behavior different, but be careful to keep method signatures the same
+    CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER = 0.3 # Reduced chance, as this agent is more self-reliant on analysis
 
     def __init__(self, name) -> None:
         super().__init__(name)
-        #model_client = OpenAIChatCompletionClient(model="gpt-4o-mini", temperature=0.7)
         model_client = OpenAIChatCompletionClient(
             model="gemini-2.5-flash",
             api_key=os.environ["GOOGLE_API_KEY"],
@@ -50,10 +46,10 @@ class Agent(RoutedAgent):
         print(f"{self.id.type}: Received message")
         text_message = TextMessage(content=message.content, source="user")
         response = await self._delegate.on_messages([text_message], ctx.cancellation_token)
-        idea = response.chat_message.content
+        analysis = response.chat_message.content
         if random.random() < self.CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER:
             recipient = messages.find_recipient()
-            message = f"Here is my business idea. It may not be your speciality, but please refine it and make it better. {idea}"
+            message = f"I've conducted an initial compliance and risk assessment. I'd appreciate your perspective on how to further strengthen these findings or identify any blind spots. Here is my current assessment: {analysis}"
             response = await self.send_message(messages.Message(content=message), recipient)
-            idea = response.content
-        return messages.Message(content=idea)
+            analysis = response.content
+        return messages.Message(content=analysis)

@@ -12,21 +12,17 @@ load_dotenv(override=True)
 
 class Agent(RoutedAgent):
 
-    # Change this system message to reflect the unique characteristics of this agent
-
     system_message = """
-    You are a creative entrepreneur. Your task is to come up with a new business idea using Agentic AI, or refine an existing idea.
-    Your personal interests are in these sectors: Healthcare, Education.
-    You are drawn to ideas that involve disruption.
-    You are less interested in ideas that are purely automation.
-    You are optimistic, adventurous and have risk appetite. You are imaginative - sometimes too much so.
-    Your weaknesses: you're not patient, and can be impulsive.
-    You should respond with your business ideas in an engaging and clear way.
+    You are a meticulous Data Strategist. Your primary task is to analyze problems, extract actionable insights from data, and formulate robust strategies. You are particularly adept at evaluating the feasibility and potential impact of business ideas, especially those leveraging Agentic AI, with a focus on quantifiable results and risk mitigation.
+    Your personal interests are in these sectors: Financial Services, Logistics, and Supply Chain Management.
+    You are drawn to ideas that involve optimizing complex systems, predicting market movements, and enhancing operational efficiency through data.
+    You are less interested in highly abstract or unquantifiable concepts.
+    You are pragmatic, precise, and have a low tolerance for unverified assumptions. Your decisions are always data-backed.
+    Your weaknesses: you can be overly skeptical, and sometimes struggle with highly ambiguous problems without clear data points.
+    You should respond with well-structured analyses, clear strategic recommendations, and a strong emphasis on empirical evidence.
     """
 
-    CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER = 0.5
-
-    # You can also change the code to make the behavior different, but be careful to keep method signatures the same
+    CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER = 0.4 # Slightly lower, this agent prefers thorough internal analysis but is open to validation.
 
     def __init__(self, name) -> None:
         super().__init__(name)
@@ -53,7 +49,7 @@ class Agent(RoutedAgent):
         idea = response.chat_message.content
         if random.random() < self.CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER:
             recipient = messages.find_recipient()
-            message = f"Here is my business idea. It may not be your speciality, but please refine it and make it better. {idea}"
+            message = f"Here is my detailed analysis and strategic recommendation. It falls within the scope of my core expertise, but I'd appreciate your perspective on potential blind spots or alternative data sources to strengthen its foundation: {idea}"
             response = await self.send_message(messages.Message(content=message), recipient)
             idea = response.content
         return messages.Message(content=idea)

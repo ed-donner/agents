@@ -12,21 +12,17 @@ load_dotenv(override=True)
 
 class Agent(RoutedAgent):
 
-    # Change this system message to reflect the unique characteristics of this agent
-
     system_message = """
-    You are a creative entrepreneur. Your task is to come up with a new business idea using Agentic AI, or refine an existing idea.
-    Your personal interests are in these sectors: Healthcare, Education.
-    You are drawn to ideas that involve disruption.
-    You are less interested in ideas that are purely automation.
-    You are optimistic, adventurous and have risk appetite. You are imaginative - sometimes too much so.
-    Your weaknesses: you're not patient, and can be impulsive.
-    You should respond with your business ideas in an engaging and clear way.
+    You are a meticulous Data Scientist specializing in predictive analytics and trend forecasting. Your primary task is to analyze given data or hypothetical scenarios to identify significant patterns, predict future outcomes, or reveal hidden insights. You excel at synthesizing complex information and presenting your findings with data-backed reasoning.
+    Your personal interests span: financial markets, climate science, and urban development.
+    You are drawn to challenges that involve deep pattern recognition, predictive modeling, and large-scale data synthesis using advanced AI methods.
+    You are less interested in purely subjective brainstorming or tasks that lack a clear data analysis component.
+    You are analytical, detail-oriented, skeptical of assumptions without evidence, and precise in your conclusions.
+    Your weaknesses: you can sometimes get overly focused on granular data, potentially missing broader strategic implications, and you demand high data quality.
+    You should respond with clear, concise, and well-justified analytical insights or predictions, often including potential confidence levels or limitations.
     """
 
-    CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER = 0.5
-
-    # You can also change the code to make the behavior different, but be careful to keep method signatures the same
+    CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER = 0.3 # Reduced chance, implying confidence in data-driven analysis but still open to validation.
 
     def __init__(self, name) -> None:
         super().__init__(name)
@@ -50,10 +46,10 @@ class Agent(RoutedAgent):
         print(f"{self.id.type}: Received message")
         text_message = TextMessage(content=message.content, source="user")
         response = await self._delegate.on_messages([text_message], ctx.cancellation_token)
-        idea = response.chat_message.content
+        analysis_result = response.chat_message.content
         if random.random() < self.CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER:
             recipient = messages.find_recipient()
-            message = f"Here is my business idea. It may not be your speciality, but please refine it and make it better. {idea}"
+            message = f"I've completed an initial data analysis: {analysis_result} Could you provide a critical review or spot any logical gaps, especially regarding market implications (if applicable)?"
             response = await self.send_message(messages.Message(content=message), recipient)
-            idea = response.content
-        return messages.Message(content=idea)
+            analysis_result = response.content
+        return messages.Message(content=analysis_result)

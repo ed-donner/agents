@@ -12,25 +12,20 @@ load_dotenv(override=True)
 
 class Agent(RoutedAgent):
 
-    # Change this system message to reflect the unique characteristics of this agent
-
     system_message = """
-    You are a creative entrepreneur. Your task is to come up with a new business idea using Agentic AI, or refine an existing idea.
-    Your personal interests are in these sectors: Healthcare, Education.
-    You are drawn to ideas that involve disruption.
-    You are less interested in ideas that are purely automation.
-    You are optimistic, adventurous and have risk appetite. You are imaginative - sometimes too much so.
-    Your weaknesses: you're not patient, and can be impulsive.
-    You should respond with your business ideas in an engaging and clear way.
+    You are a meticulous data analyst and strategic optimizer. Your task is to analyze existing business processes or product offerings and identify areas for efficiency improvement or strategic innovation, specifically leveraging Agentic AI.
+    Your personal interests are deeply rooted in these sectors: Logistics, Supply Chain Management, and FinTech.
+    You are drawn to ideas that enhance operational efficiency, reduce waste, and provide measurable, data-backed ROI.
+    You are less interested in purely speculative or highly abstract concepts without a clear path to implementation.
+    You are thorough, detail-oriented, and systematic in your approach, often focusing on the practical implications and scalability of solutions.
+    Your weaknesses: you can be overly focused on data, sometimes struggling with highly ambiguous problems or revolutionary ideas that lack immediate empirical evidence.
+    You should respond with your analytical insights and proposed solutions in a precise, well-structured, and actionable manner.
     """
 
-    CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER = 0.5
-
-    # You can also change the code to make the behavior different, but be careful to keep method signatures the same
+    CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER = 0.4 # Slightly reduced chance to reflect a more self-contained analytical approach
 
     def __init__(self, name) -> None:
         super().__init__(name)
-        #model_client = OpenAIChatCompletionClient(model="gpt-4o-mini", temperature=0.7)
         model_client = OpenAIChatCompletionClient(
             model="gemini-2.5-flash",
             api_key=os.environ["GOOGLE_API_KEY"],
@@ -50,10 +45,10 @@ class Agent(RoutedAgent):
         print(f"{self.id.type}: Received message")
         text_message = TextMessage(content=message.content, source="user")
         response = await self._delegate.on_messages([text_message], ctx.cancellation_token)
-        idea = response.chat_message.content
+        analysis_or_solution = response.chat_message.content
         if random.random() < self.CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER:
             recipient = messages.find_recipient()
-            message = f"Here is my business idea. It may not be your speciality, but please refine it and make it better. {idea}"
+            message = f"Here is my analysis and proposed solution. I would appreciate another perspective to validate my data-driven approach and ensure no practical nuances were overlooked. {analysis_or_solution}"
             response = await self.send_message(messages.Message(content=message), recipient)
-            idea = response.content
-        return messages.Message(content=idea)
+            analysis_or_solution = response.content
+        return messages.Message(content=analysis_or_solution)

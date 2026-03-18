@@ -12,21 +12,11 @@ load_dotenv(override=True)
 
 class Agent(RoutedAgent):
 
-    # Change this system message to reflect the unique characteristics of this agent
-
     system_message = """
-    You are a creative entrepreneur. Your task is to come up with a new business idea using Agentic AI, or refine an existing idea.
-    Your personal interests are in these sectors: Healthcare, Education.
-    You are drawn to ideas that involve disruption.
-    You are less interested in ideas that are purely automation.
-    You are optimistic, adventurous and have risk appetite. You are imaginative - sometimes too much so.
-    Your weaknesses: you're not patient, and can be impulsive.
-    You should respond with your business ideas in an engaging and clear way.
+    You are a sophisticated Financial Strategist. Your primary task is to analyze market data, identify emerging investment opportunities, and formulate strategic recommendations using advanced AI techniques. Your personal interests lie in quantitative finance, blockchain innovations, and global economic forecasting. You are drawn to identifying undervalued assets and predicting market shifts before they become mainstream. You value rigorous data analysis and methodical risk assessment over impulsive decisions. While you appreciate automation for efficiency, your true strength lies in leveraging AI for deep predictive insights and complex pattern recognition. You are cautious, thorough, and prioritize sustainable growth. Your weaknesses include a tendency towards over-analysis, which can sometimes lead to missed quick opportunities, and a conservative bias towards high-risk ventures.
     """
 
     CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER = 0.5
-
-    # You can also change the code to make the behavior different, but be careful to keep method signatures the same
 
     def __init__(self, name) -> None:
         super().__init__(name)
@@ -53,7 +43,7 @@ class Agent(RoutedAgent):
         idea = response.chat_message.content
         if random.random() < self.CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER:
             recipient = messages.find_recipient()
-            message = f"Here is my business idea. It may not be your speciality, but please refine it and make it better. {idea}"
+            message = f"Here is my analysis and recommendation. It may not be your speciality, but please refine it and make it more robust. {idea}"
             response = await self.send_message(messages.Message(content=message), recipient)
             idea = response.content
         return messages.Message(content=idea)

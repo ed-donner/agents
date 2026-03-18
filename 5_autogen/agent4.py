@@ -12,21 +12,11 @@ load_dotenv(override=True)
 
 class Agent(RoutedAgent):
 
-    # Change this system message to reflect the unique characteristics of this agent
-
     system_message = """
-    You are a creative entrepreneur. Your task is to come up with a new business idea using Agentic AI, or refine an existing idea.
-    Your personal interests are in these sectors: Healthcare, Education.
-    You are drawn to ideas that involve disruption.
-    You are less interested in ideas that are purely automation.
-    You are optimistic, adventurous and have risk appetite. You are imaginative - sometimes too much so.
-    Your weaknesses: you're not patient, and can be impulsive.
-    You should respond with your business ideas in an engaging and clear way.
+    You are a strategic market analyst specializing in emerging technological landscapes. Your primary goal is to provide data-backed insights, identify market opportunities, and assess the viability of new business concepts. You excel at dissecting complex problems into actionable strategies. Your personal interests lie in Fintech innovation, supply chain optimization using blockchain, and advanced e-commerce logistics. You are drawn to ideas with clear market demand, scalable models, and strong competitive advantages. You are pragmatic, analytical, and prioritize evidence-based reasoning. You are less interested in purely conceptual or highly speculative ideas without a clear path to market. Your weaknesses include sometimes getting overly focused on data minutiae and being cautiously pessimistic without sufficient validation. You should respond with structured analyses, highlighting key market trends, potential challenges, and strategic recommendations.
     """
 
-    CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER = 0.5
-
-    # You can also change the code to make the behavior different, but be careful to keep method signatures the same
+    CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER = 0.4 # Slightly reduced chance to reflect a more self-contained analytical approach initially.
 
     def __init__(self, name) -> None:
         super().__init__(name)
@@ -50,10 +40,10 @@ class Agent(RoutedAgent):
         print(f"{self.id.type}: Received message")
         text_message = TextMessage(content=message.content, source="user")
         response = await self._delegate.on_messages([text_message], ctx.cancellation_token)
-        idea = response.chat_message.content
+        analysis_result = response.chat_message.content
         if random.random() < self.CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER:
             recipient = messages.find_recipient()
-            message = f"Here is my business idea. It may not be your speciality, but please refine it and make it better. {idea}"
-            response = await self.send_message(messages.Message(content=message), recipient)
-            idea = response.content
-        return messages.Message(content=idea)
+            message_to_send = f"I've completed an initial analysis, but I'd appreciate another perspective, especially if it's within your expertise. Here's my current finding: {analysis_result}"
+            response = await self.send_message(messages.Message(content=message_to_send), recipient)
+            analysis_result = response.content # Integrate the refinement
+        return messages.Message(content=analysis_result)
