@@ -1,10 +1,11 @@
 """Gradio app for the ARES Research System."""
 
 import logging
+
 import gradio as gr
 from dotenv import load_dotenv
 from agents import Runner, InputGuardrailTripwireTriggered
-from ares_agents import architect_agent
+from ares_agents import architect_agent, notification_agent
 
 load_dotenv()
 
@@ -20,14 +21,12 @@ AGENT_LABELS = {
     "Research Architect Agent": ("Planning", "Analyzing query and building research strategy..."),
     "Web Specialist Agent": ("Researching", "Searching the web for information..."),
     "Report Editor Agent": ("Writing", "Compiling findings into a structured report..."),
-    "Notification Agent": ("Delivering", "Sending report via email..."),
     "Safety Classifier": ("Safety Check", "Validating your query..."),
 }
 
 TOOL_LABELS = {
     "Web_Specialist_Agent": ("Researching", "Delegating to Web Specialist..."),
     "Report_Editor_Agent": ("Writing", "Handing off to Report Editor..."),
-    "Notification_Agent": ("Delivering", "Handing off to Notification Agent..."),
     "travily_web_search": ("Searching", "Querying Tavily search engine..."),
     "send_email": ("Sending", "Delivering email via Resend..."),
 }
@@ -65,50 +64,88 @@ def handle_item_event(event, steps: list[str]) -> tuple[str, str] | None:
         return stage, desc
 
     if event.name == "tool_output":
-        steps.append("✅ Tool completed")
+        steps.append("Tool completed")
 
     return None
 
-
 async def run_research(query: str):
-    """Run the full ARES pipeline with real-time streaming progress."""
+    """Run the research pipeline with real-time streaming progress."""
     if not query.strip():
-        yield "Please enter a research query."
+        yield {
+            output: "Please enter a research query.",
+            email_section: gr.update(visible=False),
+        }
         return
-    agent_input = f"{query}\n\nPlease send the final report to: {DEFAULT_EMAIL}"
+
     steps: list[str] = []
     current_stage = "Starting"
     current_desc = "Initializing pipeline..."
 
     try:
         log.info("Starting research for: %s", query)
-        stream = Runner.run_streamed(architect_agent, input=agent_input)
+        stream = Runner.run_streamed(architect_agent, input=query)
         async for event in stream.stream_events():
             update = None
-
             if event.type == "agent_updated_stream_event":
                 update = handle_agent_event(event, steps)
             elif event.type == "run_item_stream_event":
                 update = handle_item_event(event, steps)
             if update:
                 current_stage, current_desc = update
-            yield build_status(current_stage, current_desc, steps)
+            yield {
+                output: build_status(current_stage, current_desc, steps),
+                email_section: gr.update(visible=False),
+            }
 
         log.info("Research complete. Output length: %d", len(stream.final_output))
-        yield stream.final_output
+        # Show report + show email section
+        yield {
+            output: stream.final_output,
+            email_section: gr.update(visible=True),
+        }
 
     except InputGuardrailTripwireTriggered as e:
         log.warning("Query blocked by safety guardrail: %s", e)
-        yield (
-            "### Query Blocked\n\n"
-            "Your query was flagged by our safety system and cannot be processed. "
-            "Please rephrase with a legitimate research intent."
-        )
+        yield {
+            output: (
+                "### Query Blocked\n\n"
+                "Your query was flagged by our safety system and cannot be processed. "
+                "Please rephrase with a legitimate research intent."
+            ),
+            email_section: gr.update(visible=False),
+        }
     except Exception as e:
         log.exception("Research pipeline failed")
-        yield f"### Error\n\n**{type(e).__name__}:** {e}"
+        yield {
+            output: f"### Error\n\n**{type(e).__name__}:** {e}",
+            email_section: gr.update(visible=False),
+        }
 
 
+
+# Ask for email when the report will be send
+async def send_report_email(report: str, email: str) -> str:
+    """Send the report via the Notification Agent."""
+    if not email.strip():
+        return "Please provide an email address."
+
+    if not report.strip():
+        return "No report to send. Run a research query first."
+
+    try:
+        log.info("Sending report to: %s", email)
+        notification_input = (
+            f"Send the following report to {email}:\n\n{report}"
+        )
+        await Runner.run(notification_agent, input=notification_input)
+        log.info("Email sent successfully.")
+        return f"Report sent to **{email}**"
+    except Exception as e:
+        log.exception("Email delivery failed")
+        return f"Failed to send: {type(e).__name__}: {e}"
+
+
+# Gradio App
 with gr.Blocks(title="ARES Research System") as demo:
     gr.Markdown(
         "# ARES: Autonomous Research & Extraction System\n"
@@ -120,11 +157,35 @@ with gr.Blocks(title="ARES Research System") as demo:
         placeholder="e.g. What are the latest breakthroughs in quantum computing?",
     )
     submit_btn = gr.Button("Research", variant="primary")
+
     gr.Markdown("---")
     output = gr.Markdown(label="Research Report")
+    # Hide until report is ready
+    with gr.Group(visible=False) as email_section:
+        gr.Markdown("### Send Report via Email")
+        email_input = gr.Textbox(
+            label="Recipient Email",
+            value=DEFAULT_EMAIL,
+            type="email",
+        )
+        send_btn = gr.Button("Send Now", variant="secondary")
+        email_status = gr.Markdown()
 
-    submit_btn.click(fn=run_research, inputs=query_input, outputs=output)
-    query_input.submit(fn=run_research, inputs=query_input, outputs=output)
+    submit_btn.click(
+        fn=run_research,
+        inputs=query_input,
+        outputs=[output, email_section],
+    )
+    query_input.submit(
+        fn=run_research,
+        inputs=query_input,
+        outputs=[output, email_section],
+    )
+    send_btn.click(
+        fn=send_report_email,
+        inputs=[output, email_input],
+        outputs=email_status,
+    )
 
 if __name__ == "__main__":
     demo.launch()
