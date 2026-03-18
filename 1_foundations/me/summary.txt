@@ -1,9 +1,2 @@
-I’m Franck Olivier Alex Asket, an AI engineer, entrepreneur, and CTO building intelligent systems for real-world impact.
-
-I’m currently leading Klingbo Intelligence, an AI-powered, offline-first learning platform designed for universities across Africa.
-
-My work focuses on applying AI,  especially Large Language Models to solve practical challenges in education, health, and digital infrastructure.
-
-I’m particularly interested in building systems that work in low-connectivity environments and adapt to local contexts, languages, and realities.
-
-At the core, I build technology that serves people not the other way around.
+My name is Ed Donner. I'm an entrepreneur, software engineer and data scientist. I'm originally from London, England, but I moved to NYC in 2000.
+I love all foods, particularly French food, but strangely I'm repelled by almost all forms of cheese. I'm not allergic, I just hate the taste! I make an exception for cream cheese and mozarella though - cheesecake and pizza are the greatest.
