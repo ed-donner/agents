@@ -103,13 +103,8 @@ async def run_research(query: str):
                 }
 
         log.info("Research complete. Output length: %d", len(stream.final_output))
-        # Show report + trace link + email section
-        report_with_trace = (
-            stream.final_output
-            + f"\n\n---\n*[View full trace on OpenAI]({trace_url})*"
-        )
         yield {
-            output: report_with_trace,
+            output: stream.final_output,
             email_section: gr.update(visible=True),
         }
 
@@ -133,13 +128,13 @@ async def run_research(query: str):
 
 
 # Ask for email when the report will be send
-async def send_report_email(report: str, email: str) -> str:
+async def send_report_email(report: str, email: str):
     """Send the report via the Notification Agent."""
     if not email.strip():
-        return "Please provide an email address."
+        return gr.update(interactive=True), "Please provide an email address."
 
     if not report.strip():
-        return "No report to send. Run a research query first."
+        return gr.update(interactive=True), "No report to send. Run a research query first."
 
     try:
         log.info("Sending report to: %s", email)
@@ -148,10 +143,10 @@ async def send_report_email(report: str, email: str) -> str:
         )
         await Runner.run(notification_agent, input=notification_input)
         log.info("Email sent successfully.")
-        return f"Report sent to **{email}**"
+        return gr.update(value="Sent", interactive=False), f"Report sent to **{email}**"
     except Exception as e:
         log.exception("Email delivery failed")
-        return f"Failed to send: {type(e).__name__}: {e}"
+        return gr.update(interactive=True), f"Failed to send: {type(e).__name__}: {e}"
 
 
 # Gradio App
@@ -193,7 +188,7 @@ with gr.Blocks(title="ARES Research System") as demo:
     send_btn.click(
         fn=send_report_email,
         inputs=[output, email_input],
-        outputs=email_status,
+        outputs=[send_btn, email_status],
     )
 
 if __name__ == "__main__":
