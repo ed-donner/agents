@@ -1,64 +1,58 @@
-"""Gradio app to test the ARES Architect Agent."""
+"""Gradio app for the ARES Research System."""
 
 import logging
-
 import gradio as gr
 from dotenv import load_dotenv
+from agents import Runner
+from ares_agents import architect_agent
 
 load_dotenv()
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
 )
 log = logging.getLogger("ares-app")
-
-log.info("Importing agents...")
-from agents import Runner  # noqa: E402
-from ares_agents import architect_agent  # noqa: E402
-log.info("Imports done.")
+DEFAULT_EMAIL = "gasmyrmougang@gmail.com"
 
 
-async def run_architect(query: str) -> str:
-    """Run the Research Architect agent and display the plan."""
-    log.info(">>> run_architect called with query: %s", query)
-
+async def run_research(query: str) -> str:
+    """Run the full ARES pipeline: Architect → Specialist → Editor → Notify."""
     if not query.strip():
-        log.warning("Empty query received")
         return "Please enter a research query."
 
+    agent_input = (
+        f"{query}\n\nPlease send the final report to: {DEFAULT_EMAIL}"
+    )
+
     try:
-        log.info("Starting Runner.run...")
-        result = await Runner.run(architect_agent, input=query)
-        log.info("Runner.run completed. Output type: %s", type(result.final_output))
-        log.info("Output length: %d", len(result.final_output))
-        log.info("First 100 chars: %s", result.final_output[:100])
+        log.info("Starting research for: %s", query)
+        result = await Runner.run(architect_agent, input=agent_input)
+        log.info("Research complete. Output length: %d", len(result.final_output))
         return result.final_output
     except Exception as e:
-        log.exception("Runner.run failed")
+        log.exception("Research pipeline failed")
         return f"**Error:** {type(e).__name__}: {e}"
 
 
-with gr.Blocks(title="ARES — Architect Agent Test") as demo:
-    gr.Markdown("# ARES — Architect Agent Test")
-    gr.Markdown("The Architect plans the research and delegates to the Web Specialist.")
+with gr.Blocks(title="ARES Research System") as demo:
+    gr.Markdown(
+        "# ARES — Autonomous Research & Extraction System\n"
+        "Enter a research query below. The system will plan the research, "
+        "search the web, and generate a structured report."
+    )
 
-    with gr.Row():
-        query_input = gr.Textbox(
-            label="Research Query",
-            placeholder="e.g. Analyze the impact of AI on healthcare diagnostics",
-            scale=4,
-        )
-        submit_btn = gr.Button("Submit", variant="primary", scale=1)
+    query_input = gr.Textbox(
+        label="Research Query",
+        placeholder="e.g. What are the latest breakthroughs in quantum computing?",
+    )
+    submit_btn = gr.Button("Research", variant="primary")
 
-    output = gr.Markdown(label="Research Results")
+    gr.Markdown("---")
+    output = gr.Markdown(label="Research Report")
 
-    log.info("Binding click event...")
-    submit_btn.click(fn=run_architect, inputs=query_input, outputs=output)
-    log.info("Binding submit event...")
-    query_input.submit(fn=run_architect, inputs=query_input, outputs=output)
-    log.info("Events bound.")
+    submit_btn.click(fn=run_research, inputs=query_input, outputs=output)
+    query_input.submit(fn=run_research, inputs=query_input, outputs=output)
 
 if __name__ == "__main__":
-    log.info("Launching Gradio app...")
     demo.launch()

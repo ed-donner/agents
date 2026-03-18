@@ -9,5 +9,6 @@ dependencies = [
     "openai-agents>=0.3.3",
     "pydantic>=2.11.10",
     "python-dotenv>=1.1.1",
+    "resend>=2.25.0",
     "tavily-python>=0.7.23",
 ]

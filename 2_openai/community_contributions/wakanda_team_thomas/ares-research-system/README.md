@@ -18,7 +18,7 @@ ARES follows the **Manager-Specialist** design pattern:
 - **Lead Architect (Manager)**: Generates a `ResearchPlan` (Pydantic-enforced) and delegating tasks.
 - **Web Specialist (Researcher)**: An autonomous MCP-agent that performs recursive searches and fact extraction.
 - **Narrative Editor (Synthesizer)**: Compiles raw data into semantic HTML and enforces the 200-word summary constraint.
-- **Courier (Delivery)**: Handles OAuth-protected email delivery via an MCP Email Server.
+- **Courier (Delivery)**: Handles email delivery via Resend API.
 
 ## 🛠️ Setup
 
@@ -42,7 +42,7 @@ Create a `.env` file in the root directory:
 ```
 OPENAI_API_KEY=sk-proj-xxxx
 TAVILY_API_KEY=tvly-xxxx       # For Tavily web search
-SENDGRID_API_KEY=xxxx      # For the Email MCP
+RESEND_API_KEY=re_xxxx         # For Resend email delivery
 ```
 
 ## 🚦 Usage
@@ -73,7 +73,7 @@ To deploy your own instance:
 2. Add your API keys as **Secrets** in the Space settings:
    - `OPENAI_API_KEY`
    - `TAVILY_API_KEY`
-   - `SENDGRID_API_KEY`
+   - `RESEND_API_KEY`
 3. Push the repository to the Space:
 
 ```bash
