@@ -177,7 +177,7 @@ with gr.Blocks(title="ARES Research System") as demo:
             value=DEFAULT_EMAIL,
             type="email",
         )
-        send_btn = gr.Button("Send Now", variant="secondary")
+        send_btn = gr.Button("Send Now", variant="primary")
         email_status = gr.Markdown()
 
     submit_btn.click(
