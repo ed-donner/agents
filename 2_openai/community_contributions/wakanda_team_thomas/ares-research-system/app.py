@@ -3,7 +3,7 @@
 import logging
 import gradio as gr
 from dotenv import load_dotenv
-from agents import Runner
+from agents import Runner, InputGuardrailTripwireTriggered
 from ares_agents import architect_agent
 
 load_dotenv()
@@ -30,6 +30,9 @@ async def run_research(query: str) -> str:
         result = await Runner.run(architect_agent, input=agent_input)
         log.info("Research complete. Output length: %d", len(result.final_output))
         return result.final_output
+    except InputGuardrailTripwireTriggered as e:
+        log.warning("Query blocked by safety guardrail: %s", e)
+        return "**Query Blocked:** Your query was flagged by our safety system and cannot be processed. Please rephrase with a legitimate research intent."
     except Exception as e:
         log.exception("Research pipeline failed")
         return f"**Error:** {type(e).__name__}: {e}"
@@ -37,7 +40,7 @@ async def run_research(query: str) -> str:
 
 with gr.Blocks(title="ARES Research System") as demo:
     gr.Markdown(
-        "# ARES — Autonomous Research & Extraction System\n"
+        "# ARES: Autonomous Research & Extraction System\n"
         "Enter a research query below. The system will plan the research, "
         "search the web, and generate a structured report."
     )

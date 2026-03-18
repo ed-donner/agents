@@ -5,6 +5,7 @@ from agents import Agent
 from ares_agents.web_specialist import web_specialist_agent
 from ares_agents.report_editor import report_editor_agent
 from ares_agents.notificator import notification_agent
+from ares_agents.guardrails import safety_guardrail
 
 ARCHITECT_INSTRUCTIONS = """\
 You are the lead Research Architect of the ARES deep-research system.
@@ -60,4 +61,5 @@ architect_agent = Agent(
     instructions=ARCHITECT_INSTRUCTIONS,
     model="gpt-4o",
     tools=[web_specialist_tool, report_editor_tool, notification_tool],
+    input_guardrails=[safety_guardrail],
 )

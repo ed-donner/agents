@@ -1,7 +1,6 @@
-"""Notification Agent — delivers research reports via email."""
+"""Notification Agent: delivers research reports via email."""
 
 from agents import Agent
-
 from ares_tools import send_email
 
 NOTIFICATION_INSTRUCTIONS = """\
