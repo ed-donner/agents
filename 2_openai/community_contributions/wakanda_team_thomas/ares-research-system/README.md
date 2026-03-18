@@ -1,37 +1,81 @@
-# 🛡️ ARES: Autonomous Research & Extraction System
+# ARES: Autonomous Research & Extraction System
 
-ARES is a high-precision, multi-agent deep research engine built on the OpenAI Agents SDK (2026). Unlike traditional RAG systems, ARES utilizes a hierarchical orchestration pattern to plan, execute, and synthesize deep-dive research into structured HTML reports.
+ARES is a multi-agent deep research engine built on the **OpenAI Agents SDK**. It uses a hierarchical orchestration pattern to plan, execute, and synthesize web research into structured Markdown reports — with optional email delivery via Resend.
 
-## 🚀 Key Features
+## Key Features
 
-- **Hierarchical Orchestration**: Uses a Lead Architect (Manager) to coordinate Specialists as tools.
-- **MCP Integration**: Natively connects to Model Context Protocol servers for live web search and secure email delivery.
-- **Persistent Sessions**: Powered by SQLiteSession to handle long-running research tasks without state loss.
-- **Structured HTML Delivery**: Automatically generates executive-ready HTML reports with a strict 200-word executive summary and cited deep data.
-- **Safety Guardrails**: Built-in Tripwires for PII detection and tool-input validation.
-- **Gradio UI**: Interactive web interface for submitting queries, monitoring progress, and viewing research reports — deployed on Hugging Face Spaces.
+- **Hierarchical Orchestration**: A Lead Architect (Manager) coordinates specialist agents as tools.
+- **Live Web Search**: Tavily API integration for real-time, AI-optimized web research with recency prioritization.
+- **Structured Reports**: Pydantic-enforced output with executive summary, sections, and cited sources.
+- **Email Delivery**: Styled HTML email reports via Resend with Human-in-the-Loop approval.
+- **Safety Guardrails**: Input guardrail powered by a safety classifier agent that blocks harmful queries.
+- **Streaming Progress**: Real-time activity log in the Gradio UI via `Runner.run_streamed()`.
+- **Gradio UI**: Interactive web interface deployable on Hugging Face Spaces.
+- **CLI Mode**: Run research directly from the terminal with `--query`.
 
-## 🏗️ Architecture
+## Architecture
 
 ARES follows the **Manager-Specialist** design pattern:
 
-- **Lead Architect (Manager)**: Generates a `ResearchPlan` (Pydantic-enforced) and delegating tasks.
-- **Web Specialist (Researcher)**: An autonomous MCP-agent that performs recursive searches and fact extraction.
-- **Narrative Editor (Synthesizer)**: Compiles raw data into semantic HTML and enforces the 200-word summary constraint.
-- **Courier (Delivery)**: Handles email delivery via Resend API.
+```
+User Query
+    │
+    ▼
+┌─────────────────────┐
+│  Safety Guardrail   │ ── blocks harmful queries
+└─────────┬───────────┘
+          ▼
+┌─────────────────────┐
+│  Research Architect  │ ── plans research, coordinates agents
+│  (gpt-4o)           │
+└─────────┬───────────┘
+          ├──────────────────────┐
+          ▼                      ▼
+┌──────────────────┐   ┌──────────────────┐
+│  Web Specialist  │   │  Report Editor   │
+│  (gpt-4o-mini)   │   │  (gpt-4o-mini)   │
+│  + Tavily Search │   │  → ResearchReport│
+└──────────────────┘   └──────────────────┘
+                                 │
+                                 ▼
+                       ┌──────────────────┐
+                       │ Notification Agent│ ── HITL email delivery
+                       │ (gpt-4o-mini)    │
+                       │ + Resend API     │
+                       └──────────────────┘
+```
 
-## 🛠️ Setup
+### Agents
 
-This project uses **uv** for ultra-fast dependency management and performance.
+| Agent | Role | Model | Tools |
+|-------|------|-------|-------|
+| **Research Architect** | Plans research, delegates to specialists | gpt-4o | Web Specialist, Report Editor |
+| **Web Specialist** | Searches the web, extracts findings | gpt-4o-mini | `travily_web_search` |
+| **Report Editor** | Compiles findings into structured report | gpt-4o-mini | — (structured output) |
+| **Notification Agent** | Sends report via email | gpt-4o-mini | `send_email` |
+| **Safety Classifier** | Validates queries before processing | gpt-4o-mini | — (input guardrail) |
+
+### Schemas (Pydantic)
+
+| Model | Purpose |
+|-------|---------|
+| `ResearchTask` | A single research sub-task (title, query, goal) |
+| `ResearchPlan` | The Architect's strategy (query, summary, tasks) |
+| `ResearchFinding` | A fact from the Web Specialist (content, source, quality) |
+| `ReportSection` | A chapter of the report (heading, content) |
+| `ResearchReport` | The final output (title, subject line, summary, sections, sources) |
+
+## Setup
+
+This project uses **uv** for dependency management.
 
 ### 1. Installation
 
 ```bash
-# Clone the repository
 git clone https://github.com/youruser/ares-research
 cd ares-research
 
-# Sync dependencies and create virtual environment
+# Sync dependencies
 uv sync
 ```
 
@@ -41,33 +85,37 @@ Create a `.env` file in the root directory:
 
 ```
 OPENAI_API_KEY=sk-proj-xxxx
-TAVILY_API_KEY=tvly-xxxx       # For Tavily web search
-RESEND_API_KEY=re_xxxx         # For Resend email delivery
+TAVILY_API_KEY=tvly-xxxx       # For Tavily web search (free: 1000 queries/month)
+RESEND_API_KEY=re_xxxx         # For Resend email delivery (free: 3000 emails/month)
 ```
 
-## 🚦 Usage
+## Usage
 
 ### CLI Mode
 
 ```bash
-uv run main.py --query "Analyze the 2026 solid-state battery breakthroughs and their impact on EV sector stocks."
+# Research with email delivery (prompts for approval)
+uv run main.py --query "Analyze the 2026 solid-state battery breakthroughs"
+
+# Research without email
+uv run main.py --query "Latest trends in AI" --no-email
+
+# Research with custom recipient
+uv run main.py --query "Latest trends in AI" --email someone@example.com
 ```
 
 ### Gradio UI (Local)
-
-Launch the interactive web interface locally:
 
 ```bash
 uv run app.py
 ```
 
-Then open [http://localhost:7860](http://localhost:7860) in your browser.
+Then open [http://localhost:7860](http://localhost:7860). The UI features:
+- Real-time streaming progress with activity log
+- Report rendered in Markdown
+- Email section appears after report is generated (Human-in-the-Loop)
 
 ### Hugging Face Spaces (Production)
-
-ARES is deployed as a Gradio app on [Hugging Face Spaces](https://huggingface.co/spaces).
-
-To deploy your own instance:
 
 1. Create a new Space on Hugging Face with the **Gradio** SDK.
 2. Add your API keys as **Secrets** in the Space settings:
@@ -81,27 +129,35 @@ git remote add hf https://huggingface.co/spaces/YOUR_USERNAME/ares-research
 git push hf main
 ```
 
-### Advanced: Lifecycle Hooks
-
-ARES implements `on_tool_call` hooks for Human-in-the-Loop approvals. If a research plan exceeds a specific token budget, the system will pause and wait for manual confirmation in the CLI.
-
-## 📦 Project Structure
+## Project Structure
 
 ```
-├── ares_agents/     # Agent instructions & handoff logic
-├── ares_tools/      # MCP Server connections & Python functions
-├── ares_schema/     # Pydantic models for Structured Outputs
-├── ares_data/       # SQLite persistent session database
-├── main.py          # CLI entry point and Runner configuration
-└── app.py           # Gradio web UI
+ares-research-system/
+├── ares_agents/              # Agent definitions
+│   ├── architect.py          # Research Architect (manager)
+│   ├── web_specialist.py     # Web Specialist (Tavily search)
+│   ├── report_editor.py      # Report Editor (structured output)
+│   ├── notificator.py        # Notification Agent (Resend email)
+│   └── guardrails.py         # Input safety guardrail
+├── ares_tools/               # Function tools
+│   ├── search.py             # travily_web_search tool
+│   └── email.py              # send_email tool (styled HTML template)
+├── ares_schema/              # Pydantic models
+│   └── models.py             # ResearchPlan, ResearchFinding, ResearchReport, etc.
+├── ares_data/                # Runtime data (SQLite, gitignored)
+├── main.py                   # CLI entry point
+├── app.py                    # Gradio web UI
+├── pyproject.toml            # Project config & dependencies
+├── requirements.txt          # Pinned dependencies
+└── .env                      # API keys (gitignored)
 ```
 
-## 🔒 Safety & Governance
+## Safety & Governance
 
-- **Input Guardrails**: All user queries are vetted against a safety classifier before reaching the Architect.
-- **Tool Input Validation**: The `send_email` tool is protected by a guardrail that ensures recipients match the authorized `UserContext`.
-- **Traceability**: Every run generates a full SDK trace stored in `ares-data/sessions.db` for post-run auditing.
+- **Input Guardrail**: All queries are vetted by a safety classifier agent before the Architect processes them. Harmful, illegal, or abusive queries are blocked.
+- **Human-in-the-Loop Email**: Reports are shown to the user for review before email delivery. In CLI mode, the user must confirm with `Y/n`. In the UI, a "Send Email" button appears only after the report is ready.
+- **Traceability**: The OpenAI Agents SDK provides full trace logging for every run.
 
-## 📄 License
+## License
 
 Apache-2.0

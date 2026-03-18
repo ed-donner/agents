@@ -4,7 +4,7 @@ import logging
 
 import gradio as gr
 from dotenv import load_dotenv
-from agents import Runner, InputGuardrailTripwireTriggered
+from agents import Runner, InputGuardrailTripwireTriggered, trace, gen_trace_id
 from ares_agents import architect_agent, notification_agent
 
 load_dotenv()
@@ -82,25 +82,34 @@ async def run_research(query: str):
     current_desc = "Initializing pipeline..."
 
     try:
+        trace_id = gen_trace_id()
+        trace_url = f"https://platform.openai.com/traces/trace?trace_id={trace_id}"
         log.info("Starting research for: %s", query)
-        stream = Runner.run_streamed(architect_agent, input=query)
-        async for event in stream.stream_events():
-            update = None
-            if event.type == "agent_updated_stream_event":
-                update = handle_agent_event(event, steps)
-            elif event.type == "run_item_stream_event":
-                update = handle_item_event(event, steps)
-            if update:
-                current_stage, current_desc = update
-            yield {
-                output: build_status(current_stage, current_desc, steps),
-                email_section: gr.update(visible=False),
-            }
+        log.info("Trace URL: %s", trace_url)
+
+        with trace("ARES Research", trace_id=trace_id):
+            stream = Runner.run_streamed(architect_agent, input=query)
+            async for event in stream.stream_events():
+                update = None
+                if event.type == "agent_updated_stream_event":
+                    update = handle_agent_event(event, steps)
+                elif event.type == "run_item_stream_event":
+                    update = handle_item_event(event, steps)
+                if update:
+                    current_stage, current_desc = update
+                yield {
+                    output: build_status(current_stage, current_desc, steps),
+                    email_section: gr.update(visible=False),
+                }
 
         log.info("Research complete. Output length: %d", len(stream.final_output))
-        # Show report + show email section
+        # Show report + trace link + email section
+        report_with_trace = (
+            stream.final_output
+            + f"\n\n---\n*[View full trace on OpenAI]({trace_url})*"
+        )
         yield {
-            output: stream.final_output,
+            output: report_with_trace,
             email_section: gr.update(visible=True),
         }
 

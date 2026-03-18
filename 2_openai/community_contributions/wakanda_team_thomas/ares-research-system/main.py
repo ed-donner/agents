@@ -5,7 +5,7 @@ import asyncio
 import sys
 
 from dotenv import load_dotenv
-from agents import Runner, InputGuardrailTripwireTriggered
+from agents import Runner, InputGuardrailTripwireTriggered, trace, gen_trace_id
 
 from ares_agents import architect_agent, notification_agent
 
@@ -16,20 +16,25 @@ DEFAULT_EMAIL = "gasmyrmougang@gmail.com"
 
 async def run_research(query: str, email: str | None = None) -> None:
     """Run the full ARES pipeline with live console output."""
+    trace_id = gen_trace_id()
+    trace_url = f"https://platform.openai.com/traces/trace?trace_id={trace_id}"
+
     print(f"\n{'='*60}")
     print("ARES: Autonomous Research & Extraction System")
-    print(f"{'='*60}\n")
+    print(f"{'='*60}")
+    print(f"Trace: {trace_url}\n")
 
-    stream = Runner.run_streamed(architect_agent, input=query)
+    with trace("ARES Research", trace_id=trace_id):
+        stream = Runner.run_streamed(architect_agent, input=query)
 
-    async for event in stream.stream_events():
-        if event.type == "agent_updated_stream_event":
-            print(f"  >> Agent: {event.new_agent.name}")
-        elif event.type == "run_item_stream_event":
-            if event.name == "tool_called":
-                print(f"     Tool: {event.item.raw_item.name}")
-            elif event.name == "tool_output":
-                print("     Done.")
+        async for event in stream.stream_events():
+            if event.type == "agent_updated_stream_event":
+                print(f"  >> Agent: {event.new_agent.name}")
+            elif event.type == "run_item_stream_event":
+                if event.name == "tool_called":
+                    print(f"     Tool: {event.item.raw_item.name}")
+                elif event.name == "tool_output":
+                    print("     Done.")
 
     print(f"\n{'='*60}")
     print("RESEARCH REPORT")
