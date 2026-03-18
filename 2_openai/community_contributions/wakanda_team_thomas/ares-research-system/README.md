@@ -41,7 +41,7 @@ Create a `.env` file in the root directory:
 
 ```
 OPENAI_API_KEY=sk-proj-xxxx
-BRAVE_SEARCH_API_KEY=xxxx  # For the Search MCP
+TAVILY_API_KEY=tvly-xxxx       # For Tavily web search
 SENDGRID_API_KEY=xxxx      # For the Email MCP
 ```
 
@@ -72,7 +72,7 @@ To deploy your own instance:
 1. Create a new Space on Hugging Face with the **Gradio** SDK.
 2. Add your API keys as **Secrets** in the Space settings:
    - `OPENAI_API_KEY`
-   - `BRAVE_SEARCH_API_KEY`
+   - `TAVILY_API_KEY`
    - `SENDGRID_API_KEY`
 3. Push the repository to the Space:
 
