@@ -1,46 +1,45 @@
-"""Quick Gradio app to test the Tavily search tool."""
+"""Gradio app to test the ARES Architect Agent."""
 
+import asyncio
 import gradio as gr
 from dotenv import load_dotenv
-from ares_tools.search import get_travily_client
+from agents import Runner
+from ares_agents import architect_agent
+
 load_dotenv()
 
 
-def run_search(query: str, max_results: int) -> str:
-    """Run a Tavily search and return formatted results."""
+def run_architect(query: str) -> str:
+    """Run the Research Architect agent and display the plan."""
     if not query.strip():
-        return "Please enter a search query."
+        return "Please enter a research query."
 
-    client = get_travily_client()
-    response = client.search(
-        query=query,
-        max_results=int(max_results),
-        include_answer=True,
-    )
+    result = asyncio.run(Runner.run(architect_agent, input=query))
+    plan = result.final_output
+    parts: list[str] = [
+        f"# {plan.original_query}\n",
+        f"**Strategy:** {plan.summary}\n",
+        "---\n",
+    ]
+    for i, task in enumerate(plan.tasks, 1):
+        parts.append(
+            f"### Task {i}: {task.title}\n"
+            f"- **Query:** {task.query}\n"
+            f"- **Goal:** {task.goal}\n"
+        )
 
-    parts: list[str] = []
-
-    if response.get("answer"):
-        parts.append(f"## AI Summary\n{response['answer']}\n")
-
-    for i, result in enumerate(response.get("results", []), 1):
-        title = result.get("title", "Untitled")
-        url = result.get("url", "")
-        content = result.get("content", "")
-        parts.append(f"### [{i}] {title}\n**URL:** {url}\n\n{content}\n")
-
-    return "\n".join(parts) if parts else "No results found."
+    return "\n".join(parts)
 
 
 demo = gr.Interface(
-    fn=run_search,
-    inputs=[
-        gr.Textbox(label="Search Query", placeholder="e.g. solid-state battery breakthroughs 2026"),
-        gr.Slider(minimum=1, maximum=10, value=5, step=1, label="Max Results"),
-    ],
-    outputs=gr.Markdown(label="Search Results"),
-    title="ARES — Tavily Search Test",
-    description="Test the Tavily web search tool before wiring it into the agent pipeline.",
+    fn=run_architect,
+    inputs=gr.Textbox(
+        label="Research Query",
+        placeholder="e.g. Analyze the impact of AI on healthcare diagnostics",
+    ),
+    outputs=gr.Markdown(label="Research Plan"),
+    title="ARES — Architect Agent Test",
+    description="Generate a structured research plan from your query.",
 )
 
 if __name__ == "__main__":
