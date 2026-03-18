@@ -88,10 +88,10 @@ ARES implements `on_tool_call` hooks for Human-in-the-Loop approvals. If a resea
 ## 📦 Project Structure
 
 ```
-├── ares-agents/     # Agent instructions & handoff logic
-├── ares-tools/      # MCP Server connections & Python functions
-├── ares-schema/     # Pydantic models for Structured Outputs
-├── ares-data/       # SQLite persistent session database
+├── ares_agents/     # Agent instructions & handoff logic
+├── ares_tools/      # MCP Server connections & Python functions
+├── ares_schema/     # Pydantic models for Structured Outputs
+├── ares_data/       # SQLite persistent session database
 ├── main.py          # CLI entry point and Runner configuration
 └── app.py           # Gradio web UI
 ```

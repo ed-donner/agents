@@ -21,7 +21,7 @@ venv/
 Thumbs.db
 
 # SQLite databases
-ares-data/*.db
+ares_data/*.db
 
 # Gradio
 flagged/
