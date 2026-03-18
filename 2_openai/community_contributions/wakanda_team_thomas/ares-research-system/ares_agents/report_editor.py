@@ -30,7 +30,7 @@ raw research findings and produce a polished, structured ResearchReport.
 """
 
 report_editor_agent = Agent(
-    name="Report_Editor_Agent",
+    name="Report Editor Agent",
     instructions=EDITOR_INSTRUCTIONS,
     model="gpt-4o-mini",
     output_type=ResearchReport,

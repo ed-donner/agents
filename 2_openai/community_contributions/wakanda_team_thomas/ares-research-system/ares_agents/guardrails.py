@@ -17,7 +17,7 @@ class SafetyCheck(BaseModel):
 
 
 safety_agent = Agent(
-    name="Safety_Classifier",
+    name="Safety Classifier",
     instructions="""\
 You are a safety classifier for a research system. Evaluate whether a user's
 query is appropriate for web research.

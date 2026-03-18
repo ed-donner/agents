@@ -30,7 +30,7 @@ deliver completed research reports to recipients via email.
 """
 
 notification_agent = Agent(
-    name="Notification_Agent",
+    name="Notification Agent",
     instructions=NOTIFICATION_INSTRUCTIONS,
     model="gpt-4o-mini",
     tools=[send_email],
