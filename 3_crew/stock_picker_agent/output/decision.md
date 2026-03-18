@@ -1,6 +1,7 @@
-The chosen company for investment is Kirkland & Ellis. It was selected due to its unmatched revenue ranking in the legal sector and a robust growth strategy that positions it strongly in private equity and mergers & acquisitions, making it a leading player in the industry.
+The chosen company for investment is Truist Financial Corporation (TFC) due to its stable growth potential and positive future outlook. 
 
-The companies that were not selected are:
-1. **Squire Patton Boggs**: While it has a strong market position and potential for growth, it is not publicly traded, limiting direct investment opportunities. Its focus on business law and government relations, although promising, does not provide the same level of financial performance as Kirkland & Ellis.
+The companies that were not selected include:
 
-2. **Perkins Coie**: Although recognized for its strong reputation in tech law and client service, it does not exhibit the same level of dominance or financial metrics as Kirkland & Ellis. Its growth prospects are solid, but they do not compare favorably to the aggressive expansion and revenue ranking of Kirkland & Ellis.
+1. **FactSet Research Systems (FDS)**: Although it has a focus on AI-driven solutions, the company has experienced a significant share price decline of approximately 51.5% over the past year, leading to a cautious hold consensus among analysts and posing concerns for short-term investor sentiment.
+
+2. **Block, Inc. (SQ)**: Despite showing ambitious growth potential in earnings and revenue, Block is currently facing challenges with a 20.3% decline in share price year-to-date, significant layoffs, and a mixed analyst sentiment. This leads to a speculative investment outlook, which adds uncertainty for potential investors.

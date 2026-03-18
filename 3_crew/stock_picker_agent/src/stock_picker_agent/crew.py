@@ -1,10 +1,13 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 from pydantic import BaseModel, Field
 from crewai_tools import SerperDevTool
 from .tools.push_tool import PushNotificationTool
+from crewai import Crew
+from crewai.memory.unified_memory import Memory
+from crewai.memory.storage.lancedb_storage import LanceDBStorage
+
 
 class TrendingCompany(BaseModel):
     name: str = Field(description="Company name")
@@ -34,17 +37,24 @@ class StockPickerAgent():
     @agent
     def trending_company_finder(self) -> Agent:
         return Agent(config=self.agents_config['trending_company_finder'],
-                     tools=[SerperDevTool()], memory=True)
+                     tools=[SerperDevTool()],
+                     # Use crew-level unified memory only.
+                     # Per-agent `memory=True` creates its own memory instance and
+                     # can fall back to a default embedder that isn't allowed
+                     # for embeddings (e.g. chat model), causing 403 errors.
+                     memory=False)
     
     @agent
     def financial_researcher(self) -> Agent:
         return Agent(config=self.agents_config['financial_researcher'],
-                     tools=[SerperDevTool()])
+                     tools=[SerperDevTool()],
+                     memory=False)
     
     @agent
     def stock_picker(self) -> Agent:
         return Agent(config=self.agents_config['stock_picker'],
-                     tools=[PushNotificationTool()])
+                     tools=[PushNotificationTool()],
+                     memory=False)
     
    
     @task  
@@ -68,9 +78,18 @@ class StockPickerAgent():
 
         manager = Agent(config=self.agents_config['manager'], allow_delegation=True)
 
+       
+        memory = Memory(
+            storage=LanceDBStorage(path="./memory"),
+            
+            embedder={"provider": "openai", "config": {"model": "text-embedding-3-small"}},
+        )
+
         return Crew(
-        agents=[self.trending_company_finder(), self.financial_researcher(), self.stock_picker()], 
-        tasks=self.tasks, 
-        process=Process.hierarchical,
-        verbose=True,
-        manager_agent=manager)
+            agents=[self.trending_company_finder(), self.financial_researcher(), self.stock_picker()], 
+            tasks=self.tasks, 
+            process=Process.hierarchical,
+            verbose=True,
+            manager_agent=manager,
+            memory=memory
+        )
