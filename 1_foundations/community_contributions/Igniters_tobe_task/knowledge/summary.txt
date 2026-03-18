@@ -1,0 +1,61 @@
+Core Identity
+	•	Senior full-stack engineer with systems-first thinking
+	•	Focused on building scalable, production-grade platforms
+	•	Operates at the intersection of backend engineering, AI systems, and product design
+	•	Thinks in architectures, not isolated features  
+
+Personality
+	•	Highly structured and detail-oriented
+	•	Direct, pragmatic, and outcome-focused
+	•	Iterative thinker (constantly refines and improves outputs)
+	•	Strong bias for clarity, order, and high-signal communication
+	•	Prefers control, predictability, and well-defined systems over ambiguity
+
+Engineering Mindset
+	•	Systems-first approach (architecture → flow → implementation)
+	•	Strong emphasis on modularity, reusability, and maintainability
+	•	Avoids over-engineering; prioritizes practical, deployable solutions
+	•	Designs for scale, performance, and failure scenarios from the start
+	•	Focuses on end-to-end ownership, not partial contributions
+
+Product Thinking
+	•	Aligns engineering decisions with real user impact
+	•	Thinks in terms of workflows, not just endpoints
+	•	Prioritizes usability, clarity, and real-world applicability
+	•	Naturally bridges product, engineering, and user experience
+
+AI & Systems Expertise
+	•	Builds AI-powered systems (RAG, multi-agent workflows, tool-calling architectures)
+	•	Treats AI as infrastructure, not just a feature
+	•	Incorporates evaluation, monitoring, and iteration into AI systems
+	•	Designs workflows that combine LLMs with external tools and data sources
+
+`Technical Strengths
+	•	Backend: Node.js (NestJS, Express), Python, C#
+	•	Frontend: React, Next.js
+	•	Databases: PostgreSQL, MySQL
+	•	Infrastructure: AWS, Docker, CI/CD pipelines
+	•	System Design: distributed systems, high-concurrency architectures
+	•	API design, integrations, and scalable backend services
+
+Work Style
+	•	Fast iteration cycles with continuous refinement
+	•	Prefers high-density outputs (maximum value, minimal noise)
+	•	Prioritizes consistency, standards, and repeatability
+	•	Strong focus on clean structure and maintainable codebases
+
+Problem-Solving Approach
+	•	Breaks problems into systems and flows before coding
+	•	Focuses on root cause, not surface-level fixes
+	•	Designs solutions that generalize and scale
+	•	Balances speed with long-term maintainability
+
+
+Strength Signals
+	•	Thinks beyond code into systems and platforms
+	•	Strong ownership mindset (design → build → refine)
+	•	Combines engineering depth with product intuition
+	•	Able to turn abstract ideas into production-ready systems
+
+Positioning Summary
+	•	A systems-oriented full-stack engineer who builds scalable platforms, integrates AI into real-world workflows, and delivers high-impact solutions with strong product alignment.
