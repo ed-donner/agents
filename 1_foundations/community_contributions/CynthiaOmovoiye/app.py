@@ -9,6 +9,13 @@ from pydantic import BaseModel
 
 load_dotenv(override=True)
 
+## First Create a me folder and add your linkedin.pdf and summary.txt files to it
+## Then run the app.py file
+## You can then chat with the app by typing in the input box and clicking the send button
+## The app will respond with a response based on the context of your linkedin.pdf and summary.txt files
+## You can also use the tools to record user details and unknown questions
+## The app will record the user details and unknown questions in the me folder
+## The app will also push notifications to your phone via Pushover
 
 class Evaluation(BaseModel):
     is_acceptable: bool
