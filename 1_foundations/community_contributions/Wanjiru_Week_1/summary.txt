@@ -1,0 +1,9 @@
+Software engineer with experience in building web applications using JavaScript and Python.
+
+Skilled in frontend development (React, HTML, CSS) and backend systems (Node.js, APIs, databases).
+
+Interested in AI, building scalable systems, and creating practical solutions to real-world problems.
+
+Has worked on projects involving authentication systems, APIs, and full-stack applications.
+
+Open to opportunities and collaborations in software engineering and AI-related roles.
