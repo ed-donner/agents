@@ -12,8 +12,7 @@ DEFAULT_FROM_EMAIL = os.environ.get("SENDGRID_FROM_EMAIL", "sankari.s2009@gmail.
 
 @function_tool
 def send_email(subject: str, html_body: str, to_email: str = "") -> Dict[str, str]:
-    """Send an email with the given subject and HTML body to the specified recipient.
-    to_email: recipient email address (e.g. user@example.com). If empty, uses the default recipient."""
+   
     recipient = (to_email or "").strip() or DEFAULT_TO_EMAIL
     sg = sendgrid.SendGridAPIClient(api_key=os.environ.get("SENDGRID_API_KEY"))
     from_email = Email(DEFAULT_FROM_EMAIL)

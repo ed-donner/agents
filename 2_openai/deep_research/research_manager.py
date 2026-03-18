@@ -6,10 +6,8 @@ from guardrails import run_guardrails, GuardrailResult
 
 
 class ResearchManager:
-    """Orchestrates clarifying questions and the agentic research manager."""
 
     async def get_clarifying_questions(self, query: str) -> list[str]:
-        """Generate exactly 3 clarifying questions for the query (OpenAI-style first step)."""
         result = await Runner.run(clarifier_agent, f"Query: {query}")
         return result.final_output.questions
 
@@ -20,7 +18,6 @@ class ResearchManager:
         answers: list[str],
         recipient_email: str | None = None,
     ) -> str:
-        """Combine original query with Q&A and optional recipient email for a refined context."""
         parts = [query]
         if questions and answers:
             qa = []
@@ -35,13 +32,11 @@ class ResearchManager:
         return "\n\n".join(parts)
 
     def _intent_query_from_refined(self, refined_query: str) -> str:
-        """Extract the topic part for intent check (before Clarifications / Recipient email)."""
         q = (refined_query or "").split("Clarifications:")[0].split("Recipient email:")[0].strip()
         return q
 
     async def run(self, refined_query: str, skip_guardrails: bool = False):
-        """Run the agentic manager on the (refined) query; yields status updates and final report.
-        Runs input guardrails first unless skip_guardrails=True."""
+      
         if not skip_guardrails:
             intent_query = self._intent_query_from_refined(refined_query)
             gr = run_guardrails(

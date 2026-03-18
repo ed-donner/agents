@@ -1,7 +1,4 @@
-"""
-Input guardrails for the deep research agent (using OpenAI SDK).
-Runs before research: topic intent, PII detection, length, optional sensitive topics.
-"""
+
 import os
 import re
 from dataclasses import dataclass
@@ -100,10 +97,7 @@ def run_guardrails(
     openai_api_key: str | None = None,
     allow_recipient_email: bool = False,
 ) -> GuardrailResult:
-    """
-    Run all enabled input guardrails. Returns GuardrailResult(passed, message).
-    Use intent_query when query includes clarifications/recipient; only the topic is used for intent check.
-    """
+   
     query = (query or "").strip()
     answers = answers or []
     topic_for_intent = (intent_query or query).strip()

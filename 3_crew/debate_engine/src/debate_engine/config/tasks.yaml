@@ -1,0 +1,165 @@
+
+
+  extract_evidence:
+    description: >
+      Analyze the provided case documents and extract all relevant facts,
+      events, timelines, and key legal points.
+
+    expected_output: >
+      JSON with:
+      {
+        "facts": [],
+        "events": [],
+        "key_points": [],
+        "uncertainties": []
+      }
+
+    agent: evidence_analyst
+    output_file: outputs/evidence.json
+
+  prosecutor_opening:
+    description: >
+      Construct a strong legal argument proving liability using the extracted evidence.
+
+    expected_output: >
+      JSON with:
+      {
+        "claims": [
+          {
+            "claim": "",
+            "evidence": "",
+            "legal_basis": "",
+            "confidence": 0-1
+          }
+        ],
+        "summary": ""
+      }
+
+    agent: prosecutor
+    output_file: outputs/prosecutor_opening.json
+
+  defense_opening:
+    description: >
+      Challenge the prosecution by identifying weaknesses and alternative interpretations.
+
+    expected_output: >
+      JSON with:
+      {
+        "counter_claims": [
+          {
+            "claim": "",
+            "rebuttal_to": "",
+            "evidence": "",
+            "confidence": 0-1
+          }
+        ],
+        "summary": ""
+      }
+
+    agent: defense
+    output_file: outputs/defense_opening.json
+
+  prosecutor_rebuttal:
+    description: >
+      Respond to the defense arguments and reinforce prosecution claims.
+
+    expected_output: >
+      JSON with:
+      {
+        "rebuttals": [
+          {
+            "target_claim": "",
+            "response": "",
+            "supporting_evidence": "",
+            "confidence": 0-1
+          }
+        ]
+      }
+
+    agent: prosecutor
+    output_file: outputs/prosecutor_rebuttal.json
+
+  defense_rebuttal:
+    description: >
+      Respond to prosecution rebuttals and reinforce defense arguments.
+
+    expected_output: >
+      JSON with:
+      {
+        "rebuttals": [
+          {
+            "target_claim": "",
+            "response": "",
+            "supporting_evidence": "",
+            "confidence": 0-1
+          }
+        ]
+      }
+
+    agent: defense
+    output_file: outputs/defense_rebuttal.json
+
+  fact_check:
+    description: >
+      Verify claims from both sides and flag inconsistencies.
+
+    expected_output: >
+      JSON with:
+      {
+        "verified_claims": [],
+        "flagged_issues": [
+          {
+            "claim": "",
+            "issue": "",
+            "severity": "low|medium|high"
+          }
+        ]
+      }
+
+    agent: fact_checker
+    output_file: outputs/fact_check.json
+
+  closing_arguments:
+    description: >
+      Provide final summaries for both prosecution and defense.
+
+    expected_output: >
+      JSON with:
+      {
+        "prosecution_summary": "",
+        "defense_summary": ""
+      }
+
+    agent: prosecutor
+    output_file: outputs/closing_arguments.json
+
+  final_verdict:
+    description: >
+      Evaluate the full debate and provide final judgment and scoring.
+
+    expected_output: >
+      JSON with:
+      {
+        "winner": "prosecution|defense",
+        "scores": {
+          "prosecution": {
+            "logic": 0-10,
+            "evidence": 0-10,
+            "rebuttal": 0-10,
+            "clarity": 0-10,
+            "total": 0-10
+          },
+          "defense": {
+            "logic": 0-10,
+            "evidence": 0-10,
+            "rebuttal": 0-10,
+            "clarity": 0-10,
+            "total": 0-10
+          }
+        },
+        "reasoning": "",
+        "confidence": 0-1
+      }
+
+    agent: judge
+    output_file: outputs/final_verdict.json

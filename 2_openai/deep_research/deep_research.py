@@ -9,7 +9,7 @@ from email_agent import email_agent
 from research_manager import ResearchManager
 from guardrails import run_guardrails
 
-load_dotenv(override=True)
+load_dotenv(dotenv_path="../.env", override=True)
 
 manager = ResearchManager()
 
@@ -89,7 +89,6 @@ def create_pdf_from_report(report_markdown: str) -> str:
 
 
 async def get_clarifying_questions(query: str):
-    """Phase 1: guardrails + clarifying questions. Everything except the Get button stays hidden until this succeeds."""
     query = (query or "").strip()
     if not query:
         # Keep everything else hidden.

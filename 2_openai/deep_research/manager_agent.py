@@ -1,4 +1,3 @@
-"""Agentic research manager: uses planner, search, writer, evaluator, optimizer as tools."""
 from agents import Agent, ModelSettings
 from planner_agent import planner_agent_tool
 from search_agent import search_agent_tool

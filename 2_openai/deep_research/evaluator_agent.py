@@ -1,4 +1,3 @@
-"""Evaluator: scores the report and decides if it needs refinement. Optimizer: improves report from feedback."""
 from pydantic import BaseModel, Field
 from typing import List
 from agents import Agent
