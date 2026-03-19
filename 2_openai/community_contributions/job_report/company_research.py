@@ -1,5 +1,6 @@
 from agents import Agent, WebSearchTool, ModelSettings
 
+
 INSTRUCTIONS = (
     "You are a research assistant. Given a certain company name, you search the web for that company and "
     "generate a report on all the details a potential new employee should know about the company. Details about the CEO, how much they make, what they do, etc. "
@@ -8,7 +9,7 @@ INSTRUCTIONS = (
     ""
 )
 
-search_agent = Agent(
+company_research_agent = Agent(
     name="Company research agent",
     instructions=INSTRUCTIONS,
     tools=[WebSearchTool(search_context_size="low")],

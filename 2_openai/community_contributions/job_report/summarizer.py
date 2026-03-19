@@ -1,5 +1,6 @@
 from agents import Agent, ModelSettings
-from 
+from job_report.tools.write_job_report import write_job_report_pdf
+
 
 INSTRUCTIONS = (
     "You are a senior manager with experience reading and summarizing reports. Given a report, you summarize it in a way that is easy to understand and use and you create a cheatsheet with all the information"
@@ -7,8 +8,8 @@ INSTRUCTIONS = (
     "The cheatsheet should be in a clear and concise format, with each technology being explained in a way that is easy to understand."
     "There should be a section for the company with the most important details about the company summarized from the company report"
     "Then there should be a section for the job with the most important details about the job summarized from the job report"
-    "there should be a section about the technical requirements for the job with the most important details about the technical requirements summarized from the technical research report"
-    "Write this report in a pdf with a tool that you have been given to do so"
+    "there should be a section about the technical requirements for the job with the most important details about the technical requirements summarized from the technical research report. "
+    "When the cheatsheet is complete, you MUST call the write_job_report_pdf tool exactly once with the full cheatsheet as the report_text argument so job_report.pdf is created."
 )
 
 summarizer_agent = Agent(
