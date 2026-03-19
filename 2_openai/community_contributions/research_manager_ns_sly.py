@@ -1,6 +1,6 @@
 """
-I implemented the use of tools to call Agents. 
-And Let the Research manager cordinate the other agents.
+I implemented the same Deep Research with the use of tools to call Agents, allowing the  Research Manager to manage all  Agents through the use of tools. 
+I made this architectural decision to save costs
 """
 
 from agents import Agent, Runner, trace, gen_trace_id
