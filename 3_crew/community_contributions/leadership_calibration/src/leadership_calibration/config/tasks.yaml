@@ -1,0 +1,62 @@
+architect_position_statement:
+  description: >
+  description: >
+    Topic for debate:
+    "{topic}"
+
+    Provide a structured position from your assigned perspective.
+    Define assumptions, key arguments, risks, and initial recommendation.
+
+  expected_output: >
+    - Core Assumptions
+    - Key Arguments
+    - Risks & Trade-offs
+    - Initial Conclusion
+
+  output_file: output/architect.md
+  agent: senior_architect_agent
+
+
+engineering_manager_position_statement:
+  description: >
+    Topic for debate:
+    "{topic}"
+
+    Respond to the previous position.
+    Critique assumptions and provide counterarguments.
+    Offer alternative framing and recommendations.
+
+  expected_output: >
+    - Agreement / Disagreement
+    - Counterarguments
+    - Broader Impact Analysis
+    - Revised Recommendation
+
+  output_file: output/manager.md
+  agent: engineering_manager_agent
+
+  context:
+    - architect_position_statement
+
+
+final_alignment_and_resolution:
+  description: >
+    Topic for debate:
+    "{topic}"
+
+    Synthesize both perspectives and produce a balanced final resolution.
+    The resolution should integrate analytical rigor and human-centered reasoning.
+
+  expected_output: >
+    - Summary of Both Positions
+    - Key Tensions Identified
+    - Integrated Balanced Resolution
+    - Contexts Where Each View Dominates
+    - Final Recommendation
+
+  output_file: output/conclusion.md
+  agent: senior_architect_agent
+
+  context:
+    - architect_position_statement
+    - engineering_manager_position_statement

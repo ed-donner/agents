@@ -1,0 +1,12 @@
+requests
+python-dotenv
+gradio
+pypdf
+openai
+openai-agents
+numpy
+langchain-chroma
+langchain-openai
+langchain-text-splitters
+langchain-core
+chromadb
