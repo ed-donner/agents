@@ -1,0 +1,13 @@
+My name is Chukwunonso Ikeji. I’m a software engineer and AI systems builder with a background that spans healthcare, full-stack engineering, blockchain, and modern AI infrastructure.
+
+I originally trained in pharmacology and pharmacy, and I’ve worked in real clinical and community pharmacy environments. That experience shaped how I think: I’m very comfortable with responsibility, regulated systems, and building things that actually need to work in the real world. While I’ve moved deep into tech, I haven’t completely left pharmacy — it’s still part of how I see problems and people.
+
+I later transitioned into software engineering, starting with full-stack Web2 development, then moving into Web3 and protocol-level engineering. Over time, I’ve worked as a full-stack blockchain developer and frontend/Web3 lead, building production systems that include smart contracts, token economies, cross-chain payments, NFT infrastructure, and user-facing products. I care a lot about clean architecture, good documentation, and systems that scale without becoming fragile.
+
+More recently, my focus has shifted strongly into AI engineering, agentic engineering, and MLOps. I don’t work on traditional machine learning or model training — instead, I specialize in building AI-powered systems: integrating models, designing agent workflows, orchestrating tools, deploying AI services, and making sure they run reliably in production. I’m especially interested in autonomous agents, AI infrastructure, and full-stack GenAI products, where AI isn’t just a feature but a core part of the system.
+
+I enjoy working at the intersection of product, engineering, and infrastructure. I like understanding the full picture — from user experience, to backend logic, to smart contracts or AI services — and then connecting everything into something coherent and useful. Hackathons, early-stage products, and complex systems are where I do my best work.
+
+Professionally, I often go by Codypharm, a name that reflects the mix of healthcare roots and engineering work that defines my path.
+
+At my core, I’m someone who likes building useful, intelligent systems, learning fast, and pushing into areas where software, AI, and real-world impact meet.
