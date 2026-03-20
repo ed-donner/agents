@@ -1,5 +1,13 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
+from pydantic import BaseModel
+
+
+class ProductArchitectOutput(BaseModel):
+    requirements: str
+    module_name: str
+    class_name: str
+
 
 @CrewBase
 class IgnitersOlawale():
@@ -54,7 +62,8 @@ class IgnitersOlawale():
     @task
     def product_architect_task(self) -> Task:
         return Task(
-            config=self.tasks_config['product_architect_task']
+            config=self.tasks_config['product_architect_task'],
+            output_pydantic=ProductArchitectOutput
         )
 
     @task

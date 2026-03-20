@@ -20,66 +20,68 @@ product_architect_task:
     {idea}
 
   expected_output: >
-  {
-    "requirements": "...",
-    "module_name": "...",
-    "class_name": "..."
-  }
+    A single JSON object with exactly three string keys: "requirements" (full specification text),
+    "module_name" (snake_case filename ending in .py), and "class_name" (PascalCase).
+    Example shape: {"requirements": "...", "module_name": "example.py", "class_name": "Example"}.
 
   agent: product_architect
   output_file: output/spec.txt
 
 design_task:
   description: >
-    Take the high level requirements described here and prepare a detailed design for the engineer;
-    everything should be in 1 python module, but outline the classes and methods in the module.
-    Here are the requirements: {requirements}
-    The module should be named {module_name} and the class should be named {class_name}
+    Using the product architect task output in context (requirements text, module_name, class_name),
+    prepare a detailed design for the engineer. Everything should be in one python module; outline
+    the classes and methods in the module.
 
-    IMPORTANT: Only output the design in markdown format, laying out in detail the classes and functions in the module, describing the functionality.
+    IMPORTANT: Only output the design in markdown format, laying out in detail the classes and functions
+    in the module, describing the functionality.
   expected_output: >
     A detailed design for the engineer, identifying the classes and functions in the module.
   agent: engineering_lead
   context:
     - product_architect_task
-  output_file: output/{module_name}_design.md
+  output_file: output/design.md
 
 code_task:
   description: >
-    Write a python module that implements the design described by the engineering lead, in order to achieve the requirements.
-    Here are the requirements: {requirements}
+    Write a python module that implements the design from the engineering lead task in context,
+    satisfying the requirements from the product architect output in context.
   expected_output: >
     A python module that implements the design and achieves the requirements.
     IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
     The output should be valid Python code that can be directly saved to a file and executed.
+    Name the file to match module_name from the product architect output (e.g. my_feature.py).
   agent: backend_engineer
   context:
     - design_task
-  output_file: output/{module_name}
+    - product_architect_task
+  output_file: output/backend.py
 
 frontend_task:
   description: >
-    Write a gradio UI in a module app.py that demonstrates the given backend class in {module_name}.
-    Assume there is only 1 user, and keep the UI very simple indeed - just a prototype or demo.
-    Here are the requirements: {requirements}
+    Write a gradio UI in app.py that demonstrates the backend class. Use module_name and class_name from
+    the product architect output in context. Assume there is only 1 user; keep the UI very simple.
   expected_output: >
     A gradio UI in module app.py that demonstrates the given backend class.
-    The file should be ready so that it can be run as-is, in the same directory as the backend module, and it should import the backend class from {module_name}.
+    The file should be ready so that it can be run as-is alongside the backend module, importing the
+    main class from the module file name in context.
     IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
     The output should be valid Python code that can be directly saved to a file and executed.
   agent: frontend_engineer
   context:
     - code_task
+    - product_architect_task
   output_file: output/app.py
 
 test_task:
   description: >
-    Write unit tests for the given backend module {module_name} and create a test_{module_name} in the same directory as the backend module.
+    Write unit tests for the backend module from context, using module_name from the product architect output.
   expected_output: >
-    A test_{module_name} module that tests the given backend module.
+    A test module that tests the given backend module.
     IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
     The output should be valid Python code that can be directly saved to a file and executed.
   agent: test_engineer
   context:
     - code_task
-  output_file: output/test_{module_name}
+    - product_architect_task
+  output_file: output/test_backend.py
