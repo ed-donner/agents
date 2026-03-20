@@ -2,6 +2,10 @@
 
 A small [CrewAI](https://crewai.com) project that drafts a **blameless** incident postmortem from raw notes: timeline, impact, root-cause analysis, and actionable follow-ups. Use the [CrewAI docs](https://docs.crewai.com) for framework details.
 
+## Problem it solves
+
+After outages or serious bugs, teams need a **consistent, blameless postmortem**: timeline, impact, root cause, contributing factors, and concrete follow-ups. Doing this well is repetitive and easy to skip under pressure. A small CrewAI project automates the **structure and first draft** so humans only review and approve.
+
 ## What it does
 
 Three agents run in sequence:
