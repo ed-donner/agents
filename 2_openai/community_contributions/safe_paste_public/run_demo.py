@@ -4,9 +4,9 @@ import asyncio
 import sys
 from pathlib import Path
 
-from dotenv import load_dotenv
+from env_setup import load_repo_env
 
-load_dotenv(override=True)
+load_repo_env()
 
 
 async def _run(path: Path) -> None:

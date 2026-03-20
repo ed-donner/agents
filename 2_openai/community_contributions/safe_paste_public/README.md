@@ -21,23 +21,48 @@ flowchart LR
 ## Setup
 
 ```bash
-cd /path/to/agents   # repo root with .venv recommended
-source .venv/bin/activate
+cd /path/to/agents   # repo root — use `uv` or activate `.venv`
 export OPENAI_API_KEY=sk-...
 ```
 
-Or load a `.env` from the repo root (`python-dotenv`).
+`env_setup.load_repo_env()` loads the first `.env` found in this folder or a parent (typically the repo root).
 
 ## Run
 
-From this directory (so `import scanner_agent` works):
+### Gradio (standalone)
+
+From the **repo root** (recommended, so `uv` uses `pyproject.toml`):
 
 ```bash
-python run_demo.py sample_inputs/clean_traceback.txt
+uv run python 2_openai/community_contributions/safe_paste_public/app.py
+```
+
+Or from **this** directory:
+
+```bash
+cd 2_openai/community_contributions/safe_paste_public
+uv run --project ../../.. python app.py
+python app.py   # if your shell already has the venv activated
+```
+
+### CLI (stream to stdout)
+
+```bash
+# repo root
+uv run python 2_openai/community_contributions/safe_paste_public/run_demo.py \
+  2_openai/community_contributions/safe_paste_public/sample_inputs/leaky_log.txt
+```
+
+From **this** directory:
+
+```bash
+uv run --project ../../.. python run_demo.py sample_inputs/clean_traceback.txt
 python run_demo.py sample_inputs/leaky_log.txt
 ```
 
-Or open `demo.ipynb` and run all cells.
+### Jupyter
+
+Open `demo.ipynb` with the kernel working directory set to **`safe_paste_public`**. The notebook embeds **Gradio** (`inline=True`) and includes a cell that runs **`uv run`** on `run_demo.py` via `subprocess` from the detected repo root.
 
 ## Limitations (read this)
 
@@ -50,11 +75,15 @@ Or open `demo.ipynb` and run all cells.
 | File | Role |
 |------|------|
 | `models.py` | Pydantic schemas for structured outputs |
+| `env_setup.py` | Load `.env` from this folder or parent dirs |
 | `scanner_agent.py` | Risk classification |
 | `redaction_coach_agent.py` | What to redact + safe example |
 | `leak_guardrail.py` | `input_guardrail` before explain |
 | `explainer_agent.py` | Diagnosis agent with guardrail attached |
 | `orchestrator.py` | `SafePasteManager` + `trace` / `gen_trace_id` |
+| `app.py` | Gradio UI (`build_ui()`, streaming markdown) |
+| `run_demo.py` | CLI over the same orchestrator |
+| `demo.ipynb` | Inline Gradio + `uv run` CLI example |
 
 ## Traces
 
