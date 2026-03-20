@@ -4,3 +4,4 @@ __pycache__/
 uv.lock
 output/
 memory/
+README.md
