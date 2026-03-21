@@ -40,3 +40,10 @@ class EmailPayload(BaseModel):
     to: str
     subject: str
     html: str
+
+
+class ReviewResult(BaseModel):
+    """Structured output for the review agent's draft selection."""
+    chosen_tone: Literal["serious", "engaging", "concise", "playful"]
+    justification: str = Field(description="A brief explanation of why this draft is the best fit for the campaign goals.")
+    winning_draft_content: str = Field(description="The full Text of the winning draft.")

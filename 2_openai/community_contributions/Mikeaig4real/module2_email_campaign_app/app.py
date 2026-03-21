@@ -15,7 +15,7 @@ async def run_campaign(prompt: str):
 
 
 with gr.Blocks(theme=gr.themes.Default(primary_hue="sky")) as ui:
-    gr.Markdown("# Module 2 Email Campaign App")
+    gr.Markdown("# Email Campaign App")
     prompt_box = gr.Textbox(
         label="Campaign prompt",
         placeholder="Example: Send a cold email to CTOs about AI-powered SOC2 audit readiness",

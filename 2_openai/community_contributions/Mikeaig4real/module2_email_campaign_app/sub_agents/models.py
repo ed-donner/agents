@@ -25,17 +25,17 @@ def normalize_chat_model(model_name: str, base_url: str | None, api_key: str | N
 
 
 models = {
-    "openai": "openai/gpt-4o-mini",
+    "openai": "openai/gpt-4o",
     "gemini": "google/gemini-2.0-flash-001",
     "deepseek": "deepseek/deepseek-chat",
-    "groq": "meta-llama/llama-3.3-70b-instruct",
+    "anthropic": "anthropic/claude-3.5-sonnet",
 }
 
 model_registry = {
     "openai": normalize_chat_model(models["openai"], OPENROUTER_BASE_URL, openrouter_api_key),
     "gemini": normalize_chat_model(models["gemini"], OPENROUTER_BASE_URL, openrouter_api_key),
     "deepseek": normalize_chat_model(models["deepseek"], OPENROUTER_BASE_URL, openrouter_api_key),
-    "groq": normalize_chat_model(models["groq"], OPENROUTER_BASE_URL, openrouter_api_key),
+    "anthropic": normalize_chat_model(models["anthropic"], OPENROUTER_BASE_URL, openrouter_api_key),
 }
 
 available_models = {k: v for k, v in model_registry.items() if v is not None}
