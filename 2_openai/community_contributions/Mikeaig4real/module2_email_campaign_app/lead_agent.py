@@ -2,22 +2,23 @@
 
 from agents import Agent
 
+from models import model_registry
 
-from sub_agents.concise_sales_agent import concise_sales_agent
-from sub_agents.engaging_sales_agent import engaging_sales_agent
-from sub_agents.playful_sales_agent import playful_sales_agent
-from sub_agents.serious_sales_agent import serious_sales_agent
+from sales_agents import (
+    concise_sales_agent,
+    engaging_sales_agent,
+    playful_sales_agent,
+    serious_sales_agent,
+)
 
-from sub_agents.guardrails import (
+from guardrails import (
     guardrail_against_personal_name,
     outbound_safety_guardrail,
 )
 
-from sub_agents.review_agent import review_agent
+from review_agent import review_agent
 
-from sub_agents.models import get_model
-
-from sub_agents.tools import (
+from tools import (
     build_mail_merge_plan,
     get_target_contacts,
     send_mail_merge_dry_run,
@@ -47,7 +48,8 @@ You are the Sales Manager.
 
 You MUST follow these 5 steps in EXACT order. Do NOT stop until all steps are complete:
 1. Call ALL sales agent tools (concise, engaging, serious, playful) to get candidate drafts.
-2. Pass ALL generated drafts to the 'review_agent' tool to select the best one and get the justification.
+2. Pass ALL generated drafts to the 'review_agent' 
+tool to select the best one and get the justification.
 3. Call 'get_target_contacts' to find recipients.
 4. Call 'build_mail_merge_plan' using the WINNING draft's subject and content and the contacts.
 5. Call 'send_mail_merge_dry_run' with the plan.
@@ -62,16 +64,25 @@ Rules:
 
 review_tool = review_agent.as_tool(
     tool_name="review_agent",
-    tool_description="Review multiple candidate drafts and select the best one. Pass all candidate drafts as input to this tool.",
+    tool_description="""
+    Review multiple candidate drafts and select the best one. 
+    Pass all candidate drafts as input to this tool.
+    """,
 )
 
-manager_tools = [*sales_tools, review_tool, get_target_contacts, build_mail_merge_plan, send_mail_merge_dry_run]
+manager_tools = [
+    *sales_tools,
+    review_tool,
+    get_target_contacts,
+    build_mail_merge_plan,
+    send_mail_merge_dry_run,
+]
 
 sales_manager = Agent(
     name="sales_manager",
     instructions=sales_manager_instructions,
     tools=manager_tools,
-    model=get_model("gemini"),
+    model=model_registry["gemini"],
     input_guardrails=[guardrail_against_personal_name],
     output_guardrails=[outbound_safety_guardrail],
 )

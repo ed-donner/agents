@@ -1,8 +1,9 @@
 """Guardrails for the email campaign workflow."""
 
 from agents import Agent, input_guardrail, output_guardrail, Runner, GuardrailFunctionOutput
-from .models import get_model
-from .schemas import NameCheckOutput, SafetyReviewOutput
+
+from models import model_registry
+from schemas import NameCheckOutput, SafetyReviewOutput
 from debug import debug_print
 
 
@@ -15,7 +16,7 @@ name_guardrail_agent = Agent(
         "are NOT personal names and should NOT be blocked."
     ),
     output_type=NameCheckOutput,
-    model=get_model("openai")
+    model=model_registry["openai"]
 )
 
 
@@ -31,12 +32,12 @@ output_guardrail_agent = Agent(
         "If the text is a technical summary or a standard business email, ALLOW it."
     ),
     output_type=SafetyReviewOutput,
-    model=get_model("openai")
+    model=model_registry["openai"]
 )
 
 
 @input_guardrail
-async def guardrail_against_personal_name(ctx, agent, user_input):
+async def guardrail_against_personal_name(ctx, _agent, user_input):
     """Block requests that include personal naming."""
     debug_print(f"DEBUG: guardrail_against_personal_name checking input: '{user_input}'")
     result = await Runner.run(name_guardrail_agent, user_input, context=ctx.context)
@@ -50,7 +51,7 @@ async def guardrail_against_personal_name(ctx, agent, user_input):
 
 
 @output_guardrail
-async def outbound_safety_guardrail(ctx, agent, output):
+async def outbound_safety_guardrail(ctx, _agent, output):
     """Block unsafe outbound email content."""
     debug_print("DEBUG: outbound_safety_guardrail checking generated output...")
     review = await Runner.run(output_guardrail_agent, str(output), context=ctx.context)

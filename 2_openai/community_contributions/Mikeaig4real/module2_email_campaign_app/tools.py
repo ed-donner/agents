@@ -1,8 +1,9 @@
 """Tools for email campaign workflow."""
 
-from typing import List, Dict
+from typing import List
 from agents import function_tool
-from .schemas import ColdEmail, Contact, EmailPayload
+
+from schemas import ColdEmail, Contact, EmailPayload
 from debug import debug_print
 
 

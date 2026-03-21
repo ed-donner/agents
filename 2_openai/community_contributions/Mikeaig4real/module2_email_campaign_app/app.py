@@ -1,11 +1,8 @@
 """Gradio UI for module 2 email campaign exercise."""
 
 import gradio as gr
-from dotenv import load_dotenv
 
 from manager import EmailCampaignManager
-
-load_dotenv(override=True)
 
 
 async def run_campaign(prompt: str):

@@ -1,4 +1,4 @@
-"""Schemas for the module 2 email campaign workflow."""
+"""Schemas for the email campaign workflow."""
 
 from typing import Literal
 from pydantic import BaseModel, Field

@@ -1,8 +1,10 @@
 """Sub-agent responsible for reviewing and selecting the best email draft."""
 
 from agents import Agent
-from .models import get_model
-from .schemas import ReviewResult
+
+from models import model_registry
+from schemas import ReviewResult
+
 
 review_instructions = """
 You are the Quality Assurance Director for the email campaign.
@@ -18,6 +20,6 @@ Evaluate them carefully and return your structured decision identifying the winn
 review_agent = Agent(
     name="review_agent",
     instructions=review_instructions,
-    model=get_model("openai"),  # Use a frontier model for reasoning
+    model=model_registry["openai"],
     output_type=ReviewResult,
 )

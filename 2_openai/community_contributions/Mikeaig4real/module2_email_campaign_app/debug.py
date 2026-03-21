@@ -1,3 +1,7 @@
+"""
+Custom debugger
+"""
+
 import os
 
 def debug_print(*args, **kwargs):
