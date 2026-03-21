@@ -1,0 +1,13 @@
+playwright
+langchain
+langchain-community
+langchain-experimental
+langchain-openrouter
+langgraph
+pydantic
+python-dotenv
+gradio
+brevo-python
+wikipedia
+langgraph-checkpoint-sqlite
+aiosqlite
