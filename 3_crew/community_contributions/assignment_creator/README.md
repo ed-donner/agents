@@ -22,13 +22,6 @@ The system uses a multi‑agent CrewAI architecture where:
 - A **mailer agent** sends the email using **SendGrid**.
 - A **Gradio UI** serves as the front-end for user input.
 
-## **📊 Architecture Diagram**
-Below is a visual representation of the entire flow.
-
----
-![alt text](image.png)
-
----
 
 ## **🛠 Installation**
 
