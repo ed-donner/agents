@@ -1,21 +1,35 @@
-"""Gradio chat: ResearchHost → clarifying Q&A → handoff → deep research (streaming updates)."""
 
 from __future__ import annotations
 
 import asyncio
+import inspect
 import uuid
+from typing import Any
 
 import gradio as gr
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
-import compat  # noqa: F401 — configure tracing/model before agents
+import compat  
 from agents import Runner
 from agents.items import HandoffCallItem, ItemHelpers, MessageOutputItem, ToolCallItem, ToolCallOutputItem
-from agents.memory import SQLiteSession
 from agents.stream_events import RunItemStreamEvent
-from orchestrate import research_host_agent, set_research_progress_queue
+from orchestrate import (
+    ResearchUiContext,
+    clarifier_topic_and_prior_from_gradio,
+    research_host_agent,
+    set_research_progress_queue,
+)
+
+try:
+    from agents.memory import SQLiteSession
+except ImportError:
+    SQLiteSession = None  
+
+_USE_SDK_SQLITE_SESSION = SQLiteSession is not None and (
+    "session" in inspect.signature(Runner.run_streamed).parameters
+)
 
 
 def _final_output_to_text(final_output) -> str:
@@ -73,23 +87,50 @@ async def _merge_stream_events_progress(streamed, progress_q: asyncio.Queue):
             break
 
 
-async def chat_respond(message: str, history: list, session: SQLiteSession | None):
-    if session is None:
-        session = SQLiteSession(session_id=str(uuid.uuid4()))
+def _runner_input_from_gradio_history(history: list, latest_user_text: str) -> str | list[dict[str, str]]:
+    """When SDK session is unavailable, pass full chat as OpenAI-style messages."""
+    prior = history[:-1] if history else []
+    items: list[dict[str, str]] = []
+    for user_msg, bot_msg in prior:
+        u = (user_msg or "").strip()
+        if u:
+            items.append({"role": "user", "content": u})
+        if isinstance(bot_msg, str) and bot_msg.strip():
+            items.append({"role": "assistant", "content": bot_msg.strip()})
+    items.append({"role": "user", "content": latest_user_text.strip()})
+    if len(items) == 1:
+        return latest_user_text.strip()
+    return items
+
+
+async def chat_respond(message: str, history: list, session: Any):
     text = (message or "").strip()
     if not text:
         yield history, session, ""
         return
 
-    # Replaceable placeholder (Gradio tuple chat often shows nothing for None).
+    if _USE_SDK_SQLITE_SESSION and session is None:
+        session = SQLiteSession(session_id=str(uuid.uuid4()))
+
+    
     history = list(history) + [[text, "_Thinking…_"]]
     yield history, session, ""
 
+    if _USE_SDK_SQLITE_SESSION:
+        run_input: str | list = text
+        stream_kw: dict = {"session": session, "max_turns": 40}
+    else:
+        run_input = _runner_input_from_gradio_history(history, text)
+        stream_kw = {"max_turns": 40}
+
+    ui_ctx = ResearchUiContext()
+    ui_ctx.topic, ui_ctx.prior_qa_block = clarifier_topic_and_prior_from_gradio(history)
+    stream_kw["context"] = ui_ctx
+
     streamed = Runner.run_streamed(
         research_host_agent,
-        text,
-        session=session,
-        max_turns=40,
+        run_input,
+        **stream_kw,
     )
 
     progress_q: asyncio.Queue[str] = asyncio.Queue()
@@ -101,8 +142,9 @@ async def chat_respond(message: str, history: list, session: SQLiteSession | Non
     try:
         async for kind, payload in _merge_stream_events_progress(streamed, progress_q):
             if kind == "chunk":
+               
                 if not research_live:
-                    continue
+                    research_live = True
                 raw = str(payload)
                 s = raw.strip()
                 if awaiting_report_after_email:
@@ -110,10 +152,12 @@ async def chat_respond(message: str, history: list, session: SQLiteSession | Non
                     awaiting_report_after_email = False
                     yield history, session, ""
                     continue
-                if s == "Email sent":
+                if s == "Email sent" or s.startswith("Email not sent") or s.startswith("Email skipped"):
                     awaiting_report_after_email = True
+                    if s != "Email sent":
+                        history[-1][1] = f"_{s}_"
+                        yield history, session, ""
                     continue
-                # One ephemeral status line at a time (like a single Markdown stream replacing).
                 history[-1][1] = f"_{s}_"
                 yield history, session, ""
                 continue
@@ -127,7 +171,6 @@ async def chat_respond(message: str, history: list, session: SQLiteSession | Non
                 if not delta:
                     continue
                 if research_live:
-                    # Final bubble should be the report only (from the pipeline), not model echo.
                     continue
                 history[-1][1] = delta
                 yield history, session, ""

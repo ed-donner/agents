@@ -3,15 +3,67 @@
 from __future__ import annotations
 
 import asyncio
+from dataclasses import dataclass
 
 from pydantic import BaseModel, Field
 
 import compat  # noqa: F401
 from agents import Agent, GuardrailFunctionOutput, Runner, function_tool, handoff, input_guardrail
+from agents.run_context import RunContextWrapper
 from pipeline import ResearchManager
 
-# Gradio registers this before each streamed run. ContextVar is unreliable here because
-# tool execution may run without the chat task's context, so the queue is module-global.
+
+@dataclass
+class ResearchUiContext:
+    """Set by the Gradio layer each turn so tools use the real transcript, not only LLM tool args."""
+
+    topic: str = ""
+    prior_qa_block: str = ""
+
+
+def _is_assistant_placeholder(assistant_text: str) -> bool:
+    s = (assistant_text or "").strip()
+    if not s:
+        return True
+    if s.startswith("_Thinking"):
+        return True
+    if s.startswith("_Run error"):
+        return True
+    # Gradio streams ephemeral status as italic: _status_
+    if len(s) > 2 and s.startswith("_") and s.endswith("_"):
+        return True
+    return False
+
+
+def clarifier_topic_and_prior_from_gradio(history: list) -> tuple[str, str]:
+    """Derive research topic and prior clarifying Q&A from Gradio [user, assistant] rows."""
+    if not history:
+        return "", ""
+    row0 = history[0]
+    if not isinstance(row0, (list, tuple)) or len(row0) < 1:
+        return "", ""
+    topic = (row0[0] or "").strip() if isinstance(row0[0], str) else ""
+    lines: list[str] = []
+    n = len(history)
+    for i in range(n):
+        row = history[i]
+        if not isinstance(row, (list, tuple)) or len(row) < 2:
+            continue
+        u_raw, a_raw = row[0], row[1]
+        u = (u_raw or "").strip() if isinstance(u_raw, str) else ""
+        a = (a_raw or "").strip() if isinstance(a_raw, str) else ""
+        if i == 0:
+            if a and not _is_assistant_placeholder(a):
+                lines.append(f"Q1: {a}")
+            continue
+        if u:
+            lines.append(f"A{i}: {u}")
+        is_last = i == n - 1
+        if not is_last and a and not _is_assistant_placeholder(a):
+            lines.append(f"Q{i + 1}: {a}")
+    return topic, "\n".join(lines)
+
+
 _progress_queue: asyncio.Queue[str] | None = None
 
 
@@ -33,8 +85,11 @@ class ClarifyingQuestionOutput(BaseModel):
 CLARIFIER_INSTRUCTIONS = (
     "You help narrow a research request. Given the user's topic and any prior Q&A, "
     "you write exactly ONE new clarifying question. "
-    "Questions should narrow scope, audience, timeframe, depth, or constraints. "
-    "Do not repeat a question that was already asked. "
+    "Each question must build on previous answers: do not re-ask what the user already "
+    "specified (e.g. if they chose theological, do not ask philosophy vs theology again). "
+    "Narrow a *new* dimension: audience, tradition, timeframe, depth, geographic scope, "
+    "or concrete deliverable. "
+    "Do not repeat earlier questions. "
     "Output only via the structured field."
 )
 
@@ -48,23 +103,27 @@ clarifier_agent = Agent(
 
 @function_tool
 async def next_clarifying_question(
+    ctx: RunContextWrapper[ResearchUiContext],
     topic: str,
     prior_questions_and_answers: str,
     question_index: int,
 ) -> str:
     """Generate clarifying question `question_index` (must be 1, 2, or 3).
 
-    `topic` is the user's research topic from their first message.
-    `prior_questions_and_answers` lists earlier Q&A (plain text). Use empty string if none.
+    `topic` and `prior_questions_and_answers` are hints from the host; the app may inject
+    the canonical transcript via run context (preferred when present).
     """
     if question_index not in (1, 2, 3):
         return "Error: question_index must be 1, 2, or 3."
-    prior = (prior_questions_and_answers or "").strip() or "(none yet)"
+    c = ctx.context
+    canon_topic = (c.topic or topic or "").strip()
+    canon_prior = (c.prior_qa_block or prior_questions_and_answers or "").strip()
+    prior = canon_prior or "(none yet)"
     prompt = (
-        f"Research topic (from user):\n{topic}\n\n"
+        f"Research topic (from user):\n{canon_topic}\n\n"
         f"Prior clarifying Q&A so far:\n{prior}\n\n"
         f"Produce clarifying question #{question_index} of 3. "
-        "It must not repeat an earlier question."
+        "It must not repeat an earlier question and must build on prior answers."
     )
     result = await Runner.run(clarifier_agent, prompt)
     q = result.final_output_as(ClarifyingQuestionOutput)
@@ -99,7 +158,7 @@ RESEARCH_LEAD_INSTRUCTIONS = (
     "Do not call the tool again unless the tool failed with a clear error."
 )
 
-research_lead_agent = Agent(
+research_lead_agent = Agent[ResearchUiContext](
     name="ResearchLead",
     instructions=RESEARCH_LEAD_INSTRUCTIONS,
     tools=[run_deep_research],
@@ -148,7 +207,7 @@ You are ResearchHost. You manage a single research session over chat (session me
 - Keep messages concise.
 """
 
-research_host_agent = Agent(
+research_host_agent = Agent[ResearchUiContext](
     name="ResearchHost",
     instructions=HOST_INSTRUCTIONS,
     tools=[next_clarifying_question],

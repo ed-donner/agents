@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 from collections.abc import Awaitable, Callable
+import html as html_module
 import os
 from typing import Literal
 
@@ -60,23 +61,97 @@ SEARCH_INSTRUCTIONS = (
 _use_openrouter_web_fallback = bool(os.getenv("OPENROUTER_API_KEY"))
 
 
-@function_tool
-async def web_search(query: str) -> str:
-    """Search the web and return titles and snippets from top DuckDuckGo results."""
-    async with httpx.AsyncClient(
-        timeout=30.0,
-        follow_redirects=True,
-        headers={
-            "User-Agent": "Mozilla/5.0 (compatible; AgentsCourse/1.0)",
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-    ) as client:
+def _import_ddgs_class():
+    try:
+        from ddgs import DDGS
+
+        return DDGS
+    except ImportError:
+        try:
+            from duckduckgo_search import DDGS  # type: ignore[import-not-found]
+
+            return DDGS
+        except ImportError:
+            return None
+
+
+def _search_ddgs_sync(q: str, max_results: int = 10) -> list[str]:
+    DDGS = _import_ddgs_class()
+    if DDGS is None:
+        return []
+    lines: list[str] = []
+    try:
+        with DDGS() as ddgs:
+            for item in ddgs.text(q, max_results=max_results):
+                if not isinstance(item, dict):
+                    continue
+                title = (item.get("title") or "").strip()
+                body = (item.get("body") or "").strip()
+                href = (item.get("href") or "").strip()
+                if not title and not body:
+                    continue
+                line = f"- {title}"
+                if href:
+                    line += f" ({href})"
+                line += f": {body}"
+                lines.append(line.strip())
+    except Exception:
+        return []
+    return lines
+
+
+async def _search_tavily(q: str, api_key: str) -> list[str]:
+    async with httpx.AsyncClient(timeout=45.0) as client:
+        r = await client.post(
+            "https://api.tavily.com/search",
+            json={
+                "api_key": api_key,
+                "query": q,
+                "max_results": 10,
+                "include_answer": False,
+            },
+        )
+        r.raise_for_status()
+        data = r.json()
+    lines: list[str] = []
+    for item in data.get("results") or []:
+        if not isinstance(item, dict):
+            continue
+        title = (item.get("title") or "").strip()
+        content = (item.get("content") or "").strip()
+        url = (item.get("url") or "").strip()
+        if not title and not content:
+            continue
+        line = f"- {title}"
+        if url:
+            line += f" ({url})"
+        line += f": {content}"
+        lines.append(line.strip())
+    return lines
+
+
+async def _search_duckduckgo_html(q: str) -> list[str]:
+    """Last resort: legacy HTML results (often blocked as 'bot' on cloud IPs)."""
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+        ),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://duckduckgo.com/",
+        "Content-Type": "application/x-www-form-urlencoded",
+    }
+    async with httpx.AsyncClient(timeout=30.0, follow_redirects=True, headers=headers) as client:
         response = await client.post(
             "https://html.duckduckgo.com/html/",
-            data={"q": query},
+            data={"q": q},
         )
         response.raise_for_status()
-    soup = BeautifulSoup(response.text, "lxml")
+        text = response.text
+    if "anomaly-modal" in text or "Unfortunately, bots use DuckDuckGo" in text:
+        return []
+    soup = BeautifulSoup(text, "lxml")
     lines: list[str] = []
     for res in soup.select("div.result")[:10]:
         a = res.select_one("a.result__a")
@@ -86,9 +161,39 @@ async def web_search(query: str) -> str:
         snip = res.select_one(".result__snippet")
         snippet = snip.get_text(strip=True) if snip else ""
         lines.append(f"- {title}: {snippet}".strip())
-    if not lines:
-        return f"(No results parsed for {query!r}. Try a shorter query or check your network.)"
-    return "\n".join(lines)
+    return lines
+
+
+@function_tool
+async def web_search(query: str) -> str:
+    """Search the web and return titles and snippets (Tavily if TAVILY_API_KEY, else DuckDuckGo via ddgs)."""
+    q = (query or "").strip()
+    if not q:
+        return "(Empty search query.)"
+
+    tavily_key = (os.getenv("TAVILY_API_KEY") or "").strip()
+    if tavily_key:
+        try:
+            lines = await _search_tavily(q, tavily_key)
+            if lines:
+                return "\n".join(lines)
+            return f"(Tavily returned no usable results for {q!r}.)"
+        except Exception as exc:
+            return f"(Tavily search failed: {exc})"
+
+    lines = await asyncio.to_thread(_search_ddgs_sync, q)
+    if lines:
+        return "\n".join(lines)
+
+    html_lines = await _search_duckduckgo_html(q)
+    if html_lines:
+        return "\n".join(html_lines)
+
+    return (
+        f"(No web results for {q!r}. DuckDuckGo often blocks datacenter IPs; "
+        "set TAVILY_API_KEY (see https://tavily.com) in your environment for reliable search on "
+        "Hugging Face Spaces, or ensure the ddgs package is installed.)"
+    )
 
 
 _search_tools = (
@@ -185,23 +290,36 @@ def send_lab_email(subject: str, body: str, *, subtype: Literal["plain", "html"]
         raise RuntimeError(f"SendGrid HTTP {response.status_code}: {response.body}")
 
 
-@function_tool
-def send_email(subject: str, html_body: str) -> str:
-    """Send an email with the given subject and HTML body to the configured recipient."""
-    send_lab_email(subject, html_body, subtype="html")
-    return "success"
+def _report_email_subject_and_html(report: ReportData) -> tuple[str, str]:
+    subject = (report.short_summary or "Research report").strip().replace("\n", " ")
+    if len(subject) > 120:
+        subject = subject[:117].rstrip() + "..."
+    md = report.markdown_report or ""
+    safe_summary = html_module.escape(report.short_summary or "")
+    safe_md = html_module.escape(md)
+    body = (
+        "<html><body><h1>Research report</h1>"
+        f"<p><strong>Summary:</strong> {safe_summary}</p><hr/>"
+        "<div style='white-space:pre-wrap;font-family:system-ui,Segoe UI,sans-serif;font-size:14px'>"
+        f"{safe_md}</div></body></html>"
+    )
+    return subject, body
 
 
-EMAIL_INSTRUCTIONS = """You are able to send a nicely formatted HTML email based on a detailed report.
-You will be provided with a detailed report. You should use your tool to send one email, providing the 
-report converted into clean, well presented HTML with an appropriate subject line."""
+def send_report_email_direct(report: ReportData) -> str:
+    """Send the report using env-configured Gmail or SendGrid. Returns a one-line status for the UI."""
+    skip = (os.getenv("SKIP_EMAIL") or "").strip().lower() in ("1", "true", "yes")
+    if skip:
+        return "Email skipped (SKIP_EMAIL=1)."
+    try:
+        subject, body = _report_email_subject_and_html(report)
+        send_lab_email(subject, body, subtype="html")
+        return "Email sent"
+    except ValueError as exc:
+        return f"Email not sent: {exc}"
+    except Exception as exc:
+        return f"Email not sent: {exc!s}"
 
-email_agent = Agent(
-    name="Email agent",
-    instructions=EMAIL_INSTRUCTIONS,
-    tools=[send_email],
-    model=compat.AGENT_MODEL,
-)
 
 # --- Research manager ---
 
@@ -244,8 +362,18 @@ class ResearchManager:
             yield line
             line = await _emit("Writing email...")
             yield line
-            await self.send_email(report)
-            line = await _emit("Email sent")
+            
+            try:
+                email_status = await asyncio.wait_for(
+                    asyncio.to_thread(send_report_email_direct, report),
+                    timeout=45.0,
+                )
+            except asyncio.TimeoutError:
+                email_status = (
+                    "Email not sent: timed out (Gmail SMTP is often blocked on cloud hosts; "
+                    "use SendGrid + SENDGRID_* env vars on Hugging Face)."
+                )
+            line = await _emit(email_status)
             yield line
             line = await _emit(report.markdown_report, log=False)
             yield line
@@ -272,7 +400,7 @@ class ResearchManager:
                 results.append(result)
             num_completed += 1
             if progress:
-                msg = f"Searching... "
+                msg = f"Searching... {num_completed}/{n} completed"
                 print(msg)
                 await progress(msg)
         return results
@@ -290,5 +418,3 @@ class ResearchManager:
         result = await Runner.run(writer_agent, inp)
         return result.final_output_as(ReportData)
 
-    async def send_email(self, report: ReportData) -> None:
-        await Runner.run(email_agent, report.markdown_report)

@@ -7,6 +7,25 @@ import os
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
 
+def _patch_response_text_delta_logprobs() -> None:
+    import openai.types.responses.response_text_delta_event as rde
+    from pydantic import Field
+
+    if getattr(rde, "_deep_research_logprobs_patched", False):
+        return
+
+    class ResponseTextDeltaEventCompat(rde.ResponseTextDeltaEvent):
+        logprobs: list[rde.Logprob] = Field(default_factory=list)
+
+    rde.ResponseTextDeltaEvent = ResponseTextDeltaEventCompat
+    import openai.types.responses as responses_pkg
+
+    responses_pkg.ResponseTextDeltaEvent = ResponseTextDeltaEventCompat
+    rde._deep_research_logprobs_patched = True
+
+
+_patch_response_text_delta_logprobs()
+
 from agents import OpenAIChatCompletionsModel, set_tracing_disabled
 
 load_dotenv(override=True)
