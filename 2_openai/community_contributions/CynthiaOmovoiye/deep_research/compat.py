@@ -1,9 +1,4 @@
-"""Route LLM calls through OpenRouter when OPENROUTER_API_KEY is set.
-
-The Agents SDK defaults to the OpenAI Responses API. OpenRouter is built around
-Chat Completions; using the default path with an OpenRouter key often yields
-401 from OpenAI. We use OpenAIChatCompletionsModel + AsyncOpenAI for OpenRouter.
-"""
+"""OpenRouter vs OpenAI model routing for the Agents SDK."""
 
 from __future__ import annotations
 
