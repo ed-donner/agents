@@ -5,7 +5,7 @@ from datetime import datetime
 from agents import Agent
 
 from ares_schema import ResearchFinding
-from ares_tools import travily_web_search
+from ares_tools import tavily_web_search
 
 
 def get_recent_period() -> str:
@@ -31,7 +31,7 @@ The current date is {RECENT_PERIOD}.
 
 ### YOUR WORKFLOW:
 1. You will receive a research task with a title, query, and goal.
-2. Use the travily_web_search tool to search for relevant information.
+2. Use the tavily_web_search tool to search for relevant information.
 3. Always append "{RECENT_PERIOD}" or "latest" to your search queries
    to prioritize the most recent data and sources.
 4. Extract concrete facts, data points, and insights from the results.
@@ -69,6 +69,6 @@ web_specialist_agent = Agent(
     name="Web Specialist Agent",
     instructions=WEB_SPECIALIST_INSTRUCTIONS,
     model="gpt-4o-mini",
-    tools=[travily_web_search],
+    tools=[tavily_web_search],
     output_type=ResearchFinding,
 )

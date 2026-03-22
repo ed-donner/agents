@@ -1,4 +1,4 @@
-"""Tavily web search tool for the ARES Web Specialist agent."""
+"""Tavily web search tool for the ARES research system."""
 
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ def get_travily_client() -> TavilyClient:
 
 
 @function_tool
-def travily_web_search(query: str, max_results: int = 5) -> str:
+def tavily_web_search(query: str, max_results: int = 5) -> str:
     """Search the web using Tavily and return extracted content.
     Args:
         query: The search query to execute.

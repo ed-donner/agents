@@ -27,7 +27,7 @@ AGENT_LABELS = {
 TOOL_LABELS = {
     "Web_Specialist_Agent": ("Researching", "Delegating to Web Specialist..."),
     "Report_Editor_Agent": ("Writing", "Handing off to Report Editor..."),
-    "travily_web_search": ("Searching", "Querying Tavily search engine..."),
+    "tavily_web_search": ("Searching", "Querying Tavily search engine..."),
     "send_email": ("Sending", "Delivering email via Resend..."),
 }
 
