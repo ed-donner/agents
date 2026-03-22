@@ -1,7 +1,7 @@
 from langchain_core.messages import SystemMessage, HumanMessage
 from pydantic import BaseModel, Field
 
-from prompts import SYSTEM_PROMPT, USER_PROMPT
+from .prompts import SYSTEM_PROMPT, USER_PROMPT
 from job_search.state import State
 from job_search.config import get_llm, INPUT_GUARDRAILS_ASSISTANT
 
@@ -14,7 +14,7 @@ class InputGuardrails(BaseModel):
     )
 
 
-def input_guardrails_assistant(state: State, **kwargs) -> State:
+def input_guardrails_assistant(state: State) -> State:
     last_message = state["messages"][-1].content
 
     system_message = SYSTEM_PROMPT
@@ -33,7 +33,7 @@ def input_guardrails_assistant(state: State, **kwargs) -> State:
         HumanMessage(content=user_message),
     ]
 
-    llm = get_llm(**kwargs).with_structured_output(InputGuardrails)
+    llm = get_llm().with_structured_output(InputGuardrails)
     response = llm.invoke(messages)
 
     new_state = {

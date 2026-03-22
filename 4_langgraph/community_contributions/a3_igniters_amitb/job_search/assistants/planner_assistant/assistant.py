@@ -1,18 +1,37 @@
-def jobs_search(query: str):
-    """
-    A search tool to search relevant jobs on online platforms such as Linkedin.
-    Args:
-        query: str, user query defining job search details.
-    Returns:
-        search_results : list, metadata of all matching jobs.
-    """
+from pydantic import BaseModel, Field
+from langchain_core.messages import SystemMessage, HumanMessage
 
-def jobs_filter(search_results: list):
-    """
-    A filter tool to extract only matching results from user preferences.
-    Args:
-        search_results : list, metadata of all matching jobs.
-    Returns:
-        matching_jobs: list, final list of matching jobs.
-    """
-    pass
+from .prompts import SYSTEM_PROMPT
+from job_search.config import get_llm, PLANNER_ASSISTANT
+from job_search.state import State
+from job_search.helper import format_conversation
+
+
+class JobSearchPlan(BaseModel):
+    search_queries: list[str] = Field(description="List of search queries to use when looking for relevant jobs")
+    filters: list[str] = Field(description="List of filters to apply on search results based on user preferences")
+    summary: str = Field(description="Brief summary of the search strategy to pass to the executor")
+
+
+def planner_assistant(state: State) -> State:
+    conversation = format_conversation(state["messages"])
+
+    messages = [
+        SystemMessage(content=SYSTEM_PROMPT),
+        HumanMessage(content=conversation),
+    ]
+
+    llm = get_llm().with_structured_output(JobSearchPlan)
+    response = llm.invoke(messages)
+
+    plan_message = (
+        f"Job search plan:\n"
+        f"Search queries: {response.search_queries}\n"
+        f"Filters: {response.filters}\n"
+        f"Strategy: {response.summary}"
+    )
+
+    return {
+        "messages": [{"role": "assistant", "content": plan_message}],
+        "last_assistant": PLANNER_ASSISTANT,
+    }

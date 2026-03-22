@@ -2,16 +2,16 @@ from typing import Any, Dict
 
 from langchain_core.messages import SystemMessage
 
-from primary_assistant.prompts import (
+from .prompts import (
     SYSTEM_PROMPT as primary_assistant_prompt,
     FEEDBACK_PROMPT as feedback_prompt
 )
-from config import get_llm, PRIMARY_ASSISTANT
-from state import State
-from tools import add_tools
+from job_search.config import get_llm, PRIMARY_ASSISTANT
+from job_search.state import State
+from job_search.tools import add_tools
 
 
-async def primary_assistant(state: State, **kwargs) -> Dict[str, Any]:
+async def primary_assistant(state: State) -> Dict[str, Any]:
     """
     The primary assistant is the main assistant that routes the task to the
     appropriate sub-assistant.
@@ -40,7 +40,7 @@ async def primary_assistant(state: State, **kwargs) -> Dict[str, Any]:
 
     # Invoke the LLM with tools
     _tools = await add_tools()
-    llm = get_llm(**kwargs).bind_tools(_tools)
+    llm = get_llm().bind_tools(_tools)
 
     response = llm.invoke(messages)
 

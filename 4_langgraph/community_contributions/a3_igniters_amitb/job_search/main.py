@@ -4,9 +4,16 @@ from langgraph.checkpoint.memory import MemorySaver
 import uuid
 import asyncio
 
-from tools import add_tools
-from state import State
+from job_search.tools import add_tools
+from job_search.state import State
 from job_search import config
+
+from job_search.assistants.primary_assistant.assistant import primary_assistant
+from job_search.assistants.input_guardrails_assistant.assistant import input_guardrails_assistant
+from job_search.assistants.planner_assistant.assistant import planner_assistant
+from job_search.assistants.executor_assistant.assistant import executor_assistant
+from job_search.assistants.output_guardrails_assistant.assistant import output_guardrails_assistant
+from job_search.assistants.output_manager_assistant.assistant import output_manager_assistant
 
 
 class JobsSearchAssistant:
@@ -56,20 +63,23 @@ class JobsSearchAssistant:
             return "END"
         if state.get("success_criteria_met"):
             return config.OUTPUT_MANAGER_ASSISTANT
-        return config.PRIMARY_ASSISTANT
+        return config.EXECUTOR_ASSISTANT
+
+    async def _executor(self, state, **kwargs):
+        return await executor_assistant(state, self.tools, **kwargs)
 
     async def build_graph(self):
         # Set up Graph Builder with State
         graph_builder = StateGraph(State)
 
         # Add nodes
-        graph_builder.add_node(config.PRIMARY_ASSISTANT, self.primary_assistant)
+        graph_builder.add_node(config.PRIMARY_ASSISTANT, primary_assistant)
         graph_builder.add_node("tools", ToolNode(tools=self.tools))
-        graph_builder.add_node(config.INPUT_GUARDRAILS_ASSISTANT, self.input_guardrails_assistant)
-        graph_builder.add_node(config.PLANNER_ASSISTANT, self.planner_assistant)
-        graph_builder.add_node(config.EXECUTOR_ASSISTANT, self.executor_assistant)
-        graph_builder.add_node(config.OUTPUT_GUARDRAILS_ASSISTANT, self.output_guardrails_assistant)
-        graph_builder.add_node(config.OUTPUT_MANAGER_ASSISTANT, self.output_manager_assistant)
+        graph_builder.add_node(config.INPUT_GUARDRAILS_ASSISTANT, input_guardrails_assistant)
+        graph_builder.add_node(config.PLANNER_ASSISTANT, planner_assistant)
+        graph_builder.add_node(config.EXECUTOR_ASSISTANT, self._executor)
+        graph_builder.add_node(config.OUTPUT_GUARDRAILS_ASSISTANT, output_guardrails_assistant)
+        graph_builder.add_node(config.OUTPUT_MANAGER_ASSISTANT, output_manager_assistant)
 
         # Add edges
         # START -> Primary (router in diagram)
@@ -143,12 +153,46 @@ class JobsSearchAssistant:
             "feedback": None,
             "success_criteria_met": False,
             "user_input_needed": False,
+            "executor_output": None,
         }
-        result = await self.graph.ainvoke(state, config=graph_config)
-        user = {"role": "user", "content": message}
-        reply = {"role": "assistant", "content": result["messages"][-2].content}
-        feedback = {"role": "assistant", "content": result["messages"][-1].content}
-        return history + [user, reply, feedback]
+
+        print(f"\n{'='*60}")
+        print(f"User: {message}")
+        print(f"{'='*60}")
+
+        async for event in self.graph.astream(state, config=graph_config, stream_mode="updates"):
+            for node_name, node_update in event.items():
+                if node_name == "__start__":
+                    continue
+                print(f"\n[{node_name}]")
+                for msg in node_update.get("messages", []):
+                    content = (
+                        getattr(msg, "content", None)
+                        or (msg.get("content") if isinstance(msg, dict) else None)
+                    )
+                    if content:
+                        print(f"  {content}")
+                for key in ("feedback", "success_criteria_met", "user_input_needed", "last_assistant"):
+                    if key in node_update:
+                        print(f"  {key}: {node_update[key]}")
+
+        final_state = (await self.graph.aget_state(graph_config)).values
+        last_assistant = final_state.get("last_assistant")
+        user_input_needed = final_state.get("user_input_needed", False)
+
+        if last_assistant == config.OUTPUT_MANAGER_ASSISTANT:
+            reply_content = final_state["messages"][-1].content
+        elif user_input_needed:
+            reply_content = final_state.get("feedback", "Could you please provide more details?")
+        else:
+            reply_content = final_state["messages"][-1].content
+
+        print(f"\n[reply to user]\n  {reply_content}")
+        print(f"{'='*60}\n")
+
+        user_msg = {"role": "user", "content": message}
+        reply_msg = {"role": "assistant", "content": reply_content}
+        return history + [user_msg, reply_msg]
 
     def cleanup(self):
         if self.browser:

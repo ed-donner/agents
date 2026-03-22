@@ -9,3 +9,4 @@ class State(TypedDict):
     last_assistant: str
     success_criteria_met: bool
     user_input_needed: bool
+    executor_output: Optional[str]
