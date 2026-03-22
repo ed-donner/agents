@@ -1,4 +1,4 @@
-from agents import Runner, trace, gen_trace_id, OutputGuardrailTripwireTriggered
+from agents import Runner, trace, gen_trace_id, OutputGuardrailTripwireTriggered, InputGuardrailTripwireTriggered
 from search_agent import search_agent
 from planner_agent import planner_agent, WebSearchItem, WebSearchPlan
 from writer_agent import writer_agent, ReportData
@@ -14,9 +14,23 @@ class ResearchManager:
         with trace("Research trace", trace_id=trace_id):
             print(f"View trace: https://platform.openai.com/traces/trace?trace_id={trace_id}")
             yield f"View trace: https://platform.openai.com/traces/trace?trace_id={trace_id}"
-            print("Starting research...")
-            search_plan = await self.plan_searches(query)
-            yield "Searches planned, starting to search..."     
+
+            print("Checking research topic appropriateness and starting research...")
+            yield "Checking research topic appropriateness..."
+
+            try:
+                search_plan = await self.plan_searches(query)
+            except InputGuardrailTripwireTriggered as e:
+                # Input guardrail blocked the research topic
+                guardrail_info = e.guardrail_output_info
+                error_msg = f"**Research topic blocked**: {guardrail_info.get('reason', 'Topic is inappropriate')}\n\n**Category**: {guardrail_info.get('category', 'Unknown')}\n\nPlease provide a different research topic that is appropriate..."
+                print(f"Input guardrail blocked: {guardrail_info.get('reason')}")
+                yield error_msg
+                return
+
+            print("Topic approved. Starting research...")
+            yield "Topic approved. Starting research..."
+            yield "Searches planned, starting to search..."
             search_results = await self.perform_searches(search_plan)
             yield "Searches complete, writing report..."
             report = await self.write_report(query, search_results)
@@ -96,6 +110,7 @@ class ResearchManager:
         """ Generate clarification questions based on the user's research topic """
         print("Generating clarification questions...")
         input = f"Analyze this research query and generate 3 clarifying questions that would help refine the research: {query}"
+
         try: 
             questions = await Runner.run(
                 clarifying_agent,
@@ -103,6 +118,12 @@ class ResearchManager:
             )
             print("Generated clarification questions")
             return questions.final_output
+        except InputGuardrailTripwireTriggered as e:
+            # Input guardrail blocked the research topic
+            guardrail_info = e.guardrail_output_info
+            error_msg = f"**Research topic blocked**: {guardrail_info.get('reason', 'Topic is inappropriate')}\n\n**Category**: {guardrail_info.get('category', 'Unknown')}\n\nPlease provide a different research topic."
+            print(f"Input guardrail blocked clarifying questions: {guardrail_info.get('reason')}")
+            return error_msg
         except Exception as e:
             print(f"Error generating questions: {e}")
             return ""

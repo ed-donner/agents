@@ -1,4 +1,5 @@
 from agents import Agent
+from input_guardrail_agent import guardrail_research_topic
 
 INSTRUCTIONS = ("""
   You are a request clarifying agent. When given a research query, generate a concise list of targeted clarification questions to better define the user's intent.
@@ -27,4 +28,5 @@ clarifying_agent = Agent(
     instructions=INSTRUCTIONS,
     model="gpt-4o-mini",
     output_type=str,
+    input_guardrails=[guardrail_research_topic]
 )

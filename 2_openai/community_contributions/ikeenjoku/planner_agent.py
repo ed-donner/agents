@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from agents import Agent
+from input_guardrail_agent import guardrail_research_topic
 
 HOW_MANY_SEARCHES = 5
 
@@ -20,4 +21,5 @@ planner_agent = Agent(
     instructions=INSTRUCTIONS,
     model="gpt-4o-mini",
     output_type=WebSearchPlan,
+    input_guardrails=[guardrail_research_topic]
 )
