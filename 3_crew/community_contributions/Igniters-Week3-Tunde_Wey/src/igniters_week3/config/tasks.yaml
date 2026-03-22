@@ -1,0 +1,45 @@
+research_lesson_topic:
+  description: >
+    Research how to teach: {topic}.
+    Audience: {audience}. Level: {level}. Target session length: ~{duration_minutes} minutes.
+
+    Produce structured notes with:
+    1. 3-5 measurable learning objectives
+    2. What learners probably already know vs gaps
+    3. 3-5 common misconceptions to address
+    4. Suggested sequence of concepts (bullet outline with rough minute estimates)
+    5. One idea for a short hands-on exercise tied to {topic}
+  expected_output: >
+    Markdown research notes the lesson author can follow directly (no full lesson yet).
+  agent: curriculum_researcher
+  output_file: output/research_notes.md
+
+write_lesson_plan:
+  description: >
+    Using the research notes, write a complete single-session lesson plan for {topic}.
+    Audience: {audience}. Level: {level}. Aim for ~{duration_minutes} minutes wall-clock.
+
+    Include: title, objectives, materials (if any), timed agenda, teaching script bullets,
+    the hands-on activity with instructions, a 5-minute check-for-understanding,
+    and optional take-home practice.
+  expected_output: >
+    A polished lesson plan in markdown, ready for a first draft read-through.
+  agent: lesson_author
+  context:
+    - research_lesson_topic
+  output_file: output/lesson_draft.md
+
+critique_and_finalize:
+  description: >
+    Read the draft lesson plan in light of the original research goals for {topic}
+    (audience {audience}, level {level}, ~{duration_minutes} min).
+
+    Fix pacing, clarity, and pedagogy. Ensure objectives match activities.
+    At the end, add a section "## Critic summary" with 5-8 bullets of what you changed and why.
+  expected_output: >
+    Final markdown lesson plan suitable to hand to an instructor, including "## Critic summary".
+  agent: pedagogy_critic
+  context:
+    - research_lesson_topic
+    - write_lesson_plan
+  output_file: output/lesson_final.md
