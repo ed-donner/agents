@@ -12,13 +12,29 @@ from nodes.markdown_writer import MarkdownWriterNode
 from nodes.pdf_writer import PDFWriterNode
 from nodes.notifier import NotifierNode
 
+# Node names
+NODE_RESEARCHER = "researcher"
+NODE_CURRICULUM_BUILDER = "curriculum_builder"
+NODE_EVALUATOR = "evaluator"
+NODE_MARKDOWN_WRITER = "markdown_writer"
+NODE_PDF_WRITER = "pdf_writer"
+NODE_NOTIFIER = "notifier"
+
+# Route names
+ROUTE_REVISION = "revision"
+ROUTE_APPROVED = "approved"
+
+# Defaults
+DEFAULT_MODEL = "gpt-4o-mini"
+DEFAULT_THREAD_ID = "default"
+
 
 class LearningPlannerGraph:
     """
     LangGraph-based Learning Path Generator.
     """
     
-    def __init__(self, model: str = "gpt-4o-mini"):
+    def __init__(self, model: str = DEFAULT_MODEL):
         self.model = model
         self.graph = None
         self.memory = MemorySaver()
@@ -39,48 +55,42 @@ class LearningPlannerGraph:
         builder = StateGraph(State)
         
         # Add nodes
-        builder.add_node("researcher", researcher.execute)
-        builder.add_node("curriculum_builder", curriculum_builder.execute)
-        builder.add_node("evaluator", evaluator.execute)
-        builder.add_node("markdown_writer", markdown_writer.execute)
-        builder.add_node("pdf_writer", pdf_writer.execute)
-        builder.add_node("notifier", notifier.execute)
+        builder.add_node(NODE_RESEARCHER, researcher.execute)
+        builder.add_node(NODE_CURRICULUM_BUILDER, curriculum_builder.execute)
+        builder.add_node(NODE_EVALUATOR, evaluator.execute)
+        builder.add_node(NODE_MARKDOWN_WRITER, markdown_writer.execute)
+        builder.add_node(NODE_PDF_WRITER, pdf_writer.execute)
+        builder.add_node(NODE_NOTIFIER, notifier.execute)
         
-        # Add edges
-        builder.add_edge(START, "researcher")
-        builder.add_edge("researcher", "curriculum_builder")
-        builder.add_edge("curriculum_builder", "evaluator")
-        
-        # Conditional edge from evaluator
+        builder.add_edge(START, NODE_RESEARCHER)
+        builder.add_edge(NODE_RESEARCHER, NODE_CURRICULUM_BUILDER)
+        builder.add_edge(NODE_CURRICULUM_BUILDER, NODE_EVALUATOR)
+
         builder.add_conditional_edges(
-            "evaluator",
+            NODE_EVALUATOR,
             self._route_after_evaluation,
             {
-                "revision": "curriculum_builder",
-                "approved": "markdown_writer",
+                ROUTE_REVISION: NODE_CURRICULUM_BUILDER,
+                ROUTE_APPROVED: NODE_MARKDOWN_WRITER,
             }
         )
-        
-        # Continue to writers and notifier
-        builder.add_edge("markdown_writer", "pdf_writer")
-        builder.add_edge("pdf_writer", "notifier")
-        builder.add_edge("notifier", END)
-        
-        # Compile with memory
+        builder.add_edge(NODE_MARKDOWN_WRITER, NODE_PDF_WRITER)
+        builder.add_edge(NODE_PDF_WRITER, NODE_NOTIFIER)
+        builder.add_edge(NODE_NOTIFIER, END)
         self.graph = builder.compile(checkpointer=self.memory)
     
     def _route_after_evaluation(self, state: State) -> str:
         """Route based on evaluation result."""
         if state.get("is_complete", False):
-            return "approved"
+            return ROUTE_APPROVED
         
         if state.get("needs_user_input", False):
-            return "approved"
+            return ROUTE_APPROVED
         
-        return "revision"
+        return ROUTE_REVISION
     
     def run(self, topic: str, skill_level: str, time_commitment: str, 
-            user_email: str = "", thread_id: str = "default") -> State:
+            user_email: str = "", thread_id: str = DEFAULT_THREAD_ID) -> State:
         """Run the learning path generator."""
         
         initial_state = {
@@ -105,7 +115,6 @@ class LearningPlannerGraph:
         
         config = {"configurable": {"thread_id": thread_id}}
         result = self.graph.invoke(initial_state, config=config)
-        
         return result
     
     def get_graph_image(self):

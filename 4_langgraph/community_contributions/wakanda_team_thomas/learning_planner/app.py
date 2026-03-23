@@ -96,7 +96,7 @@ with gr.Blocks(
         outputs=[research_output, curriculum_output, eval_output, output_status, run_btn]
     )
     
-    gr.Markdown("""**Wakanda Team Thomas**""")
+    gr.Markdown("""**Design by M.T.Gasmyr**""")
 
 
 if __name__ == "__main__":

@@ -129,4 +129,4 @@ The generator creates:
 
 ## Team
 
-**Wakanda Team Thomas**
+**Design by M.T.Gasmyr**
