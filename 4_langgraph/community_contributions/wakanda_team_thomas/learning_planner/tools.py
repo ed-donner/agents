@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 from langchain_community.utilities.wikipedia import WikipediaAPIWrapper
 from langchain_community.tools.wikipedia.tool import WikipediaQueryRun
-from langchain_community.tools.tavily_search import TavilySearchResults
+from langchain_tavily import TavilySearch
 from langchain.agents import Tool
 from dotenv import load_dotenv
 
@@ -24,11 +24,9 @@ def get_wikipedia_tool():
 
 def get_search_tool():
     """Create and return the Tavily web search tool."""
-    search_tool = TavilySearchResults(
+    search_tool = TavilySearch(
         max_results=5,
-        search_depth="advanced",
-        include_answer=True,
-        include_raw_content=False,
+        topic="general",
     )
     return search_tool
 

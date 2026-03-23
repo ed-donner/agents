@@ -1,94 +1,138 @@
 """
 Gradio UI for the Learning Path Generator.
-Tool testing mode - testing each tool as we build.
+Tool testing mode - testing each node as we build.
 """
 
 import sys
 sys.stdout.reconfigure(line_buffering=True)
 
 import gradio as gr
-from tools import send_email_with_pdf, create_email_body, SANDBOX_DIR
+from nodes.researcher import ResearcherNode
+from nodes.curriculum_builder import CurriculumBuilderNode
+from nodes.evaluator import EvaluatorNode
 
-print("Starting Learning Planner - Tool Testing...")
+print("Starting Learning Planner - Node Testing...")
+
+researcher = ResearcherNode()
+curriculum_builder = CurriculumBuilderNode()
+evaluator = EvaluatorNode()
 
 
-def test_email_notifier(to_email: str, topic: str, pdf_filename: str) -> str:
-    """Test the email notifier tool."""
-    if not to_email.strip():
-        return "Please enter an email address."
+def test_full_chain(
+    topic: str,
+    skill_level: str,
+    time_commitment: str,
+) -> tuple[str, str, str]:
+    """Test the full chain: Researcher → Curriculum Builder → Evaluator."""
     if not topic.strip():
-        return "Please enter a topic."
-    if not pdf_filename.strip():
-        return "Please enter a PDF filename."
+        return "Please enter a topic.", "", ""
     
-    if not pdf_filename.endswith(".pdf"):
-        pdf_filename = f"{pdf_filename}.pdf"
+    state = {
+        "topic": topic,
+        "current_skill_level": skill_level,
+        "time_commitment": time_commitment,
+        "messages": [],
+        "prerequisites": [],
+        "key_concepts": [],
+        "research_summary": "",
+        "curriculum": None,
+        "evaluation_feedback": None,
+        "is_complete": False,
+        "needs_user_input": False,
+    }
     
-    pdf_path = SANDBOX_DIR / pdf_filename
+    research_result = researcher.execute(state)
+    state["prerequisites"] = research_result["prerequisites"]
+    state["key_concepts"] = research_result["key_concepts"]
+    state["research_summary"] = research_result["research_summary"]
     
-    if not pdf_path.exists():
-        return f"Error: PDF file not found at {pdf_path}. Generate a PDF first."
+    curriculum_result = curriculum_builder.execute(state)
+    state["curriculum"] = curriculum_result["curriculum"]
     
-    email_body = create_email_body(topic, total_phases=5, total_days=14)
-    subject = f"Your Learning Path for {topic} is Ready!"
+    eval_result = evaluator.execute(state)
     
-    result = send_email_with_pdf(
-        to_email=to_email,
-        subject=subject,
-        body_html=email_body,
-        pdf_path=str(pdf_path),
-    )
-    return result
+    research_output = f"""**Prerequisites:**
+{chr(10).join([f"- {p}" for p in state["prerequisites"]])}
+
+**Key Concepts:**
+{chr(10).join([f"- {c}" for c in state["key_concepts"]])}
+"""
+
+    curriculum = state["curriculum"]
+    curriculum_output = f"""## {topic} Learning Path
+
+**Overview:** {curriculum.overview}
+
+**Duration:** {curriculum.total_estimated_days} days
+
+---
+
+"""
+    for m in curriculum.milestones:
+        curriculum_output += f"""### Phase {m.phase_number}: {m.title}
+**Goal:** {m.goal}
+
+{m.description}
+
+**Resources:**
+"""
+        for r in m.resources:
+            curriculum_output += f"- [{r.title}]({r.url}) ({r.type})\n"
+        
+        if m.project_idea:
+            curriculum_output += f"\n**Project:** {m.project_idea}\n"
+        curriculum_output += f"\n*Duration: {m.estimated_days} days*\n\n---\n\n"
+
+    status_icon = "✅" if eval_result["is_complete"] else "⚠️"
+    eval_output = f"""{status_icon} **Status:** {"Approved" if eval_result["is_complete"] else "Needs Revision"}
+
+**Feedback:**
+{eval_result["evaluation_feedback"]}
+
+**Needs User Input:** {"Yes" if eval_result["needs_user_input"] else "No"}
+"""
+
+    return research_output, curriculum_output, eval_output
 
 
-def list_available_pdfs() -> str:
-    """List PDF files in the sandbox directory."""
-    SANDBOX_DIR.mkdir(exist_ok=True)
-    pdfs = list(SANDBOX_DIR.glob("*.pdf"))
-    if not pdfs:
-        return "No PDF files found. Generate a PDF first using the PDF Generator."
-    return "\n".join([f"- {p.name}" for p in pdfs])
-
-
-with gr.Blocks(title="Learning Planner - Tool Testing") as ui:
-    gr.Markdown("## Tool Testing: Email Notifier (Resend)")
-    gr.Markdown("Send a learning path PDF to an email address.")
+with gr.Blocks(title="Learning Planner - Node Testing") as ui:
+    gr.Markdown("## Node Testing: Full Chain")
+    gr.Markdown("Researcher → Curriculum Builder → Evaluator")
     
-    with gr.Row():
-        available_pdfs = gr.Textbox(
-            label="Available PDFs in sandbox",
-            value=list_available_pdfs(),
-            interactive=False,
-            lines=3
-        )
-    
-    with gr.Row():
-        email_input = gr.Textbox(
-            label="Recipient Email",
-            placeholder="e.g., user@example.com"
-        )
     with gr.Row():
         topic_input = gr.Textbox(
             label="Topic",
-            placeholder="e.g., Kubernetes, LangGraph"
+            placeholder="e.g., LangGraph, Kubernetes, Machine Learning"
         )
     with gr.Row():
-        pdf_input = gr.Textbox(
-            label="PDF Filename",
-            placeholder="e.g., learning_path (from sandbox directory)"
-        )
+        with gr.Column():
+            skill_level = gr.Dropdown(
+                label="Current Skill Level",
+                choices=["none", "beginner", "intermediate", "advanced"],
+                value="beginner"
+            )
+        with gr.Column():
+            time_commitment = gr.Dropdown(
+                label="Time Commitment",
+                choices=["30min/day", "1hr/day", "2hr/day", "weekends"],
+                value="1hr/day"
+            )
     with gr.Row():
-        send_btn = gr.Button("Send Email", variant="primary")
-        refresh_btn = gr.Button("Refresh PDF List")
-    with gr.Row():
-        email_result = gr.Textbox(label="Result", lines=3)
+        run_btn = gr.Button("Generate & Evaluate", variant="primary")
     
-    send_btn.click(
-        test_email_notifier,
-        inputs=[email_input, topic_input, pdf_input],
-        outputs=[email_result]
+    with gr.Row():
+        with gr.Column(scale=1):
+            research_output = gr.Markdown(label="Research")
+        with gr.Column(scale=2):
+            curriculum_output = gr.Markdown(label="Curriculum")
+        with gr.Column(scale=1):
+            eval_output = gr.Markdown(label="Evaluation")
+    
+    run_btn.click(
+        test_full_chain,
+        inputs=[topic_input, skill_level, time_commitment],
+        outputs=[research_output, curriculum_output, eval_output]
     )
-    refresh_btn.click(list_available_pdfs, outputs=[available_pdfs])
 
 
 if __name__ == "__main__":
