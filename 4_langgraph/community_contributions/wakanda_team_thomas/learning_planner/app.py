@@ -7,69 +7,42 @@ import sys
 sys.stdout.reconfigure(line_buffering=True)
 
 import gradio as gr
-from tools import get_wikipedia_tool, get_search_tool
+from tools import generate_pdf_from_markdown
 
 print("Starting Learning Planner - Tool Testing...")
 
 
-wiki_tool = get_wikipedia_tool()
-search_tool = get_search_tool()
-
-
-def test_wikipedia(query: str) -> str:
-    """Test the Wikipedia tool with a query."""
-    if not query.strip():
-        return "Please enter a search query."
-    result = wiki_tool.invoke(query)
+def test_pdf_generator(filename: str, content: str) -> str:
+    """Test the PDF generator tool."""
+    if not filename.strip():
+        return "Please enter a filename."
+    if not content.strip():
+        return "Please enter markdown content."
+    result = generate_pdf_from_markdown(content, filename)
     return result
 
 
-def test_web_search(query: str) -> str:
-    """Test the web search tool with a query."""
-    if not query.strip():
-        return "Please enter a search query."
-    results = search_tool.invoke(query)
-    
-    output = []
-    for r in results:
-        output.append(f"**{r.get('title', 'No title')}**")
-        output.append(f"URL: {r.get('url', 'N/A')}")
-        output.append(f"{r.get('content', 'No content')}")
-        output.append("-" * 50)
-    
-    return "\n\n".join(output) if output else "No results found."
-
-
 with gr.Blocks(title="Learning Planner - Tool Testing") as ui:
-    gr.Markdown("## Tool Testing")
+    gr.Markdown("## Tool Testing: PDF Generator")
+    gr.Markdown("Convert markdown content to a styled PDF file.")
     
-    with gr.Tab("Wikipedia"):
-        gr.Markdown("Search Wikipedia for topic overviews.")
-        with gr.Row():
-            wiki_query = gr.Textbox(
-                label="Search Query",
-                placeholder="e.g., LangGraph, Machine Learning, Kubernetes"
-            )
-        with gr.Row():
-            wiki_btn = gr.Button("Search Wikipedia", variant="primary")
-        with gr.Row():
-            wiki_result = gr.Textbox(label="Result", lines=15, show_copy_button=True)
-        wiki_btn.click(test_wikipedia, inputs=[wiki_query], outputs=[wiki_result])
-        wiki_query.submit(test_wikipedia, inputs=[wiki_query], outputs=[wiki_result])
+    with gr.Row():
+        pdf_name = gr.Textbox(
+            label="Filename",
+            placeholder="e.g., learning_path (will add .pdf extension)"
+        )
+    with gr.Row():
+        pdf_content = gr.Textbox(
+            label="Markdown Content",
+            placeholder="# My Learning Path\n\n## Phase 1\n\n- Item 1\n- Item 2",
+            lines=12
+        )
+    with gr.Row():
+        pdf_btn = gr.Button("Generate PDF", variant="primary")
+    with gr.Row():
+        pdf_result = gr.Textbox(label="Result", lines=3)
     
-    with gr.Tab("Web Search"):
-        gr.Markdown("Search the web for current information.")
-        with gr.Row():
-            search_query = gr.Textbox(
-                label="Search Query",
-                placeholder="e.g., LangGraph tutorial 2024, Kubernetes roadmap"
-            )
-        with gr.Row():
-            search_btn = gr.Button("Search Web", variant="primary")
-        with gr.Row():
-            search_result = gr.Textbox(label="Result", lines=15, show_copy_button=True)
-        search_btn.click(test_web_search, inputs=[search_query], outputs=[search_result])
-        search_query.submit(test_web_search, inputs=[search_query], outputs=[search_result])
+    pdf_btn.click(test_pdf_generator, inputs=[pdf_name, pdf_content], outputs=[pdf_result])
 
 
 if __name__ == "__main__":
