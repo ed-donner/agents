@@ -9,13 +9,12 @@ async def setup():
     return sidekick
 
 
-# ✅ UPDATED: now returns tool logs too
+
 async def process_message(sidekick, message, success_criteria, history):
     updated_history, tool_logs = await sidekick.run_superstep(
         message, success_criteria, history
     )
 
-    # ✅ Format tool logs nicely
     tool_text = "### 🛠 Tool Execution Logs\n\n"
 
     for log in tool_logs:
@@ -51,7 +50,6 @@ with gr.Blocks(title="Sidekick", theme=gr.themes.Default(primary_hue="emerald"))
     with gr.Row():
         chatbot = gr.Chatbot(label="Sidekick", height=300, type="messages")
 
-    # ✅ NEW: Tool logs panel
     with gr.Row():
         tool_logs = gr.Markdown("### 🛠 Tool Execution Logs")
 
@@ -72,7 +70,6 @@ with gr.Blocks(title="Sidekick", theme=gr.themes.Default(primary_hue="emerald"))
 
     ui.load(setup, [], [sidekick])
 
-    # ✅ UPDATED: now outputs tool logs
     message.submit(
         process_message,
         [sidekick, message, success_criteria, chatbot],

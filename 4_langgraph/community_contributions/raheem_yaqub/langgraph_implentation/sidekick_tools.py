@@ -1,7 +1,4 @@
 
-# UPDATED SIDEKICK_TOOLS.PY
-# Changes marked with: ### NEW ###
-
 from playwright.async_api import async_playwright
 from langchain_community.agent_toolkits import PlayWrightBrowserToolkit
 from dotenv import load_dotenv
@@ -13,7 +10,7 @@ from langchain_community.tools.wikipedia.tool import WikipediaQueryRun
 from langchain_experimental.tools import PythonREPLTool
 from langchain_community.utilities import GoogleSerperAPIWrapper
 from langchain_community.utilities.wikipedia import WikipediaAPIWrapper
-import sqlite3   ### NEW ###
+import sqlite3   
 
 load_dotenv(override=True)
 
@@ -45,13 +42,9 @@ def get_file_tools():
     toolkit = FileManagementToolkit(root_dir="sandbox")
     return toolkit.get_tools()
 
-
-# ### NEW: Custom Report Tool ###
 def generate_sql_report(query: str):
     return f"[REPORT GENERATED]: {query}"
 
-
-# ### NEW: Simple SQL Query Tool ###
 def query_memory_db(query: str):
     try:
         conn = sqlite3.connect("memory.db")
@@ -84,7 +77,6 @@ async def other_tools():
 
     python_repl = PythonREPLTool()
 
-    # ### NEW: Add custom tools ###
     report_tool = Tool(
         name="generate_report",
         func=generate_sql_report,
