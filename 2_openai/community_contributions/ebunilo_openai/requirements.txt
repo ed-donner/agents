@@ -4,6 +4,7 @@ appnope==0.1.4
 asttokens==3.0.1
 attrs==26.1.0
 certifi==2026.2.25
+tiktoken>=0.7.0
 cffi==2.0.0
 charset-normalizer==3.4.6
 click==8.3.1
