@@ -148,3 +148,88 @@ def generate_pdf_from_markdown(markdown_content: str, filename: str) -> str:
     HTML(string=styled_html).write_pdf(filepath, stylesheets=[css])
     
     return f"Successfully generated PDF: {filepath}"
+
+
+def send_email_with_pdf(
+    to_email: str,
+    subject: str,
+    body_html: str,
+    pdf_path: str,
+) -> str:
+    """Send an email with a PDF attachment using Resend API."""
+    import base64
+    import requests
+    
+    resend_api_key = os.getenv("RESEND_API_KEY")
+    from_email = os.getenv("RESEND_FROM_EMAIL", "Learning Planner <onboarding@resend.dev>")
+    
+    if not resend_api_key:
+        return "Error: RESEND_API_KEY not found in environment variables"
+    
+    pdf_file = Path(pdf_path)
+    if not pdf_file.exists():
+        return f"Error: PDF file not found at {pdf_path}"
+    
+    pdf_content = base64.b64encode(pdf_file.read_bytes()).decode("utf-8")
+    
+    payload = {
+        "from": from_email,
+        "to": [to_email],
+        "subject": subject,
+        "html": body_html,
+        "attachments": [
+            {
+                "filename": pdf_file.name,
+                "content": pdf_content,
+            }
+        ]
+    }
+    
+    response = requests.post(
+        "https://api.resend.com/emails",
+        headers={
+            "Authorization": f"Bearer {resend_api_key}",
+            "Content-Type": "application/json"
+        },
+        json=payload
+    )
+    
+    if response.status_code == 200:
+        return f"Successfully sent email to {to_email} with {pdf_file.name} attached"
+    else:
+        return f"Error sending email: {response.status_code} - {response.text}"
+
+
+def create_email_body(topic: str, total_phases: int, total_days: int) -> str:
+    """Create a styled HTML email body for the learning path notification."""
+    return f"""
+    <html>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h1 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">
+                Your Learning Path is Ready!
+            </h1>
+            
+            <p>Hi,</p>
+            
+            <p>Your personalized learning path for <strong>{topic}</strong> has been generated.</p>
+            
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                <h3 style="color: #34495e; margin-top: 0;">Key Highlights:</h3>
+                <ul>
+                    <li><strong>{total_phases}</strong> phases covering prerequisites to advanced topics</li>
+                    <li>Estimated completion: <strong>{total_days} days</strong></li>
+                    <li>Includes hands-on projects for each phase</li>
+                </ul>
+            </div>
+            
+            <p>The full learning path is attached as a PDF document.</p>
+            
+            <p style="color: #7f8c8d; font-size: 14px; margin-top: 30px;">
+                Happy learning!<br>
+                <em>Learning Path Generator</em>
+            </p>
+        </div>
+    </body>
+    </html>
+    """
