@@ -3,5 +3,4 @@ python-dotenv
 gitpython
 pydantic
 openai-agents
-tree-sitter 
 tree-sitter-languages

@@ -10,10 +10,10 @@ async def run(query: str):
 with gr.Blocks(theme=gr.themes.Default(primary_hue="sky")) as ui:
     gr.Markdown("# Code Review and Refactor")
     query_textbox = gr.Textbox(label="What is the code you want to review and refactor?", placeholder="Type or paste the repository URL or local directory path")
-    review_and_refactor_btn = gr.Button("Review and Refactor", variant="primary")
+    review_btn = gr.Button("Review and Refactor", variant="primary")
     report = gr.Markdown(label="Report")
 
-    review_and_refactor_btn.click(fn=run, inputs=query_textbox, outputs=report)
+    review_btn.click(fn=run, inputs=query_textbox, outputs=report)
     query_textbox.submit(fn=run, inputs=query_textbox, outputs=report)
 
 ui.launch(inbrowser=True)

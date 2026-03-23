@@ -8,8 +8,6 @@ load_dotenv(override=True)
 
 REPORT_OUTPUT_DIR = os.environ.get("REPORT_OUTPUT_DIR") or "./reports"
 
-# ── write_report_tool ─────────────────────────────────────────────────────────
-
 @function_tool
 def write_report_tool(
     code_map: list,
@@ -19,25 +17,7 @@ def write_report_tool(
     total_files_reviewed: int,
     total_lines_analyzed: int
 ) -> dict:
-    """
-    Compiles all agent findings into a structured Markdown report and writes
-    it to disk. This tool is called exclusively by the Report Compiler Agent.
-
-    Args:
-        code_map: List of file summary dicts from the Code Analysis Agent.
-        bugs: List of bug finding dicts from the Bug Detection Agent.
-        refactor_suggestions: List of suggestion dicts from the Refactor Agent.
-        security_findings: List of vulnerability dicts from the Security Audit Agent.
-        total_files_reviewed: Total number of files that were successfully read.
-        total_lines_analyzed: Total lines of code across all reviewed files.
-
-    Returns:
-        A dict with:
-          - success (bool): Whether the report was written successfully.
-          - report_path (str): Absolute path to the written report file.
-          - executive_summary (str): The plain-text executive summary section.
-          - error (str): Error message if writing failed.
-    """
+    """Compiles all agent findings into a structured Markdown report and writes it to disk."""
     try:
         os.makedirs(REPORT_OUTPUT_DIR, exist_ok=True)
 
@@ -45,7 +25,6 @@ def write_report_tool(
         filename = f"code_review_report_{timestamp}.md"
         report_path = str(Path(REPORT_OUTPUT_DIR) / filename)
 
-        # ── Compute Summary Stats ─────────────────────────────────────────────
         critical_bugs = [b for b in bugs if b.get("severity") == "CRITICAL"]
         high_bugs = [b for b in bugs if b.get("severity") == "HIGH"]
 
@@ -61,7 +40,6 @@ def write_report_tool(
             bugs, refactor_suggestions, security_findings, health_score
         )
 
-        # ── Build Full Report ─────────────────────────────────────────────────
         sections = [
             _header(timestamp),
             executive_summary,
@@ -92,9 +70,7 @@ def write_report_tool(
         }
 
 
-# ── Section Builders ──────────────────────────────────────────────────────────
-
-def _header(timestamp: str) -> str:
+def _header() -> str:
     return (
         f"# Code Review Report\n"
         f"_Generated on {datetime.now().strftime('%B %d, %Y at %H:%M:%S')}_"
@@ -140,7 +116,7 @@ def _bug_section(bugs: list) -> str:
         group = [b for b in bugs if b.get("severity") == severity]
         if not group:
             continue
-        lines.append(f"### {_severity_badge(severity)} {severity} ({len(group)})\n")
+        lines.append(f"### {severity} ({len(group)})\n")
         for bug in group:
             lines.append(
                 f"**File:** `{bug.get('file_path', 'N/A')}` — "
@@ -164,7 +140,7 @@ def _refactor_section(suggestions: list) -> str:
         group = [s for s in suggestions if s.get("priority") == priority]
         if not group:
             continue
-        lines.append(f"### {_priority_badge(priority)} {priority} ({len(group)})\n")
+        lines.append(f"### {priority} ({len(group)})\n")
         for suggestion in group:
             lines.append(
                 f"**File:** `{suggestion.get('file_path', 'N/A')}` — "
@@ -188,7 +164,7 @@ def _security_section(findings: list) -> str:
         group = [f for f in findings if f.get("severity") == severity]
         if not group:
             continue
-        lines.append(f"### {_severity_badge(severity)} {severity} ({len(group)})\n")
+        lines.append(f"### {severity} ({len(group)})\n")
         for finding in group:
             lines.append(
                 f"**File:** `{finding.get('file_path', 'N/A')}` — "
@@ -275,35 +251,8 @@ def _action_plan(
     return "\n".join(lines)
 
 
-# ── Badge Helpers ─────────────────────────────────────────────────────────────
-
-def _severity_badge(severity: str) -> str:
-    badges = {
-        "CRITICAL": "🔴",
-        "HIGH": "🟠",
-        "MEDIUM": "🟡",
-        "LOW": "🔵"
-    }
-    return badges.get(severity, "⚪")
-
-
-def _priority_badge(priority: str) -> str:
-    badges = {
-        "HIGH": "🟠",
-        "MEDIUM": "🟡",
-        "LOW": "🔵"
-    }
-    return badges.get(priority, "⚪")
-
-
-# ── Health Score ──────────────────────────────────────────────────────────────
-
 def _compute_health_score(bugs: list, refactor_suggestions: list, security_findings: list) -> int:
-    """
-    Computes a health score out of 10 based on finding counts and severity.
-    Starts at 10 and deducts points based on issue weight.
-    Score is floored at 0 and rounded to the nearest integer.
-    """
+    """Computes a health score out of 10 based on finding counts and severity."""
     score = 10.0
 
     severity_deductions = {"CRITICAL": 2.0, "HIGH": 1.0, "MEDIUM": 0.4, "LOW": 0.1}
@@ -312,8 +261,7 @@ def _compute_health_score(bugs: list, refactor_suggestions: list, security_findi
     for bug in bugs:
         score -= severity_deductions.get(bug.get("severity", "LOW"), 0.1)
 
-    for finding in security_findings:
-        # Security findings carry 1.5x weight
+    for finding in security_findings:   
         score -= severity_deductions.get(finding.get("severity", "LOW"), 0.1) * 1.5
 
     for suggestion in refactor_suggestions:

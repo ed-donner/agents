@@ -1,6 +1,5 @@
 from pydantic import BaseModel, Field
 
-# ── Bug Detection Output Schema ────────────────────────────────────────────────────
 class BugFinding(BaseModel):
     """A bug finding in the codebase"""
     file_path: str = Field(..., description="The file where the bug was found")
@@ -14,14 +13,11 @@ class BugDetectionOutput(BaseModel):
     """A list of bug findings in the codebase"""
     bugs: list[BugFinding] = Field(..., description="A list of bug findings in the codebase")
 
-# ── Bug Detection Guardrail Output
 class BugGuardrailResult(BaseModel):
     """The result of the bug detection guardrail"""
     passed: bool = Field(..., description="Whether the bug detection guardrail passed")
     reason: str = Field(..., description="The reason for the pass or failure")
 
-
-# ── Code Analysis Output Schema ────────────────────────────────────────────────────
 class CodeMap(BaseModel):
     """A structured code map"""
     file_path: str = Field(..., description="The file path")
@@ -41,8 +37,6 @@ class CodeAnalysisOutput(BaseModel):
     """A structured code analysis output"""
     code_map: list[CodeMap] = Field(..., description="A list of code maps")
 
-
-# ── Refactor Suggestion Output Schema ────────────────────────────────────────────────────
 class RefactorSuggestion(BaseModel):
     """A refactor suggestion for the codebase"""
     file_path: str = Field(..., description="The file where the issue was found")
@@ -56,14 +50,11 @@ class RefactorSuggestionOutput(BaseModel):
     """A list of refactor suggestions for the codebase"""
     refactor_suggestions: list[RefactorSuggestion] = Field(..., description="A list of refactor suggestions for the codebase")
 
-
-# ── Report Compiler Output Schema ────────────────────────────────────────────────────
 class ReportCompilerOutput(BaseModel):
+    """A report compiler output"""
     report_path: str = Field(..., description="The path to the generated report")
     executive_summary: str = Field(..., description="The executive summary of the report")
 
-
-# ── Security Audit Output Schema ────────────────────────────────────────────────────
 class SecurityFinding(BaseModel):
     """A security finding in the codebase"""
     file_path: str = Field(..., description="The file where the vulnerability was found")
@@ -77,14 +68,10 @@ class SecurityAuditOutput(BaseModel):
     """A list of security findings in the codebase"""
     security_findings: list[SecurityFinding] = Field(..., description="A list of security findings in the codebase")
 
-# ── Security Audit Guardrail Output
 class SecurityGuardrailResult(BaseModel):
     """The result of the security audit guardrail"""
     passed: bool = Field(..., description="Whether the security audit guardrail passed")
     reason: str = Field(..., description="The reason for the pass or failure")
-
-
-# ── Orchestrator Input Guardrail ─────────────────────────────────────────────
 
 class UserInputAnalysis(BaseModel):
     """The result of the user input analysis"""

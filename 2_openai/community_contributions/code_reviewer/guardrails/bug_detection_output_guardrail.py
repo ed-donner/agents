@@ -1,8 +1,6 @@
 from agents import Agent, output_guardrail, GuardrailFunctionOutput, RunContextWrapper
 from models import BugFinding, BugDetectionOutput, BugGuardrailResult
 
-
-# ── Helper: Collect All Violations ───────────────────────────────────────────
 def collect_violations(bugs: list[BugFinding]) -> list[str]:
     """
     Runs all three behavioural checks against the bug findings list and
@@ -10,20 +8,8 @@ def collect_violations(bugs: list[BugFinding]) -> list[str]:
     """
     violations = []
 
-    # ── Check 1: No Vague Descriptions ───────────────────────────────────────
+    VAGUE_PHRASES = ["this might be a bug", "could be an issue", "may cause problems", "potential issue", "possible bug", "might fail", "unclear", "unknown", "needs review", "not sure"]
 
-    VAGUE_PHRASES = [
-        "this might be a bug",
-        "could be an issue",
-        "may cause problems",
-        "potential issue",
-        "possible bug",
-        "might fail",
-        "unclear",
-        "unknown",
-        "needs review",
-        "not sure",
-    ]
 
     vague_findings = []
     for bug in bugs:
@@ -40,8 +26,6 @@ def collect_violations(bugs: list[BugFinding]) -> list[str]:
             f"{len(vague_findings)} finding(s): {', '.join(vague_findings)}. "
             f"Every description must clearly explain what the bug is and where it occurs."
         )
-
-    # ── Check 2: Severity Inflation ───────────────────────────────────────────
 
     CRITICAL_RATIO_THRESHOLD = 0.40
     MIN_FINDINGS_FOR_RATIO_CHECK = 5
@@ -65,8 +49,6 @@ def collect_violations(bugs: list[BugFinding]) -> list[str]:
                 f"Review severity assignments — not all bugs warrant CRITICAL severity."
             )
 
-    # ── Check 3: Missing Line Numbers ─────────────────────────────────────────
-
     INVALID_LINE_VALUES = {"", "n/a", "unknown", "none", "0", "null", "-"}
 
     missing_line_findings = []
@@ -85,8 +67,6 @@ def collect_violations(bugs: list[BugFinding]) -> list[str]:
     return violations
 
 
-# ── Output Guardrail ──────────────────────────────────────────────────────────
-
 @output_guardrail
 async def bug_detection_guardrail(
     ctx: RunContextWrapper, agent: Agent, output: BugDetectionOutput
@@ -98,12 +78,8 @@ async def bug_detection_guardrail(
       1. No vague or uninformative descriptions.
       2. No severity inflation (too many CRITICAL findings).
       3. No missing or invalid line numbers.
-
-    If any check fails, the tripwire is triggered and the pipeline is halted
-    with a descriptive message listing all violations found.
     """
 
-    # If no bugs were found, skip all checks — an empty list is valid output.
     if not output.bugs:
         return GuardrailFunctionOutput(
             output_info=BugGuardrailResult(

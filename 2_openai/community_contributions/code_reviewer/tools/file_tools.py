@@ -6,8 +6,6 @@ from agents import function_tool
 import git
 
 
-# ── Constants ─────────────────────────────────────────────────────────────────
-
 SUPPORTED_EXTENSIONS = {
     ".py", ".js", ".ts", ".java", ".go", ".rb", ".php",
     ".cs", ".cpp", ".c", ".h", ".rs", ".swift", ".kt"
@@ -24,28 +22,14 @@ IGNORED_FILES = {
     "Pipfile.lock", ".DS_Store", "Thumbs.db"
 }
 
-MAX_FILE_SIZE_BYTES = 1_000_000  # 1MB — skip files larger than this
+MAX_FILE_SIZE_BYTES = 1_000_000
 
-
-# ── clone_repo_tool ───────────────────────────────────────────────────────────
 
 @function_tool
 def clone_repo_tool(github_url: str) -> dict:
     """
-    Clones a public GitHub repository into a temporary directory.
-
-    Args:
-        github_url: The full GitHub repository URL to clone.
-                    Example: https://github.com/username/repo
-
-    Returns:
-        A dict with:
-          - success (bool): Whether the clone succeeded.
-          - repo_dir (str): Absolute path to the cloned repository.
-          - error (str): Error message if the clone failed.
-    """
+Clones a public GitHub repository into a temporary directory."""
     try:
-        # Validate URL format before attempting clone
         if not github_url.startswith("https://github.com"):
             return {
                 "success": False,
@@ -54,7 +38,6 @@ def clone_repo_tool(github_url: str) -> dict:
                          f"URL must start with https://github.com"
             }
 
-        # Create a unique temp directory for this clone
         temp_dir = tempfile.mkdtemp(prefix="code_review_")
 
         git.Repo.clone_from(github_url, temp_dir, depth=1)
@@ -79,31 +62,11 @@ def clone_repo_tool(github_url: str) -> dict:
         }
 
 
-# ── read_files_tool ───────────────────────────────────────────────────────────
-
 @function_tool
 def read_files_tool(repo_dir: str) -> dict:
-    """
-    Recursively walks a directory and reads all supported source files,
-    skipping ignored directories, unsupported file types, and oversized files.
+    """Recursively walks a directory and reads all supported source files,
+    skipping ignored directories, unsupported file types, and oversized files."""
 
-    Args:
-        repo_dir: Absolute path to the root directory of the codebase.
-
-    Returns:
-        A dict with:
-          - success (bool): Whether the read operation succeeded.
-          - files (list[dict]): List of file objects, each containing:
-              - file_path (str): Relative path from repo root.
-              - content (str): Full file content as a string.
-              - line_count (int): Number of lines in the file.
-              - size_bytes (int): File size in bytes.
-          - skipped (list[dict]): Files that were skipped, each with:
-              - file_path (str): Relative path.
-              - reason (str): Why the file was skipped.
-          - total_files_read (int): Total number of files successfully read.
-          - error (str): Error message if the operation failed entirely.
-    """
     try:
         if not os.path.isdir(repo_dir):
             return {
@@ -119,13 +82,11 @@ def read_files_tool(repo_dir: str) -> dict:
         skipped = []
 
         for path in root.rglob("*"):
-            # Skip directories themselves
             if path.is_dir():
                 continue
 
             relative_path = str(path.relative_to(root))
 
-            # Skip ignored directories anywhere in the path
             path_parts = set(path.parts)
             if path_parts & IGNORED_DIRS:
                 skipped.append({
@@ -134,7 +95,6 @@ def read_files_tool(repo_dir: str) -> dict:
                 })
                 continue
 
-            # Skip ignored file names
             if path.name in IGNORED_FILES:
                 skipped.append({
                     "file_path": relative_path,
@@ -142,7 +102,6 @@ def read_files_tool(repo_dir: str) -> dict:
                 })
                 continue
 
-            # Skip unsupported extensions
             if path.suffix.lower() not in SUPPORTED_EXTENSIONS:
                 skipped.append({
                     "file_path": relative_path,
@@ -150,7 +109,6 @@ def read_files_tool(repo_dir: str) -> dict:
                 })
                 continue
 
-            # Skip oversized files
             size_bytes = path.stat().st_size
             if size_bytes > MAX_FILE_SIZE_BYTES:
                 skipped.append({
@@ -159,7 +117,6 @@ def read_files_tool(repo_dir: str) -> dict:
                 })
                 continue
 
-            # Read file content
             try:
                 content = path.read_text(encoding="utf-8", errors="replace")
                 files.append({
@@ -191,24 +148,9 @@ def read_files_tool(repo_dir: str) -> dict:
             "error": f"Unexpected error reading files: {str(e)}"
         }
 
-
-# ── cleanup_repo_tool ─────────────────────────────────────────────────────────
-
 @function_tool
 def cleanup_repo_tool(repo_dir: str) -> dict:
-    """
-    Deletes the temporary directory created by clone_repo_tool after the
-    review pipeline has completed. Always call this at the end of the pipeline
-    to avoid accumulating temp directories on disk.
-
-    Args:
-        repo_dir: Absolute path to the temp directory to delete.
-
-    Returns:
-        A dict with:
-          - success (bool): Whether cleanup succeeded.
-          - error (str): Error message if cleanup failed.
-    """
+    """Deletes the temporary directory created by clone_repo_tool after the review pipeline has completed."""
     try:
         if not os.path.isdir(repo_dir):
             return {
@@ -216,8 +158,6 @@ def cleanup_repo_tool(repo_dir: str) -> dict:
                 "error": f"Directory not found: '{repo_dir}'"
             }
 
-        # Safety check — only delete directories inside the system temp folder
-        # to prevent accidental deletion of important directories
         temp_base = tempfile.gettempdir()
         if not repo_dir.startswith(temp_base):
             return {

@@ -2,8 +2,6 @@ from agents import Agent, input_guardrail, GuardrailFunctionOutput, RunContextWr
 from openai import AsyncOpenAI
 from models import UserInputAnalysis
 import os
-import json
-
 
 client = AsyncOpenAI(
     base_url=os.environ.get("OPENROUTER_BASE_URL"),
@@ -20,7 +18,6 @@ async def validate_user_input(
     Plain conversational input is always allowed through.
     """
 
-    # ── Step 1: Extract plain text ─────────────────────────────────────────────
     if isinstance(input, str):
         raw_text = input
     elif isinstance(input, list):
@@ -33,27 +30,23 @@ async def validate_user_input(
 
     raw_text = raw_text.strip()
 
-    # ── Step 2: LLM extraction ─────────────────────────────────────────────────
     system_prompt = """
 You are an input analyzer for a code review system.
-Your job is to detect whether the user input contains a GitHub URL or a local
-file system path. Extract it if present.
+Detect whether the input contains a GitHub URL or local file path.
 
-Respond ONLY with valid JSON in this exact structure:
+Return JSON only:
 {
   "has_repo_reference": <true|false>,
-  "extracted_value": "<the extracted URL or path, or empty string if none>",
+  "extracted_value": "<URL or path, or empty string>",
   "input_type": "<github_url | local_path | none>",
-  "reason": "<one sentence explanation>"
+  "reason": "<one sentence>"
 }
 
-Rules:
-- Set has_repo_reference to true ONLY if a URL or file path is explicitly present
-- A GitHub URL must start with https://github.com
-- A local path looks like C:\\folder\\repo or /home/user/repo or ./myrepo
-- Conversational messages like "hello", "help me", "what can you do" have
-  has_repo_reference=false and input_type="none"
-- Return only JSON, no markdown, no preamble
+- GitHub URL must start with https://github.com
+- Local path examples: C:\\folder\\repo, /home/user/repo, ./myrepo
+- Extract the value even if surrounded by natural language
+- Conversational messages have has_repo_reference=false and input_type=none
+- Return JSON only, no markdown, no preamble
 """
 
     try:
@@ -76,9 +69,6 @@ Rules:
             tripwire_triggered=False
         )
 
-    # ── Step 3: Apply validation only when a reference was detected ────────────
-
-    # No URL or path in input — plain conversation, always allow through
     if not parsed.has_repo_reference:
         return GuardrailFunctionOutput(
             output_info="No repo reference detected. Passing conversational input through.",
@@ -87,7 +77,6 @@ Rules:
 
     extracted = parsed.extracted_value.strip()
 
-    # GitHub URL detected — validate it
     if parsed.input_type == "github_url":
         is_valid = extracted.startswith("https://github.com")
         return GuardrailFunctionOutput(
@@ -98,7 +87,6 @@ Rules:
             tripwire_triggered=not is_valid
         )
 
-    # Local path detected — validate it exists on disk
     if parsed.input_type == "local_path":
         path_exists = os.path.exists(extracted)
         return GuardrailFunctionOutput(
@@ -109,7 +97,6 @@ Rules:
             tripwire_triggered=not path_exists
         )
 
-    # Fallback — unrecognised type, allow through
     return GuardrailFunctionOutput(
         output_info=f"Unrecognised input type '{parsed.input_type}', passing through.",
         tripwire_triggered=False

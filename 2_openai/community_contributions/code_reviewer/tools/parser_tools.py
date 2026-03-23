@@ -1,16 +1,11 @@
 import ast
-import re
 from agents import function_tool
 from tree_sitter_languages import get_language, get_parser
 
 
-# ── Constants ─────────────────────────────────────────────────────────────────
-
 CHUNK_SIZE_LINES = 300
 CHUNK_OVERLAP_LINES = 10
 
-# Maps file extension to (language_label, tree_sitter_language_name)
-# tree_sitter_language_name must match what tree-sitter-languages expects
 LANGUAGE_MAP = {
     ".py":    ("python",     "python"),
     ".js":    ("javascript", "javascript"),
@@ -28,11 +23,6 @@ LANGUAGE_MAP = {
     ".kt":    ("kotlin",     "kotlin"),
 }
 
-
-# ── Node Query Configs ────────────────────────────────────────────────────────
-# Each language defines tree-sitter node type names for the constructs we want
-# to extract: classes, functions/methods, and import statements.
-# These map directly to the node types in each language's tree-sitter grammar.
 
 LANGUAGE_QUERIES = {
     "python": {
@@ -58,14 +48,14 @@ LANGUAGE_QUERIES = {
         "import":   ["import_declaration"],
     },
     "go": {
-        "class":    ["type_declaration"],      # Go uses structs, not classes
+        "class":    ["type_declaration"],      
         "function": ["function_declaration", "method_declaration"],
         "import":   ["import_declaration"],
     },
     "ruby": {
         "class":    ["class", "module"],
         "function": ["method", "singleton_method"],
-        "import":   ["call"],                  # Ruby uses require/require_relative
+        "import":   ["call"],                 
     },
     "php": {
         "class":    ["class_declaration", "interface_declaration", "trait_declaration"],
@@ -105,30 +95,9 @@ LANGUAGE_QUERIES = {
 }
 
 
-# ── parse_code_tool ───────────────────────────────────────────────────────────
-
 @function_tool
 def parse_code_tool(file_path: str, content: str) -> dict:
-    """
-    Parses a source file and extracts a structured map of its classes,
-    functions, and imports. Supports all languages in LANGUAGE_MAP using
-    tree-sitter. Python files additionally use the built-in ast module
-    for richer type hint and docstring extraction.
-
-    Args:
-        file_path: Relative path of the file (used for language detection).
-        content: Full source code content of the file as a string.
-
-    Returns:
-        A dict with:
-          - file_path (str): The file path as provided.
-          - language (str): Detected language label.
-          - line_count (int): Total number of lines.
-          - classes (list[dict]): Extracted class definitions.
-          - functions (list[dict]): Extracted top-level functions.
-          - imports (list[str]): Extracted import statements as raw strings.
-          - parse_error (str): Error message if parsing failed, else empty string.
-    """
+    """Parses a source file and extracts a structured map of its classes, functions, and imports."""
     extension = "." + file_path.rsplit(".", 1)[-1].lower() if "." in file_path else ""
     language_info = LANGUAGE_MAP.get(extension)
     line_count = len(content.splitlines())
@@ -152,17 +121,13 @@ def parse_code_tool(file_path: str, content: str) -> dict:
 
     language_label, ts_language_name = language_info
 
-    # ── Python: use built-in ast for richer output ────────────────────────────
     if language_label == "python":
         return _parse_python(file_path, content, line_count)
 
-    # ── All Other Languages: use tree-sitter ──────────────────────────────────
     return _parse_with_tree_sitter(
         file_path, content, line_count, language_label, ts_language_name
     )
 
-
-# ── Python Parser (built-in ast) ──────────────────────────────────────────────
 
 def _parse_python(file_path: str, content: str, line_count: int) -> dict:
     """Uses Python's built-in ast module for deep Python-specific parsing."""
@@ -184,7 +149,6 @@ def _parse_python(file_path: str, content: str, line_count: int) -> dict:
         )
         return result
 
-    # Extract imports
     imports = []
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
@@ -201,7 +165,6 @@ def _parse_python(file_path: str, content: str, line_count: int) -> dict:
             )
             imports.append(f"from {module} import {names}")
 
-    # Extract classes
     classes = []
     for node in ast.walk(tree):
         if isinstance(node, ast.ClassDef):
@@ -220,7 +183,6 @@ def _parse_python(file_path: str, content: str, line_count: int) -> dict:
                 "methods": methods
             })
 
-    # Extract top-level functions
     functions = [
         _extract_python_function(node)
         for node in ast.iter_child_nodes(tree)
@@ -260,8 +222,6 @@ def _extract_python_function(node) -> dict:
     }
 
 
-# ── Tree-sitter Parser (all other languages) ──────────────────────────────────
-
 def _parse_with_tree_sitter(
     file_path: str,
     content: str,
@@ -281,7 +241,6 @@ def _parse_with_tree_sitter(
     }
 
     try:
-        language = get_language(ts_language_name)
         parser = get_parser(ts_language_name)
         tree = parser.parse(bytes(content, "utf-8"))
     except Exception as e:
@@ -297,7 +256,6 @@ def _parse_with_tree_sitter(
     functions = []
     imports = []
 
-    # Walk tree and match node types against query config
     def walk(node):
         node_type = node.type
 
@@ -305,7 +263,6 @@ def _parse_with_tree_sitter(
             name = _extract_node_name(node, lines)
             methods = []
 
-            # Walk class body for methods
             for child in node.children:
                 if child.type in queries.get("function", []):
                     methods.append(_extract_ts_function(child, lines))
@@ -315,11 +272,9 @@ def _parse_with_tree_sitter(
                 "base_classes": _extract_base_classes(node, lines, language_label),
                 "methods": methods
             })
-            return  # Don't recurse further into class — already handled methods
+            return
 
         if node_type in queries.get("function", []):
-            # Only capture top-level functions (not inside a class body)
-            # by checking that the parent is not a class node
             parent_type = node.parent.type if node.parent else ""
             if parent_type not in queries.get("class", []):
                 functions.append(_extract_ts_function(node, lines))
@@ -343,10 +298,7 @@ def _parse_with_tree_sitter(
 
 
 def _extract_node_name(node, lines: list) -> str:
-    """
-    Extracts the name of a class or function node.
-    Looks for an 'identifier' child node which holds the name in most grammars.
-    """
+    """Extracts the name of a class or function node."""
     for child in node.children:
         if child.type == "identifier":
             start_line = child.start_point[0]
@@ -359,11 +311,9 @@ def _extract_node_name(node, lines: list) -> str:
 def _extract_ts_function(node, lines: list) -> dict:
     """Extracts basic metadata from a tree-sitter function node."""
     name = _extract_node_name(node, lines)
-    line_start = node.start_point[0] + 1   # Convert to 1-based
+    line_start = node.start_point[0] + 1
     line_end = node.end_point[0] + 1
 
-    # Extract parameter names by finding 'identifier' nodes inside
-    # 'parameters' or 'formal_parameters' child nodes
     parameters = []
     for child in node.children:
         if "parameter" in child.type:
@@ -377,21 +327,18 @@ def _extract_ts_function(node, lines: list) -> dict:
     return {
         "name": name,
         "parameters": parameters,
-        "return_annotation": "",   # Not universally extractable across languages
+        "return_annotation": "",
         "line_start": line_start,
         "line_end": line_end,
-        "has_docstring": False     # Language-specific — not extracted at this layer
+        "has_docstring": False
     }
 
 
 def _extract_base_classes(node, lines: list, language_label: str) -> list:
-    """
-    Attempts to extract base class or interface names from a class node.
-    Language-specific node types are handled individually.
-    """
+    """Attempts to extract base class or interface names from a class node."""
+    
     base_classes = []
-
-    # Node type names that indicate inheritance or implementation in each grammar
+    
     INHERITANCE_NODE_TYPES = {
         "superclass", "base_list", "super_interfaces",
         "implements", "extends_clause", "class_parents",
@@ -410,32 +357,9 @@ def _extract_base_classes(node, lines: list, language_label: str) -> list:
     return base_classes
 
 
-# ── chunk_code_tool ───────────────────────────────────────────────────────────
-# (Unchanged — chunking is language-agnostic)
-
 @function_tool
 def chunk_code_tool(file_path: str, content: str) -> dict:
-    """
-    Splits a source file into overlapping chunks of up to CHUNK_SIZE_LINES lines.
-    Language-agnostic — works on any plain text source file.
-
-    Args:
-        file_path: Relative path of the file.
-        content: Full source code content of the file as a string.
-
-    Returns:
-        A dict with:
-          - file_path (str): The file path as provided.
-          - total_lines (int): Total number of lines in the file.
-          - total_chunks (int): Number of chunks produced.
-          - chunks (list[dict]): List of chunks, each with:
-              - chunk_index (int): Zero-based chunk index.
-              - file_path (str): Same as the input file_path.
-              - start_line (int): 1-based line number where the chunk starts.
-              - end_line (int): 1-based line number where the chunk ends.
-              - content (str): The raw source code lines in this chunk.
-              - line_count (int): Number of lines in this chunk.
-    """
+    """Splits a source file into overlapping chunks of up to CHUNK_SIZE_LINES lines."""
     lines = content.splitlines()
     total_lines = len(lines)
     chunks = []
