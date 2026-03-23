@@ -1,7 +1,7 @@
 from crewai.tools import BaseTool
 from typing import Type
 from pydantic import BaseModel, Field
-from firebase import get_db
+from event_research.tools.firebase import get_db
 
 
 class EventToolInput(BaseModel):
@@ -26,6 +26,6 @@ class DatabaseTool(BaseTool):
     def _run(self, events:list[EventToolInput]) -> str:
         db = get_db()
         for event in events:
-            event_data = event.dict()
-            db.collection("event_prospects").add(event_data)
-        return "Done adding events to the database. Event added: " + events[0].name
+            print(event)
+            db.collection("event_prospects").add(event)
+        return "Done adding events to the database. Event added: " + str(len(events))
