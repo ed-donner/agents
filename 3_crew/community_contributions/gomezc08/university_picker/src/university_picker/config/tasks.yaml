@@ -1,0 +1,43 @@
+find_suitable_universities_task:
+  description: >
+    Analyze the student's {background} and {interests}. 
+    Identify the key academic and cultural requirements the student needs. 
+    Search for a broad list of 5-8 universities that match these specific 
+    criteria, focusing on program reputation and campus environment.
+  expected_output: >
+    A structured JSON-ready list of potential universities, including 
+    why each school was initially flagged as a potential match.
+  agent: suitable_university_finder
+  output_file: output/potential_matches.json
+
+research_universities_task:
+  description: >
+    Take the list of potential universities and conduct a rigorous 
+    financial and academic audit of each. Find the latest stats on:
+    - Graduation rates and post-grad employment ROI.
+    - Specific faculty strengths in the student's area of interest.
+    - True cost of attendance and available scholarship trends.
+  expected_output: >
+    A comprehensive comparison report in JSON format detailing the 
+    pros, cons, and data-backed "Match Score" for each university.
+  agent: university_researcher
+  context:
+    - find_suitable_universities_task
+  output_file: output/research_report.json
+
+pick_best_university_task:
+  description: >
+    Review the Academic Intelligence Report. Select the top 3 
+    universities that offer the absolute best fit for the student. 
+    Draft a personalized "Acceptance Strategy" for each, explaining 
+    how the student's specific background makes them a strong candidate.
+    Do not pick the same University more than once.
+  expected_output: >
+    A professional Markdown report for the student containing:
+    1. The "Top Pick" with a 1-sentence headline rationale.
+    2. Two alternative "Strong Matches."
+    3. A brief explanation of which schools were excluded and why.
+  agent: university_picker
+  context:
+    - research_universities_task
+  output_file: output/final_decision.md

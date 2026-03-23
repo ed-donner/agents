@@ -1,0 +1,15 @@
+# docs
+docs/
+
+# DB
+career_agent.db
+chroma_db/
+
+# Logs
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+
