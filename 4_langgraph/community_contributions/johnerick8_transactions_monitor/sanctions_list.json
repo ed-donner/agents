@@ -1,0 +1,502 @@
+[
+  {
+    "name": "MARTELLY, Michel Joseph",
+    "reason": "ILLICIT-DRUGS-EO14059",
+    "date_added": "2024-08-20"
+  },
+  {
+    "name": "ABI-KHALIL, Mansour",
+    "reason": "SDGT",
+    "date_added": "2019-09-10"
+  },
+  {
+    "name": "AHMAD, Muhammad Abd-al-Halim",
+    "reason": "SDGT",
+    "date_added": "2023-10-18"
+  },
+  {
+    "name": "AKHMEDOV, Farkhad Teimurovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-05-19"
+  },
+  {
+    "name": "AL-ABSI, Ammar Lutfi",
+    "reason": "SDGT",
+    "date_added": "2023-12-07"
+  },
+  {
+    "name": "AL-ADHAM, Khalid",
+    "reason": "SDGT",
+    "date_added": "2023-10-18"
+  },
+  {
+    "name": "AL-ARIDHI, Hassan",
+    "reason": "SDGT",
+    "date_added": "2023-10-27"
+  },
+  {
+    "name": "AL-ATTIYA, Abdulaziz bin Khalifa",
+    "reason": "SDGT",
+    "date_added": "2023-12-13"
+  },
+  {
+    "name": "AL-AZZAWI, Arshad",
+    "reason": "SDGT",
+    "date_added": "2023-10-27"
+  },
+  {
+    "name": "AL-BAKR, Muhammad",
+    "reason": "SDGT",
+    "date_added": "2023-12-13"
+  },
+  {
+    "name": "AL-BARAKA, Ahmad",
+    "reason": "SDGT",
+    "date_added": "2023-12-07"
+  },
+  {
+    "name": "AL-DAJANI, Majed",
+    "reason": "SDGT",
+    "date_added": "2023-10-18"
+  },
+  {
+    "name": "AL-FAKHOURY, Shadi",
+    "reason": "SDGT",
+    "date_added": "2023-12-07"
+  },
+  {
+    "name": "AL-GHANDOUR, Ibrahim",
+    "reason": "SDGT",
+    "date_added": "2023-11-14"
+  },
+  {
+    "name": "AL-HAMMAD, Hamad",
+    "reason": "SDGT",
+    "date_added": "2023-12-13"
+  },
+  {
+    "name": "AL-HARBI, Khalid",
+    "reason": "SDGT",
+    "date_added": "2023-12-13"
+  },
+  {
+    "name": "AL-HASHIMI, Abu Hafs",
+    "reason": "SDGT",
+    "date_added": "2023-11-14"
+  },
+  {
+    "name": "AL-HINDI, Akram",
+    "reason": "SDGT",
+    "date_added": "2023-10-18"
+  },
+  {
+    "name": "AL-HUSSEIN, Faisal",
+    "reason": "SDGT",
+    "date_added": "2023-10-18"
+  },
+  {
+    "name": "AL-JABER, Mubarak",
+    "reason": "SDGT",
+    "date_added": "2023-12-13"
+  },
+  {
+    "name": "AL-KAFARNA, Jihad",
+    "reason": "SDGT",
+    "date_added": "2023-12-07"
+  },
+  {
+    "name": "AL-KAHLOUT, Abu Obeida",
+    "reason": "SDGT",
+    "date_added": "2023-11-14"
+  },
+  {
+    "name": "AL-KHATIB, Muhammad",
+    "reason": "SDGT",
+    "date_added": "2023-10-18"
+  },
+  {
+    "name": "AL-MADHOUN, Ibrahim",
+    "reason": "SDGT",
+    "date_added": "2023-10-18"
+  },
+  {
+    "name": "AL-MANSOUR, Abdulrahman",
+    "reason": "SDGT",
+    "date_added": "2023-12-13"
+  },
+  {
+    "name": "AL-MASRI, Abu Hamza",
+    "reason": "SDGT",
+    "date_added": "2023-11-14"
+  },
+  {
+    "name": "AL-MUTAIRI, Bader",
+    "reason": "SDGT",
+    "date_added": "2023-12-13"
+  },
+  {
+    "name": "AL-NAJJAR, Muhammad",
+    "reason": "SDGT",
+    "date_added": "2023-10-18"
+  },
+  {
+    "name": "AL-NASSER, Abu Anas",
+    "reason": "SDGT",
+    "date_added": "2023-11-14"
+  },
+  {
+    "name": "AL-QAHTANI, Saud",
+    "reason": "GLOMAG",
+    "date_added": "2018-11-15"
+  },
+  {
+    "name": "AL-QAWASMI, Mousa",
+    "reason": "SDGT",
+    "date_added": "2023-10-18"
+  },
+  {
+    "name": "AL-RASHID, Abdullah",
+    "reason": "SDGT",
+    "date_added": "2023-12-13"
+  },
+  {
+    "name": "AL-RAWAS, Abdulrahman",
+    "reason": "SDGT",
+    "date_added": "2023-10-27"
+  },
+  {
+    "name": "AL-SAADI, Abu Ibrahim",
+    "reason": "SDGT",
+    "date_added": "2023-11-14"
+  },
+  {
+    "name": "AL-SHAMMARI, Ahmed",
+    "reason": "SDGT",
+    "date_added": "2023-12-13"
+  },
+  {
+    "name": "AL-SHARIF, Mahmoud",
+    "reason": "SDGT",
+    "date_added": "2023-10-18"
+  },
+  {
+    "name": "AL-SUWAIDI, Ahmed",
+    "reason": "SDGT",
+    "date_added": "2023-12-13"
+  },
+  {
+    "name": "AL-TAMIMI, Abu Baker",
+    "reason": "SDGT",
+    "date_added": "2023-11-14"
+  },
+  {
+    "name": "AL-YAMANI, Abu Jihad",
+    "reason": "SDGT",
+    "date_added": "2023-11-14"
+  },
+  {
+    "name": "AL-ZAHRANI, Ali",
+    "reason": "SDGT",
+    "date_added": "2023-12-13"
+  },
+  {
+    "name": "ALANIS, Jose Alfredo",
+    "reason": "SDNTK",
+    "date_added": "2023-08-09"
+  },
+  {
+    "name": "ALEKSANDROV, Alexey Alexandrovich",
+    "reason": "MAGNIT",
+    "date_added": "2021-08-20"
+  },
+  {
+    "name": "ALEXANDROV, Artem Yurievich",
+    "reason": "CYBER2",
+    "date_added": "2023-02-09"
+  },
+  {
+    "name": "ALISHEROV, Bakhtiyor",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-11-02"
+  },
+  {
+    "name": "ALKHATIB, Mahmoud",
+    "reason": "SDGT",
+    "date_added": "2023-10-18"
+  },
+  {
+    "name": "ALTUNIN, Igor Alekseevich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-05-19"
+  },
+  {
+    "name": "AMELIN, Alexander Georgievich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "AMITANI, Yuki",
+    "reason": "TCO",
+    "date_added": "2023-12-08"
+  },
+  {
+    "name": "ANDRIUSHCHENKO, Oleksandr",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-09-14"
+  },
+  {
+    "name": "ANISIMOV, Vasily Vasilievich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "ARAKELYAN, Artur",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-05-19"
+  },
+  {
+    "name": "ARANDARENKO, Roman Yurievich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-02-24"
+  },
+  {
+    "name": "ARISTOV, Sergey Vasilievich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "ARZAMASTSEVA, Anna Borisovna",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-05-19"
+  },
+  {
+    "name": "ASHTARI, Hossein",
+    "reason": "IRAN-HR",
+    "date_added": "2022-09-22"
+  },
+  {
+    "name": "ASLANOV, Rustam",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-11-02"
+  },
+  {
+    "name": "AVERIN, Mikhail Valerevich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-02-24"
+  },
+  {
+    "name": "AVRUTIN, Alexander Mikhailovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BABAKOV, Alexander Mikhailovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2022-04-07"
+  },
+  {
+    "name": "BAGHDADI, Abu Bakr",
+    "reason": "SDGT",
+    "date_added": "2011-10-04"
+  },
+  {
+    "name": "BAGRIY, Alexander Sergeevich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-05-19"
+  },
+  {
+    "name": "BAKER, Mohammed",
+    "reason": "SDGT",
+    "date_added": "2023-10-18"
+  },
+  {
+    "name": "BALABUKH, Vladimir Pavlovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BARAKOV, Alexander",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-11-02"
+  },
+  {
+    "name": "BARANOV, Mikhail Valeryevich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BARANOV, Sergey Viktorovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BARYSHEV, Mikhail Nikolayevich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-05-19"
+  },
+  {
+    "name": "BARYSHNIKOV, Pavel Mikhailovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BASHKIROVA, Nadezhda Alexandrovna",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-05-19"
+  },
+  {
+    "name": "BASMANOV, Alexander Valeryevich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BATYRSHIN, Ildar",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-11-02"
+  },
+  {
+    "name": "BAZAROV, Alexander Vladimirovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BELOUSOV, Andrey Removich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2022-12-15"
+  },
+  {
+    "name": "BELOV, Sergey Alexandrovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BELYAEV, Vladimir Vasilyevich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BEREZIN, Sergey Vladimirovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BEZRUKOV, Andrey Olegovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2022-08-02"
+  },
+  {
+    "name": "BILAL, Abu",
+    "reason": "SDGT",
+    "date_added": "2015-09-29"
+  },
+  {
+    "name": "BLOKHIN, Vladimir Vladimirovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BOGDANOV, Mikhail Leonidovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2022-12-15"
+  },
+  {
+    "name": "BOGDANOVA, Olga Nikolayevna",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-05-19"
+  },
+  {
+    "name": "BOLSHAKOV, Boris Mikhailovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BONDARENKO, Alexander Viktorovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BONDAREV, Viktor Nikolayevich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2022-09-30"
+  },
+  {
+    "name": "BORISOV, Alexander Alexandrovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BORISOV, Yuri Ivanovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-01-26"
+  },
+  {
+    "name": "BORODIN, Alexander Sergeevich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BORODIN, Andrey Vyacheslavovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BORZENKOVA, Svetlana Vladimirovna",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-05-19"
+  },
+  {
+    "name": "BOTVINKIN, Alexander Nikolayevich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BRAGIN, Sergey Valeryevich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BUDARIN, Alexander Nikolayevich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BUDNIKOV, Alexander Mikhailovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BULAEV, Nikolai Ivanovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2022-12-15"
+  },
+  {
+    "name": "BULATOV, Mikhail Viktorovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BULGAKOV, Dmitry Vitalyevich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2023-05-19"
+  },
+  {
+    "name": "BUNIN, Alexander Mikhailovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BURAKOV, Alexander Vladimirovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BURAVOY, Evgeny Vladimirovich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  },
+  {
+    "name": "BURLAKOV, Mikhail Valeryevich",
+    "reason": "RUSSIA-EO14024",
+    "date_added": "2024-02-23"
+  }
+]
