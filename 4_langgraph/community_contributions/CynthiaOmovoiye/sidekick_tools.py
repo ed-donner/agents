@@ -3,7 +3,7 @@ from langchain_community.agent_toolkits import PlayWrightBrowserToolkit
 from dotenv import load_dotenv
 import os
 import requests
-from langchain.agents import Tool
+from langchain_core.tools import Tool
 from langchain_community.agent_toolkits import FileManagementToolkit
 from langchain_community.tools.wikipedia.tool import WikipediaQueryRun
 from langchain_experimental.tools import PythonREPLTool
@@ -18,11 +18,32 @@ pushover_user = os.getenv("PUSHOVER_USER")
 pushover_url = "https://api.pushover.net/1/messages.json"
 serper = GoogleSerperAPIWrapper()
 
+
+def _playwright_headless() -> bool:
+    """HF Spaces set SPACE_ID; headed browsers are not available there. Override with PLAYWRIGHT_HEADLESS."""
+    v = os.getenv("PLAYWRIGHT_HEADLESS", "").strip().lower()
+    if v in ("1", "true", "yes"):
+        return True
+    if v in ("0", "false", "no"):
+        return False
+    return bool(os.getenv("SPACE_ID"))
+
+
 async def playwright_tools():
-    playwright = await async_playwright().start()
-    browser = await playwright.chromium.launch(headless=False)
-    toolkit = PlayWrightBrowserToolkit.from_browser(async_browser=browser)
-    return toolkit.get_tools(), browser, playwright
+    playwright = None
+    try:
+        playwright = await async_playwright().start()
+        browser = await playwright.chromium.launch(headless=_playwright_headless())
+        toolkit = PlayWrightBrowserToolkit.from_browser(async_browser=browser)
+        return toolkit.get_tools(), browser, playwright
+    except Exception as e:
+        print(f"Playwright unavailable (browser tools disabled): {e}")
+        if playwright is not None:
+            try:
+                await playwright.stop()
+            except Exception:
+                pass
+        return [], None, None
 
 
 def push(text: str):
