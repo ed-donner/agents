@@ -21,20 +21,22 @@ def send_email(subject: str, html_body: str) -> Dict[str, str]:
     override = recipient_override.get()
     to_addr = (override.strip() if override else None) or os.environ.get("SENDGRID_TO")
     if not api_key:
-        return {"status": "error", "message": "SENDGRID_API_KEY is not set"}
+        raise RuntimeError("SENDGRID_API_KEY is not set")
     if not from_addr:
-        return {"status": "error", "message": "SENDGRID_FROM is not set"}
+        raise RuntimeError("SENDGRID_FROM is not set")
     if not to_addr:
-        return {
-            "status": "error",
-            "message": "No recipient: enter your email in the app or set SENDGRID_TO",
-        }
+        raise RuntimeError("No recipient: enter your email in the app or set SENDGRID_TO")
     sg = sendgrid.SendGridAPIClient(api_key=api_key)
     from_email = Email(from_addr)
     to_email = To(to_addr)
     content = Content("text/html", html_body)
     mail = Mail(from_email, to_email, subject, content).get()
-    sg.client.mail.send.post(request_body=mail)
+    response = sg.client.mail.send.post(request_body=mail)
+    status = getattr(response, "status_code", None)
+    if status is not None and status >= 400:
+        body = getattr(response, "body", None) or b""
+        text = body.decode("utf-8", errors="replace") if isinstance(body, (bytes, bytearray)) else str(body)
+        raise RuntimeError(f"SendGrid error {status}: {text[:500]}")
     return {"status": "success"}
 
 

@@ -21,7 +21,7 @@ async def run_research(query: str, send_email: bool, recipient_email: str):
 
     manager = ResearchManager(
         send_email_report=send_email,
-        recipient_email=recipient_email.strip() or None,
+        recipient_email=(recipient_email or "").strip() or None,
     )
     try:
         async for chunk in manager.run(query):
@@ -50,7 +50,7 @@ async def run_research_streaming(query: str, send_email: bool, recipient_email: 
 
     manager = ResearchManager(
         send_email_report=send_email,
-        recipient_email=recipient_email.strip() or None,
+        recipient_email=(recipient_email or "").strip() or None,
     )
     full_output = []
     try:
