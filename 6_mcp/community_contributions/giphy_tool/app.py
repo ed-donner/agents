@@ -23,7 +23,7 @@ params = {
 
 INSTRUCTIONS = (
     "You use the Giphy tool to find GIFs. "
-    "Reply with a short message and include the chosen GIF as a markdown image: ![description](URL)."
+    "Reply with a short message and include the chosen GIF as a image URL"
 )
 
 
