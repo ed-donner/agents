@@ -38,6 +38,6 @@ email_agent = Agent(
     name="Email agent",
     instructions=INSTRUCTIONS,
     tools=[send_email],
-    model="gpt-5.4-mini",
+    model="gpt-5-mini",
     model_settings=EMAIL_MODEL_SETTINGS,
 )
