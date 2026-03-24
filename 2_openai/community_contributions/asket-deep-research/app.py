@@ -67,7 +67,17 @@ with gr.Blocks(
     """,
 ) as ui:
     gr.Markdown(
-        
+        """
+        # 🔍 Deep Research
+
+        Enter a research topic and get a detailed report with:
+        - **Planned web searches** (AI-driven)
+        - **Parallel search execution**
+        - **Synthesized markdown report**
+        - **Optional email delivery**
+
+        *Uses OpenAI Agents SDK • Model params & guardrails configured*
+        """
     )
     with gr.Row():
         query_box = gr.Textbox(
