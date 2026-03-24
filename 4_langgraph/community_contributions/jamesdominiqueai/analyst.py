@@ -26,7 +26,7 @@ import logging
 from datetime import datetime
 load_dotenv(override=True)
 logger = logging.getLogger(__name__)
-# ── State ──────────────────────────────────────────────────────────────────────
+
 class State(TypedDict):
     messages: Annotated[List[Any], add_messages]
     success_criteria: str
@@ -41,7 +41,7 @@ class State(TypedDict):
     worker_turn_count: int
     tool_calls_made: List[str]
     tool_outputs_observed: List[str]
-# ── Evaluator schema ───────────────────────────────────────────────────────────
+    
 class EvaluatorOutput(BaseModel):
     feedback: str = Field(
         description="Detailed feedback on the analyst's response"
@@ -61,7 +61,7 @@ class EvaluatorOutput(BaseModel):
             "(e.g. include correlations, anomalies, trends, or recommendations)"
         )
     )
-# ── Agent ──────────────────────────────────────────────────────────────────────
+
 class DataAnalystAgent:
     def __init__(self, max_iterations: int = 3, max_worker_turns: int = 12):
         self.graph = None
@@ -111,7 +111,7 @@ class DataAnalystAgent:
         self.worker_llm_with_tools = worker_llm.bind_tools(self.tools)
         self.evaluator_llm = self._build_llm(evaluator=True)
         self.build_graph()
-    # ── Worker ─────────────────────────────────────────────────────────────────
+   
     def _is_python_tool(self, tool_name: str) -> bool:
         return "python" in (tool_name or "").lower()
     def worker(self, state: State) -> Dict[str, Any]:
@@ -237,7 +237,7 @@ Address this feedback and improve your analysis.
         if hasattr(last, "tool_calls") and last.tool_calls:
             return "tools"
         return "evaluator"
-    # ── Evaluator ──────────────────────────────────────────────────────────────
+ 
     def _format_conversation(self, messages: List[Any]) -> str:
         out = "Conversation history:\n\n"
         for msg in messages:
@@ -380,7 +380,7 @@ Give the analyst reasonable benefit of the doubt on file saves.
         if state["success_criteria_met"] or state["user_input_needed"]:
             return "END"
         return "worker"
-    # ── Graph ──────────────────────────────────────────────────────────────────
+   
     def tools_node(self, state: State) -> Dict[str, Any]:
         tool_node = self._tool_node
         result = tool_node.invoke(state)
@@ -414,7 +414,7 @@ Give the analyst reasonable benefit of the doubt on file saves.
             if isinstance(msg, ToolMessage):
                 outputs.append(msg.name or "unknown_tool")
         return outputs
-    # ── Public API ─────────────────────────────────────────────────────────────
+    
     def run(self, message: str, success_criteria: str, dataset_filename: Optional[str], history: list) -> tuple:
         config = {
             "configurable": {"thread_id": self.agent_id},

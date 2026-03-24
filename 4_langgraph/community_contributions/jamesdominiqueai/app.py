@@ -7,7 +7,7 @@ from analyst_tools import (
     normalize_message_text,
     collect_charts,
 )
-# ── Helpers ────────────────────────────────────────────────────────────────────
+
 def _init_agent():
     agent = DataAnalystAgent()
     agent.setup()
@@ -40,14 +40,14 @@ def process_message(agent, message, success_criteria, dataset_file, history):
         message, success_criteria, dataset_filename, history,
     )
     evaluator_feedback = normalize_message_text(evaluator_feedback)
-    # Charts gallery
+    
     charts = collect_charts(agent.session_dir)
     chart_update = gr.update(value=charts, visible=True) if charts else gr.update(visible=False)
-    # HTML report rendered in-browser
+    
     report_update = gr.update(value=html_report, visible=True) if html_report else gr.update(visible=False)
-    # Notebook download
+    
     nb_update = gr.update(value=nb_path, visible=True) if nb_path else gr.update(value=None, visible=False)
-    # Status line
+    
     chart_count = len(charts)
     status_parts = ["Analysis complete"]
     if chart_count:
@@ -80,7 +80,7 @@ def reset_agent(agent):
         gr.update(value=None, visible=False),
         gr.update(value=""),
     )
-# ── CSS ────────────────────────────────────────────────────────────────────────
+
 CSS = """
 /* ── Page background ─────────────────────────────────────────────────────── */
 body {
@@ -243,7 +243,7 @@ body {
 footer { display: none !important; }
 .gr-examples .gr-samples-table { border-radius: 12px !important; }
 """
-# ── Build UI ───────────────────────────────────────────────────────────────────
+
 with gr.Blocks(
     title="Data Analyst Agent",
     theme=gr.themes.Soft(
@@ -258,7 +258,7 @@ with gr.Blocks(
     ),
     css=CSS,
 ) as ui:
-    # ── Header ─────────────────────────────────────────────────────────────────
+    
     gr.HTML(
         '<div id="app-header">'
         "<h1>Data Analyst Agent</h1>"
@@ -267,7 +267,7 @@ with gr.Blocks(
         "</div>"
     )
     agent_state = gr.State()
-    # ── Top bar: dataset upload + status ───────────────────────────────────────
+    
     with gr.Row(equal_height=True):
         with gr.Column(scale=3):
             dataset_upload = gr.File(
@@ -278,9 +278,9 @@ with gr.Blocks(
             )
         with gr.Column(scale=2):
             status_html = gr.HTML(value="", elem_id="status-bar")
-    # ── Main content: left = chat, right = results tabs ────────────────────────
+    
     with gr.Row(equal_height=False):
-        # ── Left: conversation ─────────────────────────────────────────────────
+        
         with gr.Column(scale=5, min_width=440):
             chatbot = gr.Chatbot(
                 label="Conversation",
@@ -293,7 +293,7 @@ with gr.Blocks(
                     "https://api.dicebear.com/9.x/bottts/svg?seed=analyst",
                 ),
             )
-            # ── Input area ─────────────────────────────────────────────────────
+            
             with gr.Group(elem_id="input-group"):
                 message = gr.Textbox(
                     show_label=False,
@@ -322,7 +322,7 @@ with gr.Blocks(
                         elem_id="go-btn",
                         size="lg",
                     )
-        # ── Right: results tabs ────────────────────────────────────────────────
+        
         with gr.Column(scale=4, min_width=360):
             with gr.Tabs():
                 # Tab 1 — Report
@@ -371,7 +371,7 @@ with gr.Blocks(
                         "Internal quality evaluator feedback.</p>"
                     )
                     evaluator_feedback = gr.Markdown(visible=False)
-    # ── Example prompts ────────────────────────────────────────────────────────
+    
     gr.Examples(
         examples=[
             [
@@ -390,7 +390,7 @@ with gr.Blocks(
         inputs=[message, success_criteria],
         label="Quick-start prompts",
     )
-    # ── Events ─────────────────────────────────────────────────────────────────
+    
     ui.load(_init_agent, [], [agent_state])
     shared_inputs = [agent_state, message, success_criteria, dataset_upload, chatbot]
     shared_outputs = [

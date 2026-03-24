@@ -23,12 +23,11 @@ try:
     plt.show = lambda *args, **kwargs: None
 except Exception:
     matplotlib = None
-# Use an absolute path anchored to this file's directory so the sandbox
-# location is predictable regardless of the working directory at launch.
+
 _SCRIPT_DIR = Path(__file__).resolve().parent
 SANDBOX_DIR = _SCRIPT_DIR / "sandbox"
 SANDBOX_DIR.mkdir(exist_ok=True)
-# -- Shared text helpers -------------------------------------------------------
+
 def normalize_message_text(content) -> str:
     """Convert LangChain message content (str | list[dict] | None) to a plain string."""
     if isinstance(content, list):
@@ -40,7 +39,7 @@ def normalize_message_text(content) -> str:
                 parts.append(str(item))
         return "\n".join(parts)
     return "" if content is None else str(content)
-# -- Sandbox helpers ------------------------------------------------------------
+
 def get_session_sandbox_dir(session_id: str) -> Path:
     session_dir = SANDBOX_DIR / session_id
     session_dir.mkdir(parents=True, exist_ok=True)
@@ -81,7 +80,7 @@ def recover_orphaned_charts(session_dir: str | Path) -> None:
                     logger.info("Recovered orphaned chart %s → %s", png, dest)
                 except Exception:
                     logger.warning("Could not move %s", png, exc_info=True)
-# -- Notebook generation -------------------------------------------------------
+
 def _make_nb_cell(cell_type: str, source: str, outputs=None) -> dict:
     """Build a single Jupyter notebook cell dict."""
     cell = {
@@ -166,7 +165,7 @@ def build_notebook(
         json.dump(notebook, f, indent=1, ensure_ascii=False)
     logger.info("Notebook saved to %s", nb_path)
     return nb_path
-# -- HTML report for in-browser preview ----------------------------------------
+
 def build_html_report(
     session_dir: str,
     analyst_summary: str,
@@ -293,7 +292,7 @@ def _inline_fmt(text: str) -> str:
     text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
     text = re.sub(r"`(.+?)`", r"<code>\1</code>", text)
     return text
-# -- Extract code snippets from conversation -----------------------------------
+
 def extract_python_snippets(messages) -> list[str]:
     """
     Walk through LangChain messages and pull out the Python code that was
@@ -316,7 +315,7 @@ def extract_python_snippets(messages) -> list[str]:
                     if code.strip():
                         snippets.append(code.strip())
     return snippets
-# -- Tool factory --------------------------------------------------------------
+
 def get_analyst_tools(session_dir: str | Path, enable_web_search: bool | None = None):
     file_tools = get_file_tools(session_dir)
     tools = list(file_tools)
