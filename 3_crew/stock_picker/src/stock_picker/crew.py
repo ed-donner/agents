@@ -3,11 +3,17 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import SerperDevTool
 from pydantic import BaseModel, Field
 from typing import List
-from .tools.push_tool import PushNotificationTool
+import os
 from crewai.memory import LongTermMemory, ShortTermMemory, EntityMemory
 from crewai.memory.storage.rag_storage import RAGStorage
 from crewai.memory.storage.ltm_sqlite_storage import LTMSQLiteStorage
+from stock_picker.tools.push_tool import PushNotificationTool
 
+
+
+openai_base_url = os.getenv('OPENAI_BASE_URL')
+if openai_base_url:
+    os.environ['OPENAI_API_BASE'] = openai_base_url
 class TrendingCompany(BaseModel):
     """ A company that is in the news and attracting attention """
     name: str = Field(description="Company name")
@@ -101,9 +107,9 @@ class StockPicker():
             short_term_memory = ShortTermMemory(
                 storage = RAGStorage(
                         embedder_config={
-                            "provider": "openai",
+                            "provider": "huggingface",
                             "config": {
-                                "model": 'text-embedding-3-small'
+                                "model": 'sentence-transformers/all-MiniLM-L6-v2'
                             }
                         },
                         type="short_term",
@@ -113,9 +119,9 @@ class StockPicker():
             entity_memory = EntityMemory(
                 storage=RAGStorage(
                     embedder_config={
-                        "provider": "openai",
+                        "provider": "huggingface",
                         "config": {
-                            "model": 'text-embedding-3-small'
+                            "model": 'sentence-transformers/all-MiniLM-L6-v2'
                         }
                     },
                     type="short_term",
@@ -123,3 +129,4 @@ class StockPicker():
                 )
             ),
         )
+        

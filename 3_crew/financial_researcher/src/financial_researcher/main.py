@@ -2,6 +2,7 @@
 # src/financial_researcher/main.py
 import os
 from financial_researcher.crew import ResearchCrew
+from datetime import datetime
 
 # Create output directory if it doesn't exist
 os.makedirs('output', exist_ok=True)
@@ -11,7 +12,8 @@ def run():
     Run the research crew.
     """
     inputs = {
-        'company': 'Apple'
+        'company': 'Apple',
+        'current_date': datetime.now().strftime('%Y-%m-%d')
     }
 
     # Create and run the crew
