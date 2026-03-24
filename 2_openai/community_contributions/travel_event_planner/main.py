@@ -19,9 +19,8 @@ from .agents import (
 )
 
 
-# ---------------------------------------------------------------------------
+
 # Per-search context (ties a query back to its day for the writer)
-# ---------------------------------------------------------------------------
 
 
 @dataclass(frozen=True)
@@ -122,9 +121,8 @@ def build_report_document(report: ItineraryReport) -> str:
     )
 
 
-# ---------------------------------------------------------------------------
+
 # CLI
-# ---------------------------------------------------------------------------
 
 
 def _parse_args(argv: list[str]) -> argparse.Namespace:

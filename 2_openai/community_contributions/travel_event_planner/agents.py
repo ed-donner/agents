@@ -5,9 +5,7 @@ from agents.model_settings import ModelSettings
 from pydantic import BaseModel, Field
 
 
-# ---------------------------------------------------------------------------
 # Structured outputs (planner + writer)
-# ---------------------------------------------------------------------------
 
 
 class DaySearch(BaseModel):
@@ -55,9 +53,7 @@ class ItineraryReport(BaseModel):
     )
 
 
-# ---------------------------------------------------------------------------
 # System prompts
-# ---------------------------------------------------------------------------
 
 PLANNER_INSTRUCTIONS = """You are an expert travel and event planner assistant.
 Given a natural-language trip or event request, produce a structured plan.
@@ -90,9 +86,7 @@ WRITER_INSTRUCTIONS = (
 )
 
 
-# ---------------------------------------------------------------------------
 # Agent instances (gpt-4o-mini + hosted web search on researcher only)
-# ---------------------------------------------------------------------------
 
 planner_agent = Agent(
     name="TripPlannerAgent",
