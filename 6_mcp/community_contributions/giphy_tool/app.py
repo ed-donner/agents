@@ -13,6 +13,7 @@ class GiphyToolResult(BaseModel):
     url: str
     text: str
 
+# You need a GIPHY_API_KEY in your .env file to run this app.
 GIPHY_API_KEY = os.getenv("GIPHY_API_KEY")
 params = {
     "command": "npx",
