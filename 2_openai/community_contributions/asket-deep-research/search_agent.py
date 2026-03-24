@@ -1,4 +1,4 @@
-from agents import Agent, WebSearchTool, ModelSettings
+from agents import Agent, WebSearchTool
 
 from config import SEARCH_MODEL_SETTINGS
 
@@ -15,6 +15,6 @@ search_agent = Agent(
     name="Search agent",
     instructions=INSTRUCTIONS,
     tools=[WebSearchTool(search_context_size="low")],
-    model="gpt-5-mini",
+    model="gpt-4o-mini",
     model_settings=SEARCH_MODEL_SETTINGS,
 )

@@ -5,6 +5,7 @@ HOW_MANY_SEARCHES = 3
 TEMPERATURE = 0.7
 TOP_P = 1.0
 MAX_TOKENS = 4096
+
 PLANNER_MODEL_SETTINGS = ModelSettings(
     temperature=TEMPERATURE,
     top_p=TOP_P,

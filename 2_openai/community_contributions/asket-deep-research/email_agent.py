@@ -1,3 +1,4 @@
+import contextvars
 import os
 from typing import Dict
 
@@ -7,18 +8,27 @@ from agents import Agent, function_tool
 
 from config import EMAIL_MODEL_SETTINGS
 
+# Set by ResearchManager before Runner.run(email_agent, ...) when the UI provides a recipient.
+recipient_override: contextvars.ContextVar[str | None] = contextvars.ContextVar(
+    "recipient_override", default=None
+)
+
 
 @function_tool
 def send_email(subject: str, html_body: str) -> Dict[str, str]:
     api_key = os.environ.get("SENDGRID_API_KEY")
     from_addr = os.environ.get("SENDGRID_FROM")
-    to_addr = os.environ.get("SENDGRID_TO")
+    override = recipient_override.get()
+    to_addr = (override.strip() if override else None) or os.environ.get("SENDGRID_TO")
     if not api_key:
         return {"status": "error", "message": "SENDGRID_API_KEY is not set"}
     if not from_addr:
         return {"status": "error", "message": "SENDGRID_FROM is not set"}
     if not to_addr:
-        return {"status": "error", "message": "SENDGRID_TO is not set"}
+        return {
+            "status": "error",
+            "message": "No recipient: enter your email in the app or set SENDGRID_TO",
+        }
     sg = sendgrid.SendGridAPIClient(api_key=api_key)
     from_email = Email(from_addr)
     to_email = To(to_addr)
@@ -38,6 +48,6 @@ email_agent = Agent(
     name="Email agent",
     instructions=INSTRUCTIONS,
     tools=[send_email],
-    model="gpt-5-mini",
+    model="gpt-4o-mini",
     model_settings=EMAIL_MODEL_SETTINGS,
 )

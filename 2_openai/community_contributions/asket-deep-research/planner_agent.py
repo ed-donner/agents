@@ -25,7 +25,7 @@ class WebSearchPlan(BaseModel):
 planner_agent = Agent(
     name="PlannerAgent",
     instructions=INSTRUCTIONS,
-    model="gpt-5-mini",
+    model="gpt-4o-mini",
     output_type=WebSearchPlan,
     model_settings=PLANNER_MODEL_SETTINGS,
     input_guardrails=[guardrail_query_safety, guardrail_query_relevance],

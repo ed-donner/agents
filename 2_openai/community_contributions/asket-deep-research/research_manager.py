@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 
 from agents import Runner, trace, gen_trace_id, InputGuardrailTripwireTriggered
 from openai import APIError, APITimeoutError, APIConnectionError
@@ -7,7 +8,7 @@ from openai import APIError, APITimeoutError, APIConnectionError
 from search_agent import search_agent
 from planner_agent import planner_agent, WebSearchItem, WebSearchPlan
 from writer_agent import writer_agent, ReportData
-from email_agent import email_agent
+from email_agent import email_agent, recipient_override
 
 logger = logging.getLogger(__name__)
 
@@ -17,8 +18,9 @@ class ResearchError(Exception):
 
 
 class ResearchManager:
-    def __init__(self, send_email_report: bool = True):
+    def __init__(self, send_email_report: bool = True, recipient_email: str | None = None):
         self.send_email_report = send_email_report
+        self.recipient_email = (recipient_email or "").strip() or None
 
     async def run(self, query: str):
         trace_id = gen_trace_id()
@@ -40,12 +42,18 @@ class ResearchManager:
                 yield "📄 **Report written**\n\n"
 
                 if self.send_email_report:
-                    try:
-                        await self._send_email(report)
-                        yield "📧 **Email sent**\n\n"
-                    except Exception as e:
-                        logger.warning("Email send failed: %s", e)
-                        yield f"⚠️ **Email not sent** ({e})\n\n"
+                    if not self.recipient_email and not os.environ.get("SENDGRID_TO"):
+                        yield (
+                            "⚠️ **Email not sent:** enter your email in the app or set `SENDGRID_TO` "
+                            "in your environment.\n\n"
+                        )
+                    else:
+                        try:
+                            await self._send_email(report)
+                            yield "📧 **Email sent**\n\n"
+                        except Exception as e:
+                            logger.warning("Email send failed: %s", e)
+                            yield f"⚠️ **Email not sent** ({e})\n\n"
 
                 yield "---\n\n"
                 yield report.markdown_report
@@ -109,4 +117,8 @@ class ResearchManager:
         return result.final_output_as(ReportData)
 
     async def _send_email(self, report: ReportData) -> None:
-        await Runner.run(email_agent, report.markdown_report, max_turns=5)
+        token = recipient_override.set(self.recipient_email)
+        try:
+            await Runner.run(email_agent, report.markdown_report, max_turns=5)
+        finally:
+            recipient_override.reset(token)
