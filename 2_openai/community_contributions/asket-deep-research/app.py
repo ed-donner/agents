@@ -29,17 +29,15 @@ async def run_research(query: str, send_email: bool):
         yield f"\n\n❌ **Unexpected error:** {str(e)}"
 
 
-def run_research_sync(query: str, send_email: bool):
-    result = []
-    async def _run():
+def run_research_sync(query: str, send_email: bool) -> str:
+    async def _collect() -> str:
+        parts: list[str] = []
         async for chunk in run_research(query, send_email):
-            result.append(chunk)
-            yield "".join(result)
+            parts.append(chunk)
+        text = "".join(parts)
+        return text if text else "No output."
 
-    try:
-        return asyncio.run(_run().__anext__())
-    except StopAsyncIteration:
-        return "".join(result) if result else "No output."
+    return asyncio.run(_collect())
 
 
 async def run_research_streaming(query: str, send_email: bool):
@@ -69,17 +67,7 @@ with gr.Blocks(
     """,
 ) as ui:
     gr.Markdown(
-        """
-        # 🔍 Deep Research
-
-        Enter a research topic and get a detailed report with:
-        - **Planned web searches** (AI-driven)
-        - **Parallel search execution**
-        - **Synthesized markdown report**
-        - **Optional email delivery**
-
-        *Uses OpenAI Agents SDK • Model params & guardrails configured*
-        """
+        
     )
     with gr.Row():
         query_box = gr.Textbox(

@@ -10,9 +10,18 @@ from config import EMAIL_MODEL_SETTINGS
 
 @function_tool
 def send_email(subject: str, html_body: str) -> Dict[str, str]:
-    sg = sendgrid.SendGridAPIClient(api_key=os.environ.get("SENDGRID_API_KEY"))
-    from_email = Email(os.environ.get("SENDGRID_FROM", "noreply@klingbo.com"))
-    to_email = To(os.environ.get("SENDGRID_TO", "asketfranckolivieralex@gmail.com"))
+    api_key = os.environ.get("SENDGRID_API_KEY")
+    from_addr = os.environ.get("SENDGRID_FROM")
+    to_addr = os.environ.get("SENDGRID_TO")
+    if not api_key:
+        return {"status": "error", "message": "SENDGRID_API_KEY is not set"}
+    if not from_addr:
+        return {"status": "error", "message": "SENDGRID_FROM is not set"}
+    if not to_addr:
+        return {"status": "error", "message": "SENDGRID_TO is not set"}
+    sg = sendgrid.SendGridAPIClient(api_key=api_key)
+    from_email = Email(from_addr)
+    to_email = To(to_addr)
     content = Content("text/html", html_body)
     mail = Mail(from_email, to_email, subject, content).get()
     sg.client.mail.send.post(request_body=mail)
