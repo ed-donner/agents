@@ -106,6 +106,7 @@ class LearningPlannerGraph:
             "evaluation_feedback": None,
             "is_complete": False,
             "needs_user_input": False,
+            "revision_count": 0,
             "markdown_content": None,
             "markdown_path": None,
             "pdf_path": None,

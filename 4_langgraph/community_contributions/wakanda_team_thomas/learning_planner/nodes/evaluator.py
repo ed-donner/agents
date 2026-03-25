@@ -9,13 +9,17 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from state import State, EvaluatorOutput
 
 
+MAX_REVISIONS = 2
+
+
 class EvaluatorNode:
     """
     Evaluate the curriculum for completeness, logical ordering, and quality.
     Decides if it's ready or needs revision.
     """
     
-    def __init__(self, model: str = "gpt-4o-mini"):
+    def __init__(self, model: str = "gpt-4o-mini", max_revisions: int = MAX_REVISIONS):
+        self.max_revisions = max_revisions
         self.llm = ChatOpenAI(model=model)
         self.llm_with_output = self.llm.with_structured_output(EvaluatorOutput)
         
@@ -40,6 +44,7 @@ Be constructive in your feedback. If issues exist, clearly explain what needs im
         prerequisites = state.get("prerequisites", [])
         key_concepts = state.get("key_concepts", [])
         curriculum = state.get("curriculum")
+        revision_count = state.get("revision_count", 0)
         
         if not curriculum:
             return {
@@ -98,11 +103,24 @@ Provide your evaluation with:
         
         result = self.llm_with_output.invoke(messages)
         
+        new_revision_count = revision_count + 1
+        
+        # Force approval after max revisions to prevent infinite loops
+        if not result.is_complete and new_revision_count >= self.max_revisions:
+            return {
+                "evaluation_feedback": f"{result.feedback}\n\n[Auto-approved after {self.max_revisions} revisions]",
+                "is_complete": True,
+                "needs_user_input": False,
+                "revision_count": new_revision_count,
+                "messages": [{"role": "assistant", "content": f"Evaluation complete: auto-approved after {self.max_revisions} revision(s)."}]
+            }
+        
         status = "approved" if result.is_complete else "needs revision"
         
         return {
             "evaluation_feedback": result.feedback,
             "is_complete": result.is_complete,
             "needs_user_input": result.needs_user_input,
+            "revision_count": new_revision_count,
             "messages": [{"role": "assistant", "content": f"Evaluation complete: {status}. {len(result.issues or [])} issues found."}]
         }

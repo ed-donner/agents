@@ -66,6 +66,7 @@ class State(TypedDict):
     evaluation_feedback: Optional[str] = Field(default=None, description="A feedback on the curriculum")
     is_complete: bool = Field(description="Whether the curriculum is complete")
     needs_user_input: bool = Field(description="Whether user clarification is needed to improve the curriculum")
+    revision_count: int = Field(description="Number of revision iterations")
     
     # Writer outputs
     markdown_content: Optional[str] = Field(default=None, description="The markdown content of the learning path")
