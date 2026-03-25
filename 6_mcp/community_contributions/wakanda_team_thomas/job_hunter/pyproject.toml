@@ -22,6 +22,7 @@ dependencies = [
 dev = [
     "pytest>=8.0.0",
     "pytest-asyncio>=0.23.0",
+    "reportlab>=4.0.0",
 ]
 
 [build-system]

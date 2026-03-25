@@ -1,10 +1,10 @@
 """Database models and repository."""
 
-from src.db.models import Base, Job, Profile, init_database
+from src.db.models import HuntingBase, Job, Profile, init_database
 from src.db.repository import JobRepository, ProfileRepository
 
 __all__ = [
-    "Base",
+    "HuntingBase",
     "Job",
     "Profile",
     "init_database",

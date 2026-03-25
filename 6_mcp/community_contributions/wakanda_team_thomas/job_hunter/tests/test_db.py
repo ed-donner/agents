@@ -4,7 +4,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from src.db.models import Base, Job, Profile, init_database
+from src.db.models import HuntingBase, Job, Profile, init_database
 from src.db.repository import JobRepository, ProfileRepository
 from src.schemas.profile import ProfileCreate, ProfileUpdate, Skill, Experience
 from src.schemas.job import JobCreate, JobUpdate, MatchDetail
