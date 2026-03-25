@@ -1,0 +1,24 @@
+[project]
+name = "ngx_analyst"
+version = "0.1.0"
+description = "ngx-analyst using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]==1.11.0"
+]
+
+[project.scripts]
+ngx_analyst = "ngx_analyst.main:run"
+run_crew = "ngx_analyst.main:run"
+train = "ngx_analyst.main:train"
+replay = "ngx_analyst.main:replay"
+test = "ngx_analyst.main:test"
+run_with_trigger = "ngx_analyst.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
