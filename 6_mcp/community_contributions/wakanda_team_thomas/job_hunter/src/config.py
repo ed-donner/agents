@@ -4,15 +4,22 @@ import os
 from pathlib import Path
 from functools import lru_cache
 
+from dotenv import load_dotenv
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+PROJECT_ROOT = Path(__file__).parent.parent
+ENV_FILE = PROJECT_ROOT / ".env"
+
+load_dotenv(ENV_FILE)
 
 
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=str(ENV_FILE),
         env_file_encoding="utf-8",
         extra="ignore",
     )
@@ -100,7 +107,6 @@ class MatchWeights:
 
 
 # Project paths
-PROJECT_ROOT = Path(__file__).parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 UPLOADS_DIR = DATA_DIR / "uploads"
 

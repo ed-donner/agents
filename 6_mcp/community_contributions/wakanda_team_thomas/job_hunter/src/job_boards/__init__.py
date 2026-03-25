@@ -14,10 +14,10 @@ __all__ = [
 ]
 
 
-def get_all_clients() -> list[JobBoardClient]:
-    """Return instances of all available job board clients."""
+def get_all_clients() -> list[type[JobBoardClient]]:
+    """Return all available job board client classes."""
     return [
-        RemoteOKClient(),
-        RemotiveClient(),
-        ArbeitnowClient(),
+        RemoteOKClient,
+        RemotiveClient,
+        ArbeitnowClient,
     ]

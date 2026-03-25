@@ -1,1 +1,1 @@
-"""Streamlit application for job hunter UI."""
+"""Streamlit UI for Job Hunter."""

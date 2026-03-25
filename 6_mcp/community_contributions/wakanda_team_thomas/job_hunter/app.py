@@ -1,5 +1,6 @@
-"""Manual testing script for Job Hunter features."""
+"""Job Hunter CLI - Test and run job hunting workflows."""
 
+import asyncio
 import sys
 from pathlib import Path
 
@@ -119,18 +120,108 @@ def test_job_boards(keywords: list[str]):
     return 0
 
 
+async def run_hunt(resume_path: str):
+    """Run the full job hunting workflow."""
+    from src.manager import HuntManager
+    
+    path = Path(resume_path).expanduser()
+    
+    if not path.exists():
+        print(f"Error: File not found: {path}")
+        return 1
+    
+    if not is_supported_file(path):
+        print(f"Error: Unsupported file format: {path.suffix}")
+        return 1
+    
+    print("=" * 60)
+    print("Job Hunter - Full Workflow")
+    print("=" * 60)
+    print(f"\nResume: {path}")
+    print("\nWorkflow Steps:")
+    print("  1. Parse resume (extract text, structure data)")
+    print("  2. Build/update profile in database")
+    print("  3. Search job boards with profile keywords")
+    print("  4. Match jobs against profile (90%+ threshold)")
+    print("  5. Save matched jobs to database")
+    print("\nRunning...")
+    
+    manager = HuntManager()
+    result = await manager.hunt(str(path))
+    
+    print("\n" + "=" * 60)
+    print("Results")
+    print("=" * 60)
+    print(f"Session ID: {result.session_id}")
+    print(f"Status: {result.status}")
+    print(f"Profile ID: {result.profile_id}")
+    print(f"Jobs Found: {result.jobs_found}")
+    print(f"Jobs Matched (90%+): {result.jobs_matched}")
+    print(f"Duration: {result.duration_seconds:.2f}s")
+    
+    if result.error:
+        print(f"Error: {result.error}")
+    
+    if result.trace_url:
+        print(f"Trace URL: {result.trace_url}")
+    
+    print("=" * 60)
+    
+    return 0 if result.status == "completed" else 1
+
+
+async def run_hunt_search(profile_id: int, keywords: list[str]):
+    """Run job search for an existing profile."""
+    from src.manager import HuntManager
+    
+    print("=" * 60)
+    print("Job Hunter - Search for Existing Profile")
+    print("=" * 60)
+    print(f"\nProfile ID: {profile_id}")
+    print(f"Keywords: {', '.join(keywords)}")
+    print("\nSearching...")
+    
+    manager = HuntManager()
+    result = await manager.search_only(profile_id, keywords)
+    
+    print("\n" + "=" * 60)
+    print("Results")
+    print("=" * 60)
+    print(f"Session ID: {result.session_id}")
+    print(f"Status: {result.status}")
+    print(f"Jobs Found: {result.jobs_found}")
+    print(f"Jobs Matched (90%+): {result.jobs_matched}")
+    print(f"Duration: {result.duration_seconds:.2f}s")
+    
+    if result.error:
+        print(f"Error: {result.error}")
+    
+    print("=" * 60)
+    
+    return 0 if result.status == "completed" else 1
+
+
 def print_usage():
     """Print usage instructions."""
-    print("Job Hunter - Manual Testing")
+    print("Job Hunter CLI")
     print()
     print("Usage:")
     print("  uv run python app.py extract <file_path>")
     print("  uv run python app.py search <keyword1> [keyword2] ...")
+    print("  uv run python app.py hunt <resume_path>")
+    print("  uv run python app.py hunt-search <profile_id> <keyword1> [keyword2] ...")
+    print()
+    print("Commands:")
+    print("  extract      Test text extraction from PDF/DOCX")
+    print("  search       Test job board search (no profile needed)")
+    print("  hunt         Full workflow: parse resume, build profile, find matching jobs")
+    print("  hunt-search  Search jobs for an existing profile")
     print()
     print("Examples:")
     print("  uv run python app.py extract ~/resume.pdf")
     print("  uv run python app.py search python django")
-    print("  uv run python app.py search 'machine learning' aws")
+    print("  uv run python app.py hunt ~/resume.pdf")
+    print("  uv run python app.py hunt-search 1 python backend aws")
 
 
 def main():
@@ -154,6 +245,26 @@ def main():
             sys.exit(1)
         keywords = sys.argv[2:]
         sys.exit(test_job_boards(keywords))
+
+    elif command == "hunt":
+        if len(sys.argv) < 3:
+            print("Error: Missing resume path")
+            print("Usage: uv run python app.py hunt <resume_path>")
+            sys.exit(1)
+        sys.exit(asyncio.run(run_hunt(sys.argv[2])))
+
+    elif command == "hunt-search":
+        if len(sys.argv) < 4:
+            print("Error: Missing profile_id and/or keywords")
+            print("Usage: uv run python app.py hunt-search <profile_id> <keyword1> [keyword2] ...")
+            sys.exit(1)
+        try:
+            profile_id = int(sys.argv[2])
+        except ValueError:
+            print(f"Error: Invalid profile_id: {sys.argv[2]}")
+            sys.exit(1)
+        keywords = sys.argv[3:]
+        sys.exit(asyncio.run(run_hunt_search(profile_id, keywords)))
 
     else:
         print(f"Unknown command: {command}")
