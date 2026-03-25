@@ -325,7 +325,7 @@ def render_settings_page():
     st.code(settings.database_url)
     
     st.markdown("**Match Threshold**")
-    st.text(f"{settings.match_threshold:.0%}")
+    st.text(f"{settings.job_match_threshold:.0%}")
     
     st.markdown("**Langfuse**")
     st.text(f"Enabled: {settings.langfuse_enabled}")

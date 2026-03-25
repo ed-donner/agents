@@ -189,9 +189,49 @@ class HuntManager:
     
     async def _build_profile(self, parsed_resume: ParsedResume, trace) -> ProfileBuildResult:
         """Build or update profile from parsed resume."""
+        from src.db.repository import ProfileRepository
+        from src.schemas.profile import ProfileCreate, ProfileUpdate, Skill, Experience, Education
+        
         start = datetime.now()
         
-        result = await build_profile(parsed_resume)
+        SessionFactory = _get_session_factory()
+        session = SessionFactory()
+        repo = ProfileRepository(session)
+        
+        existing_profile = None
+        if parsed_resume.email:
+            existing_profile = repo.get_by_email(parsed_resume.email)
+        
+        if existing_profile:
+            skills = [Skill(name=s.name, level=s.level, years=s.years) for s in parsed_resume.skills]
+            experience = [Experience(
+                company=e.company, title=e.title, start_date=e.start_date,
+                end_date=e.end_date, description=e.description, location=e.location
+            ) for e in parsed_resume.experience]
+            education = [Education(
+                institution=e.institution, degree=e.degree, field=e.field,
+                graduation_date=e.graduation_date
+            ) for e in parsed_resume.education]
+            
+            update_data = ProfileUpdate(
+                summary=parsed_resume.summary,
+                phone=parsed_resume.phone,
+                location=parsed_resume.location,
+                skills=skills,
+                experience=experience,
+                education=education,
+                keywords=parsed_resume.keywords,
+            )
+            repo.update(existing_profile.id, update_data)
+            
+            result = ProfileBuildResult(
+                success=True,
+                profile_id=existing_profile.id,
+                message=f"Updated existing profile for {existing_profile.name}",
+                is_new=False,
+            )
+        else:
+            result = await build_profile(parsed_resume)
         
         duration_ms = (datetime.now() - start).total_seconds() * 1000
         self._log_span(
@@ -264,7 +304,7 @@ class HuntManager:
         """Match jobs using fast rule-based scoring."""
         start = datetime.now()
         
-        matched = match_jobs_fast(profile_id, jobs, threshold=self.settings.match_threshold)
+        matched = match_jobs_fast(profile_id, jobs, threshold=self.settings.job_match_threshold)
         
         duration_ms = (datetime.now() - start).total_seconds() * 1000
         self._log_span(
