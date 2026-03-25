@@ -1,0 +1,48 @@
+opening_statement:
+  description: >
+    Generate a compelling opening statement presenting your worldview's perspective on the motion: "{motion}". 
+    Ensure your argument is logically sound, aligns with your backstory, and clearly states your core premises.
+    Format your response NOT as paragraphs, but strictly as a concise, numbered list of points.
+  expected_output: >
+    A concise, numbered list of points defending or critiquing the motion from your specific worldview.
+
+moderator_selection:
+  description: >
+    Review the following opening statements from the four debaters regarding the motion: "{motion}".
+    Evaluate them based on logic, clarity, and persuasiveness.
+    Decide which two debaters (by their worldview, e.g., 'christian', 'muslim', 'atheist', 'agnostic') made the most compelling cases.
+    Output MUST strictly be the JSON representing the top two debaters.
+  expected_output: >
+    A Pydantic model representing the two selected debaters and a brief reason for their selection.
+  agent: moderator
+
+debate_propose:
+  description: >
+    It is your turn to PROPOSE an argument or counter-argument. The motion is: "{motion}".
+    Review the debate history so far:
+    {debate_history}
+    Present your next points or rebuttals. Format your response strictly as a concise, numbered list of points. 
+    When rebutting, explicitly quote something specifically said earlier by your opponent, then reply directly to that quoted point under the same numbered item.
+  expected_output: >
+    A numbered list of concise points or rebuttals, quoting the opponent directly where applicable.
+
+debate_oppose:
+  description: >
+    It is your turn to OPPOSE the points just made. The motion is: "{motion}".
+    Review the debate history so far:
+    {debate_history}
+    Present your counter-points or rebuttals. Format your response strictly as a concise, numbered list of points. 
+    When rebutting, explicitly quote something specifically said earlier by your opponent, then reply directly to that quoted point under the same numbered item.
+  expected_output: >
+    A numbered list of concise points or rebuttals, quoting the opponent directly where applicable.
+
+final_judgment:
+  description: >
+    The head-to-head debate has concluded. The motion was: "{motion}".
+    Review the entire debate transcript:
+    {debate_history}
+    Evaluate the back-and-forth exchanges. Did one side effectively dismantle the other's arguments? Did one side commit logical fallacies?
+    Declare the ultimate winner and provide a concise, numbered list of points justifying your decision.
+  expected_output: >
+    A final verdict declaring the winner and justifying the decision via a numbered list of points based purely on the arguments presented.
+  agent: moderator

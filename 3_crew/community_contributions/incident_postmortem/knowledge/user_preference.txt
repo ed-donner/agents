@@ -1,0 +1,2 @@
+Postmortems must be blameless: focus on systems and processes, not individuals.
+Prefer concrete timelines, measurable impact, and actionable follow-ups.
