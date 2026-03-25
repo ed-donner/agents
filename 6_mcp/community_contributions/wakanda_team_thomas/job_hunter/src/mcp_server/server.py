@@ -2,7 +2,7 @@
 MCP Server for Job Hunter.
 
 Provides tools for managing profiles and jobs.
-Run with: uv run python -m src.mcp.server
+Run with: uv run python -m src.mcp_server.server
 """
 
 import sys

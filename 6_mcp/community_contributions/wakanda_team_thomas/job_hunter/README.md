@@ -32,7 +32,7 @@ The system uses a manager orchestration pattern with specialized agents:
 ### Installation
 
 ```bash
-cd 2_openai/community_contributions/wakanda_team_thomas/job_hunter
+cd 6_mcp/community_contributions/wakanda_team_thomas/job_hunter
 
 # Create virtual environment and install dependencies
 uv venv
@@ -65,7 +65,7 @@ streamlit run app/main.py
 ### Run the MCP Server
 
 ```bash
-uv run src/mcp/server.py
+uv run python -m src.mcp_server.server
 ```
 
 ## Project Structure
@@ -75,7 +75,7 @@ job_hunter/
 ├── src/
 │   ├── agents/          # Agent definitions
 │   ├── manager/         # Orchestration logic
-│   ├── mcp/             # MCP server
+│   ├── mcp_server/      # MCP server
 │   ├── db/              # Database models
 │   ├── schemas/         # Pydantic schemas
 │   ├── job_boards/      # Job board clients
