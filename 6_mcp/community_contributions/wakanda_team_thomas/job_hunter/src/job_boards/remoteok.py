@@ -19,8 +19,8 @@ class RemoteOKClient(JobBoardClient):
 
     def search(self, keywords: list[str], limit: int = 50) -> list[JobBoardListing]:
         """
-        Search RemoteOK for remote jobs.
-        RemoteOK API returns all jobs, filtering is done client-side.
+        Search RemoteOK for 100% remote worldwide jobs.
+        Only jobs without geographic restrictions are included.
         """
         try:
             client = self.get_client()
@@ -42,6 +42,9 @@ class RemoteOKClient(JobBoardClient):
         listings = []
 
         for job in data:
+            if not self._is_worldwide_remote(job):
+                continue
+
             if not self._matches_keywords(job, keywords_lower):
                 continue
 
@@ -53,6 +56,23 @@ class RemoteOKClient(JobBoardClient):
                 break
 
         return listings
+
+    def _is_worldwide_remote(self, job: dict) -> bool:
+        """Check if job is available worldwide (no geographic restrictions)."""
+        location = job.get("location", "").lower()
+        
+        restricted_terms = [
+            "usa only", "us only", "united states only",
+            "uk only", "eu only", "europe only", "european",
+            "canada only", "us/canada", "north america only",
+            "apac only", "latam only", "emea only",
+        ]
+        
+        for term in restricted_terms:
+            if term in location:
+                return False
+        
+        return True
 
     def _matches_keywords(self, job: dict, keywords_lower: list[str]) -> bool:
         """Check if job matches any of the keywords."""

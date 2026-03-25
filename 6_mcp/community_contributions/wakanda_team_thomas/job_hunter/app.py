@@ -76,7 +76,7 @@ def test_job_boards(keywords: list[str]):
     print("Job Hunter - Job Board Search Test")
     print("=" * 60)
     print(f"\nKeywords: {', '.join(keywords)}")
-    print(f"Searching for 100% remote jobs only...")
+    print("Filter: 100% remote, worldwide (no geographic restrictions)")
 
     clients = [
         ("RemoteOK", RemoteOKClient()),

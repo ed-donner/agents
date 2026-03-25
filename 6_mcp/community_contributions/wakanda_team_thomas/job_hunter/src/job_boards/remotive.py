@@ -19,8 +19,8 @@ class RemotiveClient(JobBoardClient):
 
     def search(self, keywords: list[str], limit: int = 50) -> list[JobBoardListing]:
         """
-        Search Remotive for remote jobs.
-        Remotive supports search parameter for filtering.
+        Search Remotive for 100% remote worldwide jobs.
+        Only jobs without geographic restrictions are included.
         """
         try:
             client = self.get_client()
@@ -42,6 +42,9 @@ class RemotiveClient(JobBoardClient):
         listings = []
 
         for job in jobs:
+            if not self._is_worldwide_remote(job):
+                continue
+
             if keywords_lower and not self._matches_keywords(job, keywords_lower):
                 continue
 
@@ -53,6 +56,29 @@ class RemotiveClient(JobBoardClient):
                 break
 
         return listings
+
+    def _is_worldwide_remote(self, job: dict) -> bool:
+        """Check if job is available worldwide (no geographic restrictions)."""
+        location = job.get("candidate_required_location", "").lower()
+        
+        if not location or location in ["worldwide", "anywhere", "global", ""]:
+            return True
+        
+        restricted_terms = [
+            "usa only", "us only", "united states only", "united states",
+            "uk only", "eu only", "europe only", "european union",
+            "canada only", "north america only",
+            "apac only", "latam only", "emea only",
+        ]
+        
+        for term in restricted_terms:
+            if term in location:
+                return False
+        
+        if location and "only" in location:
+            return False
+        
+        return True
 
     def _matches_keywords(self, job: dict, keywords_lower: list[str]) -> bool:
         """Check if job matches any of the keywords."""

@@ -20,9 +20,8 @@ class ArbeitnowClient(JobBoardClient):
 
     def search(self, keywords: list[str], limit: int = 50) -> list[JobBoardListing]:
         """
-        Search Arbeitnow for remote jobs.
-        
-        Arbeitnow API supports remote filter.
+        Search Arbeitnow for 100% remote worldwide jobs.
+        Only jobs marked as remote and without geographic restrictions are included.
         """
         try:
             client = self.get_client()
@@ -43,6 +42,9 @@ class ArbeitnowClient(JobBoardClient):
             if not job.get("remote", False):
                 continue
 
+            if not self._is_worldwide_remote(job):
+                continue
+
             if keywords_lower and not self._matches_keywords(job, keywords_lower):
                 continue
 
@@ -54,6 +56,25 @@ class ArbeitnowClient(JobBoardClient):
                 break
 
         return listings
+
+    def _is_worldwide_remote(self, job: dict) -> bool:
+        """Check if job is available worldwide (no geographic restrictions)."""
+        location = job.get("location", "").lower()
+        
+        if not location or location in ["worldwide", "anywhere", "global", "remote"]:
+            return True
+        
+        restricted_terms = [
+            "usa only", "us only", "united states only",
+            "uk only", "eu only", "europe only",
+            "germany only", "canada only", "north america only",
+        ]
+        
+        for term in restricted_terms:
+            if term in location:
+                return False
+        
+        return True
 
     def _matches_keywords(self, job: dict, keywords_lower: list[str]) -> bool:
         """Check if job matches any of the keywords."""
