@@ -2,9 +2,7 @@
 
 from abc import ABC, abstractmethod
 from typing import Optional
-
 import httpx
-
 from src.schemas.job import JobBoardListing
 
 
