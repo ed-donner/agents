@@ -8,7 +8,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.documents.base import Document
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
-from models import EvaluationList, JobPostingList, State
+from models import EvaluationList, JobPostingList, NotificationList, State
 
 
 class ApplicantAgent:
@@ -242,6 +242,8 @@ class ApplicantAgent:
 
         For each acceptable job posting, notify the user of the job posting details and the feedback.
         Make sure that you send them as a list with the job posting details and the feedback.
+
+        After notifying the user, return the notifications as a list of notifications.
         """
         notification_message = f"""
         Notify the user of the job postings that are acceptable: 
@@ -249,12 +251,35 @@ class ApplicantAgent:
         job postings are: {job_postings}
         """
         notification_tools = [self.push_notification_tool]
-        llm_with_tools = self.llm.bind_tools(notification_tools)
+        llm_with_tools = self.llm.bind_tools(notification_tools).with_structured_output(
+            NotificationList
+        )
         messages = [
             SystemMessage(content=notification_instructions),
             HumanMessage(content=notification_message),
         ]
         response = await llm_with_tools.ainvoke(input=messages)
+        return {"notifications": response}
+
+    async def notification_response(self, state: State) -> Dict[str, List[Any]]:
+        """
+        Notification response
+        """
+        notifications: NotificationList = state.notifications
+        notification_response_instructions = f"""
+        You are a notification response assistant helping {self.username} get the response of the notifications.
+
+        Use markdown to format the notification list into a readable format.
+        """
+        notification_response_message = f"""
+        Notify the user of the job postings that are acceptable: 
+        notifications are: {notifications}
+        """
+        messages = [
+            SystemMessage(content=notification_response_instructions),
+            HumanMessage(content=notification_response_message),
+        ]
+        response = await self.llm.ainvoke(input=messages)
         return {"messages": [response]}
 
     def cleanup(self):

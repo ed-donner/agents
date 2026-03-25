@@ -5,7 +5,7 @@ from applicant_agents import ApplicantAgent
 from dotenv import load_dotenv
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import START, StateGraph
-from models import EvaluationList, JobPostingList, State
+from models import EvaluationList, JobPostingList, NotificationList, State
 
 load_dotenv(override=True)
 
@@ -47,10 +47,14 @@ class Applicant:
             "evaluate_job_postings", self.agent.evaluate_job_postings
         )
         graph_builder.add_node("notification_worker", self.agent.notification_worker)
+        graph_builder.add_node(
+            "notification_response", self.agent.notification_response
+        )
 
         # Add edges
         graph_builder.add_edge("listing_worker", "evaluate_job_postings")
         graph_builder.add_edge("evaluate_job_postings", "notification_worker")
+        graph_builder.add_edge("notification_worker", "notification_response")
         graph_builder.add_edge(START, "listing_worker")
 
         # Compile the graph
@@ -66,12 +70,12 @@ class Applicant:
             "job_posting_url": job_posting_url,
             "job_postings": JobPostingList(job_postings=[]),
             "evaluations": EvaluationList(evaluations=[]),
+            "notifications": NotificationList(notifications=[]),
         }
         result = await self.graph.ainvoke(state, config=config)
         user = {"role": "user", "content": message}
-        reply = {"role": "assistant", "content": result["messages"][-2].content}
-        feedback = {"role": "assistant", "content": result["messages"][-1].content}
-        return history + [user, reply, feedback]
+        reply = {"role": "assistant", "content": result["messages"][-1].content}
+        return history + [user, reply]
 
     def cleanup(self):
         self.agent.cleanup()

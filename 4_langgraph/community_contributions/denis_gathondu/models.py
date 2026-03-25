@@ -42,8 +42,22 @@ class EvaluationList(BaseModel):
     evaluations: list[Evaluation]
 
 
+class Notification(BaseModel):
+    """Notification of the job postings that are acceptable"""
+
+    job_posting: JobPosting
+    feedback: str
+
+
+class NotificationList(BaseModel):
+    """List of notifications"""
+
+    notifications: list[Notification]
+
+
 class State(BaseModel):
     messages: Annotated[List[Any], add_messages]
     job_posting_url: str
     job_postings: JobPostingList
     evaluations: EvaluationList
+    notifications: NotificationList
