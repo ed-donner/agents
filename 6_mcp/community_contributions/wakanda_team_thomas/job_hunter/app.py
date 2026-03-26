@@ -142,7 +142,7 @@ async def run_hunt(resume_path: str):
     print("  1. Parse resume (extract text, structure data)")
     print("  2. Build/update profile in database")
     print("  3. Search job boards with profile keywords")
-    print("  4. Match jobs against profile (90%+ threshold)")
+    print("  4. Match jobs against profile (threshold from settings)")
     print("  5. Save matched jobs to database")
     print("\nRunning...")
     
@@ -156,7 +156,7 @@ async def run_hunt(resume_path: str):
     print(f"Status: {result.status}")
     print(f"Profile ID: {result.profile_id}")
     print(f"Jobs Found: {result.jobs_found}")
-    print(f"Jobs Matched (90%+): {result.jobs_matched}")
+    print(f"Jobs Matched: {result.jobs_matched}")
     print(f"Duration: {result.duration_seconds:.2f}s")
     
     if result.error:
@@ -190,7 +190,7 @@ async def run_hunt_search(profile_id: int, keywords: list[str]):
     print(f"Session ID: {result.session_id}")
     print(f"Status: {result.status}")
     print(f"Jobs Found: {result.jobs_found}")
-    print(f"Jobs Matched (90%+): {result.jobs_matched}")
+    print(f"Jobs Matched: {result.jobs_matched}")
     print(f"Duration: {result.duration_seconds:.2f}s")
     
     if result.error:

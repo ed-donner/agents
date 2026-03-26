@@ -16,7 +16,7 @@ class TestSettings:
     def test_default_values(self):
         """Test default settings values."""
         settings = Settings()
-        assert settings.job_match_threshold == 0.90
+        assert settings.job_match_threshold == 0.60
         assert settings.search_interval_hours == 24
         assert settings.debug is False
         assert settings.log_level == "INFO"

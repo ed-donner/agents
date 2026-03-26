@@ -22,7 +22,7 @@ class HuntResult(BaseModel):
     session_id: str = Field(description="Unique session identifier")
     profile_id: Optional[int] = Field(default=None, description="Profile ID if created/found")
     jobs_found: int = Field(default=0, description="Total jobs found from boards")
-    jobs_matched: int = Field(default=0, description="Jobs matching 90%+ criteria")
+    jobs_matched: int = Field(default=0, description="Jobs matching threshold criteria")
     duration_seconds: float = Field(default=0.0, description="Total execution time")
     status: str = Field(default="pending", description="Session status")
     error: Optional[str] = Field(default=None, description="Error message if failed")
@@ -37,7 +37,7 @@ class HuntManager:
     1. Parse resume (extract text, structure data)
     2. Build/update profile in database
     3. Search job boards with profile keywords
-    4. Match jobs against profile (90%+ threshold)
+    4. Match jobs against profile (configurable threshold, default 60%)
     5. Save matching jobs to database
     """
     
@@ -370,7 +370,7 @@ certifications, languages, and keywords for job matching."""},
                     url=job.get("url", ""),
                     location=job.get("location"),
                     salary_range=job.get("salary_range"),
-                    match_score=job.get("match_score", 0.9),
+                    match_score=job.get("match_score", 0.6),
                     required_skills=job.get("required_skills", []),
                     match_details=[job.get("match_details", {})],
                 )

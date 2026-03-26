@@ -139,7 +139,7 @@ def render_upload_page():
         1. **Parse Resume** - Extract text and structure data
         2. **Build Profile** - Create searchable profile
         3. **Search Jobs** - Query multiple job boards
-        4. **Match & Save** - Filter 90%+ matches
+        4. **Match & Save** - Filter matches above threshold
         """)
         
         st.markdown("### Job Boards")
@@ -273,7 +273,7 @@ def render_jobs_page():
         )
     
     with col2:
-        min_score = st.slider("Min Match Score", 0.0, 1.0, 0.9, 0.05)
+        min_score = st.slider("Min Match Score", 0.0, 1.0, 0.6, 0.05)
     
     with col3:
         sort_by = st.selectbox("Sort By", ["Match Score", "Date Added", "Company"])

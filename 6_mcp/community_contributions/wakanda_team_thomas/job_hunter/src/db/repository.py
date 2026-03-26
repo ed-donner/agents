@@ -102,6 +102,7 @@ class JobRepository:
             title=data.title,
             company=data.company,
             description=data.description,
+            location=data.location,
             salary_range=data.salary_range,
             url=data.url,
             match_score=data.match_score,
@@ -109,7 +110,10 @@ class JobRepository:
         )
         job.set_required_skills(data.required_skills)
         if data.match_details:
-            job.set_match_details(data.match_details.model_dump())
+            if isinstance(data.match_details, list):
+                job.set_match_details(data.match_details)
+            else:
+                job.set_match_details([data.match_details])
 
         self.session.add(job)
         self.session.commit()

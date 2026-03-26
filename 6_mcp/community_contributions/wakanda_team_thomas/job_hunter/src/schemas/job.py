@@ -37,14 +37,15 @@ class JobCreate(BaseModel):
     title: str = Field(..., description="Job title")
     company: str = Field(..., description="Company name")
     description: str = Field(..., description="Job description")
+    location: Optional[str] = Field(default=None, description="Job location")
     required_skills: list[str] = Field(
         default_factory=list, description="Required skills"
     )
     salary_range: Optional[str] = Field(default=None, description="Salary range")
     url: str = Field(..., description="Job posting URL")
     match_score: float = Field(..., ge=0, le=1, description="Overall match score")
-    match_details: Optional[MatchDetail] = Field(
-        default=None, description="Detailed match breakdown"
+    match_details: Optional[list] = Field(
+        default=None, description="Match details"
     )
     posted_at: Optional[datetime] = Field(
         default=None, description="When job was posted"

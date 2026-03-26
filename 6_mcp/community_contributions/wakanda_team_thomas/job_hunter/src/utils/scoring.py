@@ -18,8 +18,8 @@ class MatchResult:
 
     @property
     def meets_threshold(self) -> bool:
-        """Check if score meets the 90% threshold."""
-        return self.score >= 0.90
+        """Check if score meets the default threshold (60%)."""
+        return self.score >= 0.60
 
 
 def normalize_skill(skill: str) -> str:

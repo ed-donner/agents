@@ -1,7 +1,7 @@
 """
 Job Matcher Agent.
 
-Evaluates job listings against a profile and saves matching jobs (90%+).
+Evaluates job listings against a profile and saves matching jobs.
 Uses hybrid approach: rule-based scoring + LLM semantic analysis.
 """
 
@@ -29,7 +29,7 @@ class MatchedJob(BaseModel):
 class MatchingResult(BaseModel):
     """Result of the job matching operation."""
     total_evaluated: int = Field(description="Total jobs evaluated")
-    total_matched: int = Field(description="Jobs meeting 90% threshold")
+    total_matched: int = Field(description="Jobs meeting threshold")
     matched_jobs: list[MatchedJob] = Field(default_factory=list, description="List of matched jobs")
     skipped_count: int = Field(default=0, description="Jobs skipped (below threshold or duplicates)")
 
@@ -217,13 +217,13 @@ def save_matched_job(
 
 
 MATCHER_INSTRUCTIONS = """You are a job matching specialist. Your task is to evaluate job listings
-against a user's profile and save only highly relevant matches (90%+ score).
+against a user's profile and save matches that meet the threshold (default 60%).
 
 For each job listing provided:
 
 1. First check if the job already exists using check_job_exists
 2. If not, calculate the match score using calculate_job_match
-3. If the score is >= 0.90 (90%), proceed with semantic analysis
+3. If the score meets the threshold, proceed with semantic analysis
 4. Provide a detailed explanation of why this job matches the profile:
    - Which skills align
    - Relevant experience
@@ -236,7 +236,7 @@ When analyzing matches, consider:
 - Experience level alignment (junior vs senior roles)
 - Domain expertise (fintech, healthcare, etc.)
 
-Only save jobs that truly match at 90% or higher. Quality over quantity.
+Save all jobs that meet the threshold. Balance quality with opportunity.
 
 Return a MatchingResult with counts and details of matched jobs."""
 
@@ -271,20 +271,20 @@ async def match_jobs(profile_id: int, jobs: list[dict]) -> MatchingResult:
     
     result = await Runner.run(
         job_matcher_agent,
-        f"Evaluate these jobs for profile {profile_id} and save matches (90%+ only):\n{json.dumps(jobs)}",
+        f"Evaluate these jobs for profile {profile_id} and save matches that meet the threshold:\n{json.dumps(jobs)}",
     )
     
     return result.final_output_as(MatchingResult)
 
 
-def match_jobs_fast(profile_id: int, jobs: list[dict], threshold: float = 0.9) -> list[dict]:
+def match_jobs_fast(profile_id: int, jobs: list[dict], threshold: float = 0.6) -> list[dict]:
     """
     Fast rule-based matching without LLM (for pre-filtering).
     
     Args:
         profile_id: Profile ID
         jobs: List of job dictionaries
-        threshold: Minimum match score (default 0.9)
+        threshold: Minimum match score (default 0.6)
         
     Returns:
         List of jobs meeting the threshold
