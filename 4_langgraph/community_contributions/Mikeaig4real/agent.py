@@ -92,7 +92,6 @@ INSTRUCTIONS:
         return {"messages": [response]}
 
     # routing
-
     def _router(self, state: State) -> str:
         last = state["messages"][-1]
         if hasattr(last, "tool_calls") and last.tool_calls:
@@ -100,7 +99,6 @@ INSTRUCTIONS:
         return END
 
     # graph
-
     def _build_graph(self):
         """Compile the LangGraph state graph."""
         builder = StateGraph(State)
@@ -115,7 +113,6 @@ INSTRUCTIONS:
         self.graph = builder.compile(checkpointer=self.checkpointer)
 
     # resume handling
-
     def _check_refetch(self, message: str) -> bool:
         """Check if the user is asking to refetch their resume."""
         triggers = ["refetch", "update resume", "re-read", "reload resume"]
@@ -186,15 +183,15 @@ INSTRUCTIONS:
         if match:
             new_url = match.group(1)
             if new_url != resume_url:
-                yield "⏳ **Detecting new resume link...**"
+                yield "**Detecting new resume link...**"
                 resume_url = new_url
-                yield "📑 **Extracting professional details from PDF...**"
+                yield "**Extracting professional details from PDF...**"
                 resume_text = await self._load_resume(resume_url, force=True)
                 new_resume_detected = True
 
         force_refetch = self._check_refetch(message)
         if force_refetch and resume_url:
-            yield "🔄 **Refetching resume data...**"
+            yield "**Refetching resume data...**"
             invalidate_resume(self.db_conn, resume_url)
             resume_text = await self._load_resume(resume_url, force=True)
             new_resume_detected = True
@@ -208,14 +205,14 @@ INSTRUCTIONS:
         # If a new resume was detected, we can add a hint to the LLM
         if new_resume_detected:
             state["messages"].insert(0, SystemMessage(content="[SYSTEM]: A new resume has been successfully parsed and loaded into your context. Please acknowledge this by providing a very brief summary (2-3 bullet points) of the resume (e.g. key skills, last role) as proof that you've read it."))
-            yield "🤖 **AI is analyzing your resume and generating a summary...**"
+            yield "**AI is analyzing your resume and generating a summary...**"
 
         result = await self.graph.ainvoke(state, config=config)
         response = result["messages"][-1].content
         
         # Also prepend a clear visual indicator if it was a new resume
         if new_resume_detected:
-            response = "📄 **Resume parsed successfully!**\n\n" + response
+            response = "**Resume parsed successfully!**\n\n" + response
             
         yield response
 
