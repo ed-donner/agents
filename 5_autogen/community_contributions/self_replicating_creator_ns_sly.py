@@ -1,5 +1,5 @@
 """
-This is a self replicating creator that uses itself as template to create Agents.
+This is a self replicating-creator that uses itself as a template to create Agents.
 It achieves this by passing its own source code as the template to the LLM through the use 
 of the inspect module.
 """
