@@ -24,16 +24,16 @@ class Experience(BaseModel):
     start_date: Optional[str] = Field(default=None, description="Start date")
     end_date: Optional[str] = Field(default=None, description="End date or 'Present'")
     description: Optional[str] = Field(default=None, description="Role description")
-    achievements: list[str] = Field(default_factory=list, description="Key achievements")
+    location: Optional[str] = Field(default=None, description="Job location")
 
 
 class Education(BaseModel):
     """Education entry."""
 
     institution: str = Field(..., description="School/University name")
-    degree: str = Field(..., description="Degree obtained")
+    degree: Optional[str] = Field(default=None, description="Degree obtained")
     field: Optional[str] = Field(default=None, description="Field of study")
-    year: Optional[int] = Field(default=None, description="Graduation year")
+    graduation_date: Optional[str] = Field(default=None, description="Graduation date")
 
 
 class JobPreferences(BaseModel):

@@ -92,17 +92,25 @@ class HuntManager:
         except Exception:
             pass
     
-    async def hunt(self, resume_path: str, use_agent_matching: bool = False) -> HuntResult:
+    async def hunt(
+        self,
+        resume_path: str,
+        use_agent_matching: bool = False,
+        match_threshold: Optional[float] = None,
+    ) -> HuntResult:
         """
         Execute the complete job hunting workflow.
         
         Args:
             resume_path: Path to the resume file (PDF or DOCX)
             use_agent_matching: If True, use LLM agent for matching; otherwise fast rule-based
+            match_threshold: Minimum match score (0.0-1.0), defaults to config value
             
         Returns:
             HuntResult with session details
         """
+        if match_threshold is None:
+            match_threshold = self.settings.job_match_threshold
         session_id = str(uuid.uuid4())
         start_time = datetime.now()
         trace = self._create_trace(session_id)
@@ -139,7 +147,7 @@ class HuntManager:
                 result.jobs_matched = matching_result.total_matched
             else:
                 matched_jobs = self._match_jobs_fast(
-                    result.profile_id, search_result.jobs, trace
+                    result.profile_id, search_result.jobs, trace, match_threshold
                 )
                 result.jobs_matched = len(matched_jobs)
                 
@@ -172,10 +180,29 @@ class HuntManager:
         return result
     
     async def _parse_resume(self, resume_path: str, trace) -> ParsedResume:
-        """Parse resume and extract structured data."""
+        """Parse resume and extract structured data using direct LLM call."""
+        from openai import OpenAI
+        from src.utils.extractors import extract_text
+        from src.agent_workers.resume_parser import ParsedResume
+        
         start = datetime.now()
         
-        parsed = await parse_resume(resume_path)
+        text = extract_text(resume_path)
+        
+        client = OpenAI()
+        response = client.beta.chat.completions.parse(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": """You are a resume parser. Extract structured information from the resume text.
+Extract: name, email, phone, location, summary, skills (with level and years if mentioned), 
+work experience (company, title, dates, description), education (institution, degree, field, graduation date),
+certifications, languages, and keywords for job matching."""},
+                {"role": "user", "content": f"Parse this resume:\n\n{text}"}
+            ],
+            response_format=ParsedResume,
+        )
+        
+        parsed = response.choices[0].message.parsed
         
         duration_ms = (datetime.now() - start).total_seconds() * 1000
         self._log_span(
@@ -299,12 +326,12 @@ class HuntManager:
         return result
     
     def _match_jobs_fast(
-        self, profile_id: int, jobs: list[dict], trace
+        self, profile_id: int, jobs: list[dict], trace, threshold: float = 0.6
     ) -> list[dict]:
         """Match jobs using fast rule-based scoring."""
         start = datetime.now()
         
-        matched = match_jobs_fast(profile_id, jobs, threshold=self.settings.job_match_threshold)
+        matched = match_jobs_fast(profile_id, jobs, threshold=threshold)
         
         duration_ms = (datetime.now() - start).total_seconds() * 1000
         self._log_span(
@@ -359,17 +386,26 @@ class HuntManager:
             0,
         )
     
-    async def search_only(self, profile_id: int, keywords: list[str]) -> HuntResult:
+    async def search_only(
+        self,
+        profile_id: int,
+        keywords: list[str],
+        match_threshold: Optional[float] = None,
+    ) -> HuntResult:
         """
         Run job search and matching for an existing profile.
         
         Args:
             profile_id: Existing profile ID
             keywords: Keywords to search for
+            match_threshold: Minimum match score (0.0-1.0), defaults to config value
             
         Returns:
             HuntResult with search results
         """
+        if match_threshold is None:
+            match_threshold = self.settings.job_match_threshold
+            
         session_id = str(uuid.uuid4())
         start_time = datetime.now()
         trace = self._create_trace(session_id, "job_search")
@@ -385,7 +421,7 @@ class HuntManager:
             result.jobs_found = search_result.total_found
             
             if search_result.total_found > 0:
-                matched_jobs = self._match_jobs_fast(profile_id, search_result.jobs, trace)
+                matched_jobs = self._match_jobs_fast(profile_id, search_result.jobs, trace, match_threshold)
                 result.jobs_matched = len(matched_jobs)
                 await self._save_matched_jobs(profile_id, matched_jobs, trace)
             

@@ -41,7 +41,7 @@ class Settings(BaseSettings):
 
     # Job Search Settings
     job_match_threshold: float = Field(
-        default=0.90, ge=0.0, le=1.0, description="Minimum match score (0.0-1.0)"
+        default=0.60, ge=0.0, le=1.0, description="Minimum match score (0.0-1.0)"
     )
     search_interval_hours: int = Field(
         default=24, ge=1, description="Hours between scheduled searches"

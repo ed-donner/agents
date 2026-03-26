@@ -86,6 +86,16 @@ def render_upload_page():
             help="Max file size: 1 MB",
         )
         
+        match_threshold_pct = st.slider(
+            "Match Score Threshold (%)",
+            min_value=50,
+            max_value=100,
+            value=60,
+            step=5,
+            help="Only jobs with match score above this threshold will be saved",
+        )
+        match_threshold = match_threshold_pct / 100.0
+        
         if uploaded_file:
             st.success(f"File uploaded: {uploaded_file.name}")
             
@@ -100,7 +110,7 @@ def render_upload_page():
                     
                     try:
                         manager = HuntManager()
-                        result = asyncio.run(manager.hunt(tmp_path))
+                        result = asyncio.run(manager.hunt(tmp_path, match_threshold=match_threshold))
                         
                         if result.status == "completed":
                             st.success("Job hunt completed!")
@@ -108,7 +118,7 @@ def render_upload_page():
                             col_a, col_b, col_c = st.columns(3)
                             col_a.metric("Profile ID", result.profile_id)
                             col_b.metric("Jobs Found", result.jobs_found)
-                            col_c.metric("Jobs Matched (90%+)", result.jobs_matched)
+                            col_c.metric("Jobs Matched", f"{result.jobs_matched} ({match_threshold_pct}%+)")
                             
                             st.info(f"Duration: {result.duration_seconds:.2f}s")
                             
@@ -207,6 +217,16 @@ def render_profile_page():
             placeholder="python, django, aws",
         )
         
+        search_threshold_pct = st.slider(
+            "Match Score Threshold (%)",
+            min_value=50,
+            max_value=100,
+            value=60,
+            step=5,
+            key="search_threshold",
+        )
+        search_threshold = search_threshold_pct / 100.0
+        
         if st.button("Search Now"):
             search_keywords = keywords.copy() if keywords else []
             if custom_keywords:
@@ -217,10 +237,10 @@ def render_profile_page():
             else:
                 with st.spinner("Searching job boards..."):
                     manager = HuntManager()
-                    result = asyncio.run(manager.search_only(profile_id, search_keywords))
+                    result = asyncio.run(manager.search_only(profile_id, search_keywords, search_threshold))
                     
                     if result.status == "completed":
-                        st.success(f"Found {result.jobs_found} jobs, {result.jobs_matched} matched 90%+")
+                        st.success(f"Found {result.jobs_found} jobs, {result.jobs_matched} matched {search_threshold_pct}%+")
                     else:
                         st.error(f"Search failed: {result.error}")
 

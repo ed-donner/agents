@@ -110,15 +110,15 @@ def calculate_job_match(profile_id: int, job_json: str) -> str:
     
     result = calculate_match_score(
         profile_skills=profile_skills,
-        profile_keywords=profile_keywords,
         profile_experience=profile_experience,
-        job_skills=job_skills,
+        profile_keywords=profile_keywords,
         job_title=job_title,
         job_description=job_description,
+        job_required_skills=job_skills,
     )
     
     return json.dumps({
-        "overall_score": result.overall_score,
+        "overall_score": result.score,
         "skills_score": result.skills_score,
         "experience_score": result.experience_score,
         "keywords_score": result.keywords_score,
@@ -303,15 +303,15 @@ def match_jobs_fast(profile_id: int, jobs: list[dict], threshold: float = 0.9) -
     for job in jobs:
         result = calculate_match_score(
             profile_skills=profile_skills,
-            profile_keywords=profile_keywords,
             profile_experience=profile_experience,
-            job_skills=job.get("required_skills", []),
+            profile_keywords=profile_keywords,
             job_title=job.get("title", ""),
             job_description=job.get("description", ""),
+            job_required_skills=job.get("required_skills", []),
         )
         
-        if result.overall_score >= threshold:
-            job["match_score"] = result.overall_score
+        if result.score >= threshold:
+            job["match_score"] = result.score
             job["match_details"] = {
                 "skills": result.skills_score,
                 "experience": result.experience_score,
