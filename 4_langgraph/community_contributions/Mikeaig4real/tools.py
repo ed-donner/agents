@@ -53,13 +53,13 @@ def search_jobs(query: str) -> str:
     return "\n".join(output)
 
 
-def push_notification(text: str) -> str:
+def push(text: str) -> str:
     """Send a push notification to the user via Pushover."""
     requests.post(
         pushover_url,
         data={"token": pushover_token, "user": pushover_user, "message": text}
     )
-    return "Notification sent"
+    return "success"
 
 
 async def other_tools():
@@ -71,11 +71,10 @@ async def other_tools():
     )
 
     tool_push = Tool(
-        name="send_notification",
-        func=push_notification,
+        name="send_push_notification",
+        func=push,
         description=(
-            "Send a push notification to the user when their attention is needed, "
-            "e.g. to confirm an application, visit a link, or provide missing information"
+            "Use this tool when you want to send a push notification to the user"
         )
     )
 

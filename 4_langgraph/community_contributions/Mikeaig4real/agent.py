@@ -2,7 +2,7 @@
 
 from typing import Annotated, List, Any, Dict
 from typing_extensions import TypedDict
-from langchain_core.messages import HumanMessage, SystemMessage, BaseMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
@@ -16,10 +16,11 @@ import io
 from datetime import datetime
 import os
 import uuid
+import asyncio
 
 # State
 class State(TypedDict):
-    messages: Annotated[List[BaseMessage], add_messages]
+    messages: Annotated[List[Any], add_messages]
     resume_text: str
     resume_url: str
 
@@ -77,16 +78,19 @@ INSTRUCTIONS:
 
     def worker(self, state: State) -> Dict[str, Any]:
         """Main worker node — calls the LLM with tools."""
-        system = self._system_prompt(state)
+        system_message = self._system_prompt(state)
         
-        messages = list(state["messages"])
-        if not any(is_instance(msg, SystemMessage) for msg in messages):
-            messages = [SystemMessage(content=system)] + messages
-        else:
-            for msg in messages:
-                if isinstance(msg, SystemMessage):
-                    msg.content = system
-                    break
+        # Add in the system message (alignment with official pattern)
+        found_system_message = False
+        messages = state["messages"]
+        for message in messages:
+            if isinstance(message, SystemMessage):
+                message.content = system_message
+                found_system_message = True
+                break
+
+        if not found_system_message:
+            messages = [SystemMessage(content=system_message)] + messages
 
         response = self.llm_with_tools.invoke(messages)
         return {"messages": [response]}
@@ -219,7 +223,6 @@ INSTRUCTIONS:
     def cleanup(self):
         """Release browser resources."""
         if self.browser:
-            import asyncio
             try:
                 loop = asyncio.get_running_loop()
                 loop.create_task(self.browser.close())
@@ -230,5 +233,3 @@ INSTRUCTIONS:
                 if self.playwright:
                     asyncio.run(self.playwright.stop())
 
-def is_instance(obj, cls):
-    return isinstance(obj, cls) or (hasattr(obj, 'type') and obj.type == 'system')

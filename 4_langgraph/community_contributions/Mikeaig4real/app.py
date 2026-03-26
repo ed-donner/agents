@@ -3,23 +3,15 @@
 import gradio as gr
 from agent import JobHunterAgent
 
-# agent instance for the session
-_agent = None
+async def setup_agent():
+    """Manage agent instance via Gradio State (official pattern)."""
+    agent = JobHunterAgent()
+    await agent.setup()
+    return agent
 
-async def get_agent():
-    global _agent
-    if _agent is None:
-        _agent = JobHunterAgent()
-        await _agent.setup()
-    return _agent
-
-
-
-def cleanup():
-    global _agent
-    if _agent:
-        _agent.cleanup()
-
+def cleanup_agent(agent):
+    if agent:
+        agent.cleanup()
 
 with gr.Blocks(
     title="Job Hunter AI", 
@@ -27,11 +19,16 @@ with gr.Blocks(
     fill_height=True,
     css=".gradio-container { height: 100vh !important; }"
 ) as demo:
+    # State managed agent
+    agent_state = gr.State(delete_callback=cleanup_agent)
+    
     gr.Markdown("# Job Hunter AI")
     gr.Markdown("I can find matching jobs for you based on your resume. Just paste a Google Docs link in the chat to get started!")
     
-    async def predict(message, history):
-        agent = await get_agent()
+    async def predict(message, history, agent):
+        if agent is None:
+            agent = await setup_agent()
+        
         async for chunk in agent.run(message):
             yield chunk
 
@@ -39,10 +36,10 @@ with gr.Blocks(
         fn=predict,
         type="messages",
         fill_height=True,
+        additional_inputs=[agent_state]
     )
+    
+    demo.load(setup_agent, outputs=[agent_state])
 
 if __name__ == "__main__":
-    try:
-        demo.launch(inbrowser=True)
-    finally:
-        cleanup()
+    demo.launch(inbrowser=True)
