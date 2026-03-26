@@ -4,7 +4,7 @@ import asyncio
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent / "src"))
+sys.path.insert(0, str(Path(__file__).parent))
 
 from src.utils.extractors import (
     MAX_FILE_SIZE_BYTES,

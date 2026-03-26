@@ -1,8 +1,8 @@
 """Configuration management for Job Hunter system."""
 
 import os
-from pathlib import Path
 from functools import lru_cache
+from pathlib import Path
 
 from dotenv import load_dotenv
 from pydantic import Field
@@ -10,8 +10,18 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 PROJECT_ROOT = Path(__file__).parent.parent
-ENV_FILE = PROJECT_ROOT / ".env"
 
+
+def _resolve_env_file() -> Path:
+    """Resolve .env from project root or nearest parent directory."""
+    for base in [PROJECT_ROOT, *PROJECT_ROOT.parents]:
+        candidate = base / ".env"
+        if candidate.exists():
+            return candidate
+    return PROJECT_ROOT / ".env"
+
+
+ENV_FILE = _resolve_env_file()
 load_dotenv(ENV_FILE)
 
 
@@ -68,7 +78,11 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     """Get cached settings instance."""
-    return Settings()
+    settings = Settings()
+    # OpenAI SDK clients look for OPENAI_API_KEY in os.environ by default.
+    if settings.openai_api_key and not os.getenv("OPENAI_API_KEY"):
+        os.environ["OPENAI_API_KEY"] = settings.openai_api_key
+    return settings
 
 
 # Job status constants
