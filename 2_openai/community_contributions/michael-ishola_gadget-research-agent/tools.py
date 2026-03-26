@@ -120,10 +120,6 @@ def send_push(title: str, message: str) -> str:
         pushover_url = "https://api.pushover.net/1/messages.json"
         payload = {"user": user_key, "token": app_token, "message": message}
         requests.post(pushover_url, data=payload)
+        return "Push sent."
     except Exception as exc:
         return f"Push failed: {exc.__class__.__name__}."
-
-    if sent:
-        return "Push sent."
-    return "Push failed: provider rejected message."
-
