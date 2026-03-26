@@ -6,8 +6,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 
 from src.db.models import Job, Profile
-from src.schemas.job import JobCreate, JobStats, JobUpdate
-from src.schemas.profile import ProfileCreate, ProfileUpdate
+from src.schemas import JobCreate, JobStats, JobUpdate, ProfileCreate, ProfileUpdate
 
 
 class ProfileRepository:

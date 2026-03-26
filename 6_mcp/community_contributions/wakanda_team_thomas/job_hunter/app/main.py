@@ -329,7 +329,7 @@ def render_jobs_page():
                 notes = st.text_area("Notes", value=job.notes or "", key=f"notes_{job.id}")
                 
                 if st.button("Save", key=f"save_{job.id}"):
-                    from src.schemas.job import JobUpdate
+                    from src.schemas import JobUpdate
                     job_repo.update(job.id, JobUpdate(status=new_status, notes=notes))
                     st.success("Updated!")
                     st.rerun()

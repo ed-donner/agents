@@ -11,10 +11,16 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 from src.config import get_settings
-from src.agent_workers.resume_parser import parse_resume, ParsedResume
-from src.agent_workers.profile_builder import build_profile, ProfileBuildResult
-from src.agent_workers.job_search import search_jobs_direct, JobSearchResult
-from src.agent_workers.job_matcher import match_jobs, match_jobs_fast, MatchingResult
+from src.agent_workers import (
+    ParsedResume,
+    ProfileBuildResult,
+    JobSearchResult,
+    MatchingResult,
+    build_profile,
+    match_jobs,
+    match_jobs_fast,
+    search_jobs_direct,
+)
 
 
 class HuntResult(BaseModel):
@@ -183,7 +189,7 @@ class HuntManager:
         """Parse resume and extract structured data using direct LLM call."""
         from openai import OpenAI
         from src.utils.extractors import extract_text
-        from src.agent_workers.resume_parser import ParsedResume
+        from src.agent_workers import ParsedResume
         
         start = datetime.now()
         
@@ -217,7 +223,7 @@ certifications, languages, and keywords for job matching."""},
     async def _build_profile(self, parsed_resume: ParsedResume, trace) -> ProfileBuildResult:
         """Build or update profile from parsed resume."""
         from src.db.repository import ProfileRepository
-        from src.schemas.profile import ProfileCreate, ProfileUpdate, Skill, Experience, Education
+        from src.schemas import ProfileCreate, ProfileUpdate, Skill, Experience, Education
         
         start = datetime.now()
         
@@ -348,7 +354,7 @@ certifications, languages, and keywords for job matching."""},
     ):
         """Save matched jobs to database."""
         from src.db.repository import JobRepository
-        from src.schemas.job import JobCreate
+        from src.schemas import JobCreate
         
         SessionFactory = _get_session_factory()
         session = SessionFactory()

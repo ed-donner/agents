@@ -1,22 +1,20 @@
 """Pydantic schemas for data validation."""
 
-from src.schemas.profile import (
-    Skill,
-    Experience,
+from src.schemas.models import (
     Education,
-    JobPreferences,
-    ProfileCreate,
-    ProfileUpdate,
-    ProfileResponse,
-)
-from src.schemas.job import (
-    MatchDetail,
-    JobCreate,
-    JobUpdate,
-    JobResponse,
-    JobListResponse,
-    JobStats,
+    Experience,
     JobBoardListing,
+    JobCreate,
+    JobListResponse,
+    JobPreferences,
+    JobResponse,
+    JobStats,
+    JobUpdate,
+    MatchDetail,
+    ProfileCreate,
+    ProfileResponse,
+    ProfileUpdate,
+    Skill,
 )
 
 __all__ = [

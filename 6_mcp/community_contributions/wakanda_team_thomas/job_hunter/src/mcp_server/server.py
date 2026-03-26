@@ -16,8 +16,17 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from src.config import get_settings
 from src.db.models import init_database
 from src.db.repository import ProfileRepository, JobRepository
-from src.schemas.profile import ProfileCreate, ProfileUpdate, Skill, Experience, Education, JobPreferences
-from src.schemas.job import JobCreate, JobUpdate, MatchDetail
+from src.schemas import (
+    Education,
+    Experience,
+    JobCreate,
+    JobPreferences,
+    JobUpdate,
+    MatchDetail,
+    ProfileCreate,
+    ProfileUpdate,
+    Skill,
+)
 
 settings = get_settings()
 SessionFactory = init_database(settings.database_url)
