@@ -149,7 +149,7 @@ class Sidekick:
         human_messages = [m for m in state["messages"] if isinstance(m, HumanMessage)]
         if len(human_messages) == 1:
             return {
-                "messages": [{"role": "assistant", "content": "Waiting for user to answer clarifying questions."}],
+                "messages": [{"role": "assistant", "content": "Waiting for you to answer clarifying questions."}],
                 "feedback_on_work": None,
                 "success_criteria_met": False,
                 "user_input_needed": True,  # <-- This stops the loop
