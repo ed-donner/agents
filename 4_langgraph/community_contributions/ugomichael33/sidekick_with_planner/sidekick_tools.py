@@ -42,6 +42,7 @@ def push(text: str):
 
 
 def get_file_tools():
+    os.makedirs("sandbox", exist_ok=True)
     toolkit = FileManagementToolkit(root_dir="sandbox")
     return toolkit.get_tools()
 
