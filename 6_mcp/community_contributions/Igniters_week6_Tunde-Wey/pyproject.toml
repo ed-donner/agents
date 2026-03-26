@@ -1,0 +1,18 @@
+[project]
+name = "igniters-week6-tunde-wey"
+version = "0.1.0"
+description = "Autonomous Traders — MCP + OpenAI Agents SDK (Week 6 capstone)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "openai-agents>=0.0.15",
+    "openai>=1.68.0",
+    "mcp[cli]>=1.5.0",
+    "gradio>=5.22.0",
+    "plotly>=6.0.0",
+    "pandas>=2.0.0",
+    "pydantic>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.32.0",
+    "polygon-api-client>=1.14.0",
+]
