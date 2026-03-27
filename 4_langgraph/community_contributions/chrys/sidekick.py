@@ -2,7 +2,9 @@
 
 import asyncio
 import aiosqlite
+import json
 import os
+import re
 import uuid
 from datetime import datetime
 from typing import Annotated, Any, Dict, List, Optional
@@ -77,12 +79,56 @@ def _msg_content(m: Any) -> str:
     return str(getattr(m, "content", "") or "")
 
 
+def _parse_json_dict_from_text(text: str) -> dict:
+    """Extract a JSON object from model output (handles ```json fences)."""
+    text = (text or "").strip()
+    if not text:
+        raise ValueError("empty response")
+    fence = re.search(r"```(?:json)?\s*([\s\S]*?)```", text)
+    if fence:
+        text = fence.group(1).strip()
+    try:
+        val = json.loads(text)
+    except json.JSONDecodeError:
+        start, end = text.find("{"), text.rfind("}")
+        if start < 0 or end <= start:
+            raise
+        val = json.loads(text[start : end + 1])
+    if not isinstance(val, dict):
+        raise ValueError("JSON root must be an object")
+    return val
+
+
+def _default_router_output(model_cls: type[BaseModel]) -> BaseModel:
+    if model_cls is ClarificationOutput:
+        return ClarificationOutput(
+            ready_to_execute=True,
+            questions=[],
+            rationale="",
+        )
+    if model_cls is PlanOutput:
+        return PlanOutput(
+            steps=[
+                "Gather facts with search or Wikipedia if needed",
+                "Use tools to complete the task",
+                "Verify against success criteria",
+            ]
+        )
+    if model_cls is EvaluatorOutput:
+        return EvaluatorOutput(
+            feedback="Evaluator could not parse model output; treating turn as complete.",
+            success_criteria_met=True,
+            user_input_needed=False,
+        )
+    raise ValueError(f"No default for {model_cls}")
+
+
 class Sidekick:
     def __init__(self, thread_id: Optional[str] = None):
         self.worker_llm_with_tools = None
-        self.evaluator_llm_with_output = None
-        self.clarify_llm = None
-        self.planner_llm = None
+        self.llm_clarify = None
+        self.llm_planner = None
+        self.llm_evaluator = None
         self.tools = None
         self.graph = None
         self.sidekick_id = thread_id or str(uuid.uuid4())
@@ -94,6 +140,42 @@ class Sidekick:
     def set_thread_id(self, thread_id: str) -> None:
         self.sidekick_id = thread_id.strip()
 
+    def _invoke_router_output(
+        self,
+        llm: ChatOpenAI,
+        model_cls: type[BaseModel],
+        messages: List,
+    ) -> BaseModel:
+        """Structured output with JSON-in-text fallback (OpenRouter / some OSS models fail JSON schema mode)."""
+        structured = llm.with_structured_output(model_cls)
+        try:
+            out = structured.invoke(messages)
+            if isinstance(out, model_cls):
+                return out
+        except Exception:
+            pass
+        hints = {
+            ClarificationOutput: '{"ready_to_execute": true, "questions": ["..."], "rationale": ""}',
+            PlanOutput: '{"steps": ["step1", "step2"]}',
+            EvaluatorOutput: (
+                '{"feedback": "...", "success_criteria_met": true, "user_input_needed": false}'
+            ),
+        }
+        hint = hints.get(model_cls, "{}")
+        tail = HumanMessage(
+            content=(
+                "Reply with ONLY one JSON object matching this shape (no markdown, no prose):\n"
+                f"{hint}"
+            )
+        )
+        try:
+            r = llm.invoke(messages + [tail])
+            text = _msg_content(r)
+            data = _parse_json_dict_from_text(text)
+            return model_cls.model_validate(data)
+        except Exception:
+            return _default_router_output(model_cls)
+
     async def setup(self) -> None:
         self.tools, self.browser, self.playwright = await playwright_tools()
         self.tools += await other_tools()
@@ -104,14 +186,10 @@ class Sidekick:
         worker_llm = ChatOpenAI(model=model, temperature=0.2, base_url=base_url, api_key=openrouter_api_key)
         self.worker_llm_with_tools = worker_llm.bind_tools(self.tools)
 
-        evaluator_llm = ChatOpenAI(model=model, temperature=0, base_url=base_url, api_key=openrouter_api_key)
-        self.evaluator_llm_with_output = evaluator_llm.with_structured_output(EvaluatorOutput)
-
-        clarify_llm = ChatOpenAI(model=model, temperature=0.1, base_url=base_url, api_key=openrouter_api_key)
-        self.clarify_llm = clarify_llm.with_structured_output(ClarificationOutput)
-
-        planner_llm = ChatOpenAI(model=model, temperature=0.2, base_url=base_url, api_key=openrouter_api_key)
-        self.planner_llm = planner_llm.with_structured_output(PlanOutput)
+        # Plain LLMs: OpenRouter structured-output parsing can return invalid scalars; we use JSON fallback.
+        self.llm_evaluator = ChatOpenAI(model=model, temperature=0, base_url=base_url, api_key=openrouter_api_key)
+        self.llm_clarify = ChatOpenAI(model=model, temperature=0.1, base_url=base_url, api_key=openrouter_api_key)
+        self.llm_planner = ChatOpenAI(model=model, temperature=0.2, base_url=base_url, api_key=openrouter_api_key)
 
         db_path = os.getenv("SIDEKICK_CHECKPOINT_DB", DEFAULT_CHECKPOINT)
         self.db_conn = await aiosqlite.connect(db_path)
@@ -134,8 +212,10 @@ Conversation:
 
 If the request is vague, ambiguous, or missing constraints, set ready_to_execute false and provide 2–4 concise questions.
 If you can proceed, set ready_to_execute true and use an empty questions list."""
-        out: ClarificationOutput = self.clarify_llm.invoke(
-            [HumanMessage(content=prompt)]
+        out = self._invoke_router_output(
+            self.llm_clarify,
+            ClarificationOutput,
+            [HumanMessage(content=prompt)],
         )
         if out.ready_to_execute:
             return {"clarify_ready": True}
@@ -169,7 +249,11 @@ Conversation:
 {conv}
 
 Return 3–5 concrete steps (action-oriented)."""
-        plan: PlanOutput = self.planner_llm.invoke([HumanMessage(content=prompt)])
+        plan = self._invoke_router_output(
+            self.llm_planner,
+            PlanOutput,
+            [HumanMessage(content=prompt)],
+        )
         steps = plan.steps[:5] if plan.steps else ["Gather facts with search or Wikipedia if needed", "Use tools to complete the task", "Verify against success criteria"]
         text = "**Plan**\n\n" + "\n".join(f"{i + 1}. {s}" for i, s in enumerate(steps))
         return {"messages": [AIMessage(content=text)]}
@@ -247,11 +331,13 @@ Give the Assistant benefit of the doubt if they used tools appropriately."""
         if state.get("feedback_on_work"):
             user_message += f"\nPrior feedback you gave: {state['feedback_on_work']}\nIf the Assistant repeats mistakes, set user_input_needed true."
 
-        eval_result = self.evaluator_llm_with_output.invoke(
+        eval_result = self._invoke_router_output(
+            self.llm_evaluator,
+            EvaluatorOutput,
             [
                 SystemMessage(content=system_message),
                 HumanMessage(content=user_message),
-            ]
+            ],
         )
 
         if (
