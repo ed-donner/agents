@@ -6,7 +6,14 @@ from pathlib import Path
 from typing import Any
 
 from dotenv import load_dotenv
-from schema import Evaluation, Evaluations, JobPost, JobPosts, Notification, Notifications
+from schema import (
+    Evaluation,
+    Evaluations,
+    JobPost,
+    JobPosts,
+    Notification,
+    Notifications,
+)
 
 load_dotenv(override=True)
 BASE_URL = Path(__file__).resolve().parent
@@ -62,6 +69,44 @@ with sqlite3.connect(DB) as conn:
             notified BOOLEAN DEFAULT FALSE
         )
     """)
+    # One evaluation per job_post_id: merge duplicates before unique index (existing DBs may have dupes)
+    cursor.execute("SELECT id, job_post_id FROM evaluations")
+    by_job_post: dict[int, list[int]] = {}
+    for eid, jpid in cursor.fetchall():
+        by_job_post.setdefault(jpid, []).append(eid)
+    for jpid, ids in by_job_post.items():
+        if len(ids) <= 1:
+            continue
+        keep_id = max(ids)
+        for eid in ids:
+            if eid == keep_id:
+                continue
+            cursor.execute(
+                "UPDATE notifications SET evaluation_id = ? WHERE evaluation_id = ?",
+                (keep_id, eid),
+            )
+            cursor.execute("DELETE FROM evaluations WHERE id = ?", (eid,))
+    cursor.execute(
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_evaluations_job_post_id "
+        "ON evaluations(job_post_id)"
+    )
+    # One notification row per evaluation_id: drop duplicate rows before unique index
+    cursor.execute("SELECT id, evaluation_id FROM notifications")
+    by_eval: dict[int, list[int]] = {}
+    for nid, eid in cursor.fetchall():
+        by_eval.setdefault(eid, []).append(nid)
+    for eid, ids in by_eval.items():
+        if len(ids) <= 1:
+            continue
+        keep_id = max(ids)
+        for nid in ids:
+            if nid == keep_id:
+                continue
+            cursor.execute("DELETE FROM notifications WHERE id = ?", (nid,))
+    cursor.execute(
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_notifications_evaluation_id "
+        "ON notifications(evaluation_id)"
+    )
     conn.commit()
 
 
@@ -178,7 +223,9 @@ def write_evaluation(evaluation: Evaluation):
             """
             INSERT INTO evaluations (is_acceptable, feedback, job_post_id)
             VALUES (?, ?, ?)
-            ON CONFLICT(id) DO UPDATE SET is_acceptable=excluded.is_acceptable, feedback=excluded.feedback, job_post_id=excluded.job_post_id
+            ON CONFLICT(job_post_id) DO UPDATE SET
+                is_acceptable = excluded.is_acceptable,
+                feedback = excluded.feedback
         """,
             (evaluation.is_acceptable, evaluation.feedback, evaluation.job_post_id),
         )
@@ -270,9 +317,9 @@ def write_log(name: str, type: str, message: str):
         cursor.execute(
             """
             INSERT INTO logs (name, datetime, type, message)
-            VALUES (?, datetime('now'), ?, ?)
+            VALUES (?, datetime(?), ?, ?)
         """,
-            (name.lower(), type, message),
+            (name.lower(), now, type, message),
         )
         conn.commit()
 
@@ -316,7 +363,8 @@ def write_notification(notification: Notification) -> None:
             """
             INSERT INTO notifications (evaluation_id, notified)
             VALUES (?, ?)
-            ON CONFLICT(id) DO UPDATE SET notified=excluded.notified
+            ON CONFLICT(evaluation_id) DO UPDATE SET
+                notified = excluded.notified
             """,
             (notification.evaluation_id, notification.notified),
         )

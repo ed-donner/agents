@@ -127,10 +127,10 @@ def send_notification_email(
     to_email = os.getenv("TO_EMAIL", "")
     password = os.getenv("GOOGLE_APP_PASSWORD", "")
     host = os.getenv("EMAIL_HOST", "")
-    port = int(os.getenv("EMAIL_PORT", ""))
+    port = int(os.getenv("EMAIL_PORT") or "465")
 
-    if not all([from_email, to_email, password, host, port]):
-        return "Failed: missing one or more env vars (FROM_EMAIL, TO_EMAIL, GOOGLE_APP_PASSWORD, EMAIL_HOST, EMAIL_PORT)"
+    if not all([from_email, to_email, password, host]):
+        return "Failed: missing one or more env vars (FROM_EMAIL, TO_EMAIL, GOOGLE_APP_PASSWORD, EMAIL_HOST)"
 
     msg = MIMEMultipart()
     msg["From"] = from_email
