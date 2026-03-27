@@ -214,7 +214,7 @@ def save_report(topic: str, content: str) -> str:
 # Main
 # ----------------------
 if __name__ == "__main__":
-    topic = input("Enter a topic (e.g. AI, geopolitics, الاقتصاد): ").strip()
+    topic = input("Enter a topic (e.g. AI, geopolitics, weather): ").strip()
 
     if not topic:
         raise ValueError("Topic cannot be empty.")
