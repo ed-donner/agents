@@ -56,7 +56,7 @@ search_params: dict = {
 
 exchange_rate_params: dict = {
     "command": sys.executable,
-    "args": [str(_PROJECT_ROOT / "exchange_rate.py")],
+    "args": [str(_PROJECT_ROOT / "mcp_exchange_rate.py")],
     "cwd": str(_PROJECT_ROOT),
     "env": _SUBPROCESS_ENV,
 }
@@ -84,8 +84,8 @@ def _try_parse_json_object(blob: str) -> dict | None:
     try:
         data = json.loads(blob)
         return data if isinstance(data, dict) else None
-    except json.JSONDecodeError:
-        pass
+    except json.JSONDecodeError as e:
+        print(f"JSONDecodeError: {e}")
     # Last JSON object in text
     start = blob.rfind("{")
     end = blob.rfind("}")
@@ -93,8 +93,8 @@ def _try_parse_json_object(blob: str) -> dict | None:
         try:
             data = json.loads(blob[start : end + 1])
             return data if isinstance(data, dict) else None
-        except json.JSONDecodeError:
-            pass
+        except json.JSONDecodeError as e:
+            print(f"JSONDecodeError: {e}")
     return None
 
 

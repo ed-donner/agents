@@ -27,7 +27,7 @@ BASE_URL = "https://v6.exchangerate-api.com/v6"
 # --- Simple In-Memory Cache ---
 # Stores: { "BASE_CODE": {"timestamp": datetime, "rates": dict} }
 _CACHE: Dict[str, Dict[str, Any]] = {}
-CACHE_TTL = timedelta(minutes=5) 
+CACHE_TTL = timedelta(hours=1) 
 
 class ExchangeRateResponse(BaseModel):
     """Structured response for exchange rate data"""
