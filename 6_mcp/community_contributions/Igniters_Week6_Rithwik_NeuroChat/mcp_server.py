@@ -1,26 +1,42 @@
+"""
+Exposes three neuroscience data tools over the Model Context Protocol (MCP)
+using stdio transport. The OpenAI Agents SDK connects to this server as a
+subprocess and discovers the tools automatically at runtime.
+"""
+
 import asyncio
 import xml.etree.ElementTree as ET
 from functools import lru_cache
 
 import httpx
-from agents import function_tool
+from mcp.server.fastmcp import FastMCP
 
+mcp = FastMCP(
+    name="neurochat-tools",
+    instructions=(
+        "Provides three neuroscience data tools: "
+        "wiki_search for background knowledge, "
+        "pubmed_abstracts for peer-reviewed literature, "
+        "semantic_scholar_search for citation data and open-access PDFs."
+    ),
+)
+
+# Wikipedia requires a User-Agent header — without it the API returns 403.
 _WIKI_HEADERS = {
     "User-Agent": "NeuroChat/1.0 (neuroscience research assistant; contact@example.com)"
 }
 
-# _PUBMED_HEADERS = {
-#     "User-Agent": "NeuroChat/1.0 (neuroscience research assistant; contact@example.com)"
-# }
-
-# _SEMANTIC_SCHOLAR_HEADERS = {
-#     "User-Agent": "NeuroChat/1.0 (neuroscience research assistant; contact@example.com)"
-# }
 
 @lru_cache(maxsize=256)
-def _cached_wiki(query: str) -> str:
+def _fetch_wiki(query: str) -> str:
+    """
+    Two-step Wikipedia fetch:
+    1. opensearch resolves natural language → correct article title
+       (fixes case-sensitivity and natural language query mismatches)
+    2. /page/summary/ fetches the extract for that exact title
+    User-Agent header included on both requests to avoid 403.
+    """
     try:
-        # Step 1: resolve query → correct article title via opensearch
         search_res = httpx.get(
             "https://en.wikipedia.org/w/api.php",
             params={
@@ -38,10 +54,8 @@ def _cached_wiki(query: str) -> str:
             return f"No Wikipedia article found for: {query}"
         article_title = titles[0]
 
-        # Step 2: fetch summary for the resolved title
-        formatted = article_title.replace(" ", "_")
         summary_res = httpx.get(
-            f"https://en.wikipedia.org/api/rest_v1/page/summary/{formatted}",
+            f"https://en.wikipedia.org/api/rest_v1/page/summary/{article_title.replace(' ', '_')}",
             headers=_WIKI_HEADERS,
             timeout=10,
         )
@@ -54,8 +68,8 @@ def _cached_wiki(query: str) -> str:
 
 
 @lru_cache(maxsize=256)
-def _cached_pubmed(query: str) -> str:
-    """Cached synchronous PubMed fetch."""
+def _fetch_pubmed(query: str) -> str:
+    """Two-step PubMed fetch: esearch for IDs, then efetch for full records."""
     base = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
     try:
         search = httpx.get(
@@ -114,16 +128,18 @@ def _cached_pubmed(query: str) -> str:
 
 
 @lru_cache(maxsize=256)
-def _cached_semantic_scholar(query: str) -> str:
-    """Cached synchronous Semantic Scholar fetch."""
-    url = "https://api.semanticscholar.org/graph/v1/paper/search"
-    params = {
-        "query": query,
-        "limit": 3,
-        "fields": "title,authors,year,abstract,citationCount,openAccessPdf,externalIds",
-    }
+def _fetch_semantic_scholar(query: str) -> str:
+    """Semantic Scholar Graph API fetch with citation counts and PDF links."""
     try:
-        res = httpx.get(url, params=params, timeout=15)
+        res = httpx.get(
+            "https://api.semanticscholar.org/graph/v1/paper/search",
+            params={
+                "query": query,
+                "limit": 3,
+                "fields": "title,authors,year,abstract,citationCount,openAccessPdf,externalIds",
+            },
+            timeout=15,
+        )
         res.raise_for_status()
     except Exception as e:
         return f"Error fetching Semantic Scholar: {e}"
@@ -141,11 +157,9 @@ def _cached_semantic_scholar(query: str) -> str:
         year = p.get("year", "n.d.")
         citations = p.get("citationCount", "N/A")
         abstract = (p.get("abstract") or "No abstract available.")[:600]
-        pdf = p.get("openAccessPdf") or {}
-        pdf_link = pdf.get("url", "")
+        pdf_link = (p.get("openAccessPdf") or {}).get("url", "")
         doi = (p.get("externalIds") or {}).get("DOI", "")
         doi_link = f"https://doi.org/{doi}" if doi else ""
-
         results.append(
             f"**Title:** {title}\n"
             f"**Authors:** {authors}\n"
@@ -158,31 +172,39 @@ def _cached_semantic_scholar(query: str) -> str:
     return "\n\n---\n\n".join(results)
 
 
-@function_tool
+
+@mcp.tool()
 async def wiki_search(query: str) -> str:
     """
     Search Wikipedia for a neuroscience concept and return a plain-English summary.
     Best for definitions, background knowledge, and simple factual questions.
+    Examples: 'hippocampus', 'neuroplasticity', 'blood-brain barrier'
     """
-    # return await asyncio.to_thread(_cached_wiki, query.strip().lower())
-    return await asyncio.to_thread(_cached_wiki, query.strip())
+    return await asyncio.to_thread(_fetch_wiki, query.strip())
 
 
-@function_tool
+@mcp.tool()
 async def pubmed_abstracts(query: str) -> str:
     """
     Fetch up to 3 recent PubMed abstracts for a neuroscience research query.
     Returns titles, authors, journal info, truncated abstracts, and citations.
     Best for finding peer-reviewed research with formal citations.
+    Examples: 'BDNF depression', 'adult neurogenesis hippocampus'
     """
-    return await asyncio.to_thread(_cached_pubmed, query.strip().lower())
+    return await asyncio.to_thread(_fetch_pubmed, query.strip())
 
 
-@function_tool
+@mcp.tool()
 async def semantic_scholar_search(query: str) -> str:
     """
     Search Semantic Scholar for neuroscience papers.
     Returns citation counts, open-access PDF links, and DOIs alongside abstracts.
     Best for finding highly-cited papers, open-access content, or broader context.
+    Examples: 'synaptic plasticity LTP', 'Alzheimer amyloid beta'
     """
-    return await asyncio.to_thread(_cached_semantic_scholar, query.strip().lower())
+    return await asyncio.to_thread(_fetch_semantic_scholar, query.strip())
+
+
+
+if __name__ == "__main__":
+    mcp.run(transport="stdio")

@@ -6,7 +6,7 @@ async def chat(user_message: str, history: list):
     if not user_message.strip():
         return
 
-    # Convert Gradio [user, assistant] pairs -> SDK {role, content} dicts
+    # Convert Gradio  -> SDK dicts
     sdk_history: list[dict] = []
     for user_msg, assistant_msg in history:
         sdk_history.append({"role": "user", "content": user_msg})
@@ -17,13 +17,18 @@ async def chat(user_message: str, history: list):
     history = history + [[user_message, "⏳ Thinking..."]]
     yield history, history, ""
 
-    # creates a placeholder for the answer and updates it as the agent works
-    async for status, answer in run_agent_streamed(user_message, sdk_history):
+ 
+    full_response = ""
+    async for status, chunk in run_agent_streamed(user_message, sdk_history):
         if status:
-            history[-1][1] = f"⏳ {status}"
+            # Still working — show status above any text accumulated so far
+            display = f"⏳ {status}" if not full_response else f"⏳ {status}\n\n{full_response}"
+            history = history[:-1] + [[user_message, display]]
             yield history, history, ""
-        if answer:
-            history[-1][1] = answer
+        if chunk:
+            # New token — append and update the bubble with the full string
+            full_response += chunk
+            history = history[:-1] + [[user_message, full_response]]
             yield history, history, ""
 
 
