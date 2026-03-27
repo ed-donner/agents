@@ -37,7 +37,7 @@ class Applicant(BaseModel):
                 "name": name.lower(),
                 "summary": "",
             }
-            write_applicant(name, fields)
+            write_applicant(name.lower(), fields)
         return cls(**fields)
 
     def __str__(self):
@@ -59,13 +59,12 @@ class Applicant(BaseModel):
         self.summary = summary
         self.save()
 
-    def save_job_post(self, job_post: JobPost):
+    def save_job_post(self, job_post: JobPost) -> None:
         """
         Save the job post to the database.
         """
-        post = write_job_post(job_post)
+        write_job_post(job_post)
         write_log("applicant", "save_job_post", "Saved job post to the database.")
-        return post
 
     def list_job_posts(self) -> JobPosts:
         """
@@ -128,20 +127,20 @@ class Applicant(BaseModel):
     def list_pending_evaluations(self) -> Evaluations:
         """
         List acceptable evaluations that have not yet had a notification sent.
+        Includes:
+        - Evaluations with no notification row at all
+        - Evaluations with a notification row where notified=False (previously failed)
         """
-        pending_evaluations = list_pending_evaluations().evaluations
-        pending_notifications = [
-            notification
-            for notification in list_notifications().notifications
-            if not notification.notified
+        no_notification = list_pending_evaluations().evaluations
+        failed_notification_ids = {
+            n.evaluation_id
+            for n in list_notifications().notifications
+            if not n.notified
+        }
+        failed_evaluations = [
+            e for e in list_evaluations().evaluations if e.id in failed_notification_ids
         ]
-        pending_evaluations += [
-            evaluation
-            for evaluation in list_evaluations().evaluations
-            if evaluation.id
-            in [notification.evaluation_id for notification in pending_notifications]
-        ]
-        return Evaluations(evaluations=pending_evaluations)
+        return Evaluations(evaluations=no_notification + failed_evaluations)
 
     def list_unevaluated_job_posts(self) -> JobPosts:
         """
