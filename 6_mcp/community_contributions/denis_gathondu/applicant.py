@@ -1,13 +1,16 @@
 from database import (
+    list_evaluations,
     list_job_posts,
     read_applicant,
     read_job_post,
+    read_job_post_evaluation,
     write_applicant,
+    write_evaluation,
     write_job_post,
     write_log,
 )
 from pydantic import BaseModel, Field
-from schema import JobPost, JobPosts
+from schema import Evaluation, Evaluations, JobPost, JobPosts
 
 
 class Applicant(BaseModel):
@@ -63,3 +66,22 @@ class Applicant(BaseModel):
         Read the job post from the database.
         """
         return read_job_post(job_post_id)
+
+    def save_evaluation(self, evaluation: Evaluation):
+        """
+        Save an evaluation of a job post to the database.
+        """
+        write_evaluation(evaluation)
+        write_log("applicant", "save_evaluation", f"Saved evaluation for job post {evaluation.job_post_id}.")
+
+    def get_evaluation(self, job_post_id: int) -> Evaluation | None:
+        """
+        Read an evaluation for a job post from the database.
+        """
+        return read_job_post_evaluation(job_post_id)
+
+    def list_evaluations(self) -> Evaluations:
+        """
+        List all evaluations from the database.
+        """
+        return list_evaluations()

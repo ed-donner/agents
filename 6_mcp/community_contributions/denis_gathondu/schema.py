@@ -29,7 +29,7 @@ class Evaluation(BaseModel):
 
     is_acceptable: bool
     feedback: str
-    job_post_id: str
+    job_post_id: int
 
 
 class Evaluations(BaseModel):
