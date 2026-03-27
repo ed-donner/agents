@@ -96,17 +96,19 @@ class Sidekick:
         self.tools, self.browser, self.playwright = await playwright_tools()
         self.tools += await other_tools()
 
-        model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-        worker_llm = ChatOpenAI(model=model, temperature=0.2)
+        model = "openai/gpt-oss-120b"
+        base_url = "https://openrouter.ai/api/v1"
+        openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
+        worker_llm = ChatOpenAI(model=model, temperature=0.2, base_url=base_url, api_key=openrouter_api_key)
         self.worker_llm_with_tools = worker_llm.bind_tools(self.tools)
 
-        evaluator_llm = ChatOpenAI(model=model, temperature=0)
+        evaluator_llm = ChatOpenAI(model=model, temperature=0, base_url=base_url, api_key=openrouter_api_key)
         self.evaluator_llm_with_output = evaluator_llm.with_structured_output(EvaluatorOutput)
 
-        clarify_llm = ChatOpenAI(model=model, temperature=0.1)
+        clarify_llm = ChatOpenAI(model=model, temperature=0.1, base_url=base_url, api_key=openrouter_api_key)
         self.clarify_llm = clarify_llm.with_structured_output(ClarificationOutput)
 
-        planner_llm = ChatOpenAI(model=model, temperature=0.2)
+        planner_llm = ChatOpenAI(model=model, temperature=0.2, base_url=base_url, api_key=openrouter_api_key)
         self.planner_llm = planner_llm.with_structured_output(PlanOutput)
 
         db_path = os.getenv("SIDEKICK_CHECKPOINT_DB", DEFAULT_CHECKPOINT)

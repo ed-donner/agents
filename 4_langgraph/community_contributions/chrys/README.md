@@ -15,7 +15,7 @@ uv run python app.py
 
 | Variable | Purpose |
 |----------|---------|
-| `OPENAI_API_KEY` | Required for `ChatOpenAI` (default model `gpt-4o-mini`, override with `OPENAI_MODEL`) |
+| `OPENROUTER_API_KEY` | Required for `ChatOpenAI` (default model `gpt-4o-mini`, override with `OPENAI_MODEL`) |
 | `SERPER_API_KEY` | Optional; enables the `search` tool |
 | `SIDEKICK_CHECKPOINT_DB` | Optional path for the SQLite checkpoint file |
 | `SIDEKICK_MAX_EVAL_LOOPS` | Max worker↔evaluator cycles (default `8`) |
