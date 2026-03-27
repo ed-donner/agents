@@ -19,6 +19,7 @@ uv run python app.py
 | `SERPER_API_KEY` | Optional; enables the `search` tool |
 | `SIDEKICK_CHECKPOINT_DB` | Optional path for the SQLite checkpoint file |
 | `SIDEKICK_MAX_EVAL_LOOPS` | Max worker↔evaluator cycles (default `8`) |
+| `SIDEKICK_RECURSION_LIMIT` | LangGraph max steps per `ainvoke` (default `100`; LangGraph’s default `25` is often too low for tool loops) |
 | `PLAYWRIGHT_HEADLESS` | `true` / `false` (default `true`) |
 
 ## UI

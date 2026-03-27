@@ -26,6 +26,8 @@ load_dotenv(override=True)
 _CHRYS_DIR = Path(__file__).resolve().parent
 DEFAULT_CHECKPOINT = str(_CHRYS_DIR / "sidekick_checkpoints.sqlite")
 MAX_EVAL_LOOPS = int(os.getenv("SIDEKICK_MAX_EVAL_LOOPS", "8"))
+# LangGraph default is 25; worker↔tools↔evaluator can exceed that in one user turn.
+RECURSION_LIMIT = int(os.getenv("SIDEKICK_RECURSION_LIMIT", "100"))
 
 
 class ClarificationOutput(BaseModel):
@@ -356,7 +358,10 @@ Give the Assistant benefit of the doubt if they used tools appropriately."""
         history: List[Dict[str, str]],
         skip_clarification: bool = False,
     ):
-        config = {"configurable": {"thread_id": self.sidekick_id}}
+        config: Dict[str, Any] = {
+            "configurable": {"thread_id": self.sidekick_id},
+            "recursion_limit": RECURSION_LIMIT,
+        }
         state: Dict[str, Any] = {
             "messages": [HumanMessage(content=message)],
             "success_criteria": success_criteria
