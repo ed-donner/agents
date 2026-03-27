@@ -15,7 +15,14 @@ from database import (
     write_notification,
 )
 from pydantic import BaseModel, Field
-from schema import Evaluation, Evaluations, JobPost, JobPosts, Notification, Notifications
+from schema import (
+    Evaluation,
+    Evaluations,
+    JobPost,
+    JobPosts,
+    Notification,
+    Notifications,
+)
 
 
 class Applicant(BaseModel):
@@ -77,7 +84,11 @@ class Applicant(BaseModel):
         Save an evaluation of a job post to the database.
         """
         write_evaluation(evaluation)
-        write_log("applicant", "save_evaluation", f"Saved evaluation for job post {evaluation.job_post_id}.")
+        write_log(
+            "applicant",
+            "save_evaluation",
+            f"Saved evaluation for job post {evaluation.job_post_id}.",
+        )
 
     def get_evaluation(self, job_post_id: int) -> Evaluation | None:
         """
@@ -96,7 +107,11 @@ class Applicant(BaseModel):
         Save a notification record to the database.
         """
         write_notification(notification)
-        write_log("applicant", "save_notification", f"Saved notification for evaluation {notification.evaluation_id}.")
+        write_log(
+            "applicant",
+            "save_notification",
+            f"Saved notification for evaluation {notification.evaluation_id}.",
+        )
 
     def get_notification(self, evaluation_id: int) -> Notification | None:
         """
@@ -114,7 +129,19 @@ class Applicant(BaseModel):
         """
         List acceptable evaluations that have not yet had a notification sent.
         """
-        return list_pending_evaluations()
+        pending_evaluations = list_pending_evaluations().evaluations
+        pending_notifications = [
+            notification
+            for notification in list_notifications().notifications
+            if not notification.notified
+        ]
+        pending_evaluations += [
+            evaluation
+            for evaluation in list_evaluations().evaluations
+            if evaluation.id
+            in [notification.evaluation_id for notification in pending_notifications]
+        ]
+        return Evaluations(evaluations=pending_evaluations)
 
     def list_unevaluated_job_posts(self) -> JobPosts:
         """
