@@ -1,1 +1,0 @@
-All events have been input into the database.
