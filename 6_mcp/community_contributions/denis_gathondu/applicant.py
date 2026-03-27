@@ -1,11 +1,20 @@
 from database import (
-    list_evaluations,
-    list_job_posts,
-    list_notifications,
-    list_pending_evaluations,
-    list_unevaluated_job_posts,
+    list_evaluations as db_list_evaluations,
+)
+from database import (
+    list_job_posts as db_list_job_posts,
+)
+from database import (
+    list_notifications as db_list_notifications,
+)
+from database import (
+    list_pending_evaluations as db_list_pending_evaluations,
+)
+from database import (
+    list_unevaluated_job_posts as db_list_unevaluated_job_posts,
+)
+from database import (
     read_applicant,
-    read_job_post,
     read_job_post_evaluation,
     read_notification,
     write_applicant,
@@ -13,6 +22,9 @@ from database import (
     write_job_post,
     write_log,
     write_notification,
+)
+from database import (
+    read_job_post as db_read_job_post,
 )
 from pydantic import BaseModel, Field
 from schema import (
@@ -70,13 +82,13 @@ class Applicant(BaseModel):
         """
         List the job posts from the database.
         """
-        return list_job_posts()
+        return db_list_job_posts()
 
     def read_job_post(self, job_post_id: int) -> JobPost | None:
         """
         Read the job post from the database.
         """
-        return read_job_post(job_post_id)
+        return db_read_job_post(job_post_id)
 
     def save_evaluation(self, evaluation: Evaluation):
         """
@@ -99,7 +111,7 @@ class Applicant(BaseModel):
         """
         List all evaluations from the database.
         """
-        return list_evaluations()
+        return db_list_evaluations()
 
     def save_notification(self, notification: Notification) -> None:
         """
@@ -122,7 +134,7 @@ class Applicant(BaseModel):
         """
         List all notification records from the database.
         """
-        return list_notifications()
+        return db_list_notifications()
 
     def list_pending_evaluations(self) -> Evaluations:
         """
@@ -131,14 +143,16 @@ class Applicant(BaseModel):
         - Evaluations with no notification row at all
         - Evaluations with a notification row where notified=False (previously failed)
         """
-        no_notification = list_pending_evaluations().evaluations
+        no_notification = db_list_pending_evaluations().evaluations
         failed_notification_ids = {
             n.evaluation_id
-            for n in list_notifications().notifications
+            for n in db_list_notifications().notifications
             if not n.notified
         }
         failed_evaluations = [
-            e for e in list_evaluations().evaluations if e.id in failed_notification_ids
+            e
+            for e in db_list_evaluations().evaluations
+            if e.id in failed_notification_ids
         ]
         return Evaluations(evaluations=no_notification + failed_evaluations)
 
@@ -146,4 +160,4 @@ class Applicant(BaseModel):
         """
         List job posts that have not yet been evaluated.
         """
-        return list_unevaluated_job_posts()
+        return db_list_unevaluated_job_posts()
