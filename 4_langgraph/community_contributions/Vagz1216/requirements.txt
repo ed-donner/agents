@@ -1,0 +1,10 @@
+langgraph
+langchain-openai
+langchain-community
+langchain-groq
+ddgs
+sendgrid
+gradio
+python-dotenv
+pydantic
+nest-asyncio
