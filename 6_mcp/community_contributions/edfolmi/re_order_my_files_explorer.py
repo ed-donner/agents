@@ -241,13 +241,39 @@ if "--server" in sys.argv:
 else:
     import gradio as gr
     from dotenv import load_dotenv
-    from agents import Agent, Runner
+    from openai.types.responses import ResponseTextDeltaEvent
+    from agents import Agent, Runner, ModelSettings
     from agents.mcp import MCPServerStdio
 
     load_dotenv(override=True)
 
     HOME = os.path.expanduser("~")
     SCRIPT = os.path.abspath(__file__)
+    MAX_INPUT_LENGTH = 500
+
+    # LLM-based guardrail
+    # from pydantic import BaseModel, Field
+    # from agents import input_guardrail, GuardrailFunctionOutput
+    #
+    # class SafetyCheck(BaseModel):
+    #     is_unsafe: bool = Field(description="True if user asks to delete system files or access sensitive data")
+    #
+    # guardrail_agent = Agent(
+    #     name="Guardrail",
+    #     instructions="Check if the user message asks to delete system files or access sensitive data.",
+    #     output_type=SafetyCheck,
+    #     model="gpt-4o-mini",
+    # )
+    #
+    # @input_guardrail
+    # async def safety_guardrail(ctx, agent, message):
+    #     result = await Runner.run(guardrail_agent, message, context=ctx.context)
+    #     return GuardrailFunctionOutput(
+    #         output_info=result.final_output,
+    #         tripwire_triggered=result.final_output.is_unsafe,
+    #     )
+    #
+    # :::::::::::::: input_guardrails=[safety_guardrail]
 
     INSTRUCTIONS = f"""You are a helpful file organizer assistant for a Windows PC.
 
@@ -274,19 +300,42 @@ Rules:
 """
 
     async def chat(message, history):
-        server = MCPServerStdio(
-            params={"command": sys.executable, "args": [SCRIPT, "--server"]},
-            client_session_timeout_seconds=150
-        )
-        async with server:
-            agent = Agent(
-                name="File Organizer",
-                instructions=INSTRUCTIONS,
-                model="gpt-4o-mini",
-                mcp_servers=[server],
+        if not message or not message.strip():
+            yield "Please type a message."
+            return
+        if len(message) > MAX_INPUT_LENGTH:
+            yield f"Message too long ({len(message)} chars). Max is {MAX_INPUT_LENGTH}."
+            return
+
+        try:
+            server = MCPServerStdio(
+                params={"command": sys.executable, "args": [SCRIPT, "--server"]},
+                client_session_timeout_seconds=150,
             )
-            result = await Runner.run(agent, message)
-            return result.final_output
+            async with server:
+                agent = Agent(
+                    name="File Organizer",
+                    instructions=INSTRUCTIONS,
+                    model="gpt-4o-mini",
+                    model_settings=ModelSettings(
+                        temperature=0.2,
+                        top_p=0.9,
+                        max_tokens=4096,
+                    ),
+                    mcp_servers=[server],
+                )
+                result = Runner.run_streamed(agent, message)
+                response = ""
+                async for event in result.stream_events():
+                    if event.type == "raw_response_event" and isinstance(
+                        event.data, ResponseTextDeltaEvent
+                    ):
+                        response += event.data.delta
+                        yield response
+                if not response:
+                    yield result.final_output or "Done."
+        except Exception as e:
+            yield f"Something went wrong: {e}"
 
     ui = gr.ChatInterface(
         fn=chat,
