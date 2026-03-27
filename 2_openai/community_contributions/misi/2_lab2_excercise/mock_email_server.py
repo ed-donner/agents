@@ -142,6 +142,43 @@ class MockEmailServer:
 
         return self.get_email(reply_id)
 
+    def forward_email(
+        self,
+        email_id: int,
+        sender_email: str,
+        recipient_email: str,
+    ) -> dict[str, Any]:
+        self._validate_email(sender_email)
+        self._validate_email(recipient_email)
+
+        original = self.get_email(email_id)
+        subject = self._forward_subject(original["subject"])
+        body = original["body"]
+
+        with self._connect() as conn:
+            cursor = conn.execute(
+                """
+                INSERT INTO emails (
+                    thread_id,
+                    sender_email,
+                    recipient_email,
+                    subject,
+                    body,
+                    is_read,
+                    created_at
+                )
+                VALUES (NULL, ?, ?, ?, ?, 0, ?)
+                """,
+                (sender_email, recipient_email, subject, body, self._now()),
+            )
+            forwarded_email_id = cursor.lastrowid
+            conn.execute(
+                "UPDATE emails SET thread_id = ? WHERE id = ?",
+                (forwarded_email_id, forwarded_email_id),
+            )
+
+        return self.get_email(forwarded_email_id)
+
     def get_email(self, email_id: int) -> dict[str, Any]:
         with self._connect() as conn:
             row = conn.execute(
@@ -229,6 +266,10 @@ class MockEmailServer:
         return subject if subject.lower().startswith("re:") else f"Re: {subject}"
 
     @staticmethod
+    def _forward_subject(subject: str) -> str:
+        return subject if subject.lower().startswith("fwd:") else f"Fwd: {subject}"
+
+    @staticmethod
     def _indent_body(body: str) -> str:
         return "\n".join(f"> {line}" for line in body.splitlines() or [""])
 
@@ -264,6 +305,10 @@ def read_emails(
 
 def reply_to_email(email_id: int, sender_email: str, body: str) -> dict[str, Any]:
     return _DEFAULT_SERVER.reply_to_email(email_id, sender_email, body)
+
+
+def forward_email(email_id: int, sender_email: str, recipient_email: str) -> dict[str, Any]:
+    return _DEFAULT_SERVER.forward_email(email_id, sender_email, recipient_email)
 
 
 def get_email(email_id: int) -> dict[str, Any]:
