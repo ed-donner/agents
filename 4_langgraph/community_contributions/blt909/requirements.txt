@@ -1,0 +1,29 @@
+# Core
+gradio>=4.40.0
+python-dotenv>=1.0.0
+
+# LangGraph + LangChain
+langgraph>=0.2.0
+langchain-core>=0.2.0
+langchain-openai>=0.1.0
+langchain-anthropic>=0.1.0
+# NOTE: langchain-google-genai intentionally excluded — version conflict
+# with langchain-core (ModelProfile import error). Gemini is called directly
+# via the google-generativeai SDK instead.
+
+# LLM providers
+openai>=1.30.0
+google-generativeai>=0.7.0   # used directly, not via langchain wrapper
+anthropic>=0.28.0
+
+# Validation
+pydantic>=2.0.0
+beautifulsoup4>=4.12.0
+html5lib>=1.1
+playwright>=1.44.0
+
+# UI / Assets
+pillow>=10.0.0
+
+# Post-install step (run once):
+# playwright install chromium

@@ -1,0 +1,111 @@
+requirements_task:
+  description: >
+    Turn the feature description below into a clear numbered list of software requirements.
+    Write each requirement on its own line. No technical jargon - keep it simple and clear.
+    Feature description: {feature_description}
+  expected_output: >
+    A numbered list of clear software requirements. Nothing else.
+  agent: business_analyst
+  output_file: output/requirements.md
+
+
+design_task:
+  description: >
+    Read the requirements from the business analyst and design a system split across
+    multiple python modules. Typically 2 to 4 modules - for example a models module
+    (data classes), a services module (business logic), and a main module that ties
+    it all together.
+    For each module write a detailed description of the classes and methods it should contain.
+    Pick one module to be the main entry point - this is what the frontend and tests will use.
+  expected_output: >
+    A DesignDocument with an overview, a list of modules (each with filename, name, description),
+    the main_module filename, and the main_class name.
+  agent: engineering_lead
+  context:
+    - requirements_task
+  output_file: output/design.md
+
+
+# called once per module inside the callback loop in crew.py
+backend_code_task:
+  description: >
+    Write the python module '{module_filename}'.
+
+    Module name: {module_name}
+
+    What this module should contain:
+    {module_description}
+
+    Other modules in this project you can import from if needed:
+    {other_modules}
+
+    Requirements for context:
+    {requirements}
+
+  expected_output: >
+    Raw Python code for {module_filename}. No markdown or backticks.
+    A python module that implements the design and achieves the requirements.
+    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
+    The output should be valid Python code that can be directly saved to a file and executed.
+  agent: backend_engineer
+  output_file: output/{module_filename}
+
+
+integration_task:
+  description: >
+    Review all the python modules that have been written and confirm they fit together.
+
+    Here are the modules:
+    {modules_summary}
+
+    The main module is '{main_module}' and the main class is '{main_class}'.
+
+    List each module and what it does, list the import dependencies between them,
+    and flag any obvious problems.
+  expected_output: >
+    A short markdown summary - module list, import dependencies, any issues spotted.
+  agent: integration_lead
+  output_file: output/integration_summary.md
+
+
+frontend_task:
+  description: >
+    Write a simple Gradio UI in app.py to demo the '{main_class}' class from '{main_module}'.
+
+    The app.py will be in the same folder as the backend modules so import like this:
+      from {main_module_no_ext} import {main_class}
+
+    Keep it very simple - just a prototype. Assume there is only 1 user.
+
+    IMPORTANT: use modern Gradio 4.x syntax only.
+    - Use gr.Interface or gr.Blocks with gr.Textbox, gr.Number, gr.Button, gr.Markdown etc.
+    - Do NOT use gr.inputs or gr.outputs - these were removed in Gradio 4 and will cause an error.
+
+    Here is the main module code so you know what methods are available:
+    {main_module_code}
+
+  expected_output: >
+    A python module that implements the design and achieves the requirements.
+    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, backticks, or explanation.
+    The output should be valid Python code that can be directly saved to a file and executed.
+  agent: frontend_engineer
+  output_file: output/app.py
+
+
+test_task:
+  description: >
+    Write unit tests for the '{main_class}' class in '{main_module}'.
+
+    Here is the module code:
+    {main_module_code}
+
+    Cover the happy path for each method, edge cases, and error conditions
+    like overdrafts or selling shares you don't own.
+
+  expected_output: >
+    Raw Python code for test_{main_module}.
+    A python module that implements the design and achieves the requirements.
+    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, explanation, or backticks.
+    The output should be valid Python code that can be directly saved to a file and executed.
+  agent: test_engineer
+  output_file: output/test_{main_module}
