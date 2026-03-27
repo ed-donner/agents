@@ -14,7 +14,7 @@ from datetime import datetime
 mcp = FastMCP("risk_server")
 
 
-# Pydantic arg models
+# Pydantic models
 
 class NameArgs(BaseModel):
     name: str = Field(description="Trader account name")
