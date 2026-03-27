@@ -35,14 +35,6 @@ def read_job_post(name: str, job_post_id: int) -> JobPost:
     return Applicant.get(name).read_job_post(job_post_id)
 
 
-@mcp.resource("applicant://{name}/job_posts")
-def list_job_posts(name: str) -> JobPosts:
-    """
-    List the job posts from the database.
-    """
-    return Applicant.get(name).list_job_posts()
-
-
 @mcp.tool()
 def save_evaluation(name: str, evaluation: Evaluation):
     """
@@ -154,6 +146,22 @@ def send_notification_email(
         return "Email sent successfully"
     except Exception as e:
         return f"Failed to send email: {e}"
+
+
+@mcp.resource("applicant://{name}/job_posts")
+def list_job_posts(name: str) -> JobPosts:
+    """
+    List the job posts from the database.
+    """
+    return Applicant.get(name).list_job_posts()
+
+
+@mcp.resource("applicant://{name}/profile")
+def read_profile(name: str) -> Applicant:
+    """
+    Read the profile of the applicant from the database.
+    """
+    return Applicant.get(name)
 
 
 if __name__ == "__main__":
