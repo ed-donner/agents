@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from dotenv import load_dotenv
-from schema import Evaluation, Evaluations, JobPost, JobPosts
+from schema import Evaluation, Evaluations, JobPost, JobPosts, Notification, Notifications
 
 load_dotenv(override=True)
 BASE_URL = Path(__file__).resolve().parent
@@ -53,6 +53,13 @@ with sqlite3.connect(DB) as conn:
             datetime DATETIME,
             type TEXT,
             message TEXT
+        )
+    """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS notifications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            evaluation_id INTEGER REFERENCES evaluations(id),
+            notified BOOLEAN DEFAULT FALSE
         )
     """)
     conn.commit()
@@ -294,3 +301,97 @@ def read_log(name: str, last_n=10):
         )
 
         return reversed(cursor.fetchall())
+
+
+def write_notification(notification: Notification) -> None:
+    """
+    Write a notification record to the notifications table.
+
+    Args:
+        notification (Notification): The notification to write
+    """
+    with sqlite3.connect(DB) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO notifications (evaluation_id, notified)
+            VALUES (?, ?)
+            ON CONFLICT(id) DO UPDATE SET notified=excluded.notified
+            """,
+            (notification.evaluation_id, notification.notified),
+        )
+        conn.commit()
+
+
+def read_notification(evaluation_id: int) -> Notification | None:
+    """
+    Read a notification by evaluation_id.
+
+    Args:
+        evaluation_id (int): The evaluation id to look up
+
+    Returns:
+        Notification | None
+    """
+    with sqlite3.connect(DB) as conn:
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT * FROM notifications WHERE evaluation_id = ?", (evaluation_id,)
+        )
+        row = cursor.fetchone()
+        return Notification(**row) if row else None
+
+
+def list_notifications() -> Notifications:
+    """
+    List all notification records.
+
+    Returns:
+        Notifications
+    """
+    with sqlite3.connect(DB) as conn:
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM notifications")
+        rows = cursor.fetchall()
+        return Notifications(notifications=[Notification(**row) for row in rows])
+
+
+def list_unevaluated_job_posts() -> JobPosts:
+    """
+    List job posts that have no evaluation record yet.
+    """
+    with sqlite3.connect(DB) as conn:
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT jp.* FROM job_posts jp
+            LEFT JOIN evaluations e ON e.job_post_id = jp.id
+            WHERE e.id IS NULL
+            """
+        )
+        rows = cursor.fetchall()
+        return JobPosts(job_posts=[JobPost(**row) for row in rows])
+
+
+def list_pending_evaluations() -> Evaluations:
+    """
+    List acceptable evaluations that do not yet have a notification record.
+
+    Returns:
+        Evaluations
+    """
+    with sqlite3.connect(DB) as conn:
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT e.* FROM evaluations e
+            LEFT JOIN notifications n ON n.evaluation_id = e.id
+            WHERE e.is_acceptable = 1 AND n.id IS NULL
+            """
+        )
+        rows = cursor.fetchall()
+        return Evaluations(evaluations=[Evaluation(**row) for row in rows])

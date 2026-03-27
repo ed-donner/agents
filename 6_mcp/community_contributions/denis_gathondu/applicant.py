@@ -1,16 +1,21 @@
 from database import (
     list_evaluations,
     list_job_posts,
+    list_notifications,
+    list_pending_evaluations,
+    list_unevaluated_job_posts,
     read_applicant,
     read_job_post,
     read_job_post_evaluation,
+    read_notification,
     write_applicant,
     write_evaluation,
     write_job_post,
     write_log,
+    write_notification,
 )
 from pydantic import BaseModel, Field
-from schema import Evaluation, Evaluations, JobPost, JobPosts
+from schema import Evaluation, Evaluations, JobPost, JobPosts, Notification, Notifications
 
 
 class Applicant(BaseModel):
@@ -85,3 +90,34 @@ class Applicant(BaseModel):
         List all evaluations from the database.
         """
         return list_evaluations()
+
+    def save_notification(self, notification: Notification) -> None:
+        """
+        Save a notification record to the database.
+        """
+        write_notification(notification)
+        write_log("applicant", "save_notification", f"Saved notification for evaluation {notification.evaluation_id}.")
+
+    def get_notification(self, evaluation_id: int) -> Notification | None:
+        """
+        Read a notification record by evaluation_id.
+        """
+        return read_notification(evaluation_id)
+
+    def list_notifications(self) -> Notifications:
+        """
+        List all notification records from the database.
+        """
+        return list_notifications()
+
+    def list_pending_evaluations(self) -> Evaluations:
+        """
+        List acceptable evaluations that have not yet had a notification sent.
+        """
+        return list_pending_evaluations()
+
+    def list_unevaluated_job_posts(self) -> JobPosts:
+        """
+        List job posts that have not yet been evaluated.
+        """
+        return list_unevaluated_job_posts()

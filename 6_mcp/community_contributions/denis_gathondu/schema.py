@@ -39,10 +39,10 @@ class Evaluations(BaseModel):
 
 
 class Notification(BaseModel):
-    """Notification of the job postings that are acceptable"""
+    """Notification record for a sent job application email"""
 
-    job_post: JobPost
-    feedback: str
+    evaluation_id: int
+    notified: bool = False
 
 
 class Notifications(BaseModel):
