@@ -27,6 +27,7 @@ class JobPosts(BaseModel):
 class Evaluation(BaseModel):
     """Evaluation of the job posting"""
 
+    id: int | None = None
     is_acceptable: bool
     feedback: str
     job_post_id: int
@@ -41,6 +42,7 @@ class Evaluations(BaseModel):
 class Notification(BaseModel):
     """Notification record for a sent job application email"""
 
+    id: int | None = None
     evaluation_id: int
     notified: bool = False
 
