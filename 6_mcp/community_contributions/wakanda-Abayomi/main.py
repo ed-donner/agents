@@ -66,7 +66,7 @@ search_server: MCPServerStdio | None = None
 agent: Agent | None = None
 
 
-# --- Output parsing (model often returns markdown though we ask for JSON) ---
+# --- Output parsing
 
 
 def _strip_json_fence(text: str) -> str:
