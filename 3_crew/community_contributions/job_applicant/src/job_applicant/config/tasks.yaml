@@ -1,0 +1,132 @@
+parse_resume:
+  description: >
+    Parse the candidate's resume from the file at: {resume_path}
+
+    Use the resume_parser tool to extract the text content, then structure it into a
+    complete candidate profile including:
+    - Full name and contact information (email, phone, location, LinkedIn URL)
+    - Professional summary
+    - Complete list of technical and soft skills
+    - All work experiences with company, title, dates, and bullet points
+    - Education details
+    - Certifications
+
+    Be thorough — capture every detail from the resume.
+  expected_output: >
+    A complete structured candidate profile in JSON format with all fields populated
+    from the resume content.
+  agent: resume_parser
+  output_file: output/candidate_profile.json
+
+search_jobs:
+  description: >
+    Search for job postings matching the candidate's profile across all specified platforms.
+
+    Search criteria:
+    - Keywords: {keywords}
+    - Locations: {locations}
+    - Platforms: {platforms}
+    - Job types: {job_types}
+
+    Use the job_search tool with a JSON input containing these search parameters.
+    Collect job postings from each platform with title, company, location, description, and URL.
+    Filter out any error results or empty postings.
+  expected_output: >
+    A JSON list of job postings found across all platforms, each with title, company,
+    location, description, requirements, URL, and platform source.
+  agent: job_searcher
+  context:
+    - parse_resume
+  output_file: output/job_listings.json
+
+match_jobs:
+  description: >
+    Analyze each job posting against the candidate's profile and produce a ranked match list.
+
+    For each job posting found:
+    1. Compare the candidate's skills against job requirements
+    2. Calculate a fit score from 0.0 (no match) to 1.0 (perfect match)
+    3. List matching skills and missing skills
+    4. Provide a recommendation: Apply (score >= 0.7), Maybe (0.4-0.69), Skip (< 0.4)
+    5. Write a brief rationale explaining the assessment
+
+    Rank all jobs by score, highest first. Only include jobs with recommendation "Apply" or "Maybe".
+  expected_output: >
+    A ranked JSON list of job matches, each containing: the job posting details, match score,
+    matching skills, missing skills, recommendation (Apply/Maybe/Skip), and rationale.
+  agent: job_matcher
+  context:
+    - parse_resume
+    - search_jobs
+  output_file: output/matched_jobs.json
+
+tailor_resume:
+  description: >
+    Rewrite the candidate's resume to specifically target this job posting.
+
+    Candidate profile: {candidate_profile}
+    Target job: {job_title} at {company_name}
+    Job description: {job_description}
+    Job requirements: {job_requirements}
+
+    Optimize the resume by:
+    1. Rewriting the professional summary to position the candidate for this specific role
+    2. Reordering skills to lead with the most relevant ones for this job
+    3. Rewriting experience bullet points to emphasize achievements that map to job requirements
+    4. Incorporating key terms from the job description for ATS optimization
+    5. Keeping all information truthful — enhance presentation, don't fabricate
+
+    Use the file_writer tool to save the tailored resume as:
+    {company_name}_{job_title}_resume.md|||<the full tailored resume content>
+  expected_output: >
+    A professionally tailored resume in markdown format, optimized for the target job's
+    ATS keywords and requirements. The resume should be saved to the output directory.
+  agent: resume_tailor
+
+write_cover_letter:
+  description: >
+    Write a personalized cover letter for this specific job application.
+
+    Candidate: {candidate_name}
+    Target: {job_title} at {company_name}
+    Job description: {job_description}
+    Matching skills: {matching_skills}
+
+    The cover letter should:
+    1. Open with a strong hook showing genuine interest in the company/role
+    2. Highlight 2-3 specific experiences that directly address key job requirements
+    3. Demonstrate knowledge of the company or industry
+    4. Close with enthusiasm and a clear call to action
+    5. Be 3-4 paragraphs, professional but personable
+
+    Use the file_writer tool to save the cover letter as:
+    {company_name}_{job_title}_cover_letter.md|||<the full cover letter content>
+  expected_output: >
+    A compelling, personalized cover letter in markdown format, saved to the output directory.
+  agent: cover_letter_writer
+  context:
+    - tailor_resume
+
+submit_application:
+  description: >
+    Submit the job application for {job_title} at {company_name}.
+
+    Application details:
+    - Job URL: {job_url}
+    - Platform: {platform}
+    - Candidate name: {candidate_name}
+    - Candidate email: {candidate_email}
+    - Candidate phone: {candidate_phone}
+    - Resume path: {resume_path}
+    - Cover letter: Use the cover letter text from the previous task
+
+    Use the job_apply tool with a JSON input containing all these details.
+    If the application is blocked (CAPTCHA, login required), report the issue clearly.
+    If successful, confirm the submission.
+  expected_output: >
+    A JSON result with the application status (submitted, failed, or blocked),
+    any error messages, and the path to the submission screenshot.
+  agent: job_applicant
+  context:
+    - tailor_resume
+    - write_cover_letter
