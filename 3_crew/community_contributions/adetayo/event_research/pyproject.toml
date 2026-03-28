@@ -1,0 +1,25 @@
+[project]
+name = "event_research"
+version = "0.1.0"
+description = "event_research using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[google-genai,tools]==1.11.0",
+    "firebase-admin>=7.2.0",
+]
+
+[project.scripts]
+event_research = "event_research.main:run"
+run_crew = "event_research.main:run"
+train = "event_research.main:train"
+replay = "event_research.main:replay"
+test = "event_research.main:test"
+run_with_trigger = "event_research.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
