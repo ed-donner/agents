@@ -1,0 +1,77 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Job Applicant UI",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "--directory", "3_crew/community_contributions/job_applicant/src", "python", "-m", "job_applicant.app"],
+      "port": 7860
+    },
+    {
+      "name": "MCP Trading Floor",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "python", "app.py"],
+      "port": 7860
+    },
+    {
+      "name": "DevOps Monitor Dashboard",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "python", "gradio_app.py"],
+      "port": 7860
+    },
+    {
+      "name": "SEO Audit Agent",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "python", "app.py"],
+      "port": 7864
+    },
+    {
+      "name": "Trace Viewer",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "python", "-m", "local_trace.trace_ui"],
+      "port": 5050
+    },
+    {
+      "name": "Emotion Detection Server",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "python", "python_server/emotion_server.py"],
+      "port": 5001
+    },
+    {
+      "name": "Deep Research API",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"],
+      "port": 8000
+    },
+    {
+      "name": "CodeBuilder Backend",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "uvicorn", "backend.main:api", "--host", "0.0.0.0", "--port", "8000"],
+      "port": 8000
+    },
+    {
+      "name": "Code Learning Assistant",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "python", "code_assistant.py"],
+      "port": 7860
+    },
+    {
+      "name": "Transcript Summarizer",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "python", "main.py"],
+      "port": 7860
+    },
+    {
+      "name": "Holiday Checker",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "python", "gradio_ui.py"],
+      "port": 7862
+    },
+    {
+      "name": "InstantCV Resume Builder",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "python", "main.py"],
+      "port": 7860
+    }
+  ]
+}
