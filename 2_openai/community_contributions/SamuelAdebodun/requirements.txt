@@ -1,0 +1,4 @@
+openai-agents
+python-dotenv
+pydantic
+gradio

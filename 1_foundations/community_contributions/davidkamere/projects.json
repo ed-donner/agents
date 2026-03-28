@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Compass CFO Solutions",
+    "role": "Full Stack Software Engineer",
+    "summary": "Delivered 500+ commits across a comprehensive enterprise social platform and mobile application. Built core features including real-time discussion threads, comments with reactions and attachments, user authentication with 2FA, AWS S3 file management, notifications, polls, content filtering, email verification, user settings, pagination, and rich text editing. Developed backend APIs with Fastify and tRPC on PostgreSQL with Prisma, and implemented mobile-responsive UI for both React web and Ionic/Capacitor mobile platforms.",
+    "fit_signals": ["enterprise social platform", "internal tools", "dashboards", "full-stack", "real-time features", "authentication", "APIs", "mobile apps", "AWS S3"]
+  },
+  {
+    "name": "Artsee",
+    "role": "Full Stack Engineer",
+    "summary": "Led end-to-end implementation of design concepts, ensuring smooth integration between user interfaces and application functionality. Managed MongoDB-backed data storage, indexing, and retrieval for search, implemented APIs and middleware to improve user flow, and onboarded new engineers with technical training and support.",
+    "fit_signals": ["full-stack", "search", "MongoDB", "APIs", "middleware", "frontend implementation", "user flow"]
+  },
+  {
+    "name": "The Care Clinic",
+    "role": "Integration Engineer",
+    "summary": "Developed a Node.js and TypeScript API framework that captured health, financial, and consent data as a secure intermediary between two healthcare platforms. Helped move patient intake from manual entry to automated workflows during an EHR platform transition, significantly increasing intake capacity.",
+    "fit_signals": ["healthcare", "integrations", "Node.js", "TypeScript", "APIs", "EHR integration", "workflow automation", "data exchange"]
+  }
+]

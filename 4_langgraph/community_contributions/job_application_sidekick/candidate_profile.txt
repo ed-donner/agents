@@ -1,0 +1,50 @@
+Candidate Profile: Senior Cloud & DevOps Engineer
+
+Professional Summary
+- Cloud and DevOps Engineer focused on AWS and GCP platform engineering, infrastructure automation, Kubernetes operations, and SRE/DevSecOps practices.
+- Builds resilient, production-grade systems using Terraform, Kubernetes, CI/CD, and observability-first architecture.
+- Applies reliability engineering practices (SLIs, SLOs, error budgets, golden signals) to improve uptime and reduce incident response time.
+- Uses AI-assisted engineering workflows responsibly for design exploration, IaC development, testing, and incident investigation.
+
+Core Skills
+- Cloud: AWS (EKS, ECS, SageMaker, Lambda, RDS, VPC), GCP
+- Infrastructure as Code: Terraform, CloudFormation
+- CI/CD and GitOps: GitHub Actions, Jenkins, Argo CD, Helm
+- Containers and Platform: Kubernetes (EKS, Istio), Docker
+- SRE and Observability: Prometheus, Grafana, CloudWatch, SLIs/SLOs, incident response automation
+- Security and Compliance: DevSecOps, IAM, KMS, OPA, Checkov, PCI-DSS, GDPR, CIS Benchmarks
+- FinOps and Governance: Cost Explorer, Savings Plans, right-sizing, cost-performance tradeoff analysis
+- Scripting: Python, Bash
+
+Experience Highlights
+- Architected and optimized hybrid AWS/GCP infrastructure, improving resilience and reducing latency by 35%.
+- Modernized CI/CD with GitHub Actions and Argo CD; achieved 99.9% deployment success across staging/production.
+- Implemented DevSecOps scanning and policy controls (Trivy, Checkov, OPA), reducing critical risk exposure by 50%.
+- Built self-healing Kubernetes monitoring and alerting; reduced MTTR by up to 40%.
+- Designed secure multi-node EKS clusters with service mesh and autoscaling, supporting 99.95% uptime.
+- Built Terraform modules and reusable delivery pipelines for repeatable blue/green deployment patterns.
+- Delivered FinOps dashboards and optimization tooling, reducing cloud spend by ~30%.
+- Operated Linux-based production workloads, improving runtime stability and reducing recurring incidents.
+
+Portfolio Themes
+- Reliability-focused AWS EKS platform using SLIs/SLOs/error budgets and golden-signal monitoring.
+- Enterprise AI/ML platform reliability and cost controls; reduced inference costs by ~60%.
+- Cloud-native platform engineering with zero-downtime delivery and automated recovery workflows.
+- AWS cloud risk assessments covering IAM, networking, storage, TLS, and CIS alignment.
+
+Selected Certifications
+- AWS Certified DevOps Engineer – Professional
+- Google Cloud Professional Cloud Architect
+- AWS Certified Machine Learning Engineer – Associate
+- AWS Certified Security – Specialty
+- AWS Certified Developer – Associate
+- AWS Certified Solutions Architect – Associate
+- Google Associate Cloud Engineer
+- Kubernetes & Cloud Native Associate
+- GitHub Advanced Security
+
+Target Roles
+- Senior DevOps Engineer
+- Cloud Engineer
+- Platform Engineer
+- SRE / DevSecOps Engineer
