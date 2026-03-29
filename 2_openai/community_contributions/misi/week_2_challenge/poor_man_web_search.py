@@ -47,7 +47,7 @@ USER_AGENT = (
     "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 )
 REQUEST_TIMEOUT = 10
-MAX_RESULTS = 3
+MAX_RESULTS = 10
 MAX_CONTENT_CHARS = 4_000
 SKIP_DOMAINS = {
     "youtube.com",
@@ -169,9 +169,10 @@ def _fetch_page_content(url: str) -> str:
 
 # Public API
 def local_web_search(query: str) -> list[dict[str, Any]]:
-    """Search DuckDuckGo, visit the top 3 results, and return scraped page content."""
-    results: list[dict[str, Any]] = []
-
+    """
+    Search DuckDuckGo, visit up to the top 10 results, and return scraped page content for the first 3 available pages.
+    If a page returns an error (403, 404, etc.), try the next result until 3 valid contents are found or all are exhausted.
+    """
     try:
         urls = _search_duckduckgo_with_requests(query)
     except requests.RequestException:
@@ -190,12 +191,22 @@ def local_web_search(query: str) -> list[dict[str, Any]]:
             }
         ]
 
-    for url in urls[:MAX_RESULTS]:
+    results: list[dict[str, Any]] = []
+    attempted = 0
+    for url in urls:
+        if len(results) == 3:
+            break
         try:
             content = _fetch_page_content(url)
+            # If the content is too short or looks like an error, skip
+            if not content or content.lower().startswith("failed to fetch"):
+                continue
+            results.append({"page_url": url, "content": content})
         except Exception as exc:
-            content = f"Failed to fetch page content: {exc}"
+            continue
+        attempted += 1
 
-        results.append({"page_url": url, "content": content})
-
+    # If less than 3 valid results, fill with error messages
+    while len(results) < 3:
+        results.append({"page_url": "", "content": "No more valid results found."})
     return results
