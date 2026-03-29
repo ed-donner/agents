@@ -12,11 +12,13 @@ class ResearchCrew():
     agents_config = 'config/agents.yaml'
     tasks_config = 'config/tasks.yaml'
 
+    resume_path: str = ""
+
     @agent
     def resume_parser(self) -> Agent:
         return Agent(
             config=self.agents_config['resume_parser'],
-            tools=[ResumeParserTool()],
+            tools=[ResumeParserTool(resume_path=self.resume_path)],
             verbose=True,
         )
 

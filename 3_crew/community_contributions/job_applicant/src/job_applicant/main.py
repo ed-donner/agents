@@ -73,7 +73,9 @@ def run(
         "current_date": str(datetime.now()),
     }
 
-    research_result = ResearchCrew().crew().kickoff(inputs=research_inputs)
+    research_crew = ResearchCrew()
+    research_crew.resume_path = resume_path
+    research_result = research_crew.crew().kickoff(inputs=research_inputs)
 
     # Extract matched jobs from result
     matched_jobs = []

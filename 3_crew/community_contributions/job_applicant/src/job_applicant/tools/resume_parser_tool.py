@@ -8,15 +8,20 @@ class ResumeParserTool(BaseTool):
 
     name: str = "resume_parser"
     description: str = (
-        "Extracts text content from a resume file. Accepts a file path to a PDF or DOCX file. "
-        "Returns the raw text content of the resume for further structured extraction."
+        "Extracts text content from a resume file. "
+        "Returns the raw text content of the resume for further structured extraction. "
+        "Call this tool with any input (e.g. 'parse') to extract the pre-configured resume."
     )
-    resume_path: str = Field(default="", description="Default resume path if not provided in run")
+    resume_path: str = Field(default="", description="Path to the resume file to parse")
 
     def _run(self, file_path: str = "") -> str:
-        path = file_path or self.resume_path
+        # Use pre-configured path as primary, fall back to argument
+        path = self.resume_path or file_path
         if not path:
             return "Error: No file path provided. Please specify a resume file path."
+
+        # Clean up path - agent may wrap it in quotes
+        path = path.strip().strip("'\"")
 
         if not os.path.exists(path):
             return f"Error: File not found at '{path}'. Please check the path."
