@@ -55,7 +55,19 @@ USER_AGENT = (
 REQUEST_TIMEOUT = 10
 MAX_RESULTS = 3
 MAX_CONTENT_CHARS = 4_000
-SKIP_DOMAINS = {"youtube.com", "www.youtube.com"}
+SKIP_DOMAINS = {
+    "youtube.com",
+    "www.youtube.com",
+    "google.com",
+    "www.google.com",
+    "support.google.com",
+    "accounts.google.com",
+    "policies.google.com",
+    "duckduckgo.com",
+    "www.duckduckgo.com",
+    "html.duckduckgo.com",
+}
+DUCKDUCKGO_HTML_URL = "https://html.duckduckgo.com/html/"
 
 
 class _HTMLTextExtractor(HTMLParser):
@@ -94,12 +106,22 @@ def _extract_google_redirect_url(href: str) -> str | None:
     return query.get("q", [None])[0]
 
 
+def _extract_duckduckgo_redirect_url(href: str) -> str | None:
+    parsed = urlparse(href)
+    if parsed.path.startswith("/l/"):
+        query = parse_qs(parsed.query)
+        return query.get("uddg", [None])[0]
+    if parsed.scheme in {"http", "https"}:
+        return href
+    return None
+
+
 def _is_supported_result(url: str) -> bool:
     parsed = urlparse(url)
     if parsed.scheme not in {"http", "https"}:
         return False
     domain = parsed.netloc.lower()
-    return not any(blocked in domain for blocked in SKIP_DOMAINS)
+    return not any(domain == blocked or domain.endswith(f".{blocked}") for blocked in SKIP_DOMAINS)
 
 
 def _search_google_with_library(query: str) -> list[str]:
@@ -108,7 +130,14 @@ def _search_google_with_library(query: str) -> list[str]:
 
     try:
         results = google_search(query, num_results=MAX_RESULTS, advanced=False)
-        urls = [url for url in results if isinstance(url, str)]
+        urls: list[str] = []
+        for item in results:
+            if isinstance(item, str):
+                url = item
+            else:
+                url = getattr(item, "url", None) or getattr(item, "link", None)
+            if isinstance(url, str) and _is_supported_result(url) and url not in urls:
+                urls.append(url)
         return [url for url in urls if _is_supported_result(url)][:MAX_RESULTS]
     except Exception:
         return []
@@ -118,7 +147,7 @@ def _search_google_with_requests(query: str) -> list[str]:
     headers = {"User-Agent": USER_AGENT}
     response = requests.get(
         "https://www.google.com/search",
-        params={"q": query, "num": MAX_RESULTS, "hl": "en"},
+        params={"q": query, "num": MAX_RESULTS, "hl": "en", "gbv": "1"},
         headers=headers,
         timeout=REQUEST_TIMEOUT,
     )
@@ -127,11 +156,13 @@ def _search_google_with_requests(query: str) -> list[str]:
     if BeautifulSoup is not None:
         soup = BeautifulSoup(response.text, "html.parser")
         urls: list[str] = []
-        for anchor in soup.select("a[href]"):
+        for anchor in soup.select("a[href], div.yuRUbf a[href]"):
             href = anchor.get("href")
             if not href:
                 continue
             url = _extract_google_redirect_url(href)
+            if not url and _is_supported_result(href):
+                url = href
             if url and _is_supported_result(url) and url not in urls:
                 urls.append(url)
             if len(urls) == MAX_RESULTS:
@@ -141,6 +172,8 @@ def _search_google_with_requests(query: str) -> list[str]:
     urls = []
     for href in re.findall(r'href="([^"]+)"', response.text):
         url = _extract_google_redirect_url(unescape(href))
+        if not url and _is_supported_result(href):
+            url = href
         if url and _is_supported_result(url) and url not in urls:
             urls.append(url)
         if len(urls) == MAX_RESULTS:
@@ -153,6 +186,47 @@ def _search_google(query: str) -> list[str]:
     if urls:
         return urls
     return _search_google_with_requests(query)
+
+
+def _search_duckduckgo_with_requests(query: str) -> list[str]:
+    headers = {"User-Agent": USER_AGENT, "Referer": "https://duckduckgo.com/"}
+    response = requests.post(
+        DUCKDUCKGO_HTML_URL,
+        data={"q": query},
+        headers=headers,
+        timeout=REQUEST_TIMEOUT,
+    )
+    response.raise_for_status()
+
+    if BeautifulSoup is not None:
+        soup = BeautifulSoup(response.text, "html.parser")
+        urls: list[str] = []
+        for anchor in soup.select("a.result__a[href], a[href]"):
+            href = anchor.get("href")
+            if not href:
+                continue
+            url = _extract_duckduckgo_redirect_url(href)
+            if url and _is_supported_result(url) and url not in urls:
+                urls.append(url)
+            if len(urls) == MAX_RESULTS:
+                break
+        return urls
+
+    urls = []
+    for href in re.findall(r'href="([^"]+)"', response.text):
+        url = _extract_duckduckgo_redirect_url(unescape(href))
+        if url and _is_supported_result(url) and url not in urls:
+            urls.append(url)
+        if len(urls) == MAX_RESULTS:
+            break
+    return urls
+
+
+def _search_fallback(query: str) -> list[str]:
+    try:
+        return _search_duckduckgo_with_requests(query)
+    except Exception:
+        return []
 
 
 def _extract_page_text(html: str) -> str:
@@ -182,8 +256,25 @@ def local_web_search(query: str) -> list[dict[str, Any]]:
 
     try:
         urls = _search_google(query)
-    except Exception as exc:
-        return [{"page_url": "", "content": f"Search failed: {exc}"}]
+    except requests.RequestException:
+        urls = []
+    except Exception:
+        urls = []
+
+    if not urls:
+        urls = _search_fallback(query)
+
+    if not urls:
+        return [
+            {
+                "page_url": "",
+                "content": (
+                    "Search failed: Google search and DuckDuckGo fallback both returned no results. "
+                    "Google may be blocked by DNS/network restrictions, and the fallback backend did not "
+                    "extract any result URLs."
+                ),
+            }
+        ]
 
     for url in urls[:MAX_RESULTS]:
         try:
