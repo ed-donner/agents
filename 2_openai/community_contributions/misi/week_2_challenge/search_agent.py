@@ -1,4 +1,5 @@
-from agents import Agent, WebSearchTool, ModelSettings
+from agents import Agent, function_tool, ModelSettings, Runner
+from poor_man_web_search import local_web_search
 
 INSTRUCTIONS = (
     "You are a research assistant. Given a search term, you search the web for that term and "
@@ -8,10 +9,21 @@ INSTRUCTIONS = (
     "essence and ignore any fluff. Do not include any additional commentary other than the summary itself."
 )
 
+
+@function_tool
+def MockWebSearchTool(query: str) -> str:
+    """Search the web for the given query and return a concise summary of the results."""
+    results = local_web_search(query)
+    summary = "\n\n".join(
+        [f"URL: {item['page_url']}\nContent: {item['content']}" for item in results]
+    )
+    return summary
+
+
 search_agent = Agent(
     name="Search agent",
     instructions=INSTRUCTIONS,
-    tools=[WebSearchTool(search_context_size="low")],
+    tools=[MockWebSearchTool],
     model="gpt-4o-mini",
     model_settings=ModelSettings(tool_choice="required"),
 )
