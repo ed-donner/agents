@@ -13,21 +13,17 @@ try:
 except ImportError:  # pragma: no cover - optional dependency
     BeautifulSoup = None
 
-try:
-    from googlesearch import search as google_search
-except ImportError:  # pragma: no cover - optional dependency
-    google_search = None
 
 """
-Local Google-backed web search helper.
+Local DuckDuckGo-backed web search helper.
 
 What this tool does:
 - Accepts a plain-text search query.
-- Searches Google for that query.
+- Searches DuckDuckGo for that query.
 - Opens the top 3 results.
 - Scrapes the readable text content from each page.
 - Returns a list of dictionaries in this shape:
-  {"page_url": "<url>", "content": "<scraped page text>"}
+    {"page_url": "<url>", "content": "<scraped page text>"}
 
 How to call the function directly in Python:
 ```python
@@ -35,16 +31,14 @@ from local_web_search import local_web_search
 
 results = local_web_search("latest AI agent frameworks")
 for item in results:
-    print(item["page_url"])
-    print(item["content"][:500])
+        print(item["page_url"])
+        print(item["content"][:500])
 ```
 
 Notes:
-- The tool prefers the `googlesearch` Python package if it is installed.
-- If `googlesearch` is unavailable, it falls back to scraping Google result links.
 - `beautifulsoup4` is optional but recommended for cleaner HTML parsing.
 - Some websites may block scraping or return minimal content; in those cases the
-  `content` field will contain an error message for that page.
+    `content` field will contain an error message for that page.
 """
 
 
@@ -98,14 +92,6 @@ def _normalize_whitespace(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def _extract_google_redirect_url(href: str) -> str | None:
-    parsed = urlparse(href)
-    if parsed.path != "/url":
-        return None
-    query = parse_qs(parsed.query)
-    return query.get("q", [None])[0]
-
-
 def _extract_duckduckgo_redirect_url(href: str) -> str | None:
     parsed = urlparse(href)
     if parsed.path.startswith("/l/"):
@@ -124,70 +110,6 @@ def _is_supported_result(url: str) -> bool:
     return not any(
         domain == blocked or domain.endswith(f".{blocked}") for blocked in SKIP_DOMAINS
     )
-
-
-def _search_google_with_library(query: str) -> list[str]:
-    if google_search is None:
-        return []
-
-    try:
-        results = google_search(query, num_results=MAX_RESULTS, advanced=False)
-        urls: list[str] = []
-        for item in results:
-            if isinstance(item, str):
-                url = item
-            else:
-                url = getattr(item, "url", None) or getattr(item, "link", None)
-            if isinstance(url, str) and _is_supported_result(url) and url not in urls:
-                urls.append(url)
-        return [url for url in urls if _is_supported_result(url)][:MAX_RESULTS]
-    except Exception:
-        return []
-
-
-def _search_google_with_requests(query: str) -> list[str]:
-    headers = {"User-Agent": USER_AGENT}
-    response = requests.get(
-        "https://www.google.com/search",
-        params={"q": query, "num": MAX_RESULTS, "hl": "en", "gbv": "1"},
-        headers=headers,
-        timeout=REQUEST_TIMEOUT,
-    )
-    response.raise_for_status()
-
-    if BeautifulSoup is not None:
-        soup = BeautifulSoup(response.text, "html.parser")
-        urls: list[str] = []
-        for anchor in soup.select("a[href], div.yuRUbf a[href]"):
-            href = anchor.get("href")
-            if not href:
-                continue
-            url = _extract_google_redirect_url(href)
-            if not url and _is_supported_result(href):
-                url = href
-            if url and _is_supported_result(url) and url not in urls:
-                urls.append(url)
-            if len(urls) == MAX_RESULTS:
-                break
-        return urls
-
-    urls = []
-    for href in re.findall(r'href="([^"]+)"', response.text):
-        url = _extract_google_redirect_url(unescape(href))
-        if not url and _is_supported_result(href):
-            url = href
-        if url and _is_supported_result(url) and url not in urls:
-            urls.append(url)
-        if len(urls) == MAX_RESULTS:
-            break
-    return urls
-
-
-def _search_google(query: str) -> list[str]:
-    urls = _search_google_with_library(query)
-    if urls:
-        return urls
-    return _search_google_with_requests(query)
 
 
 def _search_duckduckgo_with_requests(query: str) -> list[str]:
@@ -224,13 +146,6 @@ def _search_duckduckgo_with_requests(query: str) -> list[str]:
     return urls
 
 
-def _search_fallback(query: str) -> list[str]:
-    try:
-        return _search_duckduckgo_with_requests(query)
-    except Exception:
-        return []
-
-
 def _extract_page_text(html: str) -> str:
     if BeautifulSoup is not None:
         soup = BeautifulSoup(html, "html.parser")
@@ -252,28 +167,25 @@ def _fetch_page_content(url: str) -> str:
     return content[:MAX_CONTENT_CHARS]
 
 
+# Public API
 def local_web_search(query: str) -> list[dict[str, Any]]:
-    """Search Google, visit the top 3 results, and return scraped page content."""
+    """Search DuckDuckGo, visit the top 3 results, and return scraped page content."""
     results: list[dict[str, Any]] = []
 
     try:
-        urls = _search_google(query)
+        urls = _search_duckduckgo_with_requests(query)
     except requests.RequestException:
         urls = []
     except Exception:
         urls = []
 
     if not urls:
-        urls = _search_fallback(query)
-
-    if not urls:
         return [
             {
                 "page_url": "",
                 "content": (
-                    "Search failed: Google search and DuckDuckGo fallback both returned no results. "
-                    "Google may be blocked by DNS/network restrictions, and the fallback backend did not "
-                    "extract any result URLs."
+                    "Search failed: DuckDuckGo search returned no results. "
+                    "DuckDuckGo may be blocked by DNS/network restrictions, or no result URLs were extracted."
                 ),
             }
         ]
