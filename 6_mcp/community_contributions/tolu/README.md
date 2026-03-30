@@ -9,4 +9,4 @@ Generates incident runbooks using web search and LLM reasoning, with MCP-based l
 - Gradio UI
 
 ## Run
-python app.py s
+python app.py
