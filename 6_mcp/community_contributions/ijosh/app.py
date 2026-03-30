@@ -1,22 +1,24 @@
 """
 CARI ── Gradio UI
-Tabs: Chat  |  Transactions  |  Tax Report
+Dark, modern, Nigerian-branded interface.
+Tabs: 💬 Chat  |  📊 Transactions  |  📄 Tax Report
 """
 
 import os
 import uuid
+import glob
 import gradio as gr
 from dotenv import load_dotenv
 
 import database as db
 from agent import run_cari_sync
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv()
 db.init_db()
 
 # ── Brand colours ──────────────────────────────────────────────
-# Deep navy base, Nigerian green accent, warm gold highlight
-with open("styles.css") as f:
+with open(os.path.join(BASE_DIR, "styles.css"), encoding="utf-8") as f:
     CUSTOM_CSS = f.read()
 
 
@@ -28,8 +30,8 @@ def fresh_session():
 def get_kpis(user_id):
     try:
         rows = db.get_all_transactions(user_id)
-        inc = sum(r["amount"] for r in rows if r["type"] == "income")
-        exp = sum(r["amount"] for r in rows if r["type"] == "expense")
+        inc = sum(float(r["amount"]) for r in rows if r["type"] == "income")
+        exp = sum(float(r["amount"]) for r in rows if r["type"] == "expense")
         return inc, exp, inc - exp
     except Exception:
         return 0.0, 0.0, 0.0
@@ -38,20 +40,45 @@ def get_kpis(user_id):
 def get_transactions_df(user_id):
     rows = db.get_all_transactions(user_id)
     if not rows:
-        return [["—", "—", "—", "—", "—"]]
+        return [["—", "—", "—", "No transactions yet", "—"]]
     return [
-        [r["date"], r["type"].title(), r["category"].title(),
-         r["description"][:45], f"₦{r['amount']:,.2f}"]
+        [
+            r["date"],
+            r["type"].title(),
+            r["category"].title(),
+            str(r["description"])[:45],
+            f"₦{float(r['amount']):,.2f}",
+        ]
         for r in rows
     ]
 
 
+# ── Chat history helpers ───────────────────────────────────────
+def normalize_chat_history(history):
+    """Normalize chatbot state to Gradio 6 messages format."""
+    if not history:
+        return []
+
+    normalized = []
+    for item in history:
+        if isinstance(item, dict) and item.get("role") in {"user", "assistant"} and "content" in item:
+            normalized.append({"role": item["role"], "content": str(item["content"])})
+        elif isinstance(item, (list, tuple)) and len(item) == 2:
+            normalized.append({"role": "user", "content": str(item[0])})
+            normalized.append({"role": "assistant", "content": str(item[1])})
+    return normalized
+
+
 # ── Chat handler ────────────────────────────────────────────────
 def chat(message, history, user_id, business_name, conv_history):
-    if not message.strip():
+    history = normalize_chat_history(history)
+    conv_history = conv_history or []
+    message = (message or "").strip()
+
+    if not message:
         return history, conv_history
 
-    business = business_name.strip() or "My Business"
+    business = (business_name or "").strip() or "My Business"
 
     try:
         reply, updated_conv = run_cari_sync(
@@ -64,16 +91,17 @@ def chat(message, history, user_id, business_name, conv_history):
         reply = f"Something went wrong: {e}"
         updated_conv = conv_history
 
-    history.append({"role": "user", "content": message})
-    history.append({"role": "assistant", "content": reply})
-
-    return history, updated_conv
+    new_history = history + [
+        {"role": "user", "content": message},
+        {"role": "assistant", "content": reply},
+    ]
+    return new_history, updated_conv
 
 
 # ── Refresh dashboard ───────────────────────────────────────────
 def refresh_dashboard(user_id):
     inc, exp, bal = get_kpis(user_id)
-    rows  = get_transactions_df(user_id)
+    rows = get_transactions_df(user_id)
     color = "color:#00A651" if bal >= 0 else "color:#E74C3C"
 
     kpi_html = f"""
@@ -96,56 +124,57 @@ def refresh_dashboard(user_id):
 
 
 def refresh_all(user_id):
-    kpi_html, rows = refresh_dashboard(user_id)
-    return kpi_html, rows
+    return refresh_dashboard(user_id)
 
 
 # ── Tax report handler ─────────────────────────────────────────
 def generate_tax(user_id, business_name, history, conv_history):
-    msg = f"Generate my tax report for {business_name or 'My Business'}"
+    history = normalize_chat_history(history)
+    conv_history = conv_history or []
+    business = (business_name or "").strip() or "My Business"
+    msg = f"Generate my tax report for {business}"
+
     try:
         reply, updated_conv = run_cari_sync(
             user_message=msg,
             user_id=user_id,
-            business_name=business_name or "My Business",
+            business_name=business,
             history=conv_history,
         )
     except Exception as e:
         reply = f"Tax report error: {e}"
         updated_conv = conv_history
 
-    history.append({"role": "user", "content": "📄 Generate Tax Report"})
-    history.append({"role": "assistant", "content": reply})
+    new_history = history + [
+        {"role": "user", "content": "📄 Generate Tax Report"},
+        {"role": "assistant", "content": reply},
+    ]
 
-    # Find PDF path using absolute directory so it works regardless of CWD
-    import glob as _glob
-    base_dir = os.path.dirname(os.path.abspath(__file__))
     pdf_path = None
     try:
-        pdfs = sorted(_glob.glob(os.path.join(base_dir, f"tax_reports/CARI_Tax_{user_id}_*.pdf")))
+        pdfs = sorted(glob.glob(os.path.join(BASE_DIR, f"tax_reports/CARI_Tax_{user_id}_*.pdf")))
         if pdfs:
             pdf_path = pdfs[-1]
     except Exception:
-        pass
+        pdf_path = None
 
-    status = "✅ Tax report generated! Check the Chat tab for details."
     if pdf_path and os.path.exists(pdf_path):
-        status += f" PDF saved to: {pdf_path}"
+        status = f"✅ Tax report generated successfully. Saved to: {pdf_path}"
+        file_update = gr.update(value=pdf_path, visible=True)
     else:
-        status = "⚠️ Report requested — if no PDF appeared, ensure MCP server is running and you have transactions recorded."
+        status = "⚠️ Report requested, but no PDF was found yet. Ensure the MCP server is running and that transactions exist."
+        file_update = gr.update(value=None, visible=True)
 
-    return history, updated_conv, status, pdf_path
+    return new_history, updated_conv, status, file_update
 
 
 # ── Build UI ───────────────────────────────────────────────────
 def build_ui():
     with gr.Blocks(title="CARI — AI CFO Agent") as demo:
 
-        # ── State ──────────────────────────────────────────────
-        session_id   = gr.State(fresh_session)
+        session_id = gr.State(fresh_session())
         conv_history = gr.State([])
 
-        # ── Header ─────────────────────────────────────────────
         gr.HTML("""
         <div class="cari-header">
             <div class="cari-logo">🤖</div>
@@ -159,7 +188,6 @@ def build_ui():
         </div>
         """)
 
-        # ── Session settings ────────────────────────────────────
         with gr.Accordion("⚙️ Session Settings", open=False):
             with gr.Row():
                 business_input = gr.Textbox(
@@ -174,7 +202,6 @@ def build_ui():
                     scale=1,
                 )
 
-        # ── KPI strip ───────────────────────────────────────────
         kpi_display = gr.HTML("""
         <div class="kpi-row">
             <div class="kpi-card">
@@ -192,10 +219,7 @@ def build_ui():
         </div>
         """)
 
-        # ── Tabs ────────────────────────────────────────────────
         with gr.Tabs(elem_classes="tab-nav"):
-
-            # ── TAB 1: Chat ─────────────────────────────────────
             with gr.Tab("💬 Chat with CARI"):
                 chatbot = gr.Chatbot(
                     value=[],
@@ -232,7 +256,6 @@ def build_ui():
                     label="💡 Try these examples",
                 )
 
-            # ── TAB 2: Transactions ─────────────────────────────
             with gr.Tab("📊 Transactions"):
                 with gr.Row():
                     refresh_btn = gr.Button("🔄 Refresh", variant="primary", scale=1)
@@ -246,7 +269,6 @@ def build_ui():
                     elem_classes="dataframe",
                 )
 
-            # ── TAB 3: Tax Report ───────────────────────────────
             with gr.Tab("📄 Tax Report"):
                 gr.HTML("""
                 <div style="background:#161627;border-radius:14px;border:1px solid #252540;
@@ -265,9 +287,7 @@ def build_ui():
                 tax_generate_btn = gr.Button(
                     "🧾 Generate Tax Report PDF", variant="primary", size="lg"
                 )
-                tax_status = gr.Textbox(
-                    label="Status", interactive=False, lines=2
-                )
+                tax_status = gr.Textbox(label="Status", interactive=False, lines=2)
                 tax_pdf_output = gr.File(
                     label="📥 Download Tax Report PDF",
                     interactive=False,
@@ -276,9 +296,6 @@ def build_ui():
 
         gr.HTML('<div class="cari-footer">CARI v1.0 · Built with OpenAI Agents SDK + MCP · Andela Bootcamp Final Project 🇳🇬</div>')
 
-        # ── Events ──────────────────────────────────────────────
-
-        # Show session ID and refresh dashboard on load
         demo.load(
             fn=lambda sid: sid,
             inputs=[session_id],
@@ -289,7 +306,6 @@ def build_ui():
             outputs=[kpi_display, tx_table],
         )
 
-        # Chat — send button
         send_btn.click(
             fn=chat,
             inputs=[chat_input, chatbot, session_id, business_input, conv_history],
@@ -303,7 +319,6 @@ def build_ui():
             outputs=[kpi_display, tx_table],
         )
 
-        # Chat — Enter key
         chat_input.submit(
             fn=chat,
             inputs=[chat_input, chatbot, session_id, business_input, conv_history],
@@ -317,14 +332,12 @@ def build_ui():
             outputs=[kpi_display, tx_table],
         )
 
-        # Refresh transactions
         refresh_btn.click(
             fn=refresh_all,
             inputs=[session_id],
             outputs=[kpi_display, tx_table],
         )
 
-        # Generate tax report
         tax_generate_btn.click(
             fn=generate_tax,
             inputs=[session_id, business_input, chatbot, conv_history],
@@ -338,7 +351,6 @@ def build_ui():
     return demo
 
 
-# ── Entry point ────────────────────────────────────────────────
 if __name__ == "__main__":
     demo = build_ui()
     demo.launch(
@@ -352,4 +364,5 @@ if __name__ == "__main__":
             neutral_hue=gr.themes.colors.slate,
         ),
         css=CUSTOM_CSS,
+        inbrowser=True,
     )
