@@ -52,7 +52,7 @@ uv run asket-mcp
 `uv run asket-mcp` uses **stdio** and waits for an MCP client (Cursor, etc.). **Ctrl+C** ends the process; stack traces from `CancelledError` on shutdown are normal.
 
 - **MCP only + semantic:** `uv sync --extra semantic`
-- **Streamlit UI:** include **`streamlit`** — `uv sync --extra ui --extra semantic` (or one-shot **`uv sync --extra all`** for UI + semantic + pytest deps).
+- **Streamlit UI:** include **`streamlit`** — `uv sync --extra ui --extra semantic` (or one-shot **`uv sync --extra all`** for UI + semantic together).
 
 Minimal install **without** OpenAI/Chroma: `uv sync` — semantic tools return a clear install/config error until you add `--extra semantic` and `OPENAI_API_KEY`.
 
@@ -117,13 +117,6 @@ Compose runs two services:
 Override `PERSONAL_STUDY_BRAIN_DIR` (default inside the stack: `/data/brain`). For auth in front of Streamlit, use your reverse proxy or a Streamlit auth extension; `ASKET_UI_AUTH_*` in `.env` are not wired into the Streamlit app.
 
 The image installs **`.[ui,semantic]`** (Streamlit + Chroma + OpenAI client). Exposes **8765** and **7860**, and defines a **HEALTHCHECK** on the MCP port. Pass **`OPENAI_API_KEY`** via environment or secrets at runtime for semantic features. The process user is **non-root** (see production checklist for bind mounts).
-
-## Tests
-
-```bash
-uv sync --extra dev
-uv run pytest
-```
 
 ## License
 

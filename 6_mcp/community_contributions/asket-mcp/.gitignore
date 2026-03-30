@@ -8,3 +8,8 @@ data/
 *.db
 dist/
 *.egg-info/
+
+# Not shipped in this contribution (kept locally if present)
+uv.lock
+tests/
+asket_mcp/ui/icons/
