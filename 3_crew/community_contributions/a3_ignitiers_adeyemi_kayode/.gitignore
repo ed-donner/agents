@@ -2,6 +2,9 @@
 __pycache__/
 .DS_Store
 knowledge/
-AGENTS.md
-README.md
 output/
+flight_ai_briefing.md
+pyproject.toml
+uv.lock
+README.md
+AGENTS.md
