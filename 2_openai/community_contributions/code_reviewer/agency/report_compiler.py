@@ -4,11 +4,15 @@ from agents import Agent, OpenAIChatCompletionsModel
 from openai import AsyncOpenAI
 from tools import write_report_tool
 from models import ReportCompilerOutput
+from agents.mcp import MCPServerStdio
 
 load_dotenv(override=True)
 
 client = AsyncOpenAI(base_url=os.environ.get("OPENROUTER_BASE_URL"), api_key=os.environ.get("OPENROUTER_API_KEY"))
 model = OpenAIChatCompletionsModel(model=os.environ.get("GPT_MODEL"), openai_client=client)
+
+report_storage_params = {"command": "uv", "args": ["run", "mcp_servers/report_storage/server.py"], "env": {**os.environ}}
+report_storage_mcp = MCPServerStdio(params=report_storage_params, client_session_timeout_seconds=30)
 
 tools = [
     write_report_tool,
@@ -37,4 +41,5 @@ report_compiler_agent = Agent(
     output_type=ReportCompilerOutput,
     model=model,
     tools=tools,
+    mcp_servers=[report_storage_mcp],
 )
