@@ -1,0 +1,16 @@
+[project]
+name = "wellness-copilot"
+version = "0.1.0"
+description = "Local wellness UI + MCP (journaling, memory, fetch, sandbox) — educational, not clinical."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "openai-agents>=0.0.15",
+    "mcp[cli]>=1.5.0",
+    "python-dotenv>=1.0.1",
+    "gradio>=5.22.0",
+    "httpx>=0.28.1",
+    "pandas>=2.0.0",
+    "plotly>=6.0.0",
+    "requests>=2.32.0",
+]
