@@ -1,0 +1,11 @@
+python-dotenv
+openai
+gradio
+pypdf
+langchain-core
+langchain-openai
+langchain-chroma
+chromadb
+langchain-text-splitters
+jupyter
+ipykernel

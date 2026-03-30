@@ -1,0 +1,6 @@
+openai>=1.0.0
+gradio>=3.50.0
+python-dotenv>=1.0.0
+pydantic>=1.10.0
+agents-sdk  # your course agent SDK, if installed via pip
+requests>=2.28.0
