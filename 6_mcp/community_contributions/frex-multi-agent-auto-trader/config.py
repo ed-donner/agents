@@ -6,7 +6,7 @@ from agents import FunctionTool
 
 load_dotenv(override=True)
 
-# --- DIRECTORY & PLAN CONFIG ---
+# Directory & Plan config
 HERE = os.path.dirname(os.path.abspath(__file__))
 POLYGON_API_KEY = os.getenv("POLYGON_API_KEY")
 POLYGON_PLAN = os.getenv("POLYGON_PLAN", "free")
@@ -15,9 +15,7 @@ BRAVE_API_KEY = os.getenv("BRAVE_API_KEY")
 IS_PAID_POLYGON = POLYGON_PLAN == "paid"
 IS_REALTIME_POLYGON = POLYGON_PLAN == "realtime"
 
-# --- MCP SERVER PARAMETERS ---
-# Note: We now point all local servers to the consolidated 'servers.py' with arguments
-
+# MCP server parameters
 if IS_PAID_POLYGON or IS_REALTIME_POLYGON:
     market_mcp_params = {
         "command": "uvx",
@@ -62,7 +60,7 @@ def researcher_mcp_server_params(name: str):
     )
     return servers
 
-# --- AGENT INSTRUCTIONS (Templates) ---
+# Agent instructions
 
 def get_market_note():
     if IS_REALTIME_POLYGON:
@@ -91,7 +89,7 @@ def trader_instructions():
 Mandatory Sequence: 1. Research -> 2. Strategize -> 3. Check Risk/Circuit Breaker -> 4. Execute -> 5. Notify.
 {get_market_note()}"""
 
-# --- MESSAGE TEMPLATES ---
+# Message templates
 
 def trade_message(name, strategy, account):
     return f"""New trading cycle for {name}.
@@ -111,7 +109,7 @@ def risk_manager_message(name, account):
 1. Get report -> 2. Evaluate breaches -> 3. Set circuit breaker -> 4. Log events.
 Account Snapshot: {account}"""
 
-# --- AGENTIC TOOLS (Handoffs) ---
+# Agentic tools
 
 _HANDOFF_PARAMS = {"type": "object", "properties": {}, "additionalProperties": False}
 

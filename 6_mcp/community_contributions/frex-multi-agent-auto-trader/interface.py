@@ -4,12 +4,10 @@ import plotly.express as px
 from enum import Enum
 from typing import List, Optional
 
-# Internal Imports
 from backend import Account, read_log, read_risk
-# Note: names/model_names are imported from engine to maintain a single source of truth
 from engine import NAMES, LASTNAMES, SHORT_MODEL_NAMES
 
-# --- UI UTILITIES (from util.py) ---
+# UI utilities
 class Color(Enum):
     RED = "#dd0000"
     GREEN = "#00dd00"
@@ -49,7 +47,7 @@ LOG_COLOR_MAP = {
     "risk": Color.BLUE.value,
 }
 
-# --- UI TRADER WRAPPER ---
+# UI Trader wrapper
 class UITrader:
     def __init__(self, name: str, lastname: str, model_name: str):
         self.name = name
@@ -110,7 +108,7 @@ class UITrader:
             log_html += f"<div style='color: {color}; font-family: monospace; margin-bottom: 2px;'>[{dt}] {log_type.upper()}: {msg}</div>"
         return log_html
 
-# --- GRADIO LAYOUT ---
+# Gradio layout
 class TraderView:
     def __init__(self, trader: UITrader):
         self.trader = trader

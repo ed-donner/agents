@@ -17,7 +17,7 @@ from backend import (
 
 load_dotenv(override=True)
 
-# --- 1. MARKET SERVER ---
+# Market server
 market_mcp = FastMCP("market_server")
 
 class SharePriceArgs(BaseModel):
@@ -29,7 +29,7 @@ def get_share_price_tool(args: SharePriceArgs) -> float:
     return get_share_price(args.symbol)
 
 
-# --- 2. RISK SERVER ---
+# Risk Server
 risk_mcp = FastMCP("risk_server")
 
 class NameArgs(BaseModel):
@@ -99,7 +99,7 @@ def update_risk_limits(args: RiskLimitsArgs) -> str:
     return "Risk limits updated"
 
 
-# --- 3. ACCOUNTS SERVER ---
+# Accounts server
 accounts_mcp = FastMCP("accounts_server")
 
 @accounts_mcp.tool()
@@ -136,7 +136,7 @@ async def read_strategy_resource(name: str) -> str:
     return Account.get(name.lower()).get_strategy()
 
 
-# --- 4. PUSH SERVER ---
+# Push Server
 push_mcp = FastMCP("push_server")
 
 class PushModelArgs(BaseModel):
@@ -154,7 +154,7 @@ def push(args: PushModelArgs):
     return "Push notification sent"
 
 
-# --- ROUTER / ENTRY POINT ---
+# Rounter / Entry point
 if __name__ == "__main__":
     # This allows the same file to be called as different servers
     # based on an argument passed in mcp_params.py

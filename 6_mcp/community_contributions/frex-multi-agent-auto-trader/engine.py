@@ -14,7 +14,6 @@ from openai import AsyncOpenAI
 from agents import Agent, Tool, Runner, OpenAIChatCompletionsModel, trace, add_trace_processor, FunctionTool
 from agents.mcp import MCPServerStdio
 
-# Internal Imports
 from backend import Account, is_market_open, LogTracer, make_trace_id, reset_risk
 from config import (
     researcher_instructions, strategist_instructions, risk_manager_instructions,
@@ -25,7 +24,7 @@ from config import (
 
 load_dotenv(override=True)
 
-# --- GLOBAL CONFIG ---
+# Global config
 RUN_EVERY_N_MINUTES = int(os.getenv("RUN_EVERY_N_MINUTES", "60"))
 RUN_EVEN_WHEN_MARKET_IS_CLOSED = os.getenv("RUN_EVEN_WHEN_MARKET_IS_CLOSED", "false").lower() == "true"
 USE_MANY_MODELS = os.getenv("USE_MANY_MODELS", "false").lower() == "true"
@@ -42,7 +41,7 @@ else:
     MODEL_NAMES = ["gpt-4o-mini"] * 4
     SHORT_MODEL_NAMES = ["GPT 4o mini"] * 4
 
-# --- ACCOUNTS CLIENT LOGIC ---
+# Accounts client
 ACCOUNTS_PARAMS = StdioServerParameters(command="uv", args=["run", "servers.py", "accounts"], env=None)
 
 
@@ -64,7 +63,7 @@ async def read_strategy_resource(name: str):
             result = await session.read_resource(f"accounts://strategy/{name}")
             return result.contents[0].text
 
-# --- AGENT CLASSES ---
+# Agent classes
 class Trader:
     def __init__(self, name: str, lastname: str, model_name: str, do_trade: bool = True):
         self.name = name
@@ -94,8 +93,7 @@ class Trader:
     async def run_agent(self, trader_mcp, researcher_mcp):
         account = await read_accounts_resource(self.name)
         strategy = await read_strategy_resource(self.name)
-        
-        # Function handoffs live on tools; MCP servers go on mcp_servers (expanded to FunctionTools at runtime).
+         
         self.agent.tools[:] = [research_tool, strategist_tool]
         self.agent.mcp_servers[:] = [*trader_mcp, *researcher_mcp]
         
@@ -147,7 +145,7 @@ class RiskManager:
         except Exception as e:
             print(f"Error running risk manager for {self.name}: {e}")
 
-# --- RESET LOGIC ---
+# Reset
 STRATEGIES = {
     "Warren": "Value-oriented investor, identifies high-quality companies trading below intrinsic value. Long-term focus.",
     "George": "Aggressive macro trader. Seeks market mispricings and geopolitical imbalances. Contrarian approach.",
@@ -162,7 +160,7 @@ def reset_traders():
         reset_risk(name)
         print(f"Reset account and risk state for {name}")
 
-# --- TRADING FLOOR ---
+# Trading floor
 async def run_cycle(traders: List[Trader], risk_managers: List[RiskManager]):
     print("Phase 1: Risk assessment...")
     await asyncio.gather(*[rm.run() for rm in risk_managers])

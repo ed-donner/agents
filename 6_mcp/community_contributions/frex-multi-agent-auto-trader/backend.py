@@ -16,7 +16,7 @@ from agents import TracingProcessor, Trace, Span
 
 load_dotenv(override=True)
 
-# --- CONFIGURATION & CONSTANTS ---
+# Configuration & Constants
 DB = "accounts.db"
 INITIAL_BALANCE = 10_000.0
 SPREAD = 0.002
@@ -26,7 +26,7 @@ IS_PAID_POLYGON = POLYGON_PLAN == "paid"
 IS_REALTIME_POLYGON = POLYGON_PLAN == "realtime"
 ALPHANUM = string.ascii_lowercase + string.digits
 
-# --- DATABASE LAYER ---
+# Database
 def get_db_connection():
     return sqlite3.connect(DB)
 
@@ -136,7 +136,7 @@ def reset_risk(name: str):
         conn.execute('DELETE FROM risk WHERE name = ?', (name.lower(),))
         conn.execute('DELETE FROM logs WHERE name = ?', (name.lower(),))
 
-# --- MARKET DATA LAYER ---
+# Market data
 def is_market_open() -> bool:
     client = RESTClient(POLYGON_API_KEY)
     return client.get_market_status().market == "open"
@@ -162,7 +162,7 @@ def get_share_price(symbol: str) -> float:
         today = datetime.now().date().strftime("%Y-%m-%d")
         return get_market_for_prior_date(today).get(symbol, 0.0)
 
-# --- ACCOUNT MODELS ---
+# Account models
 class Transaction(BaseModel):
     symbol: str
     quantity: int
@@ -251,7 +251,7 @@ class Account(BaseModel):
         write_log(self.name, "account", "Changed strategy")
         return "Changed strategy"
 
-# --- TRACING LAYER ---
+# Tracing
 def make_trace_id(tag: str) -> str:
     tag += "0"
     pad_len = 32 - len(tag)
