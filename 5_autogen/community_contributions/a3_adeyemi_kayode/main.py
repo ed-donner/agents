@@ -85,11 +85,15 @@ with gr.Blocks(title="Education · Food · Healthcare — AutoGen") as demo:
         "Ask about learning, meals, wellness, or how they intersect. The **Coordinator** wraps up and may end the turn."
     )
     chatbot = gr.Chatbot(height=420)
-    msg = gr.Textbox(
-        label="Your question",
-        placeholder="E.g., How can a busy student eat better and manage stress during exams?",
-        lines=2,
-    )
+    with gr.Column():
+        msg = gr.Textbox(
+            label="Your question",
+            placeholder="E.g., How can a busy student eat better and manage stress during exams?",
+            lines=2,
+        )
+        submit_btn = gr.Button("Submit", variant="primary")
+
+    submit_btn.click(chat, [msg, chatbot], [chatbot, msg])
     msg.submit(chat, [msg, chatbot], [chatbot, msg])
 
 if __name__ == "__main__":
