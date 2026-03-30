@@ -1,14 +1,12 @@
-# DevOps Runbook Assistant MCP (demo)
+# DevOps Runbook Assistant MCP
 
-Gradio-based assistant that generates incident runbooks using web search and LLM reasoning, with MCP-based logging of actions.
-
-Not intended for production use. Outputs are synthetic.
+Generates incident runbooks using web search and LLM reasoning, with MCP-based logging.
 
 ## Features
-- Generate runbooks from incident descriptions
-- Suggest troubleshooting steps
-- Log actions via MCP server
+- Web search (Serper)
+- OpenRouter LLM
+- MCP logging
+- Gradio UI
 
 ## Run
-
-python app.py
+python app.py s
