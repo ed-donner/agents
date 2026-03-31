@@ -1,7 +1,7 @@
 # Change Log
 
 ## **Week 6: Run Agentic Stock Trader using MCP**
-
+Add running trading floor and UI app with improvements. 
 
 ### **Updates**
 * **Replaced Brave with Tavily Search:** It was required to add a plan and a credit card to get the API, the Tremendous card does not pass validation. 
