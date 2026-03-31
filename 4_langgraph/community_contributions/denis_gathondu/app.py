@@ -7,7 +7,6 @@ async def setup():
         username="Denis Gathondu",
         no_of_postings=10,
         model="gpt-4o-mini",
-        user_profile_file_path="me/linkedin.pdf",
     )
     await applicant.setup()
     return applicant
@@ -23,7 +22,6 @@ async def reset():
         username="Denis Gathondu",
         no_of_postings=10,
         model="gpt-4o-mini",
-        user_profile_file_path="me/linkedin.pdf",
     )
     await new_applicant.setup()
     return "", "", None, new_applicant

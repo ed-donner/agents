@@ -16,7 +16,6 @@ class Applicant:
         username: str,
         no_of_postings: int,
         model: str,
-        user_profile_file_path: str,
     ):
         self.graph = None
         self.applicant_id = str(uuid.uuid4())
@@ -25,14 +24,12 @@ class Applicant:
         self.username = username
         self.no_of_postings = no_of_postings
         self.model = model
-        self.user_profile_file_path = user_profile_file_path
 
     async def setup(self):
         self.agent = ApplicantAgent(
             username=self.username,
             no_of_postings=self.no_of_postings,
             model=self.model,
-            user_profile_file_path=self.user_profile_file_path,
         )
         await self.agent.setup()
         await self.build_graph()

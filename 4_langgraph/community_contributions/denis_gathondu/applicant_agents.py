@@ -1,14 +1,17 @@
 import asyncio
+import io
+import json
 import os
-from pathlib import Path
 from typing import Any, Dict, List
 
+import httpx
 from applicant_tools import ApplicantTool
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_core.documents.base import Document
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
+from mcp import ClientSession
+from mcp.client.streamable_http import streamablehttp_client
 from models import EvaluationList, JobPostingList, NotificationList, State
+from pypdf import PdfReader
 
 
 class ApplicantAgent:
@@ -19,7 +22,7 @@ class ApplicantAgent:
         username: str,
         no_of_postings: int,
         model: str = "gpt-4o-mini",
-        user_profile_file_path: str = "me/linkedin.pdf",
+        google_drive_file_id: str | None = None,
     ):
         self.username = username
         self.no_of_postings = no_of_postings
@@ -35,7 +38,11 @@ class ApplicantAgent:
         self.model: str = model
         self.llm: ChatOpenAI = None
         self.user_profile_summary: str = None
-        self.user_profile_file_path: str = user_profile_file_path
+        self.google_drive_file_id = google_drive_file_id or os.getenv(
+            "PROFILE_GOOGLE_DRIVE_FILE_ID"
+        )
+        self.smithery_api_key = os.getenv("SMITHERY_API_KEY")
+        self.googledrive_mcp_endpoint = os.getenv("GOOGLEDRIVE_MCP_ENDPOINT")
 
     async def setup(self):
         """
@@ -53,22 +60,15 @@ class ApplicantAgent:
         self.email_tool = self.other_tools["email"]
         self.push_notification_tool = self.other_tools["push_notification"]
         self.llm = ChatOpenAI(model=self.model)
-        await self.get_user_profile_summary(
-            user_profile_file_path=self.user_profile_file_path
-        )
+        await self.get_user_profile_summary()
 
-    async def get_user_profile_summary(self, user_profile_file_path: str) -> None:
+    async def get_user_profile_summary(self) -> None:
         """
         Get the user profile summary
         """
-        user_profile_file_path = str(
-            os.path.normpath(
-                os.path.join(Path(__file__).resolve().parent, user_profile_file_path)
-            )
-        )
-        loader: PyPDFLoader = PyPDFLoader(user_profile_file_path)
-        pages: list[Document] = await loader.aload()
-        user_profile = "\n\n".join([page.page_content for page in pages])
+        pdf_bytes = await self._download_from_google_drive()
+        reader = PdfReader(io.BytesIO(pdf_bytes))
+        user_profile = "\n\n".join(page.extract_text() for page in reader.pages)
         user_profile_summary_instructions = f"""
         You are a user profile summary assistant helping {self.username} get their profile summary.
 
@@ -91,6 +91,38 @@ class ApplicantAgent:
         ]
         response = await self.llm.ainvoke(input=messages)
         self.user_profile_summary = response.content
+
+    async def _download_from_google_drive(self) -> bytes:
+        """Download a file from Google Drive using the Smithery MCP server."""
+
+        def client_factory(**kwargs):
+            existing_headers = kwargs.pop("headers", {})
+            return httpx.AsyncClient(
+                headers={
+                    **existing_headers,
+                    "Authorization": f"Bearer {self.smithery_api_key}",
+                    "Accept": "application/json, text/event-stream",
+                },
+                **kwargs,
+            )
+
+        async with streamablehttp_client(
+            self.googledrive_mcp_endpoint,
+            httpx_client_factory=client_factory,
+        ) as (read, write, _):
+            async with ClientSession(read, write) as session:
+                await session.initialize()
+                result = await session.call_tool(
+                    "download_file",
+                    {"file_id": self.google_drive_file_id},
+                )
+                response = json.loads(result.content[0].text)
+                s3_url = response["downloaded_file_content"]["s3url"]
+
+                async with httpx.AsyncClient() as client:
+                    file_response = await client.get(s3_url)
+                    file_response.raise_for_status()
+                    return file_response.content
 
     async def listing_worker(self, state: State) -> Dict[str, JobPostingList]:
         """
