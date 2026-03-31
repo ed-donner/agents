@@ -3,6 +3,12 @@ from search_agent import search_agent
 from planner_agent import planner_agent, WebSearchItem, WebSearchPlan
 from writer_agent import writer_agent, ReportData
 from printer_agent import printer_agent
+from clarification_agent import (
+    clarification_agent,
+    refinement_agent,
+    ClarificationQuestions,
+    RefinedQuery,
+)
 import asyncio
 
 
@@ -17,6 +23,7 @@ class ResearchManager:
             )
             yield f"View trace: https://platform.openai.com/traces/trace?trace_id={trace_id}"
             print("Starting research...")
+            yield "Planning searches..."
             search_plan = await self.plan_searches(query)
             yield "Searches planned, starting to search..."
             search_results = await self.perform_searches(search_plan)
@@ -26,6 +33,38 @@ class ResearchManager:
             await self.print_report(report)
             yield "Report printed, research complete"
             yield report.markdown_report
+
+    async def get_clarification_questions(self, query: str) -> ClarificationQuestions:
+        """Generate 3 clarification questions for the user's research topic."""
+        print("Generating clarification questions...")
+        result = await Runner.run(
+            clarification_agent,
+            f"User query: {query}",
+        )
+        print("Finished generating clarification questions")
+        return result.final_output_as(ClarificationQuestions)
+
+    async def refine_query(
+        self, query: str, questions: list[str], answers: list[str]
+    ) -> str:
+        """Combine the original query and clarification answers into one refined query."""
+        print("Refining query...")
+        numbered_questions = "\n".join(
+            f"{index}. {question}" for index, question in enumerate(questions, start=1)
+        )
+        numbered_answers = "\n".join(
+            f"{index}. {answer}" for index, answer in enumerate(answers, start=1)
+        )
+        result = await Runner.run(
+            refinement_agent,
+            (
+                f"Original query: {query}\n"
+                f"Clarification questions:\n{numbered_questions}\n"
+                f"User answers:\n{numbered_answers}"
+            ),
+        )
+        print("Finished refining query")
+        return result.final_output_as(RefinedQuery).refined_query
 
     async def plan_searches(self, query: str) -> WebSearchPlan:
         """Plan the searches to perform for the query"""
