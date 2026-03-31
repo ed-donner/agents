@@ -1,5 +1,0 @@
-autogen-agentchat==0.6.1
-autogen-core==0.6.1
-autogen-ext[openai]==0.6.1
-gradio>=4.0.0
-python-dotenv>=1.0.0
