@@ -25,10 +25,22 @@ async def playwright_tools():
 
 
 def push(text: str):
-    """Send a push notification to the user"""
-    requests.post(pushover_url, data = {"token": pushover_token, "user": pushover_user, "message": text})
-    return "success"
+    """Send a push notification with basic validation and error handling"""
+    if not all([pushover_token, pushover_user]):
+        return "error: missing credentials"
 
+    try:
+        response = requests.post(
+            pushover_url,
+            data={"token": pushover_token, "user": pushover_user, "message": text},
+            timeout=10
+        )
+        response.raise_for_status()
+        return "success"
+
+    except requests.exceptions.RequestException as e:
+        # 3. Return the actual error instead of lying
+        return f"failure: {e}"
 
 def get_file_tools():
     toolkit = FileManagementToolkit(root_dir="sandbox")
