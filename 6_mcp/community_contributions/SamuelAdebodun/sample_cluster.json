@@ -1,0 +1,77 @@
+{
+  "cluster": "demo-prod-use1",
+  "version": "1.29.3",
+  "nodes": [
+    {"name": "ip-10-0-1-20", "ready": true, "roles": ["worker"], "version": "1.29.3"},
+    {"name": "ip-10-0-1-21", "ready": true, "roles": ["worker"], "version": "1.29.3"},
+    {"name": "ip-10-0-1-22", "ready": false, "roles": ["worker"], "version": "1.29.3", "condition": "DiskPressure"}
+  ],
+  "namespaces": {
+    "payments": {
+      "pods": [
+        {
+          "name": "payments-api-7d8fc9b4-xkq2m",
+          "phase": "Running",
+          "restarts": 18,
+          "ready": "1/1",
+          "issue": "CrashLoopBackOff",
+          "workload": "payments-api",
+          "workload_kind": "Deployment",
+          "cpu_request": "500m",
+          "mem_request": "512Mi"
+        },
+        {
+          "name": "payments-worker-5f6cc7d-2n9vw",
+          "phase": "Pending",
+          "restarts": 0,
+          "ready": "0/1",
+          "issue": "Insufficient cpu",
+          "workload": "payments-worker",
+          "workload_kind": "Deployment",
+          "cpu_request": "4",
+          "mem_request": "8Gi"
+        }
+      ],
+      "deployments": [
+        {
+          "name": "payments-api",
+          "desired": 3,
+          "ready": 2,
+          "available": 2,
+          "updated": 3
+        },
+        {
+          "name": "payments-worker",
+          "desired": 2,
+          "ready": 0,
+          "available": 0,
+          "updated": 1
+        }
+      ]
+    },
+    "platform": {
+      "pods": [
+        {
+          "name": "ingress-nginx-controller-abc",
+          "phase": "Running",
+          "restarts": 2,
+          "ready": "1/1",
+          "issue": null,
+          "workload": "ingress-nginx-controller",
+          "workload_kind": "Deployment",
+          "cpu_request": "100m",
+          "mem_request": "128Mi"
+        }
+      ],
+      "deployments": [
+        {
+          "name": "ingress-nginx-controller",
+          "desired": 2,
+          "ready": 2,
+          "available": 2,
+          "updated": 2
+        }
+      ]
+    }
+  }
+}
