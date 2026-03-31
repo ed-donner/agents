@@ -1,14 +1,3 @@
-"""
-Personal Study Brain — launches the Streamlit dashboard.
-
-  uv sync --extra ui --extra semantic
-  uv run asket-mcp-ui
-
-Environment: ASKET_UI_HOST (default 127.0.0.1), ASKET_UI_PORT (default 7860), plus .env for Brain paths.
-
-UI logic lives in ``handlers.py``; layout in ``streamlit_app.py``.
-"""
-
 from __future__ import annotations
 
 import logging
@@ -20,7 +9,6 @@ logger = logging.getLogger(__name__)
 
 
 def _merge_no_proxy_loopback() -> None:
-    """Ensure loopback is not sent through HTTP(S)_PROXY."""
     extra = ("127.0.0.1", "localhost", "::1")
     for key in ("NO_PROXY", "no_proxy"):
         cur = (os.environ.get(key) or "").strip()
@@ -33,7 +21,10 @@ def _merge_no_proxy_loopback() -> None:
 
 def _ensure_streamlit_usable() -> None:
     try:
-        import streamlit  # noqa: F401
+        import importlib.util
+
+        if importlib.util.find_spec("streamlit") is None:
+            raise ImportError
     except ImportError:
         print(
             "asket-mcp-ui needs Streamlit.\n\n"

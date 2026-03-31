@@ -1,5 +1,3 @@
-"""Central logging setup for MCP worker processes."""
-
 import logging
 import sys
 

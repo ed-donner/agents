@@ -1,5 +1,3 @@
-"""SQLite store for learner profile (goals, rough expertise, roadmap notes)."""
-
 from __future__ import annotations
 
 import sqlite3

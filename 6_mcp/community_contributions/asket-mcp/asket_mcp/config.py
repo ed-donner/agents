@@ -1,8 +1,6 @@
-"""Runtime configuration from environment and optional `.env`."""
-
 from functools import lru_cache
 from pathlib import Path
-from typing import Literal
+from typing import Literal, cast
 
 from pydantic import AliasChoices, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -20,12 +18,10 @@ class Settings(BaseSettings):
 
     data_dir: Path = Field(
         default=Path("data"),
-        description="Directory for SQLite notes and local state",
         validation_alias=AliasChoices("ASKET_MCP_DATA_DIR", "data_dir"),
     )
     brain_root: Path = Field(
         default=Path("PersonalStudyBrain"),
-        description="Allow-listed Brain folder for Markdown and study artifacts (local-first).",
         validation_alias=AliasChoices("PERSONAL_STUDY_BRAIN_DIR", "ASKET_BRAIN_ROOT", "brain_root"),
     )
     log_level: str = Field(
@@ -63,14 +59,12 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("ASKET_MCP_FETCH_USER_AGENT", "fetch_user_agent"),
     )
 
-    # Semantic memory (ChromaDB + OpenAI) — install asket-mcp[semantic]
     openai_api_key: str | None = Field(
         default=None,
         validation_alias=AliasChoices("OPENAI_API_KEY"),
     )
     chroma_persist_path: Path | None = Field(
         default=None,
-        description="ChromaDB persistence directory (default: <data_dir>/chroma).",
         validation_alias=AliasChoices("ASKET_CHROMA_PATH", "CHROMA_DB_PATH", "CHROMA_PATH"),
     )
     embedding_model: str = Field(
@@ -100,7 +94,6 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("ASKET_SEMANTIC_CHUNK_OVERLAP"),
     )
 
-    # Streamlit UI (asket-mcp-ui); some fields are legacy Gradio-era names kept for .env compatibility
     ui_auth_username: str | None = Field(
         default=None,
         validation_alias=AliasChoices("ASKET_UI_AUTH_USERNAME"),
@@ -111,7 +104,6 @@ class Settings(BaseSettings):
     )
     ui_root_path: str | None = Field(
         default=None,
-        description="Subpath when behind a reverse proxy (e.g. /study).",
         validation_alias=AliasChoices("ASKET_UI_ROOT_PATH", "GRADIO_ROOT_PATH"),
     )
     ui_ssl_certfile: str | None = Field(
@@ -126,7 +118,6 @@ class Settings(BaseSettings):
     @field_validator("ui_ssl_certfile", "ui_ssl_keyfile", mode="before")
     @classmethod
     def _empty_ui_ssl_path_is_none(cls, v: object) -> str | None:
-        """Normalize empty env strings so half-set TLS paths are not treated as configured."""
         if v is None:
             return None
         if isinstance(v, str):
@@ -136,17 +127,14 @@ class Settings(BaseSettings):
 
     ui_ssl_verify: bool = Field(
         default=True,
-        description="Legacy: self-signed HTTPS checks when a Gradio-style probe ran. Mostly unused for Streamlit.",
         validation_alias=AliasChoices("ASKET_UI_SSL_VERIFY"),
     )
     ui_gradio_analytics: bool = Field(
         default=False,
-        description="Legacy Gradio telemetry flag; unused by Streamlit launcher.",
         validation_alias=AliasChoices("ASKET_UI_GRADIO_ANALYTICS"),
     )
     ui_ssr_mode: bool = Field(
         default=False,
-        description="Legacy Gradio SSR flag; unused by Streamlit launcher.",
         validation_alias=AliasChoices("ASKET_UI_SSR_MODE", "GRADIO_SSR_MODE"),
     )
     ui_max_threads: int = Field(
@@ -161,7 +149,6 @@ class Settings(BaseSettings):
     )
     ui_share: bool = Field(
         default=False,
-        description="Legacy Gradio share URL flag; unused by Streamlit launcher.",
         validation_alias=AliasChoices("ASKET_UI_SHARE"),
     )
     ui_debug: bool = Field(
@@ -174,17 +161,14 @@ class Settings(BaseSettings):
     )
     ui_minimal_footer: bool = Field(
         default=False,
-        description="Legacy Gradio footer flag; unused by Streamlit launcher.",
         validation_alias=AliasChoices("ASKET_UI_MINIMAL_FOOTER"),
     )
     ui_auth_message: str | None = Field(
         default=None,
-        description="Optional message on the login screen.",
         validation_alias=AliasChoices("ASKET_UI_AUTH_MESSAGE"),
     )
 
     def gradio_auth(self) -> list[tuple[str, str]] | None:
-        """HTTP basic auth tuple if both username and password are set (not wired into Streamlit app)."""
         u, p = self.ui_auth_username, self.ui_auth_password
         if u and p:
             return [(u.strip(), p)]
@@ -208,7 +192,9 @@ def get_settings() -> Settings:
 def mcp_log_level() -> LogLevel:
     raw = (get_settings().log_level or "INFO").upper()
     allowed: set[str] = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
-    return raw if raw in allowed else "INFO"  # type: ignore[return-value]
+    if raw in allowed:
+        return cast(LogLevel, raw)
+    return "INFO"
 
 
 def normalized_transport() -> Transport:

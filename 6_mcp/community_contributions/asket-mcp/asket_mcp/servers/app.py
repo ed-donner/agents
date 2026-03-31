@@ -1,10 +1,3 @@
-"""
-Asket MCP — unified server.
-
-Personal Study Brain: sandboxed Brain folder + public web fetch + SQLite scratch notes + Pushover + time.
-Run: uv run asket-mcp
-"""
-
 from __future__ import annotations
 
 import logging
@@ -40,7 +33,7 @@ _INSTRUCTIONS = """You are backing a Local-First study workflow with optional se
 
 **Filesystem Brain** — use **brain_*** tools for Markdown under the configured Brain folder only (no path escape).
 **Public web** — **fetch_public_page** for http(s) text (not a full browser).
-**Semantic memory** (requires server install `semantic` extra + `OPENAI_API_KEY`): **semantic_memory_ingest_*** adds passages to the local vector index; **semantic_memory_search** retrieves by meaning; **ask_the_brain** runs RAG (retrieve + GPT answer). Snippets sent to OpenAI leave the user's machine per OpenAI policy.
+**Semantic memory** (requires `semantic` extra + `OPENAI_API_KEY`): **semantic_memory_ingest_*** fills local Chroma; **semantic_memory_search** retrieves by meaning; **ask_the_brain** runs RAG. Text you send is POSTed to OpenAI per their service terms.
 **Learner profile** — **study_profile_get** / **study_profile_update** for goals, expertise, roadmap; **greet_and_assess** for a short coach welcome using that profile.
 
 Human-in-the-loop defaults:
@@ -184,9 +177,6 @@ async def note_delete(note_id: int, user_confirmed_deletion: bool = False) -> st
         return "Blocked: set user_confirmed_deletion=true only after the user explicitly approves deletion."
     ok = get_notes_store().delete(int(note_id))
     return "Deleted." if ok else f"No note with id {note_id}."
-
-
-# --- Semantic memory (Chroma + OpenAI) & study profile ------------------------------------
 
 
 @mcp.tool()

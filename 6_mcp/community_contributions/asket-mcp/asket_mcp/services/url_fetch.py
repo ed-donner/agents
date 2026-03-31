@@ -1,5 +1,3 @@
-"""Fetch public http/https URLs for agents (bounded size, basic SSRF guard)."""
-
 from __future__ import annotations
 
 import ipaddress

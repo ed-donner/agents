@@ -43,11 +43,11 @@ cd community_contributions/asket-mcp
 Then:
 
 ```bash
-cp .env.example .env
-# Set PERSONAL_STUDY_BRAIN_DIR and (for semantic tools) OPENAI_API_KEY
 uv sync --extra semantic
 uv run asket-mcp
 ```
+
+Set variables in a `.env` file in this directory and/or in your shell (`Settings` in `asket_mcp/config.py` lists names). Typical entries include `PERSONAL_STUDY_BRAIN_DIR`, `ASKET_MCP_DATA_DIR`, and `OPENAI_API_KEY` for semantic tools.
 
 `uv run asket-mcp` uses **stdio** and waits for an MCP client (Cursor, etc.). **Ctrl+C** ends the process; stack traces from `CancelledError` on shutdown are normal.
 
@@ -80,7 +80,6 @@ Browser dashboard over the **same Python APIs** as MCP (does not speak MCP wire 
 
 ```bash
 uv sync --extra ui --extra semantic
-# equivalent convenience: uv sync --extra all
 uv run asket-mcp-ui
 ```
 
@@ -101,7 +100,7 @@ You get **Study partner** (chat + optional uploads), **Learning roadmap / Knowle
 - **Docker**: the image runs as **UID 10001**. Named volumes work as-is; for **bind mounts**, ensure `/data` (and any Brain path) are writable by that UID or adjust ownership (`chown -R 10001:10001 …` on the host paths you mount).
 - **Operational**: set `ASKET_MCP_LOG_LEVEL=INFO` (or `WARNING`) on shared systems.
 
-See **`.env.example`** for MCP and legacy UI-related knobs. Some variables (e.g. Gradio-era **`ASKET_UI_*`**) apply only to the MCP server or are reserved for future use with Streamlit.
+Additional environment variables are defined on **`Settings`** in `asket_mcp/config.py` (optional UI/TLS keys, aliases for older installs).
 
 ## Docker (SSE / streamable-http + optional UI)
 
@@ -114,7 +113,7 @@ Compose runs two services:
 - **`asket-mcp`** — MCP on **8765** (default `ASKET_MCP_TRANSPORT=sse`), volume **`/data`**.
 - **`asket-mcp-ui`** — Streamlit on **7860**, same volume so notes and Brain data align.
 
-Override `PERSONAL_STUDY_BRAIN_DIR` (default inside the stack: `/data/brain`). For auth in front of Streamlit, use your reverse proxy or a Streamlit auth extension; `ASKET_UI_AUTH_*` in `.env` are not wired into the Streamlit app.
+Override `PERSONAL_STUDY_BRAIN_DIR` (default inside the stack: `/data/brain`). For auth in front of Streamlit, use your reverse proxy or a Streamlit auth extension; `ASKET_UI_AUTH_*` env vars are not wired into the Streamlit app.
 
 The image installs **`.[ui,semantic]`** (Streamlit + Chroma + OpenAI client). Exposes **8765** and **7860**, and defines a **HEALTHCHECK** on the MCP port. Pass **`OPENAI_API_KEY`** via environment or secrets at runtime for semantic features. The process user is **non-root** (see production checklist for bind mounts).
 

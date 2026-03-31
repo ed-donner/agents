@@ -1,5 +1,3 @@
-"""SQLite-backed notes for agents (scratchpad, reminders, capture)."""
-
 from __future__ import annotations
 
 import sqlite3

@@ -1,5 +1,3 @@
-"""Pushover API client with timeouts and explicit errors."""
-
 from __future__ import annotations
 
 import logging
@@ -14,11 +12,11 @@ PUSHOVER_URL = "https://api.pushover.net/1/messages.json"
 
 
 class PushoverConfigError(RuntimeError):
-    """Missing or invalid Pushover credentials."""
+    pass
 
 
 class PushoverRequestError(RuntimeError):
-    """Pushover HTTP API returned an error."""
+    pass
 
 
 def send_message(message: str) -> str:

@@ -1,10 +1,3 @@
-"""
-OpenAI chat helpers for RAG and short coaching prompts.
-
-Calls OpenAI over the network — not offline. Pair with local Chroma for hybrid privacy:
-vectors stay local; snippets you send to the model are transmitted to OpenAI per your policy.
-"""
-
 from __future__ import annotations
 
 import logging
@@ -36,7 +29,6 @@ def _client():
 
 
 def ask_the_brain(question: str, context_block: str) -> str:
-    """Answer using retrieved context + chat model (RAG)."""
     q = (question or "").strip()
     if not q:
         return "Ask a non-empty question."
@@ -60,7 +52,6 @@ def ask_the_brain(question: str, context_block: str) -> str:
 
 
 def greet_and_assess(profile_goals: str, profile_expertise: str, profile_roadmap: str) -> str:
-    """Short onboarding / check-in message using profile fields."""
     client = _client()
     model = get_settings().chat_model
     blob = (

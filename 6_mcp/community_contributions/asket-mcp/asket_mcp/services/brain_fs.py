@@ -1,9 +1,3 @@
-"""
-Local-first \"Brain\" filesystem: all paths must stay under PERSONAL_STUDY_BRAIN_DIR.
-
-Matches the Personal Study Brain MCP contract: allow-listed tree only, no path traversal.
-"""
-
 from __future__ import annotations
 
 import logging
@@ -85,35 +79,35 @@ def brain_delete_file(relative_path: str, user_confirmed_deletion: bool = False)
 
 def brain_search_markdown(query: str, under_subpath: str = ".", max_file_hits: int = 40) -> str:
     q = (query or "").strip().lower()
-    if len(q) < 2:
-        raise ValueError("Search query must be at least 2 characters.")
+    if not q:
+        return "No matches in .md files under that path."
     base = safe_resolve(under_subpath)
     if not base.is_dir():
         raise NotADirectoryError(f"Not a directory: {under_subpath!r}")
+    root = brain_root()
     results: list[str] = []
-    scanned = 0
+    scan_limit = 500
+    n_scanned = 0
     for path in sorted(base.rglob("*.md")):
         if not path.is_file():
             continue
-        if len(results) >= max_file_hits:
-            results.append(f"... (stopped after {max_file_hits} matching files)")
-            break
-        scanned += 1
-        if scanned > 500:
-            results.append("... (scan limit 500 files reached)")
+        n_scanned += 1
+        if n_scanned > scan_limit:
+            results.append("... (scan limit reached)")
             break
         try:
             text = path.read_text(encoding="utf-8", errors="replace")
         except OSError:
             continue
         lower = text.lower()
-        if q not in lower:
+        i = lower.find(q)
+        if i < 0:
             continue
-        rel = path.relative_to(brain_root())
-        idx = lower.find(q)
-        start = max(0, idx - 80)
-        end = min(len(text), idx + len(q) + 120)
-        snippet = text[start:end].replace("\n", " ")
+        if len(results) >= max_file_hits:
+            results.append(f"... ({max_file_hits} matches max)")
+            break
+        rel = path.relative_to(root)
+        snippet = text[max(0, i - 80) : min(len(text), i + len(q) + 120)].replace("\n", " ")
         results.append(f"{rel}\n  … {snippet} …")
     return "\n\n".join(results) if results else "No matches in .md files under that path."
 

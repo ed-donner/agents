@@ -31,12 +31,10 @@ ui = [
     "pypdf>=5.0.0",
     "python-docx>=1.1.0",
 ]
-# ChromaDB + OpenAI embeddings + chat for RAG (optional; install for semantic memory tools).
 semantic = [
     "chromadb>=0.5.0",
     "openai>=1.40.0",
 ]
-# UI + semantic + dev test deps in one shot for local workstations.
 all = [
     "streamlit>=1.40.0",
     "chromadb>=0.5.0",
@@ -56,7 +54,6 @@ include = [
     "/asket_mcp",
     "/tests",
     "/README.md",
-    "/.env.example",
     "/Dockerfile",
     "/docker-compose.yml",
 ]

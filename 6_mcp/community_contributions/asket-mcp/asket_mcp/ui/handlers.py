@@ -1,9 +1,3 @@
-"""
-Shared UI logic for Personal Study Brain (Streamlit dashboard).
-
-No framework imports — safe to import without Gradio/Streamlit installed for tests.
-"""
-
 from __future__ import annotations
 
 import csv
@@ -217,7 +211,6 @@ def ui_semantic_ask(question: str) -> str:
 
 
 def extract_upload_plain_text(path: Path) -> tuple[str, str]:
-    """Return (text, error). error is empty on success."""
     suf = path.suffix.lower()
     try:
         if suf in (".txt", ".md", ".markdown"):
@@ -274,7 +267,6 @@ def extract_upload_plain_text(path: Path) -> tuple[str, str]:
 
 
 def study_partner_reply(message: str, file_path: str | None) -> str:
-    """Single-turn reply: URLs → fetch; optional file → inline text; else RAG chat."""
     msg = (message or "").strip()
     extra_file = ""
     if file_path:

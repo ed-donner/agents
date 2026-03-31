@@ -1,4 +1,3 @@
-# Personal Study Brain — MCP (SSE / streamable-http) + optional Streamlit UI in image
 FROM python:3.12-slim-bookworm
 
 WORKDIR /app
@@ -20,7 +19,6 @@ ARG ASKET_INSTALL_EXTRAS="[ui,semantic]"
 RUN pip install --no-cache-dir ".${ASKET_INSTALL_EXTRAS}" \
     && rm -rf /root/.cache/pip
 
-# Non-root runtime (UID/GID 10001). For host bind mounts, chown data paths to 10001:10001.
 RUN groupadd -r -g 10001 asket \
     && useradd -r -u 10001 -g asket -d /home/asket -m asket \
     && chown -R asket:asket /app

@@ -1,13 +1,7 @@
-"""
-ChromaDB-backed semantic memory with OpenAI embeddings.
-
-Requires: ``uv sync --extra semantic`` (``chromadb``, ``openai``).
-Embeddings and optional RAG chat call OpenAI APIs — content leaves your machine unless you use local models elsewhere.
-"""
-
 from __future__ import annotations
 
 import hashlib
+import importlib
 import logging
 import re
 from datetime import datetime, timezone
@@ -34,7 +28,6 @@ def _require_openai_key() -> str:
 
 
 def chunk_text(text: str, max_chars: int | None = None, overlap: int | None = None) -> list[str]:
-    """Split long text into overlapping chunks (paragraph-aware, then hard split)."""
     settings = get_settings()
     max_c = max_chars if max_chars is not None else settings.semantic_chunk_chars
     ov = overlap if overlap is not None else settings.semantic_chunk_overlap
@@ -44,7 +37,6 @@ def chunk_text(text: str, max_chars: int | None = None, overlap: int | None = No
     if len(raw) <= max_c:
         return [raw]
 
-    # Prefer paragraph boundaries
     parts = re.split(r"\n\s*\n+", raw)
     chunks: list[str] = []
     buf = ""
@@ -68,7 +60,7 @@ def chunk_text(text: str, max_chars: int | None = None, overlap: int | None = No
     return chunks
 
 
-def _embedding_function():  # noqa: ANN201
+def _embedding_function() -> Any:
     _ensure_chroma_imports()
     from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction
 
@@ -78,7 +70,7 @@ def _embedding_function():  # noqa: ANN201
 
 def _ensure_chroma_imports() -> None:
     try:
-        import chromadb  # noqa: F401
+        importlib.import_module("chromadb")
     except ImportError as e:
         raise RuntimeError(_INSTALL_HELP) from e
 
@@ -107,7 +99,6 @@ def ingest_text_chunks(
     source_id: str,
     extra_metadata: dict[str, Any] | None = None,
 ) -> str:
-    """Chunk text, embed via OpenAI, store in Chroma. Returns human-readable summary."""
     _require_openai_key()
     chunks = chunk_text(text)
     if not chunks:
@@ -134,7 +125,6 @@ def ingest_text_chunks(
 
 
 def semantic_search(query: str, top_k: int | None = None) -> list[dict[str, Any]]:
-    """Run similarity search; returns list of {document, distance, metadata, id}."""
     _require_openai_key()
     k = top_k if top_k is not None else get_settings().rag_top_k
     coll = _collection()
@@ -173,7 +163,6 @@ def format_search_results(results: list[dict[str, Any]], max_snippet: int = 1200
 
 
 def collection_count() -> int:
-    """Approximate number of stored vectors (Chroma count)."""
     _require_openai_key()
     coll = _collection()
     return int(coll.count())

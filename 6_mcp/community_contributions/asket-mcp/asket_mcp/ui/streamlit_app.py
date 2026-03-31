@@ -1,9 +1,3 @@
-"""
-Personal Study Brain — Streamlit dashboard.
-
-Run via: uv run asket-mcp-ui   or   streamlit run asket_mcp/ui/streamlit_app.py
-"""
-
 from __future__ import annotations
 
 import tempfile
