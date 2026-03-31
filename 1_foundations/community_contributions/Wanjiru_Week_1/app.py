@@ -25,9 +25,13 @@ for page in reader.pages:
     if text:
         linkedin += text
 
-# Load summary
-with open("summary.txt", "r", encoding="utf-8") as f:
-    summary = f.read()
+summary = (
+    "Software engineer with experience in building web applications using JavaScript and Python.\n\n"
+    "Skilled in frontend development (React, HTML, CSS) and backend systems (Node.js, APIs, databases).\n\n"
+    "Interested in AI, building scalable systems, and creating practical solutions to real-world problems.\n\n"
+    "Has worked on projects involving authentication systems, APIs, and full-stack applications.\n\n"
+    "Open to opportunities and collaborations in software engineering and AI-related roles."
+)
 
 name = "Wanjiru"
 
@@ -132,5 +136,9 @@ def chat(message, history):
 
 # Launch UI
 if __name__ == "__main__":
-    gr.ChatInterface(chat, type="messages").launch()
+    gr.ChatInterface(
+        chat,
+        title="Chat with Wanjiru",
+        description="Ask me about my skills, experience, and projects — or share your email to get in touch.",
+    ).launch()
     

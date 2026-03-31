@@ -35,8 +35,6 @@ An AI-powered career assistant that represents me and answers questions about my
 
 ## 📁 Project Structure
 ├── app.py
-├── requirements.txt
-├── summary.txt
 ├── linkedin.pdf
 └── README.md
 
