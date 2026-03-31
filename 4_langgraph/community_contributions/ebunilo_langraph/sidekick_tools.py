@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import ast
+import ipaddress
 import operator
 import os
 import re
+from urllib.parse import urlparse
 from collections.abc import Callable
 from typing import Any
 
@@ -51,6 +53,18 @@ def push(text: str) -> str:
 
 def fetch_url_text(url: str, max_chars: int = 12000) -> str:
     """Fetch a URL and return visible text (no JS). Lighter than a full browser for static pages."""
+    parsed = urlparse((url or "").strip())
+    hostname = parsed.hostname
+    if parsed.scheme not in {"http", "https"} or not hostname:
+        return "Blocked: only valid http/https URLs are allowed."
+    try:
+        ip = ipaddress.ip_address(hostname)
+        if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_multicast:
+            return "Blocked: private, loopback, and internal network addresses are not allowed."
+    except ValueError:
+        lowered = hostname.lower()
+        if lowered in {"localhost", "host.docker.internal"} or lowered.endswith(".local"):
+            return "Blocked: localhost and internal hostnames are not allowed."
     headers = {"User-Agent": "SidekickResearchBot/1.0 (educational)"}
     resp = requests.get(url, timeout=20, headers=headers)
     resp.raise_for_status()
@@ -100,6 +114,42 @@ def calculate_math(expression: str) -> str:
         return str(_safe_eval(tree.body))
     except Exception as e:
         return f"Could not evaluate: {e}"
+
+
+PYTHON_BLOCK_PATTERNS = [
+    r"\bimport\s+os\b",
+    r"\bimport\s+sys\b",
+    r"\bimport\s+subprocess\b",
+    r"\bimport\s+socket\b",
+    r"\bimport\s+shutil\b",
+    r"\bimport\s+requests\b",
+    r"\bfrom\s+os\s+import\b",
+    r"\bfrom\s+subprocess\s+import\b",
+    r"\bos\.environ\b",
+    r"\bsubprocess\.",
+    r"\bsocket\.",
+    r"\bopen\s*\(",
+    r"\beval\s*\(",
+    r"\bexec\s*\(",
+    r"__import__\s*\(",
+    r"\bpip\s+install\b",
+    r"\brm\s+-rf\b",
+]
+
+
+def guarded_python(code: str) -> str:
+    """Run only low-risk Python snippets and block common dangerous patterns."""
+    snippet = (code or "").strip()
+    if not snippet:
+        return "Blocked: empty Python input."
+    for pattern in PYTHON_BLOCK_PATTERNS:
+        if re.search(pattern, snippet, flags=re.IGNORECASE):
+            return "Blocked by guardrails: unsafe Python code or system access was requested."
+    python_repl = PythonREPLTool()
+    try:
+        return str(python_repl.run(snippet))
+    except Exception as e:
+        return f"Python execution failed: {e}"
 
 
 def get_file_tools():
@@ -158,13 +208,15 @@ def build_research_tools(username_getter: Callable[[], str]) -> list:
 
 
 def build_files_tools(username_getter: Callable[[], str]) -> list:
-    python_repl = PythonREPLTool()
-
     def save_my_task(title: str, summary: str = "") -> str:
         return save_task(username_getter(), title, summary or title)
 
     return get_file_tools() + [
-        python_repl,
+        Tool(
+            name="guarded_python",
+            func=guarded_python,
+            description="Run low-risk Python snippets for calculations or text/data transforms. Dangerous imports, file access, env access, subprocesses, and networking are blocked.",
+        ),
         Tool(
             name="calculate_math",
             func=calculate_math,
