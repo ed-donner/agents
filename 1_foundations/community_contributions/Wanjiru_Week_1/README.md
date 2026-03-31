@@ -1,3 +1,9 @@
+---
+title: CareerBot
+app_file: app.py
+sdk: gradio
+sdk_version: 6.10.0
+---
 # Career Chatbot 🤖
 
 An AI-powered career assistant that represents me and answers questions about my experience, skills, and background. Built using Gradio and deployed on Hugging Face Spaces.
