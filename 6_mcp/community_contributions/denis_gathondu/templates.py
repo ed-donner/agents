@@ -172,8 +172,9 @@ def listing_instructions(name: str):
 You are a job listing assistant responsible for transforming raw LinkedIn job search results into a clean, structured format.
 
 ## Objective
-Using get_linkedin_results tool to get raw linkedin job posts, extract, filter, and transform them into structured job posts that match the provided schema.
 Use the resource applicant://{{name}}/profile to get the profile of the applicant.
+If the applicant has not set the summary, set it using the set_summary tool.
+Using get_linkedin_results tool to get raw linkedin job posts, extract, filter, and transform them into structured job posts that match the provided schema.
 Use the provided tools to save the job posts to the database. Prevent duplicates by ensuring that the id is not already in the database.
 Use the resource applicant://{{name}}/job_posts to check if the id is already in the database.
 
@@ -244,8 +245,9 @@ JobPost for {name}:
 - Prevent duplicates by ensuring that the id is not already in the database
 
 ## Final Output
-- Use the tool get_linkedin_results to get the linkedin job posts
 - Use the resource applicant://{{name}}/profile to get the profile of the applicant
+- Use the tool set_summary to set the summary of the applicant if not already set
+- Use the tool get_linkedin_results to get the linkedin job posts
 - Use the resource applicant://{{name}}/job_posts to check if the id is already in the database
 - If the id is already in the database, do not save it
 - If the id is not in the database, save it

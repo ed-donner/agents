@@ -1,11 +1,15 @@
+import io
+import json
 import os
-from pathlib import Path
 
+import httpx
 import requests
 from agents import Agent, function_tool
 from agents.mcp import MCPServerSse
 from applicant import Applicant
 from dotenv import load_dotenv
+from mcp import ClientSession
+from mcp.client.streamable_http import streamablehttp_client
 from pypdf import PdfReader
 from templates import (
     evaluation_instructions,
@@ -28,16 +32,84 @@ class ApplicantAgents:
         self.rapid_api_key = os.getenv("RAPID_API_KEY")
         self.rapid_api_host = os.getenv("RAPID_API_HOST")
         self.rapid_api_url = f"https://{self.rapid_api_host}/active-jb-7d"
+        self.profile_google_drive_file_id = os.getenv("PROFILE_GOOGLE_DRIVE_FILE_ID")
+        self.smithery_api_key = os.getenv("SMITHERY_API_KEY")
+        self.googledrive_mcp_endpoint = os.getenv("GOOGLEDRIVE_MCP_ENDPOINT")
         self.query_params = None
-        if not self.applicant.summary:
-            BASE_DIR = Path.cwd()
-            profile_pdf_path = os.path.abspath(
-                os.path.join(BASE_DIR, "sandbox", "linkedin.pdf")
+
+    async def set_summary(self):
+        """
+        Set the summary of the applicant from the Google Drive file if not already set.
+        """
+        if (
+            not self.profile_google_drive_file_id
+            or not self.smithery_api_key
+            or not self.googledrive_mcp_endpoint
+        ):
+            raise ValueError(
+                "PROFILE_GOOGLE_DRIVE_FILE_ID, SMITHERY_API_KEY and GOOGLEDRIVE_MCP_ENDPOINT must be set"
             )
-            with open(profile_pdf_path, "rb") as pdf_file:
-                reader = PdfReader(pdf_file)
-                profile = "\n".join([page.extract_text() for page in reader.pages])
-            self.applicant.set_summary(profile)
+        data = await self._get_profile_from_google_drive()
+        content = data
+
+        if isinstance(data, bytes):
+            reader = PdfReader(io.BytesIO(data))
+            text = "\n".join(page.extract_text() for page in reader.pages)
+            content = text
+
+        self.applicant.set_summary(content)
+
+    async def _get_profile_from_google_drive(self):
+        def client_factory(**kwargs):
+            existing_headers = kwargs.pop("headers", {})
+            return httpx.AsyncClient(
+                headers={
+                    **existing_headers,
+                    "Authorization": f"Bearer {self.smithery_api_key}",
+                    "Accept": "application/json, text/event-stream",
+                },
+                **kwargs,
+            )
+
+        async with streamablehttp_client(
+            self.googledrive_mcp_endpoint, httpx_client_factory=client_factory
+        ) as (
+            read,
+            write,
+            _,
+        ):
+            async with ClientSession(read, write) as session:
+                await session.initialize()
+
+                result = await session.call_tool(
+                    "download_file",
+                    {"file_id": self.profile_google_drive_file_id},
+                )
+
+                response = json.loads(result.content[0].text)
+                s3_url = response["downloaded_file_content"]["s3url"]
+                mimetype = response["downloaded_file_content"]["mimetype"]
+                print(
+                    f"Downloading: {response['downloaded_file_content']['name']} ({mimetype})"
+                )
+
+                # Download the actual file from the signed S3 URL
+                async with httpx.AsyncClient() as client:
+                    file_response = await client.get(s3_url)
+                    file_response.raise_for_status()
+                    return file_response.content
+
+    def _get_summary_tool(self):
+        set_summary = self.set_summary
+
+        @function_tool
+        async def get_summary():
+            """
+            Get the summary of the applicant from the Google Drive file if not already set.
+            """
+            return await set_summary()
+
+        return get_summary
 
     def _set_query_params(
         self,
@@ -59,7 +131,6 @@ class ApplicantAgents:
         advanced_title_filter: str = "AI Engineer | Software:*",
         location_filter: str = "Nairobi",
     ):
-        # Bug fix: _set_query_params returns None; use self.query_params
         self._set_query_params(limit, advanced_title_filter, location_filter)
         headers = {
             "x-rapidapi-key": self.rapid_api_key,
@@ -96,7 +167,7 @@ class ApplicantAgents:
             instructions=listing_instructions(self.name),
             model=self.model,
             mcp_servers=[applicant_server],
-            tools=[self._make_linkedin_tool()],
+            tools=[self._make_linkedin_tool(), self._get_summary_tool()],
         )
         return listing_agent
 
