@@ -1,12 +1,7 @@
 import asyncio
 from agents import Runner
 
-from my_agents.planner import planner
-from my_agents.search import search_agent
-from my_agents.writer import writer
-from my_agents.evaluator import evaluator
-from my_agents.clarifier import clarifier
-from utils.query_refiner import refiner
+from agents_config import planner, search_agent, writer, evaluator, clarifier, refiner
 
 
 MAX_ITERATIONS = 3
