@@ -1,9 +1,0 @@
-- **Definition and Measurement**: Inflation is the increase in the average price of goods and services, typically measured by the Consumer Price Index (CPI), leading to a reduction in the purchasing power of money.
-
-- **Causes**: Key causes of inflation include increases in the money supply, demand shocks, supply shocks (e.g., energy crises), decreases in interest rates, and changes in inflation expectations.
-
-- **Effects**: Inflation can have negative effects such as increased opportunity costs and uncertainty, while positive effects may include reduced unemployment and greater flexibility for central banks in monetary policy.
-
-- **Recent Trends**: A significant global surge in inflation occurred from mid-2021 to mid-2022, peaking in late 2022, with rates beginning to decline in 2023 but not necessarily returning to pre-pandemic levels.
-
-- **Central Bank Responses**: Most central banks, except for the Bank of Japan, responded to rising inflation by increasing interest rates to stabilize the economy.
