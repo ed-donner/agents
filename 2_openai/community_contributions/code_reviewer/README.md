@@ -22,6 +22,9 @@ Multi-agent code review pipeline using the **OpenAI Agents SDK** and Python. An 
 | `write_report_tool` | `tools/report_tools.py` |
 | `WebSearchTool` | OpenAI Agents SDK |
 
+## MCP Servers
+Refer to the README.md file in /6_mcp/community_contributions/code_reviewer_mcp_servers' directory for the description of the MCP servers.
+
 ## Setup
 
 - **Requires:** Python ≥3.11, Git, [OpenRouter](https://openrouter.ai) API credits
@@ -39,6 +42,7 @@ Create `.env`:
 - `OPENROUTER_API_KEY`
 - `GPT_MODEL`, `CLAUDE_MODEL`
 - `REPORT_OUTPUT_DIR=./reports`
+- `TEST_RUNNER_TIMEOUT`
 
 Dependencies: see `requirements.txt` (`openai-agents`, `gradio`, `gitpython`, `tree-sitter`, `tree-sitter-languages`, `python-dotenv`, `pydantic`).
 
