@@ -4,11 +4,15 @@ from agents import Agent, OpenAIChatCompletionsModel
 from openai import AsyncOpenAI
 from models import BugDetectionOutput
 from guardrails import bug_detection_guardrail
+from agents.mcp import MCPServerStdio
 
 load_dotenv(override=True)
 
 client = AsyncOpenAI(base_url=os.environ.get("OPENROUTER_BASE_URL"), api_key=os.environ.get("OPENROUTER_API_KEY"))
 model = OpenAIChatCompletionsModel(model=os.environ.get("CLAUDE_MODEL"), openai_client=client)
+
+test_runner_params = {"command": "uv", "args": ["run", "mcp_servers/test_runner/server.py"], "env": {**os.environ}}
+test_runner_mcp = MCPServerStdio(params=test_runner_params, client_session_timeout_seconds=30)
 
 INSTRUCTIONS = """
 Analyze the code_map and chunks for bugs and runtime issues only.
@@ -32,4 +36,5 @@ bug_detection_agent = Agent(
     output_type=BugDetectionOutput,
     model=model,
     output_guardrails=[bug_detection_guardrail],
+    mcp_servers=[test_runner_mcp],
 )
