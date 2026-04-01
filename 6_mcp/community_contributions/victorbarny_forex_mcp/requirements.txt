@@ -1,0 +1,3 @@
+mcp>=1.0.0
+requests>=2.31.0
+openai-agents>=0.0.15
