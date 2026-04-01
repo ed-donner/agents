@@ -1,4 +1,4 @@
-"""Combined MCP: latest rates + conversion in one process (same tools as rates_server + convert_server)."""
+
 
 from __future__ import annotations
 
@@ -7,20 +7,8 @@ from typing import Optional
 from mcp.server.fastmcp import FastMCP
 
 from fx_common import convert_amount as convert_amount_impl
-from fx_common import get_latest_rates as get_latest_rates_impl
 
-mcp = FastMCP("victorbarny_forex")
-
-
-@mcp.tool()
-async def get_latest_rates(base: str, symbols: str) -> str:
-    """Return latest exchange rates from a base currency to one or more quote currencies (Frankfurter v2).
-
-    Args:
-        base: ISO 4217 currency code for the base (e.g. USD, EUR).
-        symbols: Comma-separated quote currency codes (e.g. EUR,GBP,JPY).
-    """
-    return await get_latest_rates_impl(base, symbols)
+mcp = FastMCP("victorbarny_forex_convert")
 
 
 @mcp.tool()
