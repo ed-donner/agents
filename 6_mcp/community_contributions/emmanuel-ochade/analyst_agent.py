@@ -9,7 +9,7 @@ server_params = StdioServerParameters(
 )
 
 async def run_analyst():
-    client = Anthropic(api_key="YOUR_ANTHROPIC_API_KEY")
+    client = Anthropic(api_key="ANTHROPIC_API_KEY")
     
     async with stdio_client(server_params) as (read, write):
         async with ClientSession(read, write) as session:
