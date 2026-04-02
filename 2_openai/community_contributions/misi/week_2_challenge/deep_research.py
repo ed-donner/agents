@@ -1,101 +1,142 @@
+from agents import Runner, gen_trace_id, trace
 import gradio as gr
 from dotenv import load_dotenv
-from research_manager import ResearchManager
+from research_manager import get_clarification_questions, refine_query, research_manager
 
 load_dotenv(override=True)
 
 
-async def get_clarifications(query: str):
-    manager = ResearchManager()
-    clarification = await manager.get_clarification_questions(query)
+async def start_chat(query: str):
+    clarification = await get_clarification_questions(query)
     questions = clarification.questions[:3]
     while len(questions) < 3:
         questions.append("")
 
     return (
-        gr.update(visible=True),
-        gr.update(value=questions[0], visible=True),
-        gr.update(value=questions[1], visible=True),
-        gr.update(value=questions[2], visible=True),
-        gr.update(value="", visible=True),
-        gr.update(value="", visible=True),
-        gr.update(value="", visible=True),
-        gr.update(visible=True),
-        gr.update(value="Answer the clarification questions, then click Run research."),
+        [(query, questions[0])],
+        "",
+        query,
         questions,
+        [],
+        0,
     )
 
 
-async def run_research(query: str, questions: list[str], answer_1: str, answer_2: str, answer_3: str):
-    manager = ResearchManager()
-    answers = [answer_1, answer_2, answer_3]
-    refined_query = await manager.refine_query(query, questions, answers)
+async def continue_chat(
+    message: str,
+    history: list[tuple[str, str]],
+    original_query: str,
+    questions: list[str],
+    answers: list[str],
+    question_index: int,
+):
+    updated_history = history + [(message, "")]
+    updated_answers = answers + [message]
+    next_index = question_index + 1
 
-    yield (
-        gr.update(value=refined_query),
-        f"Refined query:\n\n{refined_query}\n\nStarting research..."
+    if next_index < len(questions):
+        updated_history[-1] = (message, questions[next_index])
+        yield updated_history, "", original_query, questions, updated_answers, next_index
+        return
+
+    refined_query = await refine_query(original_query, questions, updated_answers)
+    updated_history[-1] = (
+        message,
+        f"Refined query:\n\n{refined_query}\n\nStarting research...",
     )
 
-    async for chunk in manager.run(refined_query):
-        yield gr.update(value=refined_query), chunk
+    yield updated_history, "", refined_query, questions, updated_answers, next_index
+
+    trace_id = gen_trace_id()
+    with trace("Research trace", trace_id=trace_id):
+        trace_url = f"https://platform.openai.com/traces/trace?trace_id={trace_id}"
+        result = await Runner.run(research_manager, refined_query)
+        report = result.final_output
+    updated_history[-1] = (
+        message,
+        f"Refined query:\n\n{refined_query}\n\nView trace: {trace_url}\n\n{report.markdown_report}",
+    )
+    yield updated_history, "", refined_query, questions, updated_answers, next_index
+
+
+async def handle_message(
+    message: str,
+    history: list[tuple[str, str]],
+    original_query: str,
+    questions: list[str],
+    answers: list[str],
+    question_index: int,
+):
+    if not message.strip():
+        yield history, "", original_query, questions, answers, question_index
+        return
+
+    if not original_query:
+        yield await start_chat(message)
+        return
+
+    async for update in continue_chat(
+        message,
+        history,
+        original_query,
+        questions,
+        answers,
+        question_index,
+    ):
+        yield update
 
 
 with gr.Blocks(theme=gr.themes.Default(primary_hue="sky")) as ui:
+    original_query_state = gr.State("")
     clarification_questions = gr.State([])
+    clarification_answers = gr.State([])
+    question_index = gr.State(0)
 
     gr.Markdown("# Deep Research")
-    query_textbox = gr.Textbox(label="What topic would you like to research?")
-    clarify_button = gr.Button("Ask clarification questions", variant="secondary")
+    chatbot = gr.Chatbot(label="Deep Research", type="tuples", height=500)
+    query_textbox = gr.Textbox(
+        label="Start a research request or answer the current clarification question"
+    )
+    send_button = gr.Button("Send", variant="primary")
 
-    with gr.Column(visible=False) as clarification_section:
-        question_1 = gr.Textbox(label="Clarification question 1", interactive=False)
-        answer_1 = gr.Textbox(label="Your answer 1")
-        question_2 = gr.Textbox(label="Clarification question 2", interactive=False)
-        answer_2 = gr.Textbox(label="Your answer 2")
-        question_3 = gr.Textbox(label="Clarification question 3", interactive=False)
-        answer_3 = gr.Textbox(label="Your answer 3")
-        run_button = gr.Button("Run research", variant="primary")
-
-    report = gr.Markdown(label="Report")
-
-    clarify_button.click(
-        fn=get_clarifications,
-        inputs=query_textbox,
-        outputs=[
-            clarification_section,
-            question_1,
-            question_2,
-            question_3,
-            answer_1,
-            answer_2,
-            answer_3,
-            run_button,
-            report,
+    send_button.click(
+        fn=handle_message,
+        inputs=[
+            query_textbox,
+            chatbot,
+            original_query_state,
             clarification_questions,
+            clarification_answers,
+            question_index,
+        ],
+        outputs=[
+            chatbot,
+            query_textbox,
+            original_query_state,
+            clarification_questions,
+            clarification_answers,
+            question_index,
         ],
     )
 
     query_textbox.submit(
-        fn=get_clarifications,
-        inputs=query_textbox,
-        outputs=[
-            clarification_section,
-            question_1,
-            question_2,
-            question_3,
-            answer_1,
-            answer_2,
-            answer_3,
-            run_button,
-            report,
+        fn=handle_message,
+        inputs=[
+            query_textbox,
+            chatbot,
+            original_query_state,
             clarification_questions,
+            clarification_answers,
+            question_index,
         ],
-    )
-
-    run_button.click(
-        fn=run_research,
-        inputs=[query_textbox, clarification_questions, answer_1, answer_2, answer_3],
-        outputs=[query_textbox, report],
+        outputs=[
+            chatbot,
+            query_textbox,
+            original_query_state,
+            clarification_questions,
+            clarification_answers,
+            question_index,
+        ],
     )
 
 ui.launch(inbrowser=True)
