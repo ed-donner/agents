@@ -1,0 +1,33 @@
+design_task:
+  description: >-
+    Based on the following requirements: {project_description}, create a 
+    comprehensive system design. Include data models, API endpoints, 
+    and architectural diagrams (in text format).
+  expected_output: >-
+    A detailed system design document.
+  agent: engineering_lead
+
+implementation_task:
+  description: >-
+    Based on the system design provided, implement the core Python 
+    modules. Ensure the code is modular and includes basic docstrings.
+  expected_output: >-
+    A set of Python files or a single block of Python code representing 
+    the core backend implementation.
+  agent: backend_engineer
+
+testing_task:
+  description: >-
+    Review the implemented backend code and write a suite of unit tests 
+    using pytest. Ensure all core logic and edge cases are covered.
+  expected_output: >-
+    A Python file containing the unit tests for the backend.
+  agent: test_engineer
+
+frontend_task:
+  description: >-
+    Create a demonstration script (or a Gradio app) that interacts with 
+    the implemented backend to showcase its core functionality.
+  expected_output: >-
+    A Python script that acts as the frontend/demo for the project.
+  agent: frontend_engineer
