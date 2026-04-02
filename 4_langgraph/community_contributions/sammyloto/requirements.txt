@@ -1,0 +1,13 @@
+aiosqlite>=0.20.0
+duckduckgo-search>=6.0.0
+google-search-results>=2.4.0
+gradio>=4.0.0
+langchain-community>=0.3.0
+langchain-core>=0.3.0
+langchain-experimental>=0.3.0
+langchain-openai>=0.2.0
+langgraph>=0.2.0
+langgraph-checkpoint-sqlite>=2.0.0
+pydantic>=2.0.0
+python-dotenv>=1.0.0
+wikipedia>=1.4.0
