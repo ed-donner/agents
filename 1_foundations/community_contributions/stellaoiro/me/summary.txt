@@ -1,0 +1,1 @@
+Stella Oiro builds applied AI at the intersection of public health and software. She contributes to the Agentic AI Engineering course and created HALI, an HPV vaccine awareness companion grounded in Kenya’s vaccination programme and community health context. She focuses on clear, culturally aware communication and rigorous evaluation of model outputs before they reach users.
