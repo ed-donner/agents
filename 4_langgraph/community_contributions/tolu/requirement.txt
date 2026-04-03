@@ -1,0 +1,10 @@
+gradio>=4.0.0
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+typing-extensions>=4.0.0
+
+langchain>=0.2.0
+langchain-openai>=0.1.0
+langchain-community>=0.2.0
+langchain-experimental>=0.0.50
+langgraph>=0.0.40
