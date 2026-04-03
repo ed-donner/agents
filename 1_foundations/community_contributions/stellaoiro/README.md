@@ -18,7 +18,7 @@ HPV vaccine companion for Kenya — see `app.py` and `4_lab4_mama_salama.ipynb`.
 To share the LinkedIn PDF + summary chatbot with evaluator-rerun on Hugging Face, create **another** Space (Gradio, blank template) and upload:
 
 - `lab3_career_chat.py` (set as the app file in README or Space settings)
-- `me/summary.txt` and `me/linkedin.pdf`
+- `me/summary.txt` and **your** `me/linkedin.pdf` (LinkedIn → Profile → More → Save to PDF). It is **gitignored** here so the instructor’s sample PDF is not committed; upload your own file to the Space.
 - `requirements.txt` (must include `openai`, `gradio`, `python-dotenv`, `pydantic`, `pypdf`)
 
 **Space secrets:** add `OPENAI_API_KEY`. Optionally add `GOOGLE_API_KEY` so the evaluator uses Gemini like the course notebook; otherwise evaluation uses `gpt-4o-mini`.
