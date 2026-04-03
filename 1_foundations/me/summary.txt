@@ -1,2 +1,7 @@
-My name is Ed Donner. I'm an entrepreneur, software engineer and data scientist. I'm originally from London, England, but I moved to NYC in 2000.
-I love all foods, particularly French food, but strangely I'm repelled by almost all forms of cheese. I'm not allergic, I just hate the taste! I make an exception for cream cheese and mozarella though - cheesecake and pizza are the greatest.
+My name is Iduma Chika. I am a React and React Native software developer based in Nigeria, with about five years of experience across banks, fintech, and startups. I work across the full software development lifecycle, have led engineering efforts (including teams on the order of a dozen people), and collaborate closely with product owners and managers to ship products to spec.
+
+I studied at Ebonyi State University and earned a Bachelor's degree in Economics (2010–2014).
+
+Recent focus: mobile architecture, new banking and insurance features, API work, performance, and shipping features end-to-end on iOS and Android with React Native. Earlier roles included React web apps, Android development, and full-stack delivery.
+
+Contact: idumachika@gmail.com. LinkedIn: linkedin.com/in/iduma-chika-77a91a127
