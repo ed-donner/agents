@@ -1,0 +1,67 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "asket-mcp"
+version = "1.0.0"
+description = "Personal Study Brain MCP: local Brain, semantic memory (ChromaDB + OpenAI), web fetch, notes, Pushover, Streamlit UI."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Community contributors" }]
+dependencies = [
+    "httpx>=0.28.1",
+    "mcp[cli]>=1.5.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.6.0",
+    "python-dotenv>=1.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "streamlit>=1.40.0",
+    "chromadb>=0.5.0",
+    "openai>=1.40.0",
+]
+ui = [
+    "streamlit>=1.40.0",
+    "pypdf>=5.0.0",
+    "python-docx>=1.1.0",
+]
+semantic = [
+    "chromadb>=0.5.0",
+    "openai>=1.40.0",
+]
+all = [
+    "streamlit>=1.40.0",
+    "chromadb>=0.5.0",
+    "openai>=1.40.0",
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "pypdf>=5.0.0",
+    "python-docx>=1.1.0",
+]
+
+[project.scripts]
+asket-mcp = "asket_mcp.servers.app:main"
+asket-mcp-ui = "asket_mcp.ui.app:main"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/asket_mcp",
+    "/tests",
+    "/README.md",
+    "/Dockerfile",
+    "/docker-compose.yml",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
