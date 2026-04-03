@@ -15,6 +15,10 @@ HPV vaccine companion for Kenya — see `app.py` and `4_lab4_mama_salama.ipynb`.
 
 ## Week 1 Lab 3 — career chat (separate Space)
 
+**Live Space:** [huggingface.co/spaces/AcharO/digital-twin-lab3](https://huggingface.co/spaces/AcharO/digital-twin-lab3)
+
+Redeploy / refresh files from this folder using `hf upload` (see `README_SPACE_lab3.md` + `requirements-space.txt` as the Space `README.md` / `requirements.txt`).
+
 To share the LinkedIn PDF + summary chatbot with evaluator-rerun on Hugging Face, create **another** Space (Gradio, blank template) and upload:
 
 - `lab3_career_chat.py` (set as the app file in README or Space settings)
