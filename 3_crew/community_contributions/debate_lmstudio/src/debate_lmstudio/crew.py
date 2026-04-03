@@ -8,8 +8,6 @@ llm = LLM( model=MODEL,base_url=SERVER_API_HOST,api_key=API_KEY)
 @CrewBase
 class Debate():
     """Debate crew"""
-
-
     agents_config = 'config/agents.yaml'
     tasks_config = 'config/tasks.yaml'
 
@@ -24,7 +22,7 @@ class Debate():
     @agent
     def judge(self) -> Agent:
         return Agent(
-            config=self.agents_config['judge'], # type: ignore[index]
+            config=self.agents_config['judge'], 
             verbose=True,
             llm=llm
 
@@ -33,19 +31,19 @@ class Debate():
     @task
     def propose(self) -> Task:
         return Task(
-            config=self.tasks_config['propose'], # type: ignore[index]
+            config=self.tasks_config['propose'],
         )
 
     @task
     def oppose(self) -> Task:
         return Task(
-            config=self.tasks_config['oppose'], # type: ignore[index]
+            config=self.tasks_config['oppose'],
         )
 
     @task
     def decide(self) -> Task:
         return Task(
-            config=self.tasks_config['decide'], # type: ignore[index]
+            config=self.tasks_config['decide'], 
         )
 
     @crew
@@ -53,8 +51,8 @@ class Debate():
         """Creates the Debate crew"""
 
         return Crew(
-            agents=self.agents, # Automatically created by the @agent decorator
-            tasks=self.tasks, # Automatically created by the @task decorator
+            agents=self.agents, 
+            tasks=self.tasks, 
             process=Process.sequential,
             verbose=True,
         )
