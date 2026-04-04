@@ -1,0 +1,6 @@
+openai
+gradio
+pdfplumber
+geocoder
+python-dotenv
+requests

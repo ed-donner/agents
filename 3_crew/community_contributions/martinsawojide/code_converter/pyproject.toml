@@ -1,0 +1,27 @@
+[project]
+name = "code_converter"
+version = "0.1.0"
+description = "code_converter using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]==1.6.1",
+    "litellm>=1.83.0",
+    "openai>=1.0.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.scripts]
+code_converter = "code_converter.main:run"
+run_crew = "code_converter.main:run"
+train = "code_converter.main:train"
+replay = "code_converter.main:replay"
+test = "code_converter.main:test"
+run_with_trigger = "code_converter.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

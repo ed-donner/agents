@@ -8,7 +8,7 @@ researcher:
     the most relevant information about {company}.
     Known for your ability to find the most relevant
     information and present it in a clear and concise manner.
-  llm: openai/gpt-4o-mini
+  llm: openrouter/openai/gpt-4o-mini
 
 analyst:
   role: >
@@ -21,4 +21,4 @@ analyst:
     and company research. You have a talent for identifying patterns and extracting
     meaningful insights from research data, then communicating
     those insights through well crafted reports.
-  llm: openai/gpt-4o-mini
+  llm: openrouter/openai/gpt-4o-mini

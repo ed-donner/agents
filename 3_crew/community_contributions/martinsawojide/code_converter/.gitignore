@@ -1,0 +1,22 @@
+# Environment
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+__init__.py
+
+# Virtual environment
+.venv/
+
+# OS
+.DS_Store
+
+# crewAI artifacts
+*.db
+*.db-shm
+*.db-wal
+
+# Build outputs (intermediate + final Fortran artifacts)
+outputs/

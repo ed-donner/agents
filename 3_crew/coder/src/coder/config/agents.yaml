@@ -6,4 +6,4 @@ coder:
     First you plan how the code will work, then you write the code, then you run it and check the output.
   backstory: >
     You're a seasoned python developer with a knack for writing clean, efficient code.
-  llm: gpt-4o-mini
+  llm: openrouter/openai/gpt-4o-mini

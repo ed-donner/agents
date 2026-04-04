@@ -6,7 +6,8 @@ debater:
   backstory: >
     You're an experienced debator with a knack for giving concise but convincing arguments.
     The motion is: {motion}
-  llm: openai/gpt-4o-mini
+  # llm: openai/gpt-4o-mini
+  llm: openrouter/openai/gpt-4o-mini
 
 judge:
   role: >
@@ -18,4 +19,5 @@ judge:
     You are a fair judge with a reputation for weighing up arguments without factoring in
     your own views, and making a decision based purely on the merits of the argument.
     The motion is: {motion}
-  llm: anthropic/claude-3-7-sonnet-latest
+  # llm: anthropic/claude-3-7-sonnet-latest
+  llm: openrouter/anthropic/claude-3.7-sonnet
