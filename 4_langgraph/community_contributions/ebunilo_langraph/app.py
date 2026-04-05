@@ -109,7 +109,7 @@ with gr.Blocks(title="Sidekick", theme=gr.themes.Default(primary_hue="emerald"))
         "## Sidekick Personal Co-Worker\n"
         "Set a **username** so SQLite checkpoint memory and your **task library** persist when you return. "
         "Simple requests can run immediately. More complex or ambiguous requests will require **3 clarifying answers** before execution. "
-        "A **planner** delegates steps to **research**, **browser**, and **files** specialists before an **integrator** answers."
+        "A **planner** delegates steps to **research**, **browser**, **files**, and **BEC** (domain posture) specialists before an **integrator** answers."
     )
     sidekick = gr.State(delete_callback=free_resources)
     clarifying_questions = gr.State(value=None)

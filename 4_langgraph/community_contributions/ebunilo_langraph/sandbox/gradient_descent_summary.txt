@@ -1,15 +1,14 @@
-1. **Definition**: Gradient Descent is a first-order iterative algorithm used for unconstrained mathematical optimization, specifically to minimize a differentiable multivariate function.
+1. **Definition**: Gradient descent is a first-order iterative algorithm used for minimizing a differentiable multivariate function by taking repeated steps in the opposite direction of the gradient at the current point.
 
-2. **Core Idea**: The method involves taking repeated steps in the opposite direction of the gradient (or approximate gradient) of the function at the current point, as this direction represents the steepest descent.
+2. **Gradient**: The gradient of a function represents the direction of the steepest ascent. Therefore, moving in the opposite direction of the gradient leads to the steepest descent, which is the basis of the gradient descent method.
 
-3. **Gradient Ascent**: Conversely, moving in the direction of the gradient maximizes the function, a process known as gradient ascent.
+3. **Applications**: Gradient descent is particularly valuable in machine learning and artificial intelligence for minimizing cost or loss functions, which are critical for model training.
 
-4. **Applications**: Gradient Descent is particularly valuable in machine learning and artificial intelligence for minimizing cost or loss functions.
+4. **Comparison with Local Search Algorithms**: Gradient descent should not be confused with local search algorithms, although both are iterative optimization methods.
 
-5. **Distinction**: It should not be confused with local search algorithms, although both are iterative optimization methods.
+5. **Historical Context**: 
+   - The concept is attributed to Augustin-Louis Cauchy, who proposed it in 1847.
+   - Jacques Hadamard independently proposed a similar method in 1907.
+   - Haskell Curry studied the convergence properties of gradient descent for non-linear optimization problems in 1944.
 
-6. **Historical Attribution**: The technique is generally attributed to Augustin-Louis Cauchy, who proposed it in 1847. Jacques Hadamard independently proposed a similar method in 1907.
-
-7. **Convergence Properties**: The convergence properties of Gradient Descent for non-linear optimization problems were first studied by Haskell Curry in 1944.
-
-8. **Variants**: A notable variant of Gradient Descent is Stochastic Gradient Descent (SGD), which optimizes an objective function using a randomly selected subset of data. This makes it particularly useful for training deep learning models, as it reduces computational burden and allows for faster iterations, albeit with a lower convergence rate.
+6. **Variants**: A notable variant of gradient descent is stochastic gradient descent (SGD), which is widely used for training deep learning models today.
