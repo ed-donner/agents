@@ -1,0 +1,43 @@
+research_task:
+  description: >
+    Conduct thorough research on company {company}. Use `current_year={current_year}` and
+    `current_date={current_date}`.
+    Focus on:
+    1. Current company status and health
+    2. Historical company performance
+    3. Major challenges and opportunities
+    4. Recent news and events
+    5. Future outlook and potential developments
+
+    IMPORTANT:
+    - When discussing "recent news and events", do NOT invent specific dates/years.
+    - If you are not confident about a date/year, write "unknown" instead of guessing.
+    - Avoid mentioning a year (like "2024") unless it is clearly supported by information you were given.
+
+    Make sure to organize your findings in a structured format with clear sections.
+  expected_output: >
+    A comprehensive research document with well-organized sections covering
+    all the requested aspects of {company}. Include specific facts, figures,
+    and examples where relevant.
+  agent: researcher
+
+
+analysis_task:
+  description: >
+    Analyze the research findings and create a comprehensive report on {company}.
+    Your report should:
+    - Use `current_year={current_year}` and `current_date={current_date}` as the "as of" reference.
+    - Do not invent market/news dates. If a specific date/year isn't present in the research findings, omit it or use "unknown".
+    1. Begin with an executive summary
+    2. Include all key information from the research
+    3. Provide insightful analysis of trends and patterns
+    4. Offer a market outlook for company, noting that this should not be used for trading decisions
+    5. Be formatted in a professional, easy-to-read style with clear headings
+  expected_output: >
+    A polished, professional report on {company} that presents the research
+    findings with added analysis and insights. The report should be well-structured
+    with an executive summary, main sections, and conclusion.
+  agent: analyst
+  context:
+    - research_task
+  output_file: output/report.md
