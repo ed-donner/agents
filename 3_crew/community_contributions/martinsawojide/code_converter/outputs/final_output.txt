@@ -1,0 +1,24 @@
+PYTHON TO FORTRAN CONVERSION BENCHMARK
+==================================================
+
+COMPILATION FLAGS
+--------------------
+-Ofast -march=native -g0 -mtune=native -fopenmp -fomit-frame-pointer
+
+FORTRAN OUTPUT
+--------------------
+Total Maximum Subarray Sum (20 runs): 10324
+Execution Time: .026818 seconds
+Execution Time: 0.031101 seconds
+
+PYTHON OUTPUT
+--------------------
+Total Maximum Subarray Sum (10 runs): 4460
+Execution Time: 2.115306 seconds
+Execution Time: 2.146639 seconds
+
+PERFORMANCE SUMMARY
+--------------------
+Fortran time : 0.031101 s
+Python time  : 2.146639 s
+Speedup      : 69.0x faster than Python
