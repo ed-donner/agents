@@ -1,0 +1,214 @@
+{
+  "travelers": {
+    "yemi": {
+      "name": "Yemi",
+      "destination": "Lagos",
+      "days": 3,
+      "budget": 650.0,
+      "style": "birthday staycation",
+      "interests": [
+        "art",
+        "food",
+        "quiet experiences"
+      ],
+      "hotel_preferences": [
+        "quiet hotel",
+        "walkable area",
+        "good breakfast"
+      ],
+      "notes": "Prefer a moderate budget, calm evenings, and one memorable birthday dinner.",
+      "itinerary_title": "3-Day Lagos Birthday Staycation",
+      "itinerary_summary": "A curated birthday getaway in Lagos focused on art, food, and relaxation.",
+      "itinerary_items": [
+        {
+          "day": 1,
+          "time": "08:30",
+          "title": "Breakfast at Art Cafe",
+          "location": "Victoria Island",
+          "cost": 18.0,
+          "notes": "Casual breakfast spot with pastries and coffee."
+        },
+        {
+          "day": 1,
+          "time": "10:30",
+          "title": "Nike Art Gallery Visit",
+          "location": "Lekki",
+          "cost": 0.0,
+          "notes": "Explore contemporary Nigerian art and textiles."
+        },
+        {
+          "day": 1,
+          "time": "19:00",
+          "title": "Sunset Dinner at Shiro",
+          "location": "Victoria Island",
+          "cost": 55.0,
+          "notes": "Celebratory rooftop dinner with ambience."
+        },
+        {
+          "day": 2,
+          "time": "09:00",
+          "title": "Relaxing Morning",
+          "location": "",
+          "cost": 0.0,
+          "notes": "Leisurely morning, enjoy hotel amenities."
+        },
+        {
+          "day": 2,
+          "time": "12:00",
+          "title": "Lakowe Lakes Quiet Afternoon",
+          "location": "Lekki Corridor",
+          "cost": 60.0,
+          "notes": "Open space, water views, and light activities."
+        },
+        {
+          "day": 2,
+          "time": "19:00",
+          "title": "Terra Kulture Evening Show",
+          "location": "Victoria Island",
+          "cost": 35.0,
+          "notes": "An evening of theatre and Nigerian cuisine."
+        },
+        {
+          "day": 3,
+          "time": "10:00",
+          "title": "Relaxation Day",
+          "location": "",
+          "cost": 0.0,
+          "notes": "Enjoy a calm day before departure."
+        },
+        {
+          "day": 3,
+          "time": "12:00",
+          "title": "Spa Session at Oriki",
+          "location": "Victoria Island",
+          "cost": 40.0,
+          "notes": "Wellness stop for a quiet reset."
+        }
+      ],
+      "bookings": [
+        {
+          "type": "hotel",
+          "name": "Nordic Hotel Lagos",
+          "destination": "Lagos",
+          "total_cost": 435.0,
+          "details": "3 nights in Victoria Island at $145.00 per night.",
+          "booked_at": "2026-04-07 08:48:45"
+        },
+        {
+          "type": "activity",
+          "name": "Nike Art Gallery Visit",
+          "destination": "Lagos",
+          "total_cost": 0.0,
+          "details": "Art activity in Lekki lasting 2 hours.",
+          "booked_at": "2026-04-07 08:48:47"
+        },
+        {
+          "type": "activity",
+          "name": "Sunset Dinner at Shiro",
+          "destination": "Lagos",
+          "total_cost": 55.0,
+          "details": "Food activity in Victoria Island lasting 2 hours.",
+          "booked_at": "2026-04-07 08:48:47"
+        }
+      ]
+    }
+  },
+  "catalog": {
+    "lagos": {
+      "hotels": [
+        {
+          "name": "The Wheatbaker",
+          "destination": "Lagos",
+          "area": "Ikoyi",
+          "nightly_rate": 220.0,
+          "vibe": "quiet boutique luxury",
+          "highlights": [
+            "art-filled lobby",
+            "spa",
+            "calm rooms"
+          ]
+        },
+        {
+          "name": "Nordic Hotel Lagos",
+          "destination": "Lagos",
+          "area": "Victoria Island",
+          "nightly_rate": 145.0,
+          "vibe": "minimal and peaceful",
+          "highlights": [
+            "quiet rooms",
+            "central location",
+            "good breakfast"
+          ]
+        },
+        {
+          "name": "Radisson Blu Anchorage",
+          "destination": "Lagos",
+          "area": "Victoria Island",
+          "nightly_rate": 260.0,
+          "vibe": "waterfront business hotel",
+          "highlights": [
+            "lagoon views",
+            "pool",
+            "easy restaurant access"
+          ]
+        }
+      ],
+      "activities": [
+        {
+          "name": "Nike Art Gallery Visit",
+          "destination": "Lagos",
+          "category": "art",
+          "area": "Lekki",
+          "duration_hours": 2,
+          "price": 0.0,
+          "description": "A large gallery with contemporary Nigerian art and textiles."
+        },
+        {
+          "name": "Terra Kulture Evening Show",
+          "destination": "Lagos",
+          "category": "art",
+          "area": "Victoria Island",
+          "duration_hours": 3,
+          "price": 35.0,
+          "description": "A relaxed evening of theatre, live performance, and Nigerian cuisine."
+        },
+        {
+          "name": "Sunset Dinner at Shiro",
+          "destination": "Lagos",
+          "category": "food",
+          "area": "Victoria Island",
+          "duration_hours": 2,
+          "price": 55.0,
+          "description": "A polished rooftop dinner with good ambience for a celebratory night."
+        },
+        {
+          "name": "Breakfast at Art Cafe",
+          "destination": "Lagos",
+          "category": "food",
+          "area": "Victoria Island",
+          "duration_hours": 2,
+          "price": 18.0,
+          "description": "Casual breakfast spot with pastries, coffee, and a laid-back atmosphere."
+        },
+        {
+          "name": "Lakowe Lakes Quiet Afternoon",
+          "destination": "Lagos",
+          "category": "relaxation",
+          "area": "Lekki Corridor",
+          "duration_hours": 5,
+          "price": 60.0,
+          "description": "A slower afternoon escape with open space, water views, and light activities."
+        },
+        {
+          "name": "Spa Session at Oriki",
+          "destination": "Lagos",
+          "category": "wellness",
+          "area": "Victoria Island",
+          "duration_hours": 2,
+          "price": 40.0,
+          "description": "A wellness stop for a quiet reset during the trip."
+        }
+      ]
+    }
+  }
+}
