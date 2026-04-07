@@ -1,0 +1,9 @@
+gradio>=5.0.0
+langgraph>=0.2.0
+langchain-openai>=0.2.0
+langchain-community>=0.3.0
+langchain-experimental>=0.3.0
+playwright>=1.40.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+pydantic>=2.0.0
