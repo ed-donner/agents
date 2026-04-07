@@ -14,7 +14,7 @@ This is **paper / simulation only**. It does **not** place real orders. **Not fi
 
 ## Prerequisites
 
-- Repo root `.env` with `OPENAI_API_KEY` (see `.env.example`).
+- Repo root `.env` with `OPENAI_API_KEY` (same as the rest of the course — never commit `.env`).
 - Run from **`agents`** root so `uv run` resolves project deps.
 - Optional: `POLYGON_API_KEY` for live US equity *hints* via Polygon in `get_equity_hint`.
 
