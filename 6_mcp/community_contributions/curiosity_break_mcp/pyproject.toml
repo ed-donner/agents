@@ -1,0 +1,10 @@
+[project]
+name = "curiosity-break-mcp"
+version = "0.1.0"
+description = "Tiny MCP server: XKCD + random advice (stdio or HTTP for Render/Cursor)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=1.5.0",
+    "httpx>=0.28.0",
+]
