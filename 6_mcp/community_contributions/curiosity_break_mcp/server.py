@@ -10,6 +10,7 @@ Modes:
 import html
 import os
 import sys
+from typing import Any
 
 import httpx
 from mcp.server.fastmcp import FastMCP
@@ -34,6 +35,50 @@ mcp = FastMCP(
     host=_listen_host(),
     port=_listen_port(),
 )
+
+
+async def _fetch_xkcd_for_dashboard(
+    client: httpx.AsyncClient, raw_num: str
+) -> tuple[dict[str, Any] | None, str | None]:
+    """Return comic JSON or None with a user-safe error message."""
+    try:
+        if raw_num.isdigit():
+            url = f"https://xkcd.com/{int(raw_num)}/info.0.json"
+        else:
+            url = "https://xkcd.com/info.0.json"
+        r = await client.get(url)
+        r.raise_for_status()
+        data = r.json()
+        if not isinstance(data, dict):
+            return None, "XKCD returned an unexpected response."
+        for key in ("title", "alt", "num", "img"):
+            if key not in data:
+                return None, "Could not parse the comic data. Try again later."
+        try:
+            int(data["num"])
+        except (TypeError, ValueError):
+            return None, "Could not parse the comic data. Try again later."
+        return data, None
+    except httpx.HTTPError:
+        return None, "Could not load the comic (XKCD may be unreachable). Try another number or reload later."
+    except (ValueError, KeyError, TypeError):
+        return None, "Could not parse the comic data. Try again later."
+
+
+async def _fetch_advice_for_dashboard(client: httpx.AsyncClient) -> tuple[str | None, str | None]:
+    """Return advice text or None with a user-safe error message."""
+    try:
+        r = await client.get("https://api.adviceslip.com/advice")
+        r.raise_for_status()
+        slip = r.json()["slip"]
+        advice = slip["advice"]
+        if not isinstance(advice, str):
+            return None, "Advice Slip returned an unexpected response."
+        return advice, None
+    except httpx.HTTPError:
+        return None, "Could not load random advice (Advice Slip may be unreachable). Reload to try again."
+    except (ValueError, KeyError, TypeError):
+        return None, "Could not parse advice. Reload to try again."
 
 
 @mcp.tool()
@@ -79,22 +124,29 @@ async def browser_dashboard(request: Request) -> HTMLResponse:
     """Human-readable dashboard; MCP clients use /mcp."""
     raw_num = request.query_params.get("num", "").strip()
     async with httpx.AsyncClient(timeout=15.0) as client:
-        if raw_num.isdigit():
-            cr = await client.get(f"https://xkcd.com/{int(raw_num)}/info.0.json")
-        else:
-            cr = await client.get("https://xkcd.com/info.0.json")
-        cr.raise_for_status()
-        comic = cr.json()
-        ar = await client.get("https://api.adviceslip.com/advice")
-        ar.raise_for_status()
-        advice_text = ar.json()["slip"]["advice"]
+        comic, comic_err = await _fetch_xkcd_for_dashboard(client, raw_num)
+        advice_text, advice_err = await _fetch_advice_for_dashboard(client)
 
-    title = html.escape(str(comic["title"]))
-    alt = html.escape(str(comic["alt"]))
-    num = int(comic["num"])
-    img_url = str(comic["img"])
-    advice_esc = html.escape(str(advice_text))
     mcp_path = html.escape(getattr(mcp.settings, "streamable_http_path", "/mcp"))
+
+    if comic is not None:
+        title = html.escape(str(comic["title"]))
+        alt = html.escape(str(comic["alt"]))
+        num = int(comic["num"])
+        img_url = str(comic["img"])
+        w = comic.get("width", "")
+        h = comic.get("height", "")
+        comic_body = f"""<p><strong>#{num} — {title}</strong></p>
+    <p class="muted">Alt: {alt}</p>
+    <img src="{html.escape(img_url, quote=True)}" alt="{alt}" width="{w}" height="{h}" />"""
+    else:
+        comic_body = f'<p class="muted">{html.escape(comic_err or "Could not load the comic.")}</p>'
+        num = 0
+
+    if advice_text is not None:
+        advice_block = f"<p>{html.escape(advice_text)}</p>"
+    else:
+        advice_block = f'<p class="muted">{html.escape(advice_err or "Could not load advice.")}</p>'
 
     page = f"""<!DOCTYPE html>
 <html lang="en">
@@ -120,11 +172,9 @@ async def browser_dashboard(request: Request) -> HTMLResponse:
 
   <div class="card">
     <h2>Latest XKCD (or pick a number)</h2>
-    <p><strong>#{num} — {title}</strong></p>
-    <p class="muted">Alt: {alt}</p>
-    <img src="{html.escape(img_url, quote=True)}" alt="{alt}" width="{comic.get("width", "")}" height="{comic.get("height", "")}" />
+    {comic_body}
     <form method="get" action="/" style="margin-top:1rem;display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
-      <label>Comic # <input name="num" type="number" min="1" placeholder="{num}" style="width:6rem;" /></label>
+      <label>Comic # <input name="num" type="number" min="1" placeholder="{num or ''}" style="width:6rem;" /></label>
       <button type="submit">Load</button>
       <a href="/">Reset to latest</a>
     </form>
@@ -132,7 +182,7 @@ async def browser_dashboard(request: Request) -> HTMLResponse:
 
   <div class="card">
     <h2>Random advice</h2>
-    <p>{advice_esc}</p>
+    {advice_block}
     <p class="muted"><a href="/">Reload page</a> for another slip.</p>
   </div>
 </body>
