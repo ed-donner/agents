@@ -11,7 +11,7 @@ cd 6_mcp/community_contributions/erisanolasheni/navigator_context_mcp
 uv run navigator_server.py
 ```
 
-State is persisted in `.navigator_state.json` (gitignored) next to the server.
+State is persisted in `.navigator_state.json` next to the server (do not commit this file if you run locally).
 
 ### Try the demo notebook
 
