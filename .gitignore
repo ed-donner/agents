@@ -186,6 +186,3 @@ memory.db
 # Ignore Accounts database in capstone project
 6_mcp/accounts.db
 6_mcp/memory/*.db
-
-# Solarinayo week6 paper ledger (generated at runtime; do not commit)
-6_mcp/community_contributions/solarinayo/data/paper_state.json
