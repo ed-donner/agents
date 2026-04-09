@@ -17,6 +17,8 @@ State is persisted in `.navigator_state.json` next to the server (do not commit 
 
 Open `navigator_demo.ipynb` from this folder or from the repo root; it resolves the server path automatically when possible.
 
+The notebook reads **`OPENAI_API_BASE`** (or **`OPENAI_BASE_URL`** as a fallback) and, when set, configures the OpenAI Agents SDK with that base URL via `AsyncOpenAI` and `set_default_openai_client`—useful for OpenRouter, Azure OpenAI, or other OpenAI-compatible endpoints.
+
 ### Tools
 
 | Tool | Purpose |
