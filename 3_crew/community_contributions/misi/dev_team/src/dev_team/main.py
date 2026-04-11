@@ -1,8 +1,6 @@
 #!/usr/bin/env python
-import sys
-import warnings
 import os
-from datetime import datetime
+import warnings
 
 from dev_team.crew import EngineeringTeam
 
@@ -35,7 +33,7 @@ def run():
     inputs = {"requirements": requirements}
 
     # Create and run the crew
-    result = EngineeringTeam().crew().kickoff(inputs=inputs)
+    EngineeringTeam().kickoff(inputs=inputs)
 
 
 if __name__ == "__main__":
