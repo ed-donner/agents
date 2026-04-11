@@ -1,54 +1,261 @@
 # DevTeam Crew
 
-Welcome to the DevTeam Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+This project is a CrewAI-based software delivery crew that generates a multi-module Python application from a high-level requirements prompt.
 
-## Installation
+Unlike the original static scaffold, this version does not hardcode the backend module tasks in YAML. Instead, the crew runs in two phases:
 
-Ensure you have Python >=3.10 <3.14 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
+1. The `engineering_lead` designs the architecture at runtime.
+2. Python code in `src/dev_team/crew.py` dynamically creates the implementation, frontend, and test tasks from that design.
 
-First, if you haven't already, install uv:
+## Architecture
 
-```bash
-pip install uv
+```text
++---------------------------+
+| main.py                   |
+| requirements string       |
++---------------------------+
+             |
+             v
++---------------------------+
+| EngineeringTeam.kickoff() |
++---------------------------+
+             |
+             v
++---------------------------+
+| Design Crew               |
+| agent: engineering_lead   |
++---------------------------+
+             |
+             v
++---------------------------+
+| design_task               |
+| output: ApplicationDesign |
++---------------------------+
+             |
+             v
++---------------------------+
+| Normalize design          |
+| - clean file names        |
+| - clean dependencies      |
+| - validate module count   |
++---------------------------+
+             |
+             v
++---------------------------+
+| Order modules             |
+| TopologicalSorter(graph)  |
++---------------------------+
+             |
+             v
++---------------------------+
+| Generate runtime tasks    |
+| - backend module tasks    |
+| - app.py task             |
+| - test task per module    |
++---------------------------+
+             |
+             v
++---------------------------+
+| Implementation Crew       |
+| backend_engineer          |
+| frontend_engineer         |
+| test_engineer             |
++---------------------------+
+             |
+             v
++---------------------------+
+| output/*.py               |
+| generated modules, app,   |
+| and per-module tests      |
++---------------------------+
 ```
 
-Next, navigate to your project directory and install the dependencies:
+## How It Works
 
-(Optional) Lock the dependencies and install them by using the CLI command:
-```bash
-crewai install
-```
-### Customizing
+### 1. Requirements input
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+The requirements live in [src/dev_team/main.py](src/dev_team/main.py). That file passes:
 
-- Modify `src/dev_team/config/agents.yaml` to define your agents
-- Modify `src/dev_team/config/tasks.yaml` to define your tasks
-- Modify `src/dev_team/crew.py` to add your own logic, tools and specific args
-- Modify `src/dev_team/main.py` to add custom inputs for your agents and tasks
-
-## Running the Project
-
-To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
-
-```bash
-$ crewai run
+```python
+inputs = {"requirements": requirements}
 ```
 
-This command initializes the dev_team Crew, assembling the agents and assigning them tasks as defined in your configuration.
+into:
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+```python
+EngineeringTeam().kickoff(inputs=inputs)
+```
 
-## Understanding Your Crew
+### 2. Design phase
 
-The dev_team Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
+The first phase is implemented in [src/dev_team/crew.py](src/dev_team/crew.py).
 
-## Support
+`EngineeringTeam.kickoff()` first calls `_kickoff_design_crew(inputs)`.
 
-For support, questions, or feedback regarding the DevTeam Crew or crewAI.
-- Visit our [documentation](https://docs.crewai.com)
-- Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)
-- [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with our docs](https://chatg.pt/DWjSBZn)
+That method creates a single CrewAI `Task` in Python for the `engineering_lead`. The task asks the agent to:
 
-Let's create wonders together with the power and simplicity of crewAI.
+- decide which backend modules should exist,
+- define classes and functions for each module,
+- define dependencies between modules,
+- explain how the modules collaborate,
+- describe how `app.py` should use the backend modules together.
+
+The design task uses `output_pydantic=ApplicationDesign`, so the lead returns structured data instead of free-form text.
+
+### 3. Structured design model
+
+The architecture is captured in two Pydantic models in [src/dev_team/crew.py](src/dev_team/crew.py):
+
+- `ModuleDesign`
+- `ApplicationDesign`
+
+`ModuleDesign` contains:
+
+- `file_name`
+- `purpose`
+- `classes`
+- `functions`
+- `dependencies`
+- `interaction_contracts`
+
+`ApplicationDesign` contains:
+
+- `architecture_overview`
+- `shared_data_models`
+- `backend_modules`
+- `frontend_summary`
+
+This makes the runtime task generation much more reliable than parsing markdown.
+
+### 4. Design normalization
+
+After the design crew finishes, `_normalize_design()` cleans the result before task generation.
+
+It:
+
+- normalizes module filenames to a clean `*.py` format,
+- normalizes dependency names the same way,
+- removes self-dependencies,
+- deduplicates repeated modules,
+- enforces that the design contains multiple backend modules.
+
+This protects the dynamic flow from minor agent inconsistencies such as returning `auth` in one place and `auth.py` in another.
+
+### 5. Dependency ordering
+
+`_order_modules()` builds a dependency graph from the designed modules and uses:
+
+```python
+list(TopologicalSorter(graph).static_order())
+```
+
+to get a dependency-safe module order.
+
+That means if one generated module depends on another, the dependency module task is created first and can be passed as CrewAI task context to the dependent module task.
+
+If the design produces cyclic dependencies, the code raises an error instead of creating an invalid task graph.
+
+### 6. Runtime task generation
+
+This is the core change.
+
+`_build_runtime_tasks()` dynamically creates CrewAI `Task` objects in Python based on the `ApplicationDesign`.
+
+It generates:
+
+- one backend implementation task per designed backend module,
+- one `app.py` frontend task,
+- one test task per designed backend module.
+
+Each backend task:
+
+- writes to `output/<module_name>.py`,
+- is assigned to `backend_engineer`,
+- receives dependency module tasks as `context`.
+
+The frontend task:
+
+- writes to `output/app.py`,
+- is assigned to `frontend_engineer`,
+- receives all backend module tasks as `context`.
+
+Each test task:
+
+- writes to `output/test_<module>.py`,
+- is assigned to `test_engineer`,
+- receives the related module task and its dependency tasks as `context`.
+
+So the number of backend and test tasks is determined at runtime by the engineering lead's design.
+
+### 7. Implementation phase
+
+Once the runtime tasks are generated, `EngineeringTeam.kickoff()` creates a second CrewAI `Crew` with:
+
+- `backend_engineer`
+- `frontend_engineer`
+- `test_engineer`
+
+That crew then executes the dynamically created task list sequentially.
+
+## Why The Tasks Are Not In `tasks.yaml`
+
+The project still keeps:
+
+- [src/dev_team/config/agents.yaml](src/dev_team/config/agents.yaml)
+- [src/dev_team/config/tasks.yaml](src/dev_team/config/tasks.yaml)
+
+But `tasks.yaml` is now only a note explaining that tasks are created dynamically in Python.
+
+This is intentional.
+
+If the tasks were declared statically in YAML, we would have to predefine the module list ahead of time. That would contradict the goal of letting `design_task` decide the modules, classes, and dependencies dynamically at runtime.
+
+## Key Files
+
+- [src/dev_team/main.py](src/dev_team/main.py): entry point and requirements input
+- [src/dev_team/crew.py](src/dev_team/crew.py): design models, design kickoff, normalization, dependency ordering, and dynamic task generation
+- [src/dev_team/config/agents.yaml](src/dev_team/config/agents.yaml): agent goals and roles
+- [src/dev_team/config/tasks.yaml](src/dev_team/config/tasks.yaml): documentation note that task generation happens at runtime
+
+## LLM Configuration
+
+The agents are currently configured in [src/dev_team/config/agents.yaml](src/dev_team/config/agents.yaml) to use:
+
+```text
+ollama/kimi-k2.5:cloud
+```
+
+This LLM setting is defined for all project agents:
+
+- `engineering_lead`
+- `backend_engineer`
+- `frontend_engineer`
+- `test_engineer`
+
+## Running The Project
+
+From the project root:
+
+```bash
+crewai run
+```
+
+The run will:
+
+1. ask the engineering lead to design the system,
+2. convert that design into runtime tasks,
+3. generate backend modules,
+4. generate `app.py`,
+5. generate one test file per backend module.
+
+## Validation Notes
+
+The current implementation was statically validated with:
+
+```bash
+./.venv/bin/python -m py_compile src/dev_team/main.py src/dev_team/crew.py
+```
+
+and YAML parsing checks for the config files.
+
+The full live crew execution still depends on the configured model and runtime environment.
