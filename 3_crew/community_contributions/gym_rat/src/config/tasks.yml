@@ -1,0 +1,28 @@
+generate_workout_task:
+  description: >
+    Using the user preferences, create a 5-day weekly workout plan.
+    Focus on fat loss and lean muscle.
+    Include exercises, sets, and reps.
+    Keep workouts within 45–75 minutes.
+  expected_output: >
+    A clear weekly workout plan with days, exercises, sets, and reps.
+  agent: planner_agent
+
+
+generate_meal_task:
+  description: >
+    Using the user preferences, create a simple 3-day meal plan.
+    Include African-friendly foods.
+    Focus on high protein and calorie control.
+  expected_output: >
+    A 3-day meal plan with breakfast, lunch, dinner, and snacks.
+  agent: fitness_agent
+
+
+adjust_plan_task:
+  description: >
+    Based on the user’s goals and challenges, adjust the workout and meal plan
+    to improve consistency and results.
+  expected_output: >
+    A refined version of the workout and meal plan with small improvements.
+  agent: fitness_agent
