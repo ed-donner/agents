@@ -1,0 +1,79 @@
+define_mvp:
+  description: >
+    Define the exact MVP feature list for the laundry business,
+    including customer app, staff tools, admin panel, and system constraints.
+  expected_output: >
+    A markdown document with:
+    - MVP feature list grouped by Customer App, Staff Tools, Admin Panel
+    - Explicit in-scope and out-of-scope sections
+    - Feature priority (Must / Should / Later)
+  agent: product_owner
+  output_file: output/mvp_scope.md
+
+design_architecture:
+  description: >
+    Design the system architecture for the laundry MVP including
+    mobile app, backend API, database, payment flow, and admin panel.
+  expected_output: >
+    Architecture document with diagrams, technology choices, and data flow.
+  agent: system_architect
+  output_file: output/system_architecture.md
+  depends_on: [define_mvp]
+
+backend_api:
+  description: >
+    Design and implement backend APIs for the laundry MVP including
+    authentication, orders, payments, and admin controls.
+  expected_output: >
+    API specification (OpenAPI-style), database schema, and core backend code.
+  agent: backend_engineer
+  output_file: output/backend_api.md
+  depends_on: [design_architecture]
+
+flutter_app:
+  description: >
+    Build the Flutter Android app for customers and staff based on the MVP.
+    Include authentication, order creation, tracking, and notifications.
+  expected_output: >
+    Flutter project structure, core screens, and state management strategy.
+  agent: flutter_engineer
+  output_file: output/flutter_app.md
+  depends_on: 
+    - design_architecture
+    - backend_api
+
+deployment:
+  description: >
+    Design deployment strategy for the laundry MVP including Docker,
+    environment variables, CI/CD, and production readiness.
+
+    Important rule: This project targets a Flutter mobile app (Android). Do NOT
+    generate or deploy a web/React frontend as a container. Provide mobile CI/CD
+    and build instructions for Flutter (app store builds, Android keystore,
+    build flavors) instead of a web frontend container.
+  expected_output: >
+    Dockerfiles, environment variable strategy, CI/CD pipeline outline,
+    deployment steps, rollback plan, and basic monitoring checklist.
+  agent: devops_engineer
+  output_file: output/devops.md
+  depends_on: [backend_api]
+
+qa_review:
+  description: >
+    Review the full MVP plan and implementation for gaps, risks,
+    security issues, and non-MVP scope creep.
+  expected_output: >
+    Review report with:
+    - Identified risks
+    - Security concerns
+    - Scalability limitations
+    - MVP scope violations
+    - Clear, actionable recommendations
+  agent: qa_reviewer
+  output_file: output/review.md
+  depends_on:
+    - define_mvp
+    - design_architecture
+    - backend_api
+    - flutter_app
+    - deployment
