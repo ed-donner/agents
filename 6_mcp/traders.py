@@ -36,48 +36,50 @@ grok_client = AsyncOpenAI(base_url=GROK_BASE_URL, api_key=grok_api_key)
 gemini_client = AsyncOpenAI(base_url=GEMINI_BASE_URL, api_key=google_api_key)
 
 
-def get_model(model_name: str):
-    if "/" in model_name:
-        return OpenAIChatCompletionsModel(model=model_name, openai_client=openrouter_client)
-    elif "deepseek" in model_name:
-        return OpenAIChatCompletionsModel(model=model_name, openai_client=deepseek_client)
-    elif "grok" in model_name:
-        return OpenAIChatCompletionsModel(model=model_name, openai_client=grok_client)
-    elif "gemini" in model_name:
-        return OpenAIChatCompletionsModel(model=model_name, openai_client=gemini_client)
+def get_model(model: str | OpenAIChatCompletionsModel):
+    if isinstance(model, OpenAIChatCompletionsModel):
+        return model 
+    if "/" in model:
+        return OpenAIChatCompletionsModel(model=model, openai_client=openrouter_client)
+    elif "deepseek" in model:
+        return OpenAIChatCompletionsModel(model=model, openai_client=deepseek_client)
+    elif "grok" in model:
+        return OpenAIChatCompletionsModel(model=model, openai_client=grok_client)
+    elif "gemini" in model:
+        return OpenAIChatCompletionsModel(model=model, openai_client=gemini_client)
     else:
-        return model_name
+        return model
 
 
-async def get_researcher(mcp_servers, model_name) -> Agent:
+async def get_researcher(mcp_servers, model) -> Agent:
     researcher = Agent(
         name="Researcher",
         instructions=researcher_instructions(),
-        model=get_model(model_name),
+        model=get_model(model),
         mcp_servers=mcp_servers,
     )
     return researcher
 
 
-async def get_researcher_tool(mcp_servers, model_name) -> Tool:
-    researcher = await get_researcher(mcp_servers, model_name)
+async def get_researcher_tool(mcp_servers, model) -> Tool:
+    researcher = await get_researcher(mcp_servers, model)
     return researcher.as_tool(tool_name="Researcher", tool_description=research_tool())
 
 
 class Trader:
-    def __init__(self, name: str, lastname="Trader", model_name="gpt-4o-mini"):
+    def __init__(self, name: str, lastname="Trader", model: str | OpenAIChatCompletionsModel ="gpt-4o-mini"):
         self.name = name
         self.lastname = lastname
         self.agent = None
-        self.model_name = model_name
+        self.model = model
         self.do_trade = True
 
     async def create_agent(self, trader_mcp_servers, researcher_mcp_servers) -> Agent:
-        tool = await get_researcher_tool(researcher_mcp_servers, self.model_name)
+        tool = await get_researcher_tool(researcher_mcp_servers, self.model)
         self.agent = Agent(
             name=self.name,
             instructions=trader_instructions(self.name),
-            model=get_model(self.model_name),
+            model=get_model(self.model),
             tools=[tool],
             mcp_servers=trader_mcp_servers,
         )

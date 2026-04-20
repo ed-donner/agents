@@ -2,7 +2,7 @@ from traders import Trader
 from typing import List
 import asyncio
 from tracers import LogTracer
-from agents import add_trace_processor
+from agents import add_trace_processor, OpenAIChatCompletionsModel
 from market import is_market_open
 from dotenv import load_dotenv
 import os
@@ -19,7 +19,7 @@ names = ["Warren", "George", "Ray", "Cathie"]
 lastnames = ["Patience", "Bold", "Systematic", "Crypto"]
 
 if USE_MANY_MODELS:
-    model_names = [
+    model_names: list[str | OpenAIChatCompletionsModel] = [
         "gpt-4.1-mini",
         "deepseek-chat",
         "gemini-2.5-flash-preview-04-17",
