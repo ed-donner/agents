@@ -1,0 +1,49 @@
+data_ingestion_task:
+  description: >
+    For the region {region}, ingest, clean, and fuse data from climate satellites,
+    IoT sensors, historical weather, carbon flux models, and socio-economic datasets.
+    Perform anomaly detection and ensure data versioning is consistent.
+  expected_output: >
+    A unified, cleaned dataset ready for climate modeling, with a report on
+    flagged inconsistencies and data sources used.
+  agent: data_engineer
+
+climate_modeling_task:
+  description: >
+    Using the unified data for {region}, run reduced-order versions of CMIP6
+    physics-based models and ML surrogates. Project temperature, sea level,
+    and extreme events at 10km resolution.
+  expected_output: >
+    Probabilistic climate forecasts for the region with clearly defined
+    uncertainty ranges and projections for the next 30 years.
+  agent: climate_modeler
+
+impact_assessment_task:
+  description: >
+    Translate the probabilistic forecasts for {region} into local risks.
+    Analyze crop failure possibilities, flood zone mapping, energy demand spikes,
+    health outcomes, and supply chain disruptions using economic and demographic layers.
+  expected_output: >
+    Detailed risk heatmaps and time-series of critical thresholds (e.g.,
+    expected dates for exceeding wet-bulb temperatures or sea-level rise benchmarks).
+  agent: impact_analyst
+
+solution_design_task:
+  description: >
+    Based on the risk heatmaps for {region}, propose a set of prioritized
+    engineered or nature-based solutions. Consider green infrastructure,
+    renewable microgrid placement, building retrofits, and managed retreat plans.
+  expected_output: >
+    A concrete, prioritized intervention plan including cost/benefit analysis
+    and specific implementation steps for the proposed solutions.
+  agent: solution_architect
+
+final_review_task:
+  description: >
+    Review the entire workflow for {region} from data ingestion to the final solution plan.
+    Ensure coherence between the climate model and the proposed solutions.
+    Verify that the plan aligns with scientific accuracy and human values.
+  expected_output: >
+    A comprehensive final report and an interactive mitigation map summary,
+    incorporating all previous agent outputs into a cohesive strategy.
+  agent: team_lead
