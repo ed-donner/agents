@@ -1,18 +1,23 @@
 # src/research_crew/config/tasks.yaml
 research_task:
   description: >
-    Conduct thorough research on company {company}. Focus on:
-    1. Current company status and health
+    Conduct thorough research on company {company} using the SerperDevTool to find 
+    the LATEST and most CURRENT information. Focus on:
+    1. Current company status and health (LATEST quarter/year data)
     2. Historical company performance
     3. Major challenges and opportunities
-    4. Recent news and events
+    4. Recent news and events (from the LAST 6-12 months)
     5. Future outlook and potential developments
 
+    IMPORTANT: You MUST use the SerperDevTool to search for current information.
+    Search for terms like "{company} 2024", "{company} 2025", "{company} latest news",
+    "{company} current stock price", "{company} recent earnings".
+    NEVER rely on outdated data - always verify with the most recent sources.
     Make sure to organize your findings in a structured format with clear sections.
   expected_output: >
     A comprehensive research document with well-organized sections covering
     all the requested aspects of {company}. Include specific facts, figures,
-    and examples where relevant.
+    and examples with CURRENT dates and years. Cite the date/source of information.
   agent: researcher
 
 analysis_task:
