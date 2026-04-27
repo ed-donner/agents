@@ -1,0 +1,46 @@
+== PULL REQUEST COMMANDS ==
+Run these from D:\Projects\agents (the repo root).
+
+NOTE: Your current branch is: ginzo/resume-multiple-models
+NOTE: Only stage the ginzo_exercises folder — do NOT use "git add ." as there are
+      many other untracked/modified files on this branch unrelated to your contribution.
+
+----------------------------------------------------------------------
+STEP 1 — Stage only your folder
+----------------------------------------------------------------------
+git add 2_openai/community_contributions/ginzo_exercises/
+
+----------------------------------------------------------------------
+STEP 2 — Commit
+----------------------------------------------------------------------
+git commit -m "Add ginzo_exercises: lab3 with 4 competing sales agents, structured outputs, guardrails"
+
+----------------------------------------------------------------------
+STEP 3 — Push your branch to your fork (remote: myfork)
+----------------------------------------------------------------------
+git push myfork ginzo/resume-multiple-models
+
+----------------------------------------------------------------------
+STEP 4 — Open the Pull Request on GitHub
+----------------------------------------------------------------------
+Go to: https://github.com/ed-donner/agents
+GitHub will show a banner: "Compare & pull request" for your recently pushed branch.
+Click it, then fill in:
+  - Base repository: ed-donner/agents
+  - Base branch:     main
+  - Head repository: YOUR_GITHUB_USERNAME/agents
+  - Compare branch:  ginzo/resume-multiple-models
+  - Title:           Add ginzo_exercises: lab3 multi-agent sales email with guardrails and structured outputs
+  - Description:     (describe what your contribution does)
+
+Click "Create pull request".
+
+----------------------------------------------------------------------
+OPTIONAL — Create the PR from the command line using GitHub CLI (gh)
+----------------------------------------------------------------------
+gh pr create \
+  --repo ed-donner/agents \
+  --base main \
+  --head YOUR_GITHUB_USERNAME:ginzo/resume-multiple-models \
+  --title "Add ginzo_exercises: lab3 multi-agent sales email with guardrails and structured outputs" \
+  --body "Adds lab3.py with 4 competing sales agents (gpt-4o-mini, gpt-4o, Gemini, Claude), structured outputs via EmailStructuredResult, ToolInputGuardrail for unsubscribe check, and input guardrail for off-topic messages."
