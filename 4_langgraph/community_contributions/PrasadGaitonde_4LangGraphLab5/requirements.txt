@@ -1,0 +1,18 @@
+# Core LangGraph dependencies
+langgraph>=0.2.0
+langchain>=0.3.0
+langchain-openai>=0.2.0
+langchain-core>=0.3.0
+
+# UI
+gradio>=4.0.0
+
+# Database
+pandas>=2.0.0
+
+# Environment
+python-dotenv>=1.0.0
+
+# Type hints
+typing-extensions>=4.0.0
+pydantic>=2.0.0
