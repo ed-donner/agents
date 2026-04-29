@@ -186,3 +186,19 @@ memory.db
 # Ignore Accounts database in capstone project
 6_mcp/accounts.db
 6_mcp/memory/*.db
+
+# Databases and vector store artifacts (ChromaDB, SQLite, etc.)
+# These files are runtime-generated and should not be committed.
+*.sqlite3
+*.sqlite
+*.db
+*.db-shm
+*.db-wal
+chroma.sqlite3
+data_level0.bin
+header.bin
+length.bin
+link_lists.bin
+
+# Generated audio/media artifacts from agent runs
+*.wav
