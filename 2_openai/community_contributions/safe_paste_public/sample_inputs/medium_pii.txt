@@ -1,0 +1,1 @@
+Our user jane.doe@company.com reported a 500 on /checkout. No stack trace yet — only nginx access log lines.

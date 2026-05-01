@@ -1,0 +1,30 @@
+research_task:
+  description: >
+    Research agentic AI and related ML systems in aviation for: {topic}.
+    Cover where relevant: commercial and cargo airlines, OEM digital initiatives,
+    MRO and predictive maintenance, flight operations and dispatch, crew scheduling,
+    air traffic management, passenger-facing AI, simulation and digital twins, and
+    safety / certification considerations. Note the current year is {current_year};
+    prefer recent developments and name vendors, programs, or standards when you can.
+    If you use search tools, cross-check claims and mention uncertainty when sources conflict.
+  expected_output: >
+    A structured research memo as markdown: (1) Executive summary — 5 bullets,
+    (2) 10 detailed bullet points of the most relevant findings with short notes on
+    why each matters for aviation, (3) 3-5 open questions or risks worth tracking.
+  agent: researcher
+  output_file: output/research_memo.md
+  markdown: true
+
+reporting_task:
+  description: >
+    Using the prior research output as primary context, produce a polished briefing on
+    {topic} for aviation and AI stakeholders. Merge duplicate points, resolve tensions,
+    and add a short "Recommended next steps" section (bullets). Keep tone professional;
+    avoid hype; call out safety and governance themes explicitly.
+  expected_output: >
+    A full markdown briefing with titled sections (Introduction, Key findings,
+    Implications by stakeholder, Risks & governance, Recommended next steps).
+    No fenced code blocks; plain markdown only.
+  agent: reporting_analyst
+  output_file: output/flight_ai_briefing.md
+  markdown: true

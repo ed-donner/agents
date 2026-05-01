@@ -1,0 +1,12 @@
+gradio==5.49.1
+playwright==1.55.0
+beautifulsoup4==4.14.2
+lxml==6.0.2
+wikipedia==1.4.0
+langchain
+langchain-core
+langchain-community
+langchain-openai
+langgraph
+python-dotenv
+requests
