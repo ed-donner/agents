@@ -1,0 +1,15 @@
+# Python 3.11+
+gradio>=4.44.0,<6
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-openai>=0.2.0
+langchain-anthropic>=0.2.0
+langchain-community>=0.3.0
+pydantic>=2.0
+requests>=2.31.0
+python-dotenv>=1.0.0
+rich>=13.0.0
+mcp>=1.0.0
+tavily-python>=0.5.0
+duckduckgo-search>=6.0.0
+openai>=1.40.0

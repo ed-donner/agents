@@ -1,0 +1,8 @@
+.env
+uv.lock
+__pycache__/
+.DS_Store
+knowledge/
+AGENTS.md
+README.md
+output/
