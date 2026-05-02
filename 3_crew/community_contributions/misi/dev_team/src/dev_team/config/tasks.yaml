@@ -1,0 +1,6 @@
+runtime_task_generation:
+  note: >
+    Tasks are generated dynamically in src/dev_team/crew.py at runtime.
+    The engineering lead first produces a structured architecture design.
+    Backend implementation tasks, the frontend app.py task, and one test task per backend module
+    are then created programmatically from that design.
