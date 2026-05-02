@@ -1,0 +1,16 @@
+.env
+__pycache__/
+.DS_Store
+.venv
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.env.local
+.env.production
+.env.staging
+.env.development
+.env.test
+.env.development.local
+.env.test.local
