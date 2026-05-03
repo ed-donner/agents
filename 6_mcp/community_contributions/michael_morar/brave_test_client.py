@@ -8,7 +8,7 @@ env = {"BRAVE_API_KEY": os.getenv("BRAVE_API_KEY")}
 url = "https://api.search.brave.com/res/v1/web/search"
 
 params = {
-    "q": "Brave Search respects privacy"
+    "q": "Live gigs by Uncle Acid and the Deadbeats in my area"
 }
 
 headers = {
