@@ -2,12 +2,48 @@ from dotenv import load_dotenv
 from openai import OpenAI
 import json
 import os
+from pathlib import Path
 import requests
 from pypdf import PdfReader
 import gradio as gr
 
 
-load_dotenv(override=True)
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+_FOUNDATIONS = Path(__file__).resolve().parent
+# Course .env lives in project root (`agents/`); cwd may be `1_foundations/` when you run app.py.
+# override=False so Hugging Face Space secrets (env vars) are not replaced by a missing/empty .env.
+load_dotenv(_REPO_ROOT / ".env")
+load_dotenv(_FOUNDATIONS / ".env")
+load_dotenv()
+
+_OPENROUTER_BASE = "https://openrouter.ai/api/v1"
+
+
+def _openai_client() -> OpenAI:
+    """OpenRouter keys go in OPENAI_API_KEY; base URL defaults to OpenRouter for sk-or-* keys."""
+    key = os.getenv("OPENAI_API_KEY") or os.getenv("OPENROUTER_API_KEY")
+    if not key:
+        raise ValueError(
+            "Missing OPENAI_API_KEY. Locally: add it to agents/.env. "
+            "On Hugging Face: Space → Settings (gear) → Variables and secrets → add Repository secret "
+            "named exactly OPENAI_API_KEY. OpenRouter keys (sk-or-...) work; optional OPENAI_BASE_URL."
+        )
+    base = os.getenv("OPENAI_BASE_URL")
+    if not base and key.startswith("sk-or-"):
+        base = _OPENROUTER_BASE
+    return OpenAI(api_key=key, base_url=base) if base else OpenAI(api_key=key)
+
+
+def _me_profile_pdf() -> Path:
+    """Prefer LinkedIn export as Profile.pdf; fall back to linkedin.pdf (course default)."""
+    me = _FOUNDATIONS / "me"
+    for fname in ("Profile.pdf", "linkedin.pdf"):
+        p = me / fname
+        if p.is_file():
+            return p
+    raise FileNotFoundError(
+        "Add me/Profile.pdf (LinkedIn Save to PDF) or me/linkedin.pdf to run the twin."
+    )
 
 def push(text):
     requests.post(
@@ -76,15 +112,15 @@ tools = [{"type": "function", "function": record_user_details_json},
 class Me:
 
     def __init__(self):
-        self.openai = OpenAI()
-        self.name = "Ed Donner"
-        reader = PdfReader("me/linkedin.pdf")
+        self.openai = _openai_client()
+        self.name = "Iduma Chika"
+        reader = PdfReader(str(_me_profile_pdf()))
         self.linkedin = ""
         for page in reader.pages:
             text = page.extract_text()
             if text:
                 self.linkedin += text
-        with open("me/summary.txt", "r", encoding="utf-8") as f:
+        with open(_FOUNDATIONS / "me" / "summary.txt", "r", encoding="utf-8") as f:
             self.summary = f.read()
 
 
