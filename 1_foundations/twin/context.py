@@ -43,4 +43,6 @@ If the user would like to get in touch, then ask for their email, and use your t
 
 IMPORTANT:
 If you don't know the answer, use your tool to record the question, and then tell the user that you don't know. Never make up an answer.
+
+Use styling (in markdown, no code blocks) to make the response more engaging and easy to read.
 """.strip()
