@@ -26,18 +26,30 @@ There are 4 common gotchas to developing on Windows to be aware of:
 3. The evil Windows 260 character limit to filenames - here is a full [explanation and fix](https://chatgpt.com/share/67b0afb9-1b60-8012-a9f7-f968a5a910c7)! You'll need to restart after making the change.  
 4. If you've not worked with Data Science packages on your computer before, you'll need to install Microsoft Build Tools. Here are [instructions](https://chatgpt.com/share/67b0b762-327c-8012-b809-b4ec3b9e7be0). A student also mentioned that [these instructions](https://github.com/bycloudai/InstallVSBuildToolsWindows) might be helpful for people on Windows 11.    
 
-### Part 1: Clone the Repo
+### Part 1: Install Cursor
 
-1. **Install Git** (if not already installed):
+A word about Cursor: it's a cool product, but it's not to everyone's liking. It can also have a habit of being flakey with the AI recommendations. Sometimes the screens take a long time to appear. You can use VS Code (or any IDE) in its place if you prefer. Cursor itself is built from VS Code and everything on this course will work fine in either.
+
+1. Visit cursor at https://www.cursor.com/
+2. Click Sign In on the top right, then Sign Up, to create your account
+3. Download and follow its instructions to install and open Cursor
+
+After you start Cursor, you can pick the defaults for all its questions.  
+
+### Part 2: Clone the Repo
+
+1. Open a New Window in Cursor (File >> New Window or Ctrl+Shift+N)
+
+2. Open a Terminal in that Window (View >> Terminal or Ctrl+backtick)
+
+3. `git --version` to check that git is installed
+
+4. If not installed, **Install Git**
 
 - Download Git from https://git-scm.com/download/win
 - Run the installer and follow the prompts, using default options (press OK lots of times!)
 
-2. **Open Command Prompt:**
-
-- Press Win + R, type `cmd`, and press Enter
-
-3. **Navigate to your projects folder:**
+5. Back in the Cursor Terminal, **Navigate to your projects folder:**
 
 If you have a specific folder for projects, navigate to it using the cd command. For example:  
 `cd C:\Users\YourUsername\projects`  
@@ -49,35 +61,24 @@ mkdir C:\Users\YourUsername\projects
 cd C:\Users\YourUsername\projects
 ```
 
-4. **Clone the repository:**
+6. **Clone the repository:**
 
 Enter this in the command prompt in the Projects folder:
 
 `git clone https://github.com/ed-donner/agents.git`
 
-This creates a new directory `agents` within your Projects folder and downloads the code for the class. Do `cd agents` to go into it. This `agents` directory is known as the "project root directory".
+This creates a new directory `agents` within your Projects folder and downloads the code for the class.
+Do `cd agents` to go into it. This `agents` directory is known as the "project root directory".
 
+7. Open this project in Cursor
 
-### Part 2: Install Cursor
+In the main Cursor Window above the Terminal, click "Open Project"
 
-A word about Cursor: it's a cool product, but it's not to everyone's liking. It can also have a habit of being flakey with the AI recommendations. As student Alireza points out, you can use VS Code (or any IDE) in its place if you prefer. Cursor itself is built from VS Code and everything on this course will work fine in either.
+Navigate to your `agents` folder, and double click on it so that you are looking at its contents.
 
-1. Visit cursor at https://www.cursor.com/
-2. Click Sign In on the top right, then Sign Up, to create your account
-3. Download and follow its instructions to install and open Cursor
+Now click "Select Folder", when you're inside the `agents` folder.
 
-After you start Cursor, you can pick the defaults for all its questions.  
-When it's time to open the project in Cursor:  
-1. Launch Cursor, if it's not already running  
-2. File menu >> New Window  
-3. Click "Open project"  
-4. Navigate into the project root directory called `agents` (probably within projects) and click Open
-5. When your project opens, you may be prompted to "install recommended extensions" for Python and Jupyter. If so, choose Yes! Otherwise:
-- Open extensions (View >> extensions)
-- Search for python, and when the results show, click on the ms-python one, and Install it if not already installed
-- Search for jupyter, and when the results show, click on the Microsoft one, and Install it if not already installed
-
-Now open the Explorer (View >> Explorer) and Cursor should show each of the weeks in the file explorer on the left.
+The Cursor Project window should appear, and the File Explorer should show AGENTS on the top left in block capitals, indicating that you've successfully opened the Agents project.
 
 ### Part 3: The amazing `uv`
 
@@ -91,7 +92,7 @@ https://docs.astral.sh/uv/getting-started/installation/
 
 Any installation problems with uv, please see [Q11 on my FAQ page](https://edwarddonner.com/faq/#11).
 
-Then within Cursor, select View >> Terminal, to see a Terminal window within Cursor.  
+Then within the project inCursor, select View >> Terminal, to see a Terminal window within Cursor.  
 Type `pwd` to see the current directory, and check you are in the 'agents' directory - like `C:\Users\YourUsername\Documents\Projects\agents` or similar
 
 Start by running `uv self update` to make sure you're on the latest version of uv.

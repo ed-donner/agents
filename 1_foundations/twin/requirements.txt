@@ -1,0 +1,4 @@
+requests
+gradio
+pypdf
+openai
