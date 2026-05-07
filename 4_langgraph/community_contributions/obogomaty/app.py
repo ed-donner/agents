@@ -354,6 +354,13 @@ with gr.Blocks(title="Find parking near a restaurant") as demo:
 
 demo.launch(share=False, inline=True, debug=True)
 
+
+# === TEMP: Print Mermaid for PR ===
+if __name__ == "__main__":
+    print("```mermaid")
+    print(search_graph.get_graph().draw_mermaid())
+    print("```")
+
 # Or, if you want to use Colab's secrets manager:
 # from google.colab import userdata
 # os.environ["OPENROUTER_API_KEY"] = userdata.get('OPENROUTER_API_KEY')
