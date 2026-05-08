@@ -21,6 +21,21 @@ Finally, `utils.py`:
 
 The orchestration entrypoint is `main.py`.
 
+## Agentic Workflow Diagram
+
+```mermaid
+flowchart TD
+    A[Start: Run main.py] --> B[Research Scout Agent<br/>Collect AI findings via web search]
+    B --> C[Trend Cluster Agent<br/>Group findings into themes]
+    C --> D[Editorial Prioritizer Agent<br/>Assign priority and section]
+    B --> E[Newsletter Writer Agent<br/>Generate structured sections]
+    C --> E
+    D --> E
+    E --> F[prepare_newsletter_html in utils.py<br/>Render HTML email]
+    F --> G[send_mail in utils.py<br/>Send via SendGrid]
+    G --> H[End: Newsletter delivered]
+```
+
 ## Project Structure
 
 ```text
