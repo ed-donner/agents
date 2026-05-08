@@ -1,6 +1,9 @@
 import json
 import os
 import requests
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
 
 pushover_user = os.getenv("PUSHOVER_USER")
 pushover_token = os.getenv("PUSHOVER_TOKEN")
