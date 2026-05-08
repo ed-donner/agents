@@ -177,6 +177,8 @@ cython_debug/
 
 1_foundations/emails.txt
 
+2_openai/output/
+
 # Ignore Crew engineering team output
 3_crew/engineering_team/output/
 
