@@ -89,3 +89,30 @@ Key architectural insight: each agent only knows about MCP servers — the under
 ├── push_server.py        # MCP server for push notifications
 └── database.py           # SQLite backing store
 ```
+
+---
+
+## Setup
+
+```bash
+pip install -r requirements.txt
+```
+
+Pinned versions (tested May 2026):
+
+```
+openai>=1.78.0
+openai-agents>=0.0.19
+python-dotenv>=1.1.0
+requests>=2.32.3
+```
+
+**Node.js is also required** for JavaScript-based MCP servers (Playwright, filesystem, Brave Search).  
+Install Node.js LTS from [nodejs.org](https://nodejs.org), then verify with `node --version`.
+
+> **Windows users:** MCP subprocess spawning has a known issue on Windows. Use WSL2 as a workaround — see [setup/SETUP-WSL.md](../setup/SETUP-WSL.md).
+
+Lab 3 requires `BRAVE_API_KEY` (free tier at [brave.com/search/api](https://brave.com/search/api)) and `POLYGON_API_KEY` (free tier at [polygon.io](https://polygon.io)).  
+Lab 4 (Trading Floor) additionally requires `PUSHOVER_TOKEN`/`PUSHOVER_USER`.
+
+> **Cost guide:** Labs 1–3 use `gpt-4.1-mini` (~$0.01–0.20/run). Lab 4 (Trading Floor) loops every 60 min by default — monitor your usage and stop when done (~$0.20–1.00/loop × 4 traders). Cost banners are at the top of each notebook.

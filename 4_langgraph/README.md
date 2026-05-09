@@ -76,3 +76,30 @@ A production-style assistant that brings the multi-node evaluator graph into a d
 ├── sidekick.py           # Gradio app using the Sidekick graph
 └── sidekick_tools.py     # Tool definitions for the Sidekick agent
 ```
+
+---
+
+## Setup
+
+```bash
+pip install -r requirements.txt
+```
+
+Pinned versions (tested May 2026):
+
+```
+openai>=1.78.0
+langchain>=0.3.23
+langchain-openai>=0.3.14
+langgraph>=0.3.34
+langchain-community>=0.3.21
+python-dotenv>=1.1.0
+gradio>=5.29.1
+playwright>=1.52.0
+```
+
+After installing, run `playwright install chromium` once for browser automation (Lab 3 and 4).
+
+Requires `OPENAI_API_KEY` in `.env`. Lab 2 optionally uses `SERPER_API_KEY` for web search and `PUSHOVER_TOKEN`/`PUSHOVER_USER` for push notifications.
+
+> **Cost guide:** All labs use `gpt-4o-mini` (~$0.01–0.20/run depending on how many tool calls the agent makes). Cost banners are at the top of each notebook.

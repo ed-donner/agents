@@ -80,3 +80,28 @@ A personal website chatbot that puts all Week 1 concepts together:
 ├── app.py                # Personal website chatbot (capstone app)
 └── community_contributions/  # Student variations and experiments
 ```
+
+---
+
+## Setup
+
+```bash
+pip install -r requirements.txt
+```
+
+Pinned versions (tested May 2026):
+
+```
+openai>=1.78.0
+openai-agents>=0.0.19
+python-dotenv>=1.1.0
+gradio>=5.29.1
+pypdf>=5.4.0
+requests>=2.32.3
+```
+
+All notebooks require an `OPENAI_API_KEY` in your `.env` file.  
+Multi-provider labs (Lab 2) optionally use `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`, `DEEPSEEK_API_KEY`, `GROQ_API_KEY`.  
+Lab 4 uses `PUSHOVER_TOKEN` and `PUSHOVER_USER` for push notifications.
+
+> **Cost guide:** Lab 1 uses `gpt-4.1-nano` (~$0.001/run). Labs 2–4 use `gpt-4.1-mini` (~$0.005–0.02/run). Full notebook costs are shown in the "Tested on" banner at the top of each notebook.

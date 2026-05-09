@@ -79,3 +79,28 @@
 ├── messages.py      # Custom message types
 └── database.py      # SQLite setup for airline booking demo
 ```
+
+---
+
+## Setup
+
+```bash
+pip install -r requirements.txt
+```
+
+Pinned versions (tested May 2026):
+
+```
+autogen-agentchat>=0.4.9
+autogen-ext[openai]>=0.4.9
+openai>=1.78.0
+python-dotenv>=1.1.0
+gradio>=5.29.1
+# For Lab 4 distributed runtime:
+# autogen-ext[grpc]>=0.4.9
+```
+
+Requires `OPENAI_API_KEY` in `.env`. Lab 2 optionally uses `SERPER_API_KEY` for web search tools.  
+Lab 1 and 3 optionally use Ollama (free, local) — install from [ollama.com](https://ollama.com).
+
+> **Cost guide:** All labs use `gpt-4o-mini` (~$0.002–0.10/run). The Ollama option (llama3.2) is free. Cost banners are at the top of each notebook.

@@ -1,0 +1,12 @@
+# Week 4 — LangGraph
+# Tested: Python 3.11, May 2026
+# Pin versions to avoid breaking changes in rapidly evolving SDKs.
+
+openai>=1.78.0
+langchain>=0.3.23
+langchain-openai>=0.3.14
+langgraph>=0.3.34
+langchain-community>=0.3.21
+python-dotenv>=1.1.0
+gradio>=5.29.1
+playwright>=1.52.0

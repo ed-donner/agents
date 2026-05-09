@@ -6,7 +6,7 @@ This folder is a **self-contained supplement** to the Ed Donner course. The cour
 
 ## Why this week exists
 
-The main course leaves five topics either untouched or only briefly covered:
+The main course leaves eight topics either untouched or only briefly covered:
 
 | Gap | Status in course | Covered here |
 |-----|-----------------|--------------|
@@ -15,6 +15,9 @@ The main course leaves five topics either untouched or only briefly covered:
 | Agent security & safety | Not covered | Lab 5 |
 | Production deployment | HuggingFace Spaces only | Lab 3 |
 | Observability & monitoring | LangSmith tracing only | Lab 4 |
+| CI/CD eval gate | Not covered | Lab 6 |
+| Fine-tuning & distillation | Not covered | Lab 7 |
+| Vision & multimodal agents | Single `MultiModalMessage` only | Lab 8 |
 
 ---
 
@@ -96,38 +99,96 @@ Key packages: `openai`, `langchain`, stdlib only for the tracer
 
 ---
 
+### [Lab 6 — CI/CD Eval Gate](6_lab6_cicd_eval_gate.ipynb)
+**Wire your eval suite into GitHub Actions so regressions block merges automatically**
+
+- Standalone `run_evals.py` runner — exits with code 1 if avg score < threshold (CI-compatible)
+- GitHub Actions workflow (`.github/workflows/eval_gate.yml`) — triggers on every PR, posts a score table as a PR comment, blocks merge on failure
+- Pre-push git hook — 3-case smoke eval runs locally before you push (~10s, ~$0.01)
+- V1 vs V2 regression comparison with configurable tolerance margin
+- Threshold calibration guide: 0.60 for dev iteration → 0.75 for pre-release → 0.80 for production monitoring
+- **Connects Lab 2 to the real world**: the eval suite you built now gates every PR automatically
+
+Key packages: `openai`, `pydantic`, GitHub Actions (no extra Python packages needed)
+
+---
+
+### [Lab 7 — Fine-tuning & Knowledge Distillation](7_lab7_finetuning_distillation.ipynb)
+**Shrink a large model into a small, cheap, accurate specialist**
+
+- Task selection guide — when fine-tuning beats RAG or prompt engineering (classification/extraction = good; creative/low-volume = bad)
+- **Knowledge distillation** — teacher model (gpt-4o) generates labelled examples; student model (gpt-4o-mini) learns the pattern
+- JSONL dataset format, train/val split, `client.files.create()` + `client.fine_tuning.jobs.create()`
+- Polling for job completion with `client.fine_tuning.jobs.retrieve()`
+- Teacher vs student accuracy comparison on held-out test cases
+- Cost analysis: gpt-4o vs gpt-4o-mini vs ft:gpt-4o-mini vs gpt-4.1-nano at 10k calls/day
+- **`AgentRouter` pattern** — fine-tuned model handles cheap routing decisions; full model handles responses
+- Production checklist: dataset drift monitoring, periodic retraining, regression eval before deploying new version
+
+Key packages: `openai`, `pydantic`
+
+---
+
+### [Lab 8 — Vision & Multimodal Agents](8_lab8_vision_multimodal.ipynb)
+**Build agents that see — from single images to RAG over image corpora**
+
+- Vision API fundamentals: URL vs base64, `detail` levels (`low`/`high`/`auto`), token cost formula
+- **Structured visual extraction** — Pydantic schemas over image content (charts, invoices, documents)
+- Multi-image reasoning chains — before/after comparison, image series, cross-document analysis
+- Document agent — classify document type, route to the right extraction schema
+- **Vision RAG** — index images by LLM-generated descriptions, retrieve by embedding similarity, answer over corpus
+- Production patterns: description cache (no repeat API calls), graceful text-only fallback, token cost estimator
+- **`MultimodalAgent`** — full agent with mixed text/image conversation history
+- Connecting to other labs: vision faithfulness eval (Lab 2), per-session vision token budgets (Lab 3), separate vision token logging (Lab 4), image-embedded prompt injection (Lab 5)
+
+Key packages: `openai`, `pydantic`, `numpy`
+
+---
+
 ## End-to-end architecture
 
-After completing all 5 labs, the pieces fit together like this:
+After completing all 8 labs, the pieces fit together like this:
 
 ```
 User → [Lab 5: Guardrails] → [Lab 3: FastAPI + Sessions]
               ↕                         ↕
        [Lab 1: RAG Pipeline]    [Lab 4: Observability]
-              ↕                         ↕
-       [Lab 2: Eval Suite] ←→ [CI/CD regression gate]
+       [Lab 8: Vision RAG ]             ↕
+              ↕               [Lab 6: CI/CD Gate]
+       [Lab 2: Eval Suite] ←→ [Lab 7: Fine-tuned Router]
 ```
 
 ---
 
 ## Setup
 
-These notebooks use the same `.env` file and virtual environment as the rest of the course. No new setup needed beyond:
+These notebooks use the same `.env` file and virtual environment as the rest of the course. Install all dependencies with:
 
 ```bash
-pip install chromadb langchain-chroma langchain-openai langchain-core langgraph fastapi uvicorn
+pip install -r requirements.txt
 ```
 
-All other dependencies (`openai`, `langchain`, `pydantic`) are already in the course environment.
+Or manually:
+
+```bash
+pip install chromadb langchain-chroma langchain-openai langchain-core langgraph fastapi uvicorn pydantic openai numpy
+```
+
+All other dependencies (`langchain`, `python-dotenv`) are already in the course environment.
+
+See [requirements.txt](requirements.txt) for pinned versions (tested May 2026).
 
 ---
 
 ## Recommended order
 
-Security should come **before** deployment — don't ship an agent and then secure it.
+Security should come **before** deployment — don't ship an agent and then secure it.  
+CI/CD comes last — you need evals (Lab 2) before you can gate on them.
 
 ```
-Lab 1 (RAG) → Lab 2 (Evals) → Lab 5 (Secure it) → Lab 3 (Deploy it safely) → Lab 4 (Monitor it)
+Lab 1 (RAG) → Lab 2 (Evals) → Lab 5 (Secure it) → Lab 3 (Deploy it safely) → Lab 4 (Monitor it) → Lab 6 (Gate it) → Lab 7 (Fine-tune it) → Lab 8 (Add vision)
 ```
 
-After completing all 5 labs you'll have the skills to take any agent from the main course and ship it as a production system.
+Labs 7 and 8 are independent of the deployment pipeline — you can do them at any point after Lab 2.
+
+After completing all 8 labs you'll have the skills to take any agent from the main course and ship it as a production system.

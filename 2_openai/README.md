@@ -62,3 +62,27 @@
 ├── 3_lab3.ipynb    # Multi-model support + guardrails
 └── 4_lab4.ipynb    # Deep research pipeline (async + WebSearch)
 ```
+
+---
+
+## Setup
+
+```bash
+pip install -r requirements.txt
+```
+
+Pinned versions (tested May 2026):
+
+```
+openai>=1.78.0
+openai-agents>=0.0.19
+pydantic>=2.11.4
+python-dotenv>=1.1.0
+sendgrid>=6.11.0
+gradio>=5.29.1
+```
+
+Requires `OPENAI_API_KEY` in `.env`. Lab 2 and 4 require `SENDGRID_API_KEY` for email delivery.  
+Lab 3 optionally uses `GOOGLE_API_KEY`, `DEEPSEEK_API_KEY`, `GROQ_API_KEY` for multi-model agents.
+
+> **Cost guide:** Labs 1–3 use `gpt-4o-mini` (~$0.002–0.10/run). Lab 4 uses `WebSearchTool` (~$0.025/search call) — a full deep research run costs ~$0.10–0.50. Cost banners are shown at the top of each notebook.

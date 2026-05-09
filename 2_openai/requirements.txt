@@ -1,0 +1,11 @@
+# Week 2 — OpenAI Agents SDK
+# Tested: Python 3.11, May 2026
+# Pin versions to avoid breaking changes in rapidly evolving SDKs.
+
+openai>=1.78.0
+openai-agents>=0.0.19
+pydantic>=2.11.4
+python-dotenv>=1.1.0
+sendgrid>=6.11.0
+gradio>=5.29.1
+requests>=2.32.3
