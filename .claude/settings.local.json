@@ -7,7 +7,11 @@
       "mcp__claude_ai_Notion__notion-search",
       "Bash(Get-ChildItem -Path \"e:\\\\AI\\\\Udemy\\\\AI Engineer Agentic Track The Complete Agent & MCP Course - Ed Donner\\\\agents\" -Force)",
       "Bash(Select-Object Name, PSIsContainer)",
-      "Bash(Format-Table -AutoSize)"
+      "Bash(Format-Table -AutoSize)",
+      "Bash(grep -E \"\\\\.py$\")",
+      "Bash(Get-ChildItem -Path \"e:\\\\AI\\\\Udemy\\\\AI Engineer Agentic Track The Complete Agent & MCP Course - Ed Donner\\\\agents\\\\7_advanced\" -Recurse)",
+      "Bash(Select-Object FullName, Length)",
+      "Bash(Remove-Item \"e:\\\\AI\\\\Udemy\\\\AI Engineer Agentic Track The Complete Agent & MCP Course - Ed Donner\\\\agents\\\\7_advanced\\\\ISSUES.md\")"
     ]
   }
 }
