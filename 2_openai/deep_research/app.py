@@ -7,8 +7,8 @@ load_dotenv(override=True)
 
 
 async def run(query: str):
-    async for chunk in ResearchManager().run(query):
-        yield chunk
+    async for status_update in ResearchManager().run(query):
+        yield status_update
 
 
 with gr.Blocks(title="Deep Research") as ui:
