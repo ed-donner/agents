@@ -2,7 +2,7 @@
 
 ## Installing Crew
 
-__Windows users: be sure to have installed the MS Build Tools per initial setup instructions otherwise you’ll get a complex error involving chroma when you install crewai.__
+__Windows users: be sure to have installed the MS Build Tools per initial setup instructions otherwise you’ll get a complex error involving chroma when you install crewai. Here are [instructions](https://chatgpt.com/share/67b0b762-327c-8012-b809-b4ec3b9e7be0). A student also mentioned that [these instructions](https://github.com/bycloudai/InstallVSBuildToolsWindows) might be helpful for people on Windows 11.__
 
 To start, run this command in the project root (agents):
 
