@@ -189,7 +189,7 @@ def synthesize_report(query: str, all_findings: str, all_urls: list[str]) -> str
 def deep_research_agent(user_query: str, history: list):
     """Main Agentic Loop with Streaming Updates."""
     if not user_query or not user_query.strip():
-        history.append({"role": "assistant", "content": "⚠️ Please enter a research question."})
+        history.append({"role": "assistant", "content": " Please enter a research question."})
         yield history
         return
 
@@ -198,7 +198,7 @@ def deep_research_agent(user_query: str, history: list):
     yield history
     
     # 2. Start Agent Response
-    history.append({"role": "assistant", "content": "🚀 **Initializing Agentic Deep Research...**\n"})
+    history.append({"role": "assistant", "content": " **Initializing Agentic Deep Research...**\n"})
     yield history
 
     all_findings = ""
@@ -222,7 +222,7 @@ def deep_research_agent(user_query: str, history: list):
         yield history
 
         # A. Execute Search
-        history[-1]["content"] += "🔍 Searching web...\n"
+        history[-1]["content"] += " Searching web...\n"
         yield history
         findings_text, urls_found = execute_searches(queries)
         all_findings += findings_text
@@ -271,14 +271,14 @@ if __name__ == "__main__":
     print(f" http://127.0.0.1:{PORT}\n")
     
     with gr.Blocks() as demo:
-        gr.Markdown("# 🕵️‍♂️ Agentic Deep Research v3.0")
+        gr.Markdown("#  Agentic Deep Research v3.0")
         gr.Markdown("✨ **True Agentic Loop**: Plan → Search → **Self-Correct** → Synthesize")
         
         chatbot = gr.Chatbot(label="Research Report", height=700)
         msg = gr.Textbox(label="Query", placeholder="Try: 'Compare economic impacts of AI vs Robotics on global supply chains'", lines=2)
         
         with gr.Row():
-            submit = gr.Button("🚀 Start Deep Research", variant="primary")
+            submit = gr.Button(" Start Deep Research", variant="primary")
             clear = gr.ClearButton([msg, chatbot])
         
         msg.submit(respond, [msg, chatbot], [chatbot])
