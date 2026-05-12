@@ -19,14 +19,59 @@ from dotenv import load_dotenv
 import openai
 import gradio as gr
 
-# === 🔧 Setup ===
+# ===  INPUT & OUTPUT GUARDRAILS ===
+import re
+
+def input_guardrail(query: str) -> tuple[bool, str]:
+    """Validates user input. Returns (is_valid, error_message)."""
+    if not query or not query.strip():
+        return False, " Please enter a research question."
+    if len(query) > 1500:
+        return False, " Question too long. Keep under 1500 characters."
+    
+    # Prompt injection / jailbreak detection
+    injection_patterns = [
+        r"ignore\s+previous\s+instructions",
+        r"disregard\s+all\s+rules",
+        r"pretend\s+(to\s+be|you\s+are)",
+        r"you\s+are\s+now\s+",
+        r"jailbreak",
+        r"bypass\s+(filters|security)",
+        r"system\s+prompt",
+        r"/system",
+        r"do\s+anything\s+now",
+        r"repeat\s+this\s+back"
+    ]
+    for pattern in injection_patterns:
+        if re.search(pattern, query, re.IGNORECASE):
+            return False, " Input contains restricted patterns. Please rephrase."
+    
+    return True, ""
+
+def output_guardrail(text: str) -> str:
+    """Sanitizes, validates, and truncates LLM output."""
+    if not text or text.isspace():
+        return " No response generated. Please try again or rephrase your query."
+    
+    # Strip potentially dangerous HTML/script tags (XSS prevention)
+    text = re.sub(r'<(script|iframe|object|embed|style|link)[^>]*>.*?</\1>', '[REMOVED]', text, flags=re.IGNORECASE|re.DOTALL)
+    text = re.sub(r'<[^>]+>', '', text)  # Remove remaining HTML tags
+    
+    # Truncate excessively long outputs (prevents Gradio lag)
+    MAX_OUTPUT = 6000
+    if len(text) > MAX_OUTPUT:
+        text = text[:MAX_OUTPUT] + "\n\n... [Output truncated for length]"
+    
+    return text.strip()
+
+#   Setup
 print(f" Python: {sys.version.split()[0]}", flush=True)
 print(f" Gradio: {gr.__version__}", flush=True)
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s: %(message)s', stream=sys.stdout)
 load_dotenv()
 
-# ===  Search Tools ===
+#Search Tool
 def search_web(query: str, max_results: int = 4) -> list[dict]:
     results = []
     tavily_key = os.getenv("TAVILY_API_KEY")
@@ -52,7 +97,7 @@ def search_web(query: str, max_results: int = 4) -> list[dict]:
         logging.error(f"DDG error: {e}")
         return []
 
-# ===  LLM Client ===
+#  LLM Client 
 client = openai.OpenAI(
     api_key=os.getenv("OPENAI_API_KEY"),
     base_url=os.getenv("OPENAI_API_BASE", "https://openrouter.ai/api/v1")
@@ -66,7 +111,7 @@ def call_llm(messages: list, temperature: float = 0.7) -> str:
     except Exception as e:
         return f" LLM Error: {str(e)}"
 
-# === 🧠 Agentic Core Functions ===
+# === Agentic Core Functions ===
 
 def plan_initial(query: str) -> list[str]:
     """Step 1: Generate initial research plan."""
@@ -213,7 +258,7 @@ def respond(message, history):
     for update in deep_research_agent(message, history):
         yield update
 
-# === 🚀 Launch ===
+# ===  Launch ===
 def find_free_port(start=7860):
     for p in range(start, start+10):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
