@@ -1,159 +1,242 @@
 
-       
+
+
+#!/usr/bin/env python3
+"""
+ AGENTIC DEEP RESEARCH AGENT v3.0
+- Features True Agentic Loop: Plan → Search → Reflect → Refine → Synthesize
+- Self-Correcting: Audits findings and searches for missing data
+- Real-time progress updates in Gradio UI
+"""
+
 import os
 import re
+import sys
+import json
+import socket
 import logging
 from dotenv import load_dotenv
 import openai
 import gradio as gr
 
-# Setup basic logging
-logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s: %(message)s')
+# === 🔧 Setup ===
+print(f" Python: {sys.version.split()[0]}", flush=True)
+print(f" Gradio: {gr.__version__}", flush=True)
+
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s: %(message)s', stream=sys.stdout)
 load_dotenv()
 
-# === 🔍 LIVE WEB SEARCH TOOL ===
-def search_web(query: str, max_results: int = 5) -> str:
-    """Search the live internet for current information. Returns formatted results with URLs."""
-    
-    # Option A: Tavily (Recommended for AI agents, needs API key)
+# ===  Search Tools ===
+def search_web(query: str, max_results: int = 4) -> list[dict]:
+    results = []
     tavily_key = os.getenv("TAVILY_API_KEY")
+    
     if tavily_key:
         try:
             from tavily import TavilyClient
-            tavily = TavilyClient(api_key=tavily_key)
-            response = tavily.search(query=query, search_depth="advanced", max_results=max_results)
-            results = []
-            for r in response.get("results", []):
-                results.append(f"🔹 {r['title']}\n   URL: {r['url']}\n   📄 {r['content']}\n")
-            return "\n---\n".join(results)
+            client = TavilyClient(api_key=tavily_key)
+            resp = client.search(query=query, search_depth="advanced", max_results=max_results)
+            for r in resp.get("results", []):
+                results.append({"title": r.get("title"), "url": r.get("url"), "content": r.get("content")[:2000]})
+            return results
         except Exception as e:
-            logging.warning(f"Tavily search failed: {e}. Falling back to DuckDuckGo.")
-            
-    # Option B: DuckDuckGo fallback (No API key needed)
+            logging.warning(f"Tavily error: {e}")
+    
     try:
         from duckduckgo_search import DDGS
-        results = DDGS().text(query, max_results=max_results)
-        formatted = []
-        for r in results:
-            formatted.append(f"🔹 {r['title']}\n   URL: {r['href']}\n   📄 {r['body']}\n")
-        return "\n---\n".join(formatted)
+        ddg = DDGS().text(query, max_results=max_results)
+        for r in ddg:
+            results.append({"title": r.get("title"), "url": r.get("href"), "content": r.get("body")[:2000]})
+        return results
     except Exception as e:
-        return f"⚠️ Web search error: {str(e)}"
+        logging.error(f"DDG error: {e}")
+        return []
 
-# === 📝 UPDATED SYSTEM PROMPT ===
-SYSTEM_PROMPT = """You are a DEEP RESEARCH assistant. Follow these rules STRICTLY:
-
-1. 🌐 ALWAYS use the provided LIVE SEARCH RESULTS to answer. Do NOT rely on internal training data.
-2. 🔗 CITE SOURCES: Include the exact URL for every key claim. Format: [Source](URL).
-3. ⚠️ If search results conflict, note the discrepancy and present both sides.
-4. ❌ If search returns no relevant results, say so honestly—do NOT make up information.
-5. 📝 Structure your answer:
-   - 🔍 Executive Summary (1-2 sentences)
-   - 📋 Key Findings (bullet points with citations)
-   - 🔗 Sources Used (list URLs)
-   - ⏰ Note if information is time-sensitive
-
-Example:
-🔍 **Summary**: [Brief answer]
-📋 **Findings**:
-• Point one [Source](https://...)
-• Point two [Source](https://...)
-🔗 **Sources**:
-1. https://...
-2. https://...
-⏰ *Information sourced from live web search.*"""
-
-# === 🤖 OPENROUTER CLIENT ===
+# ===  LLM Client ===
 client = openai.OpenAI(
     api_key=os.getenv("OPENAI_API_KEY"),
     base_url=os.getenv("OPENAI_API_BASE", "https://openrouter.ai/api/v1")
 )
+MODEL = os.getenv("LLM_MODEL", "openai/gpt-4o-mini")
 
-# === 💬 RESEARCH CHAT FUNCTION ===
-def research_chat(user_message, history):
-    # Input guardrail: check for empty or too long input
-    if not user_message or not isinstance(user_message, str) or len(user_message.strip()) == 0:
-        return "Please enter a valid research question."
-    if len(user_message) > 1000:
-        return "Your question is too long. Please shorten it to under 1000 characters."
+def call_llm(messages: list, temperature: float = 0.7) -> str:
+    try:
+        resp = client.chat.completions.create(model=MODEL, messages=messages, temperature=temperature, max_tokens=2500)
+        return resp.choices[0].message.content or ""
+    except Exception as e:
+        return f" LLM Error: {str(e)}"
 
-    # Prompt injection filter
-    injection_patterns = [
-        r"ignore (all|any|the)? ?previous instructions?",
-        r"disregard (all|any|the)? ?previous instructions?",
-        r"pretend (to be|you are)",
-        r"you are now",
-        r"as an ai language model",
-        r"repeat after me",
-        r"do anything now",
-        r"bypass",
-        r"jailbreak",
-        r"forget all previous",
-        r"act as",
-        r"system prompt",
-        r"/system",
-        r"### system",
-        r"assistant:"
-    ]
-    for pattern in injection_patterns:
-        if re.search(pattern, user_message, re.IGNORECASE):
-            return "Your input contains patterns that are not allowed for security reasons. Please rephrase your question."
+# === 🧠 Agentic Core Functions ===
 
-    # 🔍 STEP 1: SEARCH THE WEB FIRST
-    logging.info(f"🌐 Searching the web for: {user_message}")
-    search_results = search_web(user_message)
+def plan_initial(query: str) -> list[str]:
+    """Step 1: Generate initial research plan."""
+    sys_prompt = "Break this query into 3-5 specific, searchable sub-questions. Return ONLY a JSON list of strings."
+    resp = call_llm([{"role": "system", "content": sys_prompt}, {"role": "user", "content": f"Query: {query}"}], 0.1)
+    try:
+        parsed = json.loads(re.search(r'\[.*\]', resp, re.DOTALL).group())
+        return [str(q).strip() for q in parsed if len(q) > 10][:5]
+    except:
+        return [query]
 
-    # 🔍 STEP 2: BUILD MESSAGES WITH HISTORY
-    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
-    for turn in history:
-        if isinstance(turn, dict) and "role" in turn and "content" in turn:
-            messages.append({"role": turn["role"], "content": turn["content"]})
-        elif isinstance(turn, (list, tuple)) and len(turn) == 2:
-            messages.append({"role": "user", "content": turn[0]})
-            messages.append({"role": "assistant", "content": turn[1]})
+def execute_searches(queries: list[str]) -> tuple[str, list[str]]:
+    """Execute searches for a list of queries."""
+    findings_text = ""
+    urls_found = []
+    
+    for q in queries:
+        res = search_web(q, max_results=3)
+        findings_text += f"\n## Query: {q}\n"
+        if res:
+            for r in res:
+                urls_found.append(r["url"])
+                findings_text += f"- [{r['title']}]({r['url']}): {r['content'][:300]}...\n"
+        else:
+            findings_text += "- No results found.\n"
+    
+    return findings_text, urls_found
 
-    # 🔍 STEP 3: ENHANCE USER PROMPT WITH SEARCH RESULTS
-    enhanced_user_msg = f"""USER QUERY: {user_message}
+def reflect_and_refine(original_query: str, findings_summary: str) -> dict:
+    """Step 2: Critic audits findings and identifies gaps."""
+    sys_prompt = """You are a Lead Research Auditor. Review findings against the original query.
+    1. Check if all aspects are answered with high confidence.
+    2. Identify specific missing data, conflicting claims, or gaps.
+    3. If gaps exist, generate 2-3 NEW targeted queries to fix them.
+    Return ONLY valid JSON: {"satisfied": boolean, "missing_info": "string", "new_queries": ["string"]}"""
+    
+    resp = call_llm([
+        {"role": "system", "content": sys_prompt},
+        {"role": "user", "content": f"Query: {original_query}\nFindings Summary:\n{findings_summary}"}
+    ], 0.2)
+    
+    try:
+        parsed = json.loads(re.search(r'\{.*\}', resp, re.DOTALL).group())
+        return {
+            "satisfied": parsed.get("satisfied", False),
+            "missing_info": parsed.get("missing_info", ""),
+            "new_queries": parsed.get("new_queries", [])
+        }
+    except:
+        return {"satisfied": True, "missing_info": "", "new_queries": []}
 
-🌐 LIVE SEARCH RESULTS (use these as your ONLY source for factual information):
-{search_results}
+def synthesize_report(query: str, all_findings: str, all_urls: list[str]) -> str:
+    """Step 3: Final Report Generation."""
+    unique_urls = list(dict.fromkeys([u for u in all_urls if u.startswith("http")]))
+    sources_list = "\n".join([f"{i+1}. {url}" for i, url in enumerate(unique_urls[:10])])
+    
+    sys_prompt = f"""Write a comprehensive Deep Research Report.
+    Structure:
+    1.  Executive Summary (1-2 sentences)
+    2.  Key Findings (Bullet points with inline [Source](URL) citations)
+    3.  Critical Analysis (Conflicts, tradeoffs, uncertainties)
+    4.  Verified Sources:
+    {sources_list}
+    5.  Time Sensitivity Note
+    
+    Rules: Use EXACT URLs from sources list. Never fabricate citations."""
+    
+    return call_llm([
+        {"role": "system", "content": sys_prompt},
+        {"role": "user", "content": f"Query: {query}\nAll Findings:\n{all_findings}"}
+    ], 0.6)
 
-Now answer the user's query using ONLY the search results above. Cite sources with URLs."""
-    messages.append({"role": "user", "content": enhanced_user_msg})
+# ===  Gradio Interface Logic ===
 
-    logging.info("Sending to LLM...")
-    response = client.chat.completions.create(
-        model="openai/gpt-3.5-turbo",
-        messages=messages
-    )
-    result = response.choices[0].message.content.strip()
+def deep_research_agent(user_query: str, history: list):
+    """Main Agentic Loop with Streaming Updates."""
+    if not user_query or not user_query.strip():
+        history.append({"role": "assistant", "content": "⚠️ Please enter a research question."})
+        yield history
+        return
 
-    # Output sanitization
-    result = re.sub(r'<(script|iframe|object|embed)[^>]*>.*?</\\1>', '', result, flags=re.IGNORECASE|re.DOTALL)
-    if len(result) > 3000:
-        result = result[:3000] + "... [output truncated]"
+    # 1. Add User Message
+    history.append({"role": "user", "content": user_query})
+    yield history
+    
+    # 2. Start Agent Response
+    history.append({"role": "assistant", "content": "🚀 **Initializing Agentic Deep Research...**\n"})
+    yield history
 
-    logging.info("LLM response received.")
-    return result
+    all_findings = ""
+    all_urls = []
+    iteration = 0
+    max_iterations = 3
+    satisfied = False
+    
+    # 3. Initial Plan
+    history[-1]["content"] += "\n **Phase 1: Planning**\n"
+    yield history
+    queries = plan_initial(user_query)
+    history[-1]["content"] += f" Initial plan: {len(queries)} queries.\n"
+    for i, q in enumerate(queries, 1): history[-1]["content"] += f"   {i}. {q}\n"
+    yield history
 
-# === 🚀 MAIN / CLI / GRADIO ===
-def main():
-    print("Welcome to the Deep Research App (OpenRouter + Live Web Search)")
-    print("Type your research question (or 'quit' to exit):")
-    while True:
-        user_input = input("You: ").strip()
-        if user_input.lower() in {"quit", "exit"}:
-            print("Goodbye!")
-            break
-        print("AI:", research_chat(user_input, []))
+    # 4. Agentic Loop: Search → Reflect → Refine
+    while iteration < max_iterations and not satisfied:
+        iteration += 1
+        history[-1]["content"] += f"\n **Iteration {iteration}/{max_iterations}**\n"
+        yield history
+
+        # A. Execute Search
+        history[-1]["content"] += "🔍 Searching web...\n"
+        yield history
+        findings_text, urls_found = execute_searches(queries)
+        all_findings += findings_text
+        all_urls.extend(urls_found)
+        history[-1]["content"] += f" Retrieved data from {len(urls_found)} sources.\n"
+        yield history
+
+        # B. Reflect & Critique
+        history[-1]["content"] += " Auditing findings for gaps...\n"
+        yield history
+        critique = reflect_and_refine(user_query, all_findings)
+        
+        if critique["satisfied"]:
+            satisfied = True
+            history[-1]["content"] += " **Audit Passed**: Findings are comprehensive. Proceeding to synthesis.\n"
+        else:
+            history[-1]["content"] += f" **Audit Failed**: {critique['missing_info']}\n"
+            history[-1]["content"] += f" Generating {len(critique['new_queries'])} refined queries...\n"
+            queries = critique["new_queries"]
+            for i, q in enumerate(queries, 1): history[-1]["content"] += f"   {i}. {q}\n"
+        yield history
+
+    # 5. Synthesize
+    history[-1]["content"] += "\n **Synthesizing Final Report**...\n"
+    yield history
+    
+    report = synthesize_report(user_query, all_findings, all_urls)
+    history[-1]["content"] = report
+    yield history
+
+def respond(message, history):
+    if history is None: history = []
+    for update in deep_research_agent(message, history):
+        yield update
+
+# === 🚀 Launch ===
+def find_free_port(start=7860):
+    for p in range(start, start+10):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            if s.connect_ex(('127.0.0.1', p)) != 0: return p
+    return 7860
 
 if __name__ == "__main__":
-    import sys
-    if len(sys.argv) > 1 and sys.argv[1] == "cli":
-        main()
-    else:
-        gr.ChatInterface(
-            research_chat,
-            title="Deep Research App (Live Web Search)",
-            description="Ask research questions and get detailed, cited answers from live internet sources."
-        ).launch()
+    PORT = find_free_port()
+    print(f"\n Agentic Deep Research Agent v3.0")
+    print(f" http://127.0.0.1:{PORT}\n")
+    
+    with gr.Blocks() as demo:
+        gr.Markdown("# 🕵️‍♂️ Agentic Deep Research v3.0")
+        gr.Markdown("✨ **True Agentic Loop**: Plan → Search → **Self-Correct** → Synthesize")
+        
+        chatbot = gr.Chatbot(label="Research Report", height=700)
+        msg = gr.Textbox(label="Query", placeholder="Try: 'Compare economic impacts of AI vs Robotics on global supply chains'", lines=2)
+        
+        with gr.Row():
+            submit = gr.Button("🚀 Start Deep Research", variant="primary")
+            clear = gr.ClearButton([msg, chatbot])
+        
+        msg.submit(respond, [msg, chatbot], [chatbot])
+        submit.click(respond, [msg, chatbot], [chatbot])
+    
+    demo.launch(server_name="127.0.0.1", server_port=PORT)
