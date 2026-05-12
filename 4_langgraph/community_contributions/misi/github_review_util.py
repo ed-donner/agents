@@ -70,7 +70,7 @@ def parse_pr_reference(
         return {"owner": owner, "repo": repo, "number": int(number)}
 
     number_match = re.search(
-        r"\b(?:pr|pull request|pull)\s*#?\s*(\d+)\b",
+        r"\b(?:pr|pull request|pull)(?:\s+(?:number|no\.?))?\s*(?:is|:)?\s*#?\s*(\d+)\b",
         text,
         re.IGNORECASE,
     )
@@ -239,20 +239,35 @@ def format_pr_context(
     ).strip()
 
 
-def latest_user_text(messages: List[Any]) -> str:
-    for message in reversed(messages):
+def user_texts(messages: List[Any]) -> List[str]:
+    texts = []
+    for message in messages:
         if isinstance(message, HumanMessage):
-            return message.content
-        if isinstance(message, dict) and message.get("role") == "user":
-            return message.get("content", "")
-    return ""
+            texts.append(message.content)
+        elif isinstance(message, dict) and message.get("role") == "user":
+            texts.append(message.get("content", ""))
+    return texts
+
+
+def resolve_pr_reference(state: PRReviewState) -> Dict[str, Any]:
+    for text in reversed(user_texts(state["messages"])):
+        try:
+            return parse_pr_reference(text)
+        except ValueError:
+            continue
+
+    if state.get("pr_reference"):
+        return state["pr_reference"]
+
+    raise ValueError(
+        "Please mention the pull request in the chat, for example a PR URL, "
+        "owner/repo#123, or PR 123 when GITHUB_REPOSITORY is set."
+    )
 
 
 def fetch_pr_context(state: PRReviewState) -> Dict[str, Any]:
-    user_text = latest_user_text(state["messages"])
-
     try:
-        reference = parse_pr_reference(user_text)
+        reference = resolve_pr_reference(state)
         repository = get_github_repository(reference["owner"], reference["repo"])
         metadata = fetch_pull_request_metadata(repository, reference["number"])
         files = list_pull_request_files(repository, reference["number"])
