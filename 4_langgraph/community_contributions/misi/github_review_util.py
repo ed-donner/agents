@@ -8,7 +8,6 @@ from pathlib import Path
 from typing import Annotated, Any, Dict, List, Optional, TypedDict
 
 from dotenv import load_dotenv
-from langchain_community.utilities.github import GitHubAPIWrapper
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
@@ -90,8 +89,19 @@ def parse_pr_reference(
 
 
 def get_github_repository(owner: str, repo: str):
-    github = GitHubAPIWrapper()
-    return github.github.get_repo(f"{owner}/{repo}")
+    token = os.getenv("GITHUB_TOKEN", "").strip()
+    if not token:
+        raise ValueError("Please set GITHUB_TOKEN to a GitHub Personal Access Token.")
+
+    try:
+        from github import Auth, Github
+    except ImportError as exc:
+        raise ImportError(
+            "PyGithub is not installed. Please install it with `pip install PyGithub`."
+        ) from exc
+
+    github = Github(auth=Auth.Token(token))
+    return github.get_repo(f"{owner}/{repo}")
 
 
 def fetch_pull_request_metadata(repository, pr_number: int) -> Dict[str, Any]:

@@ -99,38 +99,38 @@ export OPENAI_SUPERVISOR_MODEL="gpt-5.4-mini"
 GitHub settings:
 
 ```sh
-export GITHUB_APP_ID="your-app-id"
-export GITHUB_APP_PRIVATE_KEY="/path/to/private-key.pem"
+export GITHUB_TOKEN="github_pat_or_classic_pat"
 export GITHUB_REPOSITORY="owner/repo"
 ```
 
 `GITHUB_REPOSITORY` is optional when the chat message includes a full URL or
 `owner/repo#number`. It is required for short references like `PR 123`.
 
-## GitHub App Setup
+## GitHub PAT Setup
 
-Create a GitHub App at:
+Create a GitHub Personal Access Token at:
 
 ```text
-https://github.com/settings/apps
+https://github.com/settings/tokens
 ```
 
-Minimum repository permissions for read-only review:
+For a fine-grained token, grant access to the repository you want to review and
+use read-only permissions:
 
 - Contents: Read-only
 - Metadata: Read-only
 - Pull requests: Read-only
 - Issues: Read-only
 
-After creating the app:
+For a classic token against a private repository, the `repo` scope is usually
+enough.
 
-1. Generate and download a private key.
-2. Copy the app ID into `GITHUB_APP_ID`.
-3. Set `GITHUB_APP_PRIVATE_KEY` to the `.pem` file path or to the key content.
-4. Install the app on the repository you want to review.
-5. Set `GITHUB_REPOSITORY` to `owner/repo` if you want to use short PR numbers.
+After creating the token:
 
-Never commit `.env` files or private keys.
+1. Set `GITHUB_TOKEN` to the token value.
+2. Set `GITHUB_REPOSITORY` to `owner/repo` if you want to use short PR numbers.
+
+Never commit `.env` files or tokens.
 
 ## Dependencies
 
@@ -139,7 +139,6 @@ The repo already declares the relevant packages in `pyproject.toml` and
 
 - `gradio`
 - `langgraph`
-- `langchain-community`
 - `langchain-openai`
 - `pygithub`
 - `python-dotenv`
