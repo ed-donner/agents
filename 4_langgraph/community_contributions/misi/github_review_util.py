@@ -24,6 +24,7 @@ class PRReviewState(TypedDict, total=False):
     comments: List[Dict[str, str]]
     review_context: str
     review: str
+    supervised_review: str
     error: Optional[str]
 
 
@@ -47,6 +48,10 @@ def default_repository() -> str:
 
 def default_model() -> str:
     return os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+
+
+def default_supervisor_model() -> str:
+    return os.getenv("OPENAI_SUPERVISOR_MODEL", "gpt-5.4-mini")
 
 
 def parse_pr_reference(
@@ -128,7 +133,10 @@ def list_pull_request_files(
         patch_truncated = False
 
         if len(patch) > max_patch_chars_per_file:
-            patch = patch[:max_patch_chars_per_file] + "\n...[patch truncated for this file]"
+            patch = (
+                patch[:max_patch_chars_per_file]
+                + "\n...[patch truncated for this file]"
+            )
             patch_truncated = True
 
         if total_patch_chars + len(patch) > max_total_patch_chars:
@@ -197,11 +205,14 @@ def format_pr_context(
         for item in files
     )
 
-    comment_summary = "\n\n".join(
-        f"[{item.get('kind', 'comment')}] {item.get('author', 'unknown')}"
-        f"{(' on ' + item['path']) if item.get('path') else ''}:\n{item.get('body', '')}"
-        for item in comments
-    ) or "No existing PR comments were loaded."
+    comment_summary = (
+        "\n\n".join(
+            f"[{item.get('kind', 'comment')}] {item.get('author', 'unknown')}"
+            f"{(' on ' + item['path']) if item.get('path') else ''}:\n{item.get('body', '')}"
+            for item in comments
+        )
+        or "No existing PR comments were loaded."
+    )
 
     patches = []
     for item in files:
@@ -212,8 +223,7 @@ def format_pr_context(
             f"```diff\n{patch}\n```"
         )
 
-    return textwrap.dedent(
-        f"""
+    return textwrap.dedent(f"""
         Repository: {reference['owner']}/{reference['repo']}
         Pull request: #{metadata['number']}
         URL: {metadata['url']}
@@ -235,8 +245,7 @@ def format_pr_context(
 
         Patches:
         {chr(10).join(patches)}
-        """
-    ).strip()
+        """).strip()
 
 
 def user_texts(messages: List[Any]) -> List[str]:
@@ -284,10 +293,16 @@ def fetch_pr_context(state: PRReviewState) -> Dict[str, Any]:
         }
     except Exception as exc:
         message = f"Could not load pull request context: {exc}"
-        return {"error": message, "review": message, "messages": [AIMessage(content=message)]}
+        return {
+            "error": message,
+            "review": message,
+            "messages": [AIMessage(content=message)],
+        }
 
 
-def review_pull_request(state: PRReviewState, model: Optional[str] = None) -> Dict[str, Any]:
+def review_pull_request(
+    state: PRReviewState, model: Optional[str] = None
+) -> Dict[str, Any]:
     reviewer_llm = ChatOpenAI(model=model or default_model(), temperature=0)
     system_prompt = """
 You are a senior engineer doing a GitHub pull request review.
@@ -310,12 +325,67 @@ Review this pull request.
     return {"review": response.content, "messages": [response]}
 
 
+def supervise_review(
+    state: PRReviewState, model: Optional[str] = None
+) -> Dict[str, Any]:
+    supervisor_llm = ChatOpenAI(
+        model=model or default_supervisor_model(), temperature=0
+    )
+    system_prompt = """
+You are a senior pull request review supervisor.
+Use only the provided PR metadata, comments, filenames, patches, and reviewer output.
+Validate every concrete finding from the reviewer against the PR context.
+
+Return the same review format as the reviewer output. Do not rewrite it into a
+separate supervisor report. Preserve the original headings, finding order,
+severity labels, paths, evidence, residual risks, and overall structure as much
+as possible.
+
+For each reviewer finding, add the supervisor decision as the first bullet point
+inside that finding:
+- <span style="color: #15803d; font-weight: 700;">Verified</span> if the PR
+  context supports the finding.
+- <span style="color: #dc2626; font-weight: 700;">False positive</span> if the
+  PR context does not support the finding or the claim is speculative.
+
+After the status bullet, keep the rest of the finding in the same style as the
+reviewer output. Add only a brief validation note when it is needed to explain
+why the status is Verified or False positive. If the reviewer found no issues,
+preserve that no-issues summary and do not invent findings.
+
+If a finding is marked False positive, remove any Recommendation bullet from
+that finding. Add a bold validation note bullet instead, for example:
+- **Validation note:** The PR context does not show ...
+""".strip()
+
+    user_prompt = f"""
+PR context:
+
+{state['review_context']}
+
+Reviewer output:
+
+{state.get('review', '')}
+""".strip()
+
+    response = supervisor_llm.invoke(
+        [SystemMessage(content=system_prompt), HumanMessage(content=user_prompt)]
+    )
+    return {
+        "supervised_review": response.content,
+        "review": response.content,
+        "messages": [response],
+    }
+
+
 def route_after_fetch(state: PRReviewState) -> str:
     return "finish" if state.get("error") else "review"
 
 
 def build_review_graph(
     model: Optional[str] = None,
+    use_supervisor: bool = False,
+    supervisor_model: Optional[str] = None,
     env_path: Optional[str | Path] = None,
 ):
     load_review_environment(env_path)
@@ -323,9 +393,14 @@ def build_review_graph(
     def review_node(state: PRReviewState) -> Dict[str, Any]:
         return review_pull_request(state, model=model)
 
+    def supervisor_node(state: PRReviewState) -> Dict[str, Any]:
+        return supervise_review(state, model=supervisor_model)
+
     graph_builder = StateGraph(PRReviewState)
     graph_builder.add_node("fetch_pr_context", fetch_pr_context)
     graph_builder.add_node("review_pull_request", review_node)
+    if use_supervisor:
+        graph_builder.add_node("supervise_review", supervisor_node)
 
     graph_builder.add_edge(START, "fetch_pr_context")
     graph_builder.add_conditional_edges(
@@ -333,7 +408,11 @@ def build_review_graph(
         route_after_fetch,
         {"review": "review_pull_request", "finish": END},
     )
-    graph_builder.add_edge("review_pull_request", END)
+    if use_supervisor:
+        graph_builder.add_edge("review_pull_request", "supervise_review")
+        graph_builder.add_edge("supervise_review", END)
+    else:
+        graph_builder.add_edge("review_pull_request", END)
 
     return graph_builder.compile(checkpointer=MemorySaver())
 

@@ -1,75 +1,195 @@
-# Setup GitHubToolkit
-https://reference.langchain.com/python/langchain-community/agent_toolkits/github/toolkit/GitHubToolkit
+# GitHub PR Reviewer
 
-```sh
-pip install -U pygithub
-export GITHUB_APP_ID="your-app-id"
-export GITHUB_APP_PRIVATE_KEY="path-to-private-key"
-export GITHUB_REPOSITORY="your-github-repository"
+This folder contains a LangGraph-based GitHub pull request reviewer with a
+Gradio chat UI.
+
+Files:
+
+- `github_review.ipynb` starts the notebook UI, draws the normal and supervised
+  graphs, and launches Gradio.
+- `github_review_util.py` contains the GitHub loading logic, PR-reference
+  parser, LangGraph state, review node, optional supervisor node, and helper
+  functions.
+
+## What It Does
+
+The app reviews a GitHub pull request from chat. You can mention the PR as:
+
+```text
+Review PR 123
+Review owner/repo#123
+Review https://github.com/owner/repo/pull/123
 ```
 
----
-## Install pygithub
-`uv add pygithub` - it will add to the existing packages changing uv.lock and project.toml files
----
+If you only provide a PR number, `GITHUB_REPOSITORY` must be set to
+`owner/repo`.
 
-## How to Create a GitHub App for Langchain GitHubToolkit (for Private Repos)
+The graph loads:
 
-1. **Go to GitHub Developer Settings**
-   - Visit: https://github.com/settings/apps
-   - Click **"New GitHub App"**.
+- PR metadata
+- changed files and patches
+- issue comments
+- review comments
 
-2. **Fill Out GitHub App Details**
-   - **App name:** Choose a unique name (e.g., “Langchain Toolkit App”).
-   - **Homepage URL:** You can use your project’s homepage or your repo URL (e.g., https://github.com/mihaly-hazag/test-repo).
-   - **Description:** (Optional) e.g., “App for Langchain GitHubToolkit integration.”
-   - **User or Organization:** Choose your user or organization account.
-   - **Webhook URL:** Leave blank unless you need webhooks.
-   - **Webhook secret:** Leave blank unless you need webhooks.
+Then the reviewer model produces a code-review style response focused on
+correctness, regressions, security, data loss, and missing-test risks.
 
-3. **Set Permissions**
-   - Under **Repository permissions**, set the following (minimum for read access):
-     - **Contents:** Read-only (or Read & write if you need to push)
-     - **Metadata:** Read-only
-     - **Pull requests:** Read-only (or Read & write if you need to create PRs)
-     - **Issues:** Read-only (or Read & write if you need to create issues)
-   - Add other permissions as needed for your use case.
+## Graph Workflows
 
-4. **Subscribe to Events (Optional)**
-   - If you want to receive webhook events, select the events you need (optional for Langchain).
+Default workflow:
 
-5. **Where Can This GitHub App Be Installed?**
-   - Choose “Any account” (default).
+```text
+START -> fetch_pr_context -> review_pull_request -> END
+```
 
-6. **Create the App**
-   - Click **"Create GitHub App"** at the bottom.
+Supervised workflow:
 
-7. **Generate and Download the Private Key**
-   - After creation, scroll down to **"Private keys"**.
-   - Click **"Generate a private key"**.
-   - Download the `.pem` file. This is your **GITHUB_APP_PRIVATE_KEY** (the file path or its contents).
+```text
+START -> fetch_pr_context -> review_pull_request -> supervise_review -> END
+```
 
-8. **Get the App ID**
-   - On the app’s page, you’ll see **App ID** (a number). This is your **GITHUB_APP_ID**.
+The Gradio UI has a visible `Use supervisor` checkbox under the title. When it
+is unchecked, the app uses the default workflow. When it is checked, the app uses
+the supervised workflow.
 
-9. **Install the App on Your Private Repository**
-   - On the app’s page, click **"Install App"** (right sidebar).
-   - Choose your account/organization.
-   - Select the private repository (or all repositories) you want the app to access.
-   - Complete the installation.
+## Supervisor Mode
 
-10. **Set Up Environment Variables**
-   - In your `.env` file:
-     - `GITHUB_APP_ID="your-app-id"` (replace with the number from step 8)
-     - `GITHUB_APP_PRIVATE_KEY="path-to-private-key"` (or paste the contents, but keep formatting)
+The supervisor uses a stronger model by default and validates each concrete
+finding from the reviewer against the same PR context.
 
-11. **(Optional) Get Installation ID**
-   - Some APIs require the installation ID. You can find it in the URL after installing the app, or via the GitHub API.
+For each finding, the supervisor keeps the normal review format and adds the
+first bullet inside the finding:
 
-### Security Tips
-- Never share your private key.
-- Store the `.pem` file securely.
-- Do not commit your `.env` file or private key to version control.
+```html
+<span style="color: #15803d; font-weight: 700;">Verified</span>
+```
 
----
+or:
 
+```html
+<span style="color: #dc2626; font-weight: 700;">False positive</span>
+```
+
+If a finding is marked `False positive`, the supervisor is instructed to remove
+the `Recommendation` bullet and add a bold validation note instead:
+
+```markdown
+- **Validation note:** The PR context does not show ...
+```
+
+## Environment
+
+The notebook calls `load_review_environment()`, which looks for `.env` in the
+current working directory and then walks upward from this folder. You can also
+set these variables in your shell.
+
+Required OpenAI setting:
+
+```sh
+export OPENAI_API_KEY="your-openai-api-key"
+```
+
+Optional model settings:
+
+```sh
+export OPENAI_MODEL="gpt-4o-mini"
+export OPENAI_SUPERVISOR_MODEL="gpt-5.4-mini"
+```
+
+GitHub settings:
+
+```sh
+export GITHUB_APP_ID="your-app-id"
+export GITHUB_APP_PRIVATE_KEY="/path/to/private-key.pem"
+export GITHUB_REPOSITORY="owner/repo"
+```
+
+`GITHUB_REPOSITORY` is optional when the chat message includes a full URL or
+`owner/repo#number`. It is required for short references like `PR 123`.
+
+## GitHub App Setup
+
+Create a GitHub App at:
+
+```text
+https://github.com/settings/apps
+```
+
+Minimum repository permissions for read-only review:
+
+- Contents: Read-only
+- Metadata: Read-only
+- Pull requests: Read-only
+- Issues: Read-only
+
+After creating the app:
+
+1. Generate and download a private key.
+2. Copy the app ID into `GITHUB_APP_ID`.
+3. Set `GITHUB_APP_PRIVATE_KEY` to the `.pem` file path or to the key content.
+4. Install the app on the repository you want to review.
+5. Set `GITHUB_REPOSITORY` to `owner/repo` if you want to use short PR numbers.
+
+Never commit `.env` files or private keys.
+
+## Dependencies
+
+The repo already declares the relevant packages in `pyproject.toml` and
+`requirements.txt`, including:
+
+- `gradio`
+- `langgraph`
+- `langchain-community`
+- `langchain-openai`
+- `pygithub`
+- `python-dotenv`
+
+If dependencies need to be installed through `uv`, run from the repo root:
+
+```sh
+uv sync
+```
+
+## Running
+
+Open and run:
+
+```text
+4_langgraph/community_contributions/misi/github_review.ipynb
+```
+
+The notebook:
+
+1. imports `github_review_util.py`
+2. loads environment variables
+3. builds the normal review graph
+4. builds the supervised review graph
+5. displays graph diagrams
+6. launches the Gradio chat UI
+
+In the Gradio chat, type a PR reference in the conversation and ask for a review.
+For example:
+
+```text
+The PR number is 123. Please review it.
+```
+
+or:
+
+```text
+Please review owner/repo#123 with the supervisor.
+```
+
+The checkbox controls whether the supervisor graph is used; the chat text is not
+used to toggle supervisor mode.
+
+## Implementation Notes
+
+- `MemorySaver` is used as the LangGraph checkpointer.
+- Each Gradio request uses a fresh thread config.
+- The notebook sends the full visible chat history into the graph, so a PR
+  reference mentioned earlier in the conversation can still be resolved.
+- File patches are truncated per file and across the whole PR context to keep
+  the prompt bounded.
+- The reviewer and supervisor both use only the loaded PR context; they are not
+  instructed to browse GitHub independently.
