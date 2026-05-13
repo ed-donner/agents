@@ -1,0 +1,7 @@
+coding_task:
+  description: >
+    Use your sandbox tools to write and run python code to achieve this: {assignment}
+  expected_output: >
+    A summary of what you did to achieve the assignment and the final result.
+  agent: coder
+  output_file: output/solution.md
