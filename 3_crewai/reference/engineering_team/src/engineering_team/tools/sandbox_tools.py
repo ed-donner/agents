@@ -1,10 +1,21 @@
 from crewai.tools import tool
 from pathlib import Path
+import shutil
 import subprocess
 
 
 SANDBOX_DIR = Path(__file__).parents[3] / "sandbox"
 SANDBOX_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def reset_sandbox() -> None:
+    """Wipe the sandbox and re-initialize it as a fresh uv project with gradio."""
+    if SANDBOX_DIR.exists():
+        shutil.rmtree(SANDBOX_DIR)
+    SANDBOX_DIR.mkdir(parents=True)
+
+    subprocess.run(["uv", "init", "--bare", "--python", "3.13"], cwd=SANDBOX_DIR, check=True)
+    subprocess.run(["uv", "add", "gradio"], cwd=SANDBOX_DIR, check=True)
 
 @tool("List Sandbox Files")
 def list_sandbox_files() -> str:
@@ -57,6 +68,7 @@ def run_sandbox_python(filename: str) -> str:
     """
     Execute a Python file from the sandbox directory inside an ephemeral
     Docker container, with the sandbox mounted as the working directory,
+    using a uv run to run the code in the uv project,
     and return whatever the script printed to stdout.
 
     Args:
@@ -69,12 +81,12 @@ def run_sandbox_python(filename: str) -> str:
             "docker", "run", "--rm",
             "-v", f"{SANDBOX_DIR}:/workspace",
             "-w", "/workspace",
-            "python:3.13-slim",
-            "python", filename,
+            "ghcr.io/astral-sh/uv:python3.13-bookworm-slim",
+            "uv", "run", "python", filename,
         ],
         capture_output=True,
         text=True,
-        timeout=60,
+        timeout=300,
     )
     return result.stdout
 

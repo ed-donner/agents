@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import sys
 import warnings
-
 from datetime import datetime
 
+import engineering_team.patch  # noqa: F401 — applies CrewAI MCP monkey-patch on import
 from engineering_team.crew import EngineeringTeam
+from engineering_team.tools.sandbox_tools import reset_sandbox
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
@@ -36,6 +37,7 @@ def run():
     }
 
     try:
+        reset_sandbox()
         EngineeringTeam().crew().kickoff(inputs=inputs)
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")

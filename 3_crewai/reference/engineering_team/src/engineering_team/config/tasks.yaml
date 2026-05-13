@@ -9,6 +9,7 @@ design_task:
     The frontend_engineer should make a gradio app.
     The test_engineer should write unit tests for the backend module.
     All engineers will be working in the same sandbox directory. There is no directory structure, all files are in the same directory.
+    Everything runs in a uv project with gradio installed.
   expected_output: >
     A detailed design to achieve the requirements, identifying code structure, and assignments to the engineers.
   agent: engineering_lead
@@ -29,11 +30,12 @@ frontend_task:
   description: >
     Write a gradio UI in a module app.py that demonstrates the backend code, as described in the design.
     Assume there is only 1 user, and have the UI be professional, polished, clean.
+    Then write a separate validation script (e.g. _validate.py) that imports app.py and confirms the Blocks object constructs without error, and run it via your sandbox tools.
+    IMPORTANT: the validation script must NOT call `.launch()` — that would block until timeout. Just import and instantiate.
     Here are the requirements: {requirements}
   expected_output: >
     A gradio UI in module app.py written to the sandbox that demonstrates the functionality.
     The file should be ready so that it can be run as-is, in the same sandbox directory as the backend code.
-    Assume that you can import gradio.
     IMPORTANT: Use your sandbox tools to write and check the code.
   agent: frontend_engineer
   context:
@@ -41,11 +43,12 @@ frontend_task:
 
 test_task:
   description: >
-    Write unit tests for all python files in the sandbox directory, in a single test file.
-    Fix any errors in the code so that the unit tests pass.
+    Write unit tests for the backend module, in a single test file, using the stdlib `unittest` module.
+    Do not write tests for app.py (the gradio frontend).
+    Fix any errors in the backend code so that the unit tests pass.
     Keep working until all unit tests pass.
   expected_output: >
-    A test file that can be run to test all the python files in the sandbox directory.
+    A single test file that can be run to test the backend module.
     IMPORTANT: Use your sandbox tools to write and run the unit tests.
     Output a summary of the results of the unit tests.
   agent: test_engineer

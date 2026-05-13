@@ -61,6 +61,7 @@ class EngineeringTeam():
     def frontend_task(self) -> Task:
         return Task(
             config=self.tasks_config['frontend_task'],
+            mcps=["https://mcp.context7.com/mcp"]
         )
 
     @task
