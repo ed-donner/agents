@@ -1,0 +1,41 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Foundations Chat (1_foundations)",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["1_foundations/app.py"],
+      "port": 7860
+    },
+    {
+      "name": "LangGraph Sidekick (4_langgraph)",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["4_langgraph/app.py"],
+      "port": 7861
+    },
+    {
+      "name": "Trading Floor Dashboard (6_mcp)",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["6_mcp/app.py"],
+      "port": 7862
+    },
+    {
+      "name": "MCP Accounts Server (6_mcp)",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["6_mcp/accounts_server.py"],
+      "port": 0
+    },
+    {
+      "name": "MCP Market Server (6_mcp)",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["6_mcp/market_server.py"],
+      "port": 0
+    },
+    {
+      "name": "MCP Push Server (6_mcp)",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["6_mcp/push_server.py"],
+      "port": 0
+    }
+  ]
+}
