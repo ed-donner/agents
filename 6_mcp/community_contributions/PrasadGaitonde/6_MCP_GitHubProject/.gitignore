@@ -1,0 +1,46 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data / Dependencies
+node_modules/
+jspm_packages/
+pnpm-store/
+.pnpm-debug.log*
+
+# Environments and Secrets (NEVER commit these!)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build outputs
+dist/
+build/
+out/
+
+# Python compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# System Files
+.DS_Store
+Thumbs.db
+uv.lock
+.uvlock
+*.uvlock

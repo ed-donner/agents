@@ -28,9 +28,9 @@ class GitHubClientBridge:
             stdio_transport = await self._exit_stack.enter_async_context(stdio_client(self.server_params))
             self.session = await self._exit_stack.enter_async_context(ClientSession(stdio_transport[0], stdio_transport[1]))
             await self.session.initialize()
-            write_log("github_agent", "info", "Successfully connected to GitHub MCP server")
+            self.tracer.info("Successfully connected to GitHub MCP server")
         except Exception as e:
-            write_log("github_agent", "error", f"Failed to connect to GitHub MCP server: {e}")
+            self.tracer.error(f"Failed to connect to GitHub MCP server: {e}")
             raise
 
     async def disconnect(self):
@@ -70,10 +70,10 @@ class GitHubClientBridge:
         try:
             resource = await self.session.read_resource(uri)
             content = resource.content[0].text if resource.content else ""
-            write_log("github_agent", "resource", f"Read resource {uri}: {content[:100]}...")
+            self.tracer.resource(uri, content)
             return content
         except Exception as e:
-            write_log("github_agent", "error", f"Error reading resource {uri}: {e}")
+            self.tracer.error(f"Error reading resource {uri}: {e}")
             raise
 
     async def execute_tool(self, tool_name: str, arguments: dict) -> Any:
@@ -87,10 +87,10 @@ class GitHubClientBridge:
         try:
             result = await self.session.call_tool(tool_name, arguments)
             text_result = result.content[0].text if result.content else ""
-            write_log("github_agent", "tool", f"Executed {tool_name} with args {arguments}: {text_result[:100]}...")
+            self.tracer.tool(tool_name, arguments, text_result)
             return text_result
         except Exception as e:
-            write_log("github_agent", "error", f"Error executing tool {tool_name}: {e}")
+            self.tracer.error(f"Error executing tool {tool_name}: {e}")
             raise
 
 # Singleton for easy access
