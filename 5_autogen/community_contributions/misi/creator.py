@@ -8,8 +8,14 @@ import importlib
 import logging
 from autogen_core import AgentId
 from dotenv import load_dotenv
+from pathlib import Path
+import sys
 
 load_dotenv(override=True)
+
+BASE_DIR = Path(__file__).resolve().parent
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(TRACE_LOGGER_NAME)
@@ -44,20 +50,21 @@ class Creator(RoutedAgent):
             Respond only with the python code, no other text, and no markdown code blocks.\n\n\
             Be creative about taking the agent in a new direction, but don't change method signatures.\n\n\
             Here is the template:\n\n"
-        with open("agent.py", "r", encoding="utf-8") as f:
+        with open(BASE_DIR / "agent.py", "r", encoding="utf-8") as f:
             template = f.read()
         return prompt + template   
         
 
     @message_handler
     async def handle_my_message_type(self, message: messages.Message, ctx: MessageContext) -> messages.Message:
-        filename = message.content
-        agent_name = filename.split(".")[0]
+        output_path = BASE_DIR / Path(message.content).name
+        agent_name = output_path.stem
         text_message = TextMessage(content=self.get_user_prompt(), source="user")
         response = await self._delegate.on_messages([text_message], ctx.cancellation_token)
-        with open(filename, "w", encoding="utf-8") as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             f.write(response.chat_message.content)
         print(f"** Creator has created python code for agent {agent_name} - about to register with Runtime")
+        importlib.invalidate_caches()
         module = importlib.import_module(agent_name)
         await module.Agent.register(self.runtime, agent_name, lambda: module.Agent(agent_name))
         logger.info(f"** Agent {agent_name} is live")
