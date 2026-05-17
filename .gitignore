@@ -1,3 +1,7 @@
+#Custom added .gitignore for agents project
+.env
+.venv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
