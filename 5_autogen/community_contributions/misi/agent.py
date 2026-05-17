@@ -22,7 +22,7 @@ class Agent(RoutedAgent):
     You should respond with your business ideas in an engaging and clear way.
     """
 
-    CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER = 0.5
+    CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER = 1.0
 
     # You can also change the code to make the behavior different, but be careful to keep method signatures the same
 
@@ -37,8 +37,11 @@ class Agent(RoutedAgent):
         text_message = TextMessage(content=message.content, source="user")
         response = await self._delegate.on_messages([text_message], ctx.cancellation_token)
         idea = response.chat_message.content
-        if random.random() < self.CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER:
-            recipient = messages.find_recipient()
+        should_collaborate = message.content.strip().lower().startswith("give me an idea")
+        if should_collaborate and random.random() < self.CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER:
+            recipient = messages.find_recipient(exclude=self.id.type)
+            if recipient is None:
+                return messages.Message(content=idea)
             message = f"Here is my business idea. It may not be your speciality, but please refine it and make it better. {idea}"
             response = await self.send_message(messages.Message(content=message), recipient)
             idea = response.content

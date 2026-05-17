@@ -1,0 +1,31 @@
+# Dynamic AutoGen Agent Creation
+
+This contribution explores AutoGen's dynamic runtime behavior by having one agent create, register, and message other agents.
+
+## What Changed
+
+- `creator.py` defines a `Creator` agent that asks an AgentChat assistant to write a new Python module.
+- Each generated module defines an `Agent` class that inherits from AutoGen Core `RoutedAgent` and wraps an AutoGen AgentChat `AssistantAgent`.
+- The Creator writes each generated module beside the template, imports or reloads it, and registers the new `Agent` type with the distributed gRPC runtime.
+- `messages.py` now tracks the names of agents that have actually been registered, so created agents can select live peers by name.
+- `agent.py` keeps the collaboration behavior in the template: agents create a commercial business idea for Agents, then ask one registered peer to refine it.
+- `CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER` was changed from `0.5` to `1.0` so the demo reliably shows created agents messaging each other whenever a registered peer exists.
+
+## Why
+
+The goal is to demonstrate that AutoGen agents do not need to be fully known ahead of time. A running `Creator` agent can produce Python code, load that code as a module, register the new agent with the runtime, and immediately send messages to it.
+
+The registered-agent list avoids choosing peers just because a matching `agent*.py` file exists. That matters because a file can exist before its agent has been registered with the runtime. The template also limits peer refinement to the initial idea request, so collaboration produces a single handoff instead of an endless message loop.
+
+The collaboration probability is deliberately `1.0` rather than `0.5`. With `0.5`, a run could create agents but skip peer messaging by chance, which makes the main demonstration less clear. The initial-request guard keeps that deterministic collaboration from becoming an infinite back-and-forth between agents.
+
+## Main Flow
+
+1. `world.py` starts a distributed gRPC runtime.
+2. `world.py` registers the `Creator` agent.
+3. The Creator receives filenames such as `agent1.py`.
+4. The Creator generates Python code from the `agent.py` template.
+5. The Creator writes, imports, and registers the new module's `Agent` class.
+6. The new agent generates a commercial Agentic AI business idea.
+7. If another created agent is registered, it refines the idea by name.
+8. `world.py` saves the resulting idea as `ideaN.md`.

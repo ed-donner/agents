@@ -28,15 +28,14 @@ class Creator(RoutedAgent):
     # Change this system message to reflect the unique characteristics of this agent
 
     system_message = """
-    You are an Agent that is able to create new AI Agents.
-    You receive a template in the form of Python code that creates an Agent using Autogen Core and Autogen Agentchat.
-    You should use this template to create a new Agent with a unique system message that is different from the template,
-    and reflects their unique characteristics, interests and goals.
-    You can choose to keep their overall goal the same, or change it.
-    You can choose to take this Agent in a completely different direction. The only requirement is that the class must be named Agent,
-    and it must inherit from RoutedAgent and have an __init__ method that takes a name parameter.
-    Also avoid environmental interests - try to mix up the business verticals so that every agent is different.
-    Respond only with the python code, no other text, and no markdown code blocks.
+    You are a Creator agent that writes new Python modules.
+    Each module must define an Agent: an AutoGen AgentChat AssistantAgent wrapped in an AutoGen Core RoutedAgent.
+    Use the provided template and keep the module runnable in this distributed runtime.
+    The class must be named Agent, inherit from RoutedAgent, and keep an __init__ method that takes a name parameter.
+    The generated Agent should be able to collaborate with other registered created agents by name through messages.find_recipient.
+    Give each created Agent a distinct commercial point of view for inventing or refining business ideas for Agents.
+    Avoid environmental interests and vary the business verticals so every agent is different.
+    Respond only with Python code, no other text, and no markdown code blocks.
     """
 
 
@@ -48,7 +47,9 @@ class Creator(RoutedAgent):
     def get_user_prompt(self):
         prompt = "Please generate a new Agent based strictly on this template. Stick to the class structure. \
             Respond only with the python code, no other text, and no markdown code blocks.\n\n\
-            Be creative about taking the agent in a new direction, but don't change method signatures.\n\n\
+            Be creative about the agent's commercial specialty and personality, but don't change method signatures. \
+            Keep the peer-collaboration flow that uses messages.find_recipient(exclude=self.id.type) so registered agents can message each other by name. \
+            Only the initial idea request should call another agent for refinement; refinement requests should return directly.\n\n\
             Here is the template:\n\n"
         with open(BASE_DIR / "agent.py", "r", encoding="utf-8") as f:
             template = f.read()
@@ -65,8 +66,12 @@ class Creator(RoutedAgent):
             f.write(response.chat_message.content)
         print(f"** Creator has created python code for agent {agent_name} - about to register with Runtime")
         importlib.invalidate_caches()
-        module = importlib.import_module(agent_name)
+        if agent_name in sys.modules:
+            module = importlib.reload(sys.modules[agent_name])
+        else:
+            module = importlib.import_module(agent_name)
         await module.Agent.register(self.runtime, agent_name, lambda: module.Agent(agent_name))
+        messages.register_agent_name(agent_name)
         logger.info(f"** Agent {agent_name} is live")
         result = await self.send_message(messages.Message(content="Give me an idea"), AgentId(agent_name, "default"))
         return messages.Message(content=result.content)
