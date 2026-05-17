@@ -7,6 +7,15 @@ from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 from tracers import LogTracer
 from database import write_log
+from dotenv import load_dotenv
+
+# Path to the .env file in the parent's parent directory
+ENV_PATH = "/home/prasad/projects/agents/.env"
+load_dotenv(ENV_PATH)
+
+# Workaround for the token name in the .env file
+if os.getenv("GITLAB_PERSONAL_ACCESS_TOKEN") and not os.getenv("GITHUB_TOKEN"):
+    os.environ["GITHUB_TOKEN"] = os.getenv("GITLAB_PERSONAL_ACCESS_TOKEN")
 
 # The path to the github_server.py
 SERVER_PATH = os.path.join(os.path.dirname(__file__), "github_server.py")
@@ -17,7 +26,7 @@ class GitHubClientBridge:
         self.server_params = StdioServerParameters(
             command="uv",
             args=["run", SERVER_PATH],
-            env={**os.environ, "GITHUB_TOKEN": os.getenv("GITHUB_TOKEN", "dummy_token")}
+            env={**os.environ}
         )
         self.tracer = LogTracer()
         self._exit_stack = contextlib.AsyncExitStack()
