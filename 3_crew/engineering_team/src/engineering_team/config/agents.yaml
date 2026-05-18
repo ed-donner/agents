@@ -9,7 +9,7 @@ engineering_lead:
     The module should be named {module_name} and the class should be named {class_name}
   backstory: >
     You're a seasoned engineering lead with a knack for writing clear and concise designs.
-  llm: gpt-4o
+  llm: gpt-4o-mini
 
 
 backend_engineer:
