@@ -42,7 +42,7 @@ async def create_agents_with_evolving_creators(worker, creator_id):
 
     for i in range(1, HOW_MANY_AGENTS + 1):
         created = await create_and_message(worker, active_creator_id, i)
-        if created and random.random() < CHANCES_THAT_I_CHANGE_CREATOR:
+        if created and i < HOW_MANY_AGENTS and random.random() < CHANCES_THAT_I_CHANGE_CREATOR:
             active_creator_id = await create_next_creator(worker, active_creator_id, next_creator_number)
             next_creator_number += 1
 

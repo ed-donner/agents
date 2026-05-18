@@ -19,7 +19,10 @@ if str(BASE_DIR) not in sys.path:
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(TRACE_LOGGER_NAME)
-logger.addHandler(logging.StreamHandler())
+if not any(getattr(handler, "name", None) == "misi_creator_trace_handler" for handler in logger.handlers):
+    handler = logging.StreamHandler()
+    handler.set_name("misi_creator_trace_handler")
+    logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
 
