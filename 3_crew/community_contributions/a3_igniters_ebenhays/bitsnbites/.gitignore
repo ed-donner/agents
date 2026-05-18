@@ -1,0 +1,7 @@
+.env
+__pycache__/
+.DS_Store
+AGENTS.md
+README.md
+output/
+knowledge/

@@ -1,0 +1,7 @@
+langgraph
+langchain-openai
+langchain-community
+langchain-experimental
+python-dotenv
+gradio
+playwright

@@ -1,0 +1,56 @@
+PROFESSIONAL SUMMARY - ODINACHI DAVID
+
+Odinachi David is a highly experienced Mobile Engineer and Software
+Developer with over four years of hands-on experience designing,
+building, and scaling mobile applications across fintech, healthcare,
+and mobility sectors. He specializes in cross-platform and native mobile
+development, with strong expertise in Flutter, SwiftUI, Kotlin, and
+JavaScript.
+
+Currently serving as a Lead Mobile Developer at DownToDate and Heala,
+Odinachi plays a critical role in architecting and delivering robust
+mobile solutions. His work involves leading development efforts,
+designing scalable application structures, integrating APIs, and
+ensuring high performance and reliability in production environments.
+His leadership extends beyond coding, contributing to product direction,
+system design decisions, and mentoring development processes.
+
+Previously, Odinachi worked as a Mobile Engineer at Shuttlers and as a
+Mobile Developer at Bloomm MFB and Bankly, where he gained significant
+experience in building fintech and transportation applications. During
+these roles, he contributed to developing user-centric applications with
+secure payment integrations, real-time features, and seamless user
+experiences.
+
+His technical skill set is extensive and spans multiple programming
+languages including Dart, Swift, Kotlin, JavaScript, and Python. He has
+deep experience with frameworks such as Flutter and SwiftUI, and works
+with backend and cloud technologies including Firebase, Supabase,
+MongoDB, Redis, PostgreSQL, and AWS Amplify. He is also proficient in
+integrating monitoring and analytics tools such as Firebase Crashlytics,
+AppsFlyer, and Mixpanel to ensure app performance and user engagement
+insights.
+
+Odinachi has strong experience in software architecture patterns,
+particularly Flutter BLoC, and emphasizes writing maintainable, testable
+code. He actively develops unit tests and ensures full coverage of
+application logic, including network interactions and database
+integrations such as Firestore.
+
+Beyond engineering, Odinachi is building developer-focused tools and
+platforms, including a system that generates API service layers and
+models from endpoint configurations, as well as an AI-powered learning
+platform called Lenaz Tutor. This demonstrates his ability to think
+productively, combining technical depth with product innovation.
+
+He holds a BSc in Economics from the National Open University of
+Nigeria, giving him a unique interdisciplinary perspective that blends
+technical expertise with economic and business understanding.
+
+Odinachi is also expanding his skillset toward AI and Machine Learning,
+positioning himself for future roles in intelligent systems development.
+
+With a strong foundation in mobile engineering, backend systems, and
+product development, Odinachi David brings a combination of technical
+excellence, leadership, and innovation, making him a valuable asset in
+building modern, scalable digital products.

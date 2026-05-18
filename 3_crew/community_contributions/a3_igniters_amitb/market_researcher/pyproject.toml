@@ -1,0 +1,24 @@
+[project]
+name = "market_researcher"
+version = "0.1.0"
+description = "market_researcher using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[litellm,tools]==1.11.0",
+]
+
+[project.scripts]
+market_researcher = "market_researcher.main:run"
+run_crew = "market_researcher.main:run"
+train = "market_researcher.main:train"
+replay = "market_researcher.main:replay"
+test = "market_researcher.main:test"
+run_with_trigger = "market_researcher.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

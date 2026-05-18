@@ -1,0 +1,2 @@
+My name is Sam. I am a software developer interested in building helpful, understandable AI tools.
+Replace this file with a short bio about you. Add linkedin.pdf in this same folder for richer answers after you run ingest.

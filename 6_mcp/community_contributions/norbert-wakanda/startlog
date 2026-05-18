@@ -1,0 +1,40 @@
+#!/bin/bash
+# startlog - Clean logging with original colors preserved
+
+echo "🚀 Starting clean logging session for this project..."
+
+# This version loads your normal prompt/colors, but forces clean logging
+bash --rcfile <(cat << 'INNER_EOF'
+
+# Load your normal global settings first (keeps colors & prompt)
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+fi
+
+export PROJECT_LOGGING_ACTIVE=1
+LOG_FILE="$(pwd)/terminal_activity.log"
+TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
+
+echo ""
+echo "=================================================================="
+echo "🚀 CLEAN TERMINAL LOGGING STARTED"
+echo "Log file : $LOG_FILE"
+echo "Started  : $TIMESTAMP"
+echo "=================================================================="
+echo ""
+
+# Add header to log file
+cat >> "$LOG_FILE" << EOH
+
+==================================================================
+CLEAN TERMINAL LOGGING STARTED - $TIMESTAMP
+Project Directory: $(pwd)
+==================================================================
+
+EOH
+
+# Start logging with better cleaning options
+exec env TERM=xterm-256color script -a -f -q "$LOG_FILE"
+
+INNER_EOF
+)

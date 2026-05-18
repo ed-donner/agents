@@ -1,0 +1,58 @@
+design_task:
+  description: >
+    Take the high level requirements described here and prepare a detailed design for the engineer;
+    Break the solution down into exactly 3 logical Python modules (e.g., models.py, logic.py, and storage.py).
+    For each module, outline the purpose, classes, and method signatures.
+    Ensure the design handles how these three modules will import each other.
+    Here are the requirements: {requirements}
+    IMPORTANT: Only output the design in markdown format, laying out in detail the classes and functions in the module, describing the functionality.
+  expected_output: >
+    A detailed design for the engineer, detailing the 3-module architecture, including class diagrams and inter-module dependencies.
+  agent: engineering_lead
+  output_file: output/{module_name}_design.md
+
+code_task:
+  description: >
+    Implement the 3 modules defined in the design_task. 
+    You must output the code for all 3 modules in a single response.
+    CRITICAL INSTRUCTIONS:
+    1. Start the code for each module with a comment line: '# filename: <name>.py'
+    2. Ensure the code is valid Python.
+    3. Do not use markdown backticks or triple backticks in the final delivery.
+    4. Ensure 'logic.py' and 'storage.py' correctly import from 'models.py' if necessary.
+    Here are the requirements: {requirements}
+  expected_output: >
+    A python module that implements the design and achieves the requirements.
+    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
+    The output should be valid Python code that can be directly saved to a file and executed.
+  agent: backend_engineer
+  context:
+    - design_task
+  output_file: output/{module_name}
+
+frontend_task:
+  description: >
+    Write a gradio UI in a module app.py that demonstrates the given backend and acts as the entry point for the 3-module system..
+    Assume there is only 1 user, and keep the UI very simple indeed - just a prototype or demo.
+    Here are the requirements: {requirements}
+  expected_output: >
+    A gradio UI in module app.py that demonstrates the given backend class.
+    The file should be ready so that it can be run as-is, in the same directory as the backend module, and it should import the backend class from {module_name}.
+    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
+    The output should be valid Python code that can be directly saved to a file and executed.
+  agent: frontend_engineer
+  context:
+    - code_task
+  output_file: output/app.py
+
+test_task:
+  description: >
+    Write a comprehensive test suite that performs integration testing across the 3 modules.
+  expected_output: >
+    A python test file that validates the interactions between the 3 generated modules.
+    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
+    The output should be valid Python code that can be directly saved to a file and executed.
+  agent: test_engineer
+  context:
+    - code_task
+  output_file: output/integration_test.py

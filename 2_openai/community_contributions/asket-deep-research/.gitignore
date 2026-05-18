@@ -1,0 +1,3 @@
+# Local-only; keep out of PR / accidental commits
+README.md
+asket-deep-research.ipynb

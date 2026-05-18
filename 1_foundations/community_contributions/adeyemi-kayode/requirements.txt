@@ -1,0 +1,6 @@
+# Hugging Face Spaces — dependencies for app.py
+openai>=1.40.0
+python-dotenv
+requests
+pypdf
+gradio>=5.49.1

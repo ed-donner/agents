@@ -1,0 +1,50 @@
+research_competitor_a:
+  description: >
+    Search for the latest product updates, pricing strategies, and recent news for {competitor_a}.
+  expected_output: >
+    A detailed Markdown summary of {competitor_a}'s current market position.
+  agent: market_researcher
+  markdown: true
+  output_file: output/research_{competitor_a}.md
+
+research_competitor_b:
+  description: >
+    Search for the latest product updates, pricing strategies, and recent news for {competitor_b}.
+  expected_output: >
+    A detailed Markdown summary of {competitor_b}'s current market position.
+  agent: market_researcher
+  markdown: true
+  output_file: output/research_{competitor_b}.md
+
+research_competitor_c:
+  description: >
+    Search for the latest product updates, pricing strategies, and recent news for {competitor_c}.
+  expected_output: >
+    A detailed Markdown summary of {competitor_c}'s current market position.
+  agent: market_researcher
+  markdown: true
+  output_file: output/research_{competitor_c}.md
+
+research_market_trends:
+  description: >
+    Analyze the overall trends, regulatory shifts, and technological advancements 
+    impacting {target_market}.
+  expected_output: >
+    A summary of 3-5 major market trends impacting {target_market}.
+  agent: market_researcher
+  markdown: true
+  output_file: output/research_market_trends.md
+
+synthesize_report:
+  description: >
+    Review the research summaries for {competitor_a}, {competitor_b}, {competitor_c}, and the market trends.
+    Create a strategic report with a SWOT analysis for each competitor relative to the trends.
+    Also add relevant charts and graphs to the report.
+    The report should be in a professional, easy-to-read style with clear headings.
+    The report should be less than 1200 words.
+  expected_output: >
+    A comprehensive strategic market research report in Markdown.
+  agent: strategic_analyst
+  markdown: true
+  context: [research_competitor_a, research_competitor_b, research_competitor_c, research_market_trends]
+  output_file: output/report.md

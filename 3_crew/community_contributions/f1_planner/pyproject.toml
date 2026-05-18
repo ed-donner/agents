@@ -1,0 +1,25 @@
+[project]
+name = "f1_planner"
+version = "0.1.0"
+description = "f1_planner using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]==1.8.1",
+    "google-search-results>=2.4.2",
+]
+
+[project.scripts]
+f1_planner = "f1_planner.main:run"
+run_crew = "f1_planner.main:run"
+train = "f1_planner.main:train"
+replay = "f1_planner.main:replay"
+test = "f1_planner.main:test"
+run_with_trigger = "f1_planner.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

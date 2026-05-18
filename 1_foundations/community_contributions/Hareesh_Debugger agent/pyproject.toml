@@ -1,0 +1,19 @@
+[project]
+name = "autonomous-debugger-agent"
+version = "0.1.0"
+description = "A ReAct-based agent that autonomously executes and fixes Python code."
+authors = [
+    {name = "Hareesh R"}
+]
+dependencies = [
+    "openai",
+    "gradio",
+    "python-dotenv",
+    "requests",
+    "numpy",
+]
+requires-python = ">=3.10"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

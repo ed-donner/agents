@@ -1,0 +1,5 @@
+openai-agents
+openai
+python-dotenv
+gradio
+sendgrid

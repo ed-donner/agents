@@ -1,0 +1,17 @@
+select_best_companies:
+  description: >
+    Analyse the reports on the companies in these {sectors} and pick the best companies in each sector for stock purchase now
+  expected_output: >
+    A list with the best companies in each sector for investment. Send a push notification to the user with the list of companies and the reason for the selection.
+  agent: senior_analyst
+  output_file: output/best_companies.json
+
+create_report:
+  description: >
+    Create a report on the best companies in each sector for investment
+  expected_output: >
+    A report on the best companies in each sector for investment
+  agent: financial_analyst
+  context:
+    - select_best_companies
+  output_file: output/report.md

@@ -1,0 +1,11 @@
+# Generated at runtime (SQLite events + Chroma persistence)
+data/nairobi_events.db
+data/chroma_venues/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# IDE
+__pycache__/

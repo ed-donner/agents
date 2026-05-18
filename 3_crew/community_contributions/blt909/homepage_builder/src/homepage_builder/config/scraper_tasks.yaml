@@ -1,0 +1,7 @@
+scraper_task:
+  description: >
+    Given the URL ({url}) of the local business named {name} in the {sector} sector, scrape its homepage content.
+    Extract the main readable text, headings, descriptions, and any key information visible on the page.
+  expected_output: >
+    A structured text body containing the scraped homepage content of {name}, including its name, url, sector, and all readable text.
+  agent: scraper

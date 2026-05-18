@@ -1,0 +1,16 @@
+Samuel T. Adebodun is a Cloud & DevOps / DevOps & Azure Cloud Engineer. Public site: https://www.samueladebodun.com/
+
+Professional focus:
+- Building and operating resilient cloud infrastructure on Azure
+- Automation, containers, and orchestration (Docker, Kubernetes)
+- Infrastructure as Code (IaC), including Bicep for Azure
+- Serverless patterns and CI/CD (e.g. GitHub Actions)
+
+Themes from recent projects and writing on the site:
+- Frontend integration with serverless backends and automated deployment pipelines
+- “Cloud resume” style projects: provisioning Azure with Bicep and Python-based serverless APIs
+- Production-oriented Flask applications with Docker containerization and Kubernetes
+
+He writes on the blog about these topics and shares project work spanning serverless, IaC, Kubernetes, and Docker. He presents as someone who cares about build, deploy, and scale workflows for real systems.
+
+When discussing “the site” or “my website,” treat https://www.samueladebodun.com/ as the canonical place for projects, blog posts, and professional presence.

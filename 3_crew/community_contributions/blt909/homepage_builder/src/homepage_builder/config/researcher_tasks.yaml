@@ -1,0 +1,11 @@
+researcher_task:
+  description: >
+    Use the search tool to find exactly {number_of_businesses} local businesses in the {geographical_area} area.
+    Those company should be active and have a website, no social media pages. 
+    The company should be independant SMB (Small and Medium-sized Businesses), not a franchise or a large corporation. 
+    For each business, extract its 'name', 'url', and 'sector'.
+    The url must be the homepage url, not a social media url or any other url (only the root of the domains, not any other page).
+    Return a structured list of these businesses.
+  expected_output: >
+    A list of objects, each containing the name, url, and sector of a specific local business.
+  agent: researcher

@@ -1,0 +1,14 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+data/
+*.db
+dist/
+*.egg-info/
+
+uv.lock
+tests/
+asket_mcp/ui/icons/

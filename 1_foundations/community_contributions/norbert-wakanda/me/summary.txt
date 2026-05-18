@@ -1,0 +1,6 @@
+My name is Norbert, a versatile Software Engineer with strong experience in full-stack development, AI 
+systems, and data analysis. Proficient in Python, Django, Flask, React, and C, with solid DevOps and database 
+management skills. Successfully built secure web apps, automated workflows, and mentored developers at ALX 
+Africa. At Turing, contributed to LLM fine-tuning and agentic AI research using RLHF and ReAct. Holds a BSc 
+in Mathematics and Computer Science from Machakos University and a Software Engineering certification from 
+ALX Africa. Passionate about generative AI, agent design, and scalable solutions.

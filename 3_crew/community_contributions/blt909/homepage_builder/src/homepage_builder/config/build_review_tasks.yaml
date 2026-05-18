@@ -1,0 +1,65 @@
+web_designer_task:
+  description: >
+    Using the scraped content provided for {name} (sector: {sector}), produce a markdown document
+    that structures this content into a compelling homepage layout (Hero, About, Services, Testimonials, Footer and/or any other relevant sections depending of the sector and the scraped Content).
+    Provide detailed Tailwind CSS design guidance to the frontend developer including color palette, typography, and layout.
+    You can also suggest to recycle some images from the scraped content (providing a list of image urls and their suggested placement/role).
+    MANDATORY ACCESSIBILITY GUIDANCE: You MUST explicitly instruct the frontend developer to ensure:
+    - Semantic HTML5 tags (nav, main, section, article, header, footer, aside).
+    - Correct heading hierarchy (single h1, then h2, h3...).
+    - Sufficient color contrast ratios (WCAG AA minimum: 4.5:1 for normal text).
+    - Descriptive alt text for every image.
+    - ARIA labels on all interactive and landmark elements.
+    - Keyboard-navigable interactive elements.
+  expected_output: >
+    A rich markdown document with structured homepage sections, Tailwind CSS design instructions
+    (including mandatory W3C/WCAG compliance requirements), and the company name {name}.
+  agent: web_designer
+
+frontend_developer_task:
+  description: >
+    Using the markdown design guidance from the web designer, build a complete, single-file HTML
+    homepage for {name}. Use Tailwind CSS via CDN. The design must be modern, responsive,
+    professional, visually stunning, and WCAG-compliant.
+    IMPORTANT: Use the `Write HTML File Tool` to save the final HTML.
+    Pass the company name '{name}' and the full HTML string. Leave `is_amended` as False (the default).
+  expected_output: >
+    The confirmation string from the Write HTML File Tool.
+  agent: frontend_developer
+
+tech_review_task:
+  description: >
+    Use the `Read HTML File Tool` to read the generated HTML file for {name}.
+    Check: (1) correct HTML structure, (2) images load or use valid placeholders,
+    (3) the design brief sections are all present. Write a thorough markdown report.
+  expected_output: >
+    A markdown document detailing all technical findings and issues.
+  agent: technical_reviewer
+
+accessibility_review_task:
+  description: >
+    Use the `Read HTML File Tool` to read the generated HTML file for {name}.
+    Audit for W3C/WCAG compliance: semantic tags, heading hierarchy, contrast, ARIA labels, alt texts.
+    Write a thorough markdown report listing all violations and recommendations.
+  expected_output: >
+    A markdown document detailing all accessibility violations and recommendations.
+  agent: accessibility_reviewer
+
+amend_design_task:
+  description: >
+    Based on the findings in the technical review (`output/{name}_tech_review.md`) and accessibility review (`output/{name}_accessibility_review.md`), produce an AMENDED
+    design document for {name}. Explicitly address every issue raised in the reviews. 
+    Provide updated, precise Tailwind CSS and HTML guidance to the frontend developer.
+  expected_output: >
+    An amended markdown design document addressing all review findings for {name}.
+  agent: web_designer
+
+amend_html_task:
+  description: >
+    Using the amended design guidance and the review findings from `output/{name}_tech_review.md` and `output/{name}_accessibility_review.md`, fix the HTML for {name}.
+    IMPORTANT: Use the `Write HTML File Tool` to save the amended file.
+    Pass the company name '{name}', the full amended HTML string, AND set `is_amended=True`
+    so the file is saved with the `_amended` suffix.
+  expected_output: >
+    The confirmation string from the Write HTML File Tool confirming the `_amended` file was written for {name}.
+  agent: frontend_developer

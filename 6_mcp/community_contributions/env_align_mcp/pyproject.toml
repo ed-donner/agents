@@ -1,0 +1,14 @@
+[project]
+name = "env-align-mcp"
+version = "0.1.0"
+description = "MCP server: compare .env with .env.example and preview masked values (local repo only)."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=1.0.0",
+    "openai-agents>=0.0.15",
+    "python-dotenv>=1.0.0",
+]
+
+[tool.uv]
+package = false
