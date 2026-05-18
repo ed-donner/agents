@@ -13,8 +13,12 @@
 # can start correctly.
 #   Fix: https://github.com/modelcontextprotocol/python-sdk/issues/1103#issuecomment-3470416291
 
-# We are not directly calling the "stdio_client" so we need to "monkey patch" it
-# to pass "None" for "stderr" always.
+# Since stdio_client() is called internally by mcp_server_tools() and we can't pass
+# parameters to it directly, we monkey patch stdio.stdio_client to always pass
+# stderr=errors_file before the MCP session is created.
+
+# With None, the subprocess will bypasses Jupyter's captured stream entirely but error
+# logs will be lost, so we pass an already opened file so we can track it to see outputs.
 
 import mcp
 
