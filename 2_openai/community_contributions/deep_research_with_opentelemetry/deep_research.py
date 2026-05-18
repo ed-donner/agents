@@ -7,16 +7,17 @@ import asyncio
 from opentelemetry import trace
 from opentelemetry import metrics
 from opentelemetry._logs import get_logger_provider
+from opentelemetry._logs import get_logger
 import openlit
 import os 
 
-# get the global tracer, meter, and logging provider to pass to OpenLIT initialization
+# get the global tracer, meter, and logger to pass to OpenLIT initialization
 tracer = trace.get_tracer(__name__)
 meter_provider = metrics.get_meter_provider()
 meter = meter_provider.get_meter(__name__, version="1.0.0")
-logger_provider = get_logger_provider()
+event_logger = get_logger(__name__)
 
-openlit.init(tracer=tracer, meter=meter, event_logger=logger_provider)
+openlit.init(tracer=tracer, meter=meter, event_logger=event_logger)
 
 if os.environ.get('FROM_EMAIL_ADDRESS') is None or os.environ.get('TO_EMAIL_ADDRESS') is None: 
     print("Ensure the FROM_EMAIL_ADDRESS and TO_EMAIL_ADDRESS environment variables are set")

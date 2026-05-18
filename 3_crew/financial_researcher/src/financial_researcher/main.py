@@ -2,6 +2,9 @@
 # src/financial_researcher/main.py
 import os
 from financial_researcher.crew import ResearchCrew
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Create output directory if it doesn't exist
 os.makedirs('output', exist_ok=True)
@@ -11,7 +14,7 @@ def run():
     Run the research crew.
     """
     inputs = {
-        'company': 'Apple'
+        'company': 'Dynatrace'
     }
 
     # Create and run the crew
