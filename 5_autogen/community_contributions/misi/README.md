@@ -7,6 +7,8 @@ This contribution explores AutoGen's dynamic runtime behavior by having one agen
 - `creator.py` defines a `Creator` agent that asks an AgentChat assistant to write a new Python module.
 - Each generated module defines an `Agent` class that inherits from AutoGen Core `RoutedAgent` and wraps an AutoGen AgentChat `AssistantAgent`.
 - The Creator writes each generated module beside the template, imports or reloads it, and registers the new `Agent` type with the distributed gRPC runtime.
+- The Creator can also create a new version of itself when asked for a filename such as `creator1.py`.
+- `creator.py` exposes `read_creator_template` as an AgentChat tool so the Creator can read its own source code before writing a replica.
 - `messages.py` now tracks the names of agents that have actually been registered, so created agents can select live peers by name.
 - `agent.py` keeps the collaboration behavior in the template: agents create a commercial business idea for Agents, then ask one registered peer to refine it.
 - `CHANCES_THAT_I_BOUNCE_IDEA_OFF_ANOTHER` was changed from `0.5` to `1.0` so the demo reliably shows created agents messaging each other whenever a registered peer exists.
@@ -19,6 +21,8 @@ The registered-agent list avoids choosing peers just because a matching `agent*.
 
 The collaboration probability is deliberately `1.0` rather than `0.5`. With `0.5`, a run could create agents but skip peer messaging by chance, which makes the main demonstration less clear. The initial-request guard keeps that deterministic collaboration from becoming an infinite back-and-forth between agents.
 
+The creator-replication path is tool-based rather than hard-coding the source text into the prompt. The `read_creator_template` tool reads the module file through `__file__`, so a generated creator can read its own source after it has been written to `creatorN.py`. That lets each Creator make a slightly changed replica while keeping the core ability to create and register normal agents.
+
 ## Main Flow
 
 1. `world.py` starts a distributed gRPC runtime.
@@ -29,3 +33,6 @@ The collaboration probability is deliberately `1.0` rather than `0.5`. With `0.5
 6. The new agent generates a commercial Agentic AI business idea.
 7. If another created agent is registered, it refines the idea by name.
 8. `world.py` saves the resulting idea as `ideaN.md`.
+9. `world.py` also asks the original Creator to create `creator1.py`.
+10. The original Creator uses `read_creator_template` to read its own source, writes `creator1.py`, and registers the new `Creator` class.
+11. `world.py` asks `creator1` to create `agent_from_creator1.py`, proving the replica can also create normal agents.
