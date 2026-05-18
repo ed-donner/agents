@@ -7,17 +7,6 @@ from agents.tracing import provider
 import gradio as gr
 from dotenv import load_dotenv
 from research_manager import ResearchManager
-from opentelemetry import trace
-from opentelemetry.sdk.resources import Resource
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
-
-from opentelemetry import metrics
-from opentelemetry.sdk.metrics import MeterProvider
-from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
-from opentelemetry.sdk.metrics.export import ConsoleMetricExporter
-from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
 
 import time
 load_dotenv(override=True)
@@ -36,14 +25,6 @@ Traceloop.init(
     headers=headers,
     should_enrich_metrics=True)
 
-# Configure OpenTelemetry traces (exports to OTLP HTTP, defaults to localhost:4318).
-resource = Resource.create(
-    {
-        "service.name": os.getenv("OTEL_SERVICE_NAME", "deep-research-ui"),
-        "service.version": "1.0.0",
-        "deployment.environment": os.getenv("APP_ENV", "dev")
-    }
-)
 
 # -------------------------------
 # Research pipeline
