@@ -6,6 +6,7 @@ import messages
 from autogen_core import TRACE_LOGGER_NAME
 import importlib
 import logging
+import re
 from autogen_core import AgentId
 from dotenv import load_dotenv
 from pathlib import Path
@@ -14,6 +15,7 @@ import sys
 load_dotenv(override=True)
 
 BASE_DIR = Path(__file__).resolve().parent
+OPENAI_MODEL = "gpt-4o-mini"
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
@@ -30,6 +32,24 @@ def read_creator_template() -> str:
     """Read this creator module's source code for creator self-replication."""
     with open(Path(__file__).resolve(), "r", encoding="utf-8") as f:
         return f.read()
+
+
+def keep_openai_model_fixed(code: str) -> str:
+    code = re.sub(
+        r"(OPENAI_MODEL\s*=\s*)(['\"])([^'\"]*)(['\"])",
+        lambda match: f"{match.group(1)}{match.group(2)}{OPENAI_MODEL}{match.group(4)}",
+        code,
+    )
+    code = re.sub(
+        r"(OpenAIChatCompletionClient\s*\(\s*)(['\"])([^'\"]*)(['\"])",
+        lambda match: f"{match.group(1)}{match.group(2)}{OPENAI_MODEL}{match.group(4)}",
+        code,
+    )
+    return re.sub(
+        r"(model\s*=\s*)(['\"])([^'\"]*)(['\"])",
+        lambda match: f"{match.group(1)}{match.group(2)}{OPENAI_MODEL}{match.group(4)}",
+        code,
+    )
 
 
 class Creator(RoutedAgent):
@@ -53,15 +73,18 @@ class Creator(RoutedAgent):
     To create a new Creator module, call read_creator_template and use that source as the template.
     The generated module must still define a class named Creator that inherits from RoutedAgent.
     It must keep the same message handler signature and must keep the read_creator_template tool.
+    It must keep the OPENAI_MODEL constant and keep_openai_model_fixed function.
+    It must call keep_openai_model_fixed before writing any generated Agent or Creator Python code.
     It must still be able to create normal Agent modules and register them with the distributed runtime.
-    You may change the Creator's logic slightly in an interesting way, such as its tone, model temperature, naming strategy, or generation instructions.
+    You may change the Creator's logic slightly in an interesting way, such as its tone, naming strategy, or generation instructions.
+    Never change the OpenAI model name. Every OpenAIChatCompletionClient must use model="gpt-4o-mini" or model=OPENAI_MODEL, with OPENAI_MODEL set to "gpt-4o-mini".
     Respond only with Python code, no other text, and no markdown code blocks.
     """
 
 
     def __init__(self, name) -> None:
         super().__init__(name)
-        model_client = OpenAIChatCompletionClient(model="gpt-4o-mini", temperature=1.0)
+        model_client = OpenAIChatCompletionClient(model=OPENAI_MODEL, temperature=1.0)
         self._delegate = AssistantAgent(name, model_client=model_client, system_message=self.system_message)
         self._creator_delegate = AssistantAgent(
             f"{name}_self_writer",
@@ -76,7 +99,8 @@ class Creator(RoutedAgent):
             Respond only with the python code, no other text, and no markdown code blocks.\n\n\
             Be creative about the agent's commercial specialty and personality, but don't change method signatures. \
             Keep the peer-collaboration flow that uses messages.find_recipient(exclude=self.id.type) so registered agents can message each other by name. \
-            Only the initial idea request should call another agent for refinement; refinement requests should return directly.\n\n\
+            Only the initial idea request should call another agent for refinement; refinement requests should return directly. \
+            Do not change the OpenAI model name; keep every OpenAIChatCompletionClient on model=\"gpt-4o-mini\".\n\n\
             Here is the template:\n\n"
         with open(BASE_DIR / "agent.py", "r", encoding="utf-8") as f:
             template = f.read()
@@ -86,7 +110,10 @@ class Creator(RoutedAgent):
         return "Please create a new Creator module. First call the read_creator_template tool to read your own source code. \
             Use that source as the template for the new Creator. Keep the class name Creator and keep the runtime registration architecture. \
             The new Creator must still be able to create normal Agent modules and new Creator modules. \
+            Keep the OPENAI_MODEL constant and the keep_openai_model_fixed function. \
+            Always call keep_openai_model_fixed before writing generated Agent or Creator Python code. \
             Make one small, interesting change to the Creator's behavior or personality. \
+            Do not change the OpenAI model name; keep every OpenAIChatCompletionClient on model=\"gpt-4o-mini\" or model=OPENAI_MODEL with OPENAI_MODEL set to \"gpt-4o-mini\". \
             Respond only with the python code, no other text, and no markdown code blocks."
 
     def import_or_reload(self, module_name: str):
@@ -98,8 +125,9 @@ class Creator(RoutedAgent):
     async def create_agent(self, output_path: Path, agent_name: str, ctx: MessageContext) -> messages.Message:
         text_message = TextMessage(content=self.get_user_prompt(), source="user")
         response = await self._delegate.on_messages([text_message], ctx.cancellation_token)
+        generated_code = keep_openai_model_fixed(response.chat_message.content)
         with open(output_path, "w", encoding="utf-8") as f:
-            f.write(response.chat_message.content)
+            f.write(generated_code)
         print(f"** Creator has created python code for agent {agent_name} - about to register with Runtime")
         module = self.import_or_reload(agent_name)
         await module.Agent.register(self.runtime, agent_name, lambda: module.Agent(agent_name))
@@ -114,8 +142,9 @@ class Creator(RoutedAgent):
 
         text_message = TextMessage(content=self.get_creator_prompt(), source="user")
         response = await self._creator_delegate.on_messages([text_message], ctx.cancellation_token)
+        generated_code = keep_openai_model_fixed(response.chat_message.content)
         with open(output_path, "w", encoding="utf-8") as f:
-            f.write(response.chat_message.content)
+            f.write(generated_code)
         print(f"** Creator has created python code for creator {creator_name} - about to register with Runtime")
         module = self.import_or_reload(creator_name)
         await module.Creator.register(self.runtime, creator_name, lambda: module.Creator(creator_name))
