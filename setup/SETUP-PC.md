@@ -68,8 +68,8 @@ A word about Cursor: it's a cool product, but it's not to everyone's liking. It 
 
 After you start Cursor, you can pick the defaults for all its questions.  
 When it's time to open the project in Cursor:  
-1. Launch Cursor, if it's not already running  
-2. File menu >> New Window  
+1. Launch Cursor, if it's not already running.     
+2. File menu >> New Window. But note that the very latest version of Cursor will start by opening a special new window called their 'Agents' interface. To get to the New Window screen, press Ctrl+Shift+N.   
 3. Click "Open project"  
 4. Navigate into the project root directory called `agents` (probably within projects) and click Open
 5. When your project opens, you may be prompted to "install recommended extensions" for Python and Jupyter. If so, choose Yes! Otherwise:
