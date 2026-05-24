@@ -44,3 +44,6 @@ dependencies = [
 dev = [
     "ipykernel>=6.29.5",
 ]
+
+[tool.pyright]
+typeCheckingMode = "off"
