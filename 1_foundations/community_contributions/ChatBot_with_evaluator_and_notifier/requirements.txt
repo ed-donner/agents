@@ -1,8 +1,0 @@
-gradio
-langchain
-langchain-community
-langchain-openai
-chromadb
-sentence-transformers
-python-dotenv
-requests

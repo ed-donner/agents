@@ -1,4 +1,0 @@
-openai
-gradio
-python-dotenv
-requests

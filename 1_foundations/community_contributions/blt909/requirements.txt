@@ -1,8 +1,0 @@
-requests
-python-dotenv
-gradio
-pypdf
-openai
-openai-agents
-anthropic
-google.genai

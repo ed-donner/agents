@@ -1,5 +1,0 @@
-openai
-python-dotenv
-pypdf
-chainlit
-pydantic

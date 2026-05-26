@@ -1,5 +1,0 @@
-chromadb
-gradio
-openai
-pypdf
-python-dotenv
