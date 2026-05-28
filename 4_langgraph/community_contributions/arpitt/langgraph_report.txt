@@ -9,7 +9,7 @@ The sectors most impacted by AI include:
 - **Transportation**: The rise of autonomous vehicles threatens jobs in driving professions.
 - **Retail**: Automated checkout and inventory management systems are changing workforce dynamics.
 - **Finance**: AI algorithms are increasingly handling tasks like trading and risk assessment.
-- **Healthcare**: Diagnostics and patient management are becoming AI-driven.
+- **Healthcare**: Diagnostics and patient management are becoming AI-driven..
 
 ## 3. Jobs Vulnerable to AI Replacement
 Jobs most susceptible to AI replacement primarily include:
