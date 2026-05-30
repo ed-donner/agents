@@ -26,7 +26,7 @@ class GitHubClientBridge:
         self.server_params = StdioServerParameters(
             command="uv",
             args=["run", SERVER_PATH],
-            env={**os.environ}
+            env={**os.environ, "GITHUB_TOKEN": os.getenv("GITHUB_TOKEN", "dummy_token")}
         )
         self.tracer = LogTracer()
         self._exit_stack = contextlib.AsyncExitStack()
