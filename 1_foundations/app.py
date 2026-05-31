@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from openai import OpenAI
+from anthropic import Anthropic
 import json
 import os
 import requests
@@ -69,35 +69,36 @@ record_unknown_question_json = {
     }
 }
 
-tools = [{"type": "function", "function": record_user_details_json},
-        {"type": "function", "function": record_unknown_question_json}]
+tools = [
+    {
+        "name": "record_user_details",
+        "description": record_user_details_json["description"],
+        "input_schema": record_user_details_json["parameters"],
+    },
+    {
+        "name": "record_unknown_question",
+        "description": record_unknown_question_json["description"],
+        "input_schema": record_unknown_question_json["parameters"],
+    },
+]
 
 
 class Me:
 
     def __init__(self):
-        self.openai = OpenAI()
-        self.name = "Ed Donner"
-        reader = PdfReader("me/linkedin.pdf")
+        self.client = Anthropic()
+        self.model = "claude-sonnet-4-6"
+        self.name = "Ryan John"
+        reader = PdfReader("me/ryan_john.pdf")
         self.linkedin = ""
         for page in reader.pages:
             text = page.extract_text()
             if text:
                 self.linkedin += text
-        with open("me/summary.txt", "r", encoding="utf-8") as f:
+        with open("me/ryan_john_summary.txt", "r", encoding="utf-8") as f:
             self.summary = f.read()
 
 
-    def handle_tool_call(self, tool_calls):
-        results = []
-        for tool_call in tool_calls:
-            tool_name = tool_call.function.name
-            arguments = json.loads(tool_call.function.arguments)
-            print(f"Tool called: {tool_name}", flush=True)
-            tool = globals().get(tool_name)
-            result = tool(**arguments) if tool else {}
-            results.append({"role": "tool","content": json.dumps(result),"tool_call_id": tool_call.id})
-        return results
     
     def system_prompt(self):
         system_prompt = f"You are acting as {self.name}. You are answering questions on {self.name}'s website, \
@@ -113,19 +114,39 @@ If the user is engaging in discussion, try to steer them towards getting in touc
         return system_prompt
     
     def chat(self, message, history):
-        messages = [{"role": "system", "content": self.system_prompt()}] + history + [{"role": "user", "content": message}]
+        history = [{"role": h["role"], "content": h["content"]} for h in history]
+        messages = history + [{"role": "user", "content": message}]
+        print(history[0].keys() if history else "empty")
         done = False
+        response = None
+
         while not done:
-            response = self.openai.chat.completions.create(model="gpt-4o-mini", messages=messages, tools=tools)
-            if response.choices[0].finish_reason=="tool_calls":
-                message = response.choices[0].message
-                tool_calls = message.tool_calls
-                results = self.handle_tool_call(tool_calls)
-                messages.append(message)
-                messages.extend(results)
+            response = self.client.messages.create(
+                model=self.model,
+                max_tokens=1024,
+                system=self.system_prompt(),
+                messages=messages,
+                tools=tools,
+            )
+            if response.stop_reason == "tool_use":
+                tool_results = []
+                for block in response.content:
+                    if block.type == "tool_use":
+                        print(f"Tool called: {block.name}", flush=True)
+                        tool_fn = globals().get(block.name)
+                        result = tool_fn(**block.input) if tool_fn else {}
+                        tool_results.append({
+                            "type": "tool_result",
+                            "tool_use_id": block.id,
+                            "content": json.dumps(result),
+                        })
+                messages.append({"role": "assistant", "content": response.content})
+                messages.append({"role": "user", "content": tool_results})
             else:
                 done = True
-        return response.choices[0].message.content
+
+        # Final text from the last response
+        return "".join(b.text for b in response.content if b.type == "text")
     
 
 if __name__ == "__main__":

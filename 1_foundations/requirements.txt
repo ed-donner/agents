@@ -4,3 +4,4 @@ gradio
 pypdf
 openai
 openai-agents
+anthropic
