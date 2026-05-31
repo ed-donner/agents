@@ -1,0 +1,39 @@
+  chart_analysis_task:
+    description: >
+      Use the provided mock stock data for {stock_symbol} to analyse price movements,
+      identify key patterns, and determine if there is an uptrend, downtrend, or neutral trend.
+      Data is available under {{ mock_stock_data }}.
+    expected_output: >
+      A JSON summary containing:
+        - "trend": (upward, downward, or neutral)
+        - "rationale": explanation of the trend
+        - "confidence": a float between 0 and 1
+    agent: chart_analyst
+    output_file: output/chart_analysis.md
+
+  news_sentiment_task:
+    description: >
+      Use the provided mock news dataset for {news_topic} stored in {{ mock_news_data }}.
+      Determine overall sentiment direction, rationale, and confidence.
+    expected_output: >
+      A JSON summary containing:
+        - "sentiment": (positive, negative, or neutral)
+        - "rationale": explanation of the sentiment
+        - "confidence": a float between 0 and 1
+    agent: news_analyst
+    output_file: output/news_analysis.md
+
+  dap_consensus_task:
+    description: >
+      Combine outputs from both domain agents (chart_analyst and news_analyst)
+      using the DAP Protocol. Follow these three stages:
+      1. Intra-cluster consensus: confirm each agent’s internal consistency.
+      2. Inter-cluster negotiation: identify alignment or contradiction between agents.
+      3. Final harmonisation: produce a weighted consensus based on confidence and reliability.
+    expected_output: >
+      A single JSON summary with:
+        - "final_recommendation": (Buy, Hold, or Sell)
+        - "justification": explanation combining both domains
+        - "overall_confidence": float (weighted by confidence)
+    agent: dap_mediator
+    output_file: output/mediator_decider.md

@@ -1,0 +1,24 @@
+[project]
+name = "persona-rag"
+version = "0.1.0"
+description = "RAG-powered digital persona application for Dmitry Kisselev"
+requires-python = "==3.11.*"
+dependencies = [
+    "langchain>=0.3.0",
+    "langchain-chroma>=0.2.0",
+    "langchain-huggingface>=0.1.0",
+    "langchain-openai>=0.2.0",
+    "langchain-community>=0.3.0",
+    "sentence-transformers>=2.3.0",
+    "rank-bm25>=0.2.2",
+    "gradio>=4.0.0",
+    "openai>=1.0.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+    "pydantic>=2.0.0",
+    "matplotlib>=3.8.0",
+    "pandas>=2.1.0",
+    "numpy==1.26.4",
+    "chromadb>=0.5.0",
+    "torch==2.2.2",
+]

@@ -1,0 +1,54 @@
+from datetime import datetime
+from typing import Any
+
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
+from langchain_core.runnables import Runnable
+
+from schema import State
+
+
+def researcher_agent(llm_with_tools: Runnable, state: State) -> dict[str, Any]:
+    subtasks = state.subtasks or []
+    idx = state.next_subtask_index
+
+    if not subtasks or idx >= len(subtasks):
+        return {"messages": [AIMessage(content="No researcher task.")]}
+
+    current = subtasks[idx]
+    if current.assigned_to != "researcher":
+        return {"messages": [AIMessage(content=f"Task assigned to {current.assigned_to}.")]}
+
+    system_message = f"""You are the RESEARCHER agent. Use your tools to find information.
+    You have tools to search the web, browse and navigate web pages, and query Wikipedia.
+    When done, provide a concise summary. Do NOT call tools after your final summary.
+    The current date and time is {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+
+    This is your task:
+    {current.task}
+    """
+
+    results = state.subtask_results or []
+    if results:
+        system_message += f"""
+    Previously completed results:
+    {chr(10).join(f"    - {r}" for r in results)}
+    """
+
+    msgs = [SystemMessage(content=system_message)]
+    for m in state.messages or []:
+        if isinstance(m, (AIMessage, ToolMessage)):
+            msgs.append(m)
+    msgs.append(HumanMessage(content=f"Complete this task: {current.task}"))
+
+    response = llm_with_tools.invoke(msgs)
+
+    if hasattr(response, "tool_calls") and response.tool_calls:
+        return {"messages": [response]}
+
+    content = getattr(response, "content", "") or ""
+    summary = f"Research completed: {content[:200]}..." if len(content) > 200 else f"Research completed: {content}"
+    return {
+        "subtask_results": results + [content],
+        "next_subtask_index": idx + 1,
+        "messages": [AIMessage(content=summary)],
+    }

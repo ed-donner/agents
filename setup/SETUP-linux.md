@@ -66,7 +66,7 @@ Note! Although I am currently on Ubuntu 22.04 and did not face any issues, there
 After you start Cursor, you can pick the defaults for all its questions.  
 When it's time to open the project in Cursor:  
 1. Launch Cursor, if it's not already running  
-2. File menu >> New Window  
+2. File menu >> New Window. But note that the very latest version of Cursor will start by opening a special new window called their 'Agents' interface. To get to the New Window screen, press Ctrl+Shift+N.  
 3. Click "Open project"  
 4. Navigate into the project root directory called `agents` (probably within projects) and click Open
 5. When your project opens, you may be prompted to "install recommended extensions" for Python and Jupyter. If so, choose Yes! Otherwise:
@@ -86,24 +86,18 @@ Follow the instructions here to install uv - I recommend using the Standalone In
 
 https://docs.astral.sh/uv/getting-started/installation/
 
+Any installation problems with uv, please see [Q11 on my FAQ page](https://edwarddonner.com/faq/#11).
+
 Then within Cursor, select View >> Terminal, to see a Terminal window within Cursor.  
 Type `pwd` to see the current directory, and check you are in the 'agents' directory. For me it is `/Users/ed/projects/agents` and it should be something similar for you.
 
 Start by running `uv self update` to make sure you're on the latest version of uv.
 
-One thing to watch for: if you've used Anaconda before, make sure that your Anaconda environment is deactivated   
-`conda deactivate`
-
-And if you still have any problems with python versions, it's possible that you will need this too:  
-`conda config --set auto_activate_base false`
-
 And now simply run:  
 `uv sync`  
 And marvel at the speed and reliability! If necessary, uv should install python 3.12, and then it should install all the packages.  
-If you get an error about "invalid certificate" while running `uv sync`, then please try this instead:  
-`uv --native-tls sync`  
-And also try this instead:  
-`uv --allow-insecure-host github.com sync`
+
+Any problems with uv, please see [Q11 on my FAQ page](https://edwarddonner.com/faq/#11).
 
 Finally, run these commands to be ready to use CrewAI in week 3:  
 `uv tool install crewai`   

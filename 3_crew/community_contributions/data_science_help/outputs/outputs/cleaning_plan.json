@@ -1,0 +1,29 @@
+{
+  "steps": [
+    "Impute missing values",
+    "Consider handling high cardinality columns: months_as_customer, age, policy_number, policy_bind_date, policy_annual_premium, insured_zip, capital-gains, capital-loss, incident_date, incident_location, total_claim_amount, injury_claim, property_claim, vehicle_claim, auto_model"
+  ],
+  "justifications": [
+    "To maintain data integrity and usability.",
+    "To prevent overfitting and improve interpretability."
+  ],
+  "columns_to_remove": [],
+  "high_cardinality_cols": [
+    "months_as_customer",
+    "age",
+    "policy_number",
+    "policy_bind_date",
+    "policy_annual_premium",
+    "insured_zip",
+    "capital-gains",
+    "capital-loss",
+    "incident_date",
+    "incident_location",
+    "total_claim_amount",
+    "injury_claim",
+    "property_claim",
+    "vehicle_claim",
+    "auto_model"
+  ],
+  "leakage_candidates": []
+}

@@ -1,0 +1,169 @@
+design_task:
+  description: >
+    Only output the design in Markdown (no code).
+    Use EXACTLY these names (naming contract):
+      - analyze_module = analysis.py
+        - function: run_analysis(csv_file, task_type, target=None, imbalance_threshold=0.2) -> DatasetAudit
+      - cleaning_module = cleaning.py
+        - class: DataCleaner
+          - plan(csv_path: str, analysis_kit_json: str) -> dict   # writes outputs/cleaning_plan.json WHEN CALLED
+          - apply(csv_path: str, plan: dict) -> str                # writes outputs/cleaned_data_ref.json + cleaned CSV WHEN CALLED
+      - viz_module = viz.py
+        - class: VizToolKit
+          - visualization(cleaned_csv_path: str, task_type: str, target: str | None) -> dict  # returns VisualSummary-like dict with PNG paths
+          - frontend file: outputs/app.py  # no I/O at import; modules are executed ONLY WHEN CALLED from the UI
+          - function: build_demo() -> gr.Blocks
+          - handler: run_pipeline(csv, task_type, target, domain, company)
+      - research_task (Serper-based): no module/file in scaffold; returns Markdown WHEN CALLED with domain/company
+    For each module describe purpose/scope, signatures, structured outputs (DatasetAudit, CleaningPlan, FeatureKit),
+    execution policy ("scaffold only", "no I/O at import", "WHEN CALLED by the UI"), runtime artifacts (ONLY WHEN CALLED),
+    guardrails (leakage, high-cardinality, missingness), integration & lazy imports.
+    IMPORTANT: Output ONLY Markdown. Do not compute, browse, or write other files during scaffolding.
+  agent: design_agent
+  expected_output: SystemDesign
+  markdown: true
+  output_file: outputs/system_design.md
+
+
+analyze_task:
+  description: >
+    Prepare a python module {analyze_module} with a function run_analysis(csv_file, task_type, target = None , imbalance_threshold=0.2) that:
+    - define code that will read the CSV WHEN CALLED by the UI and convert it into a pandas DataFrame
+    - outlines how to infer dtypes & splits (numeric/categorical/bool/datetime)
+    - documents missing values per column, duplicate rows, uniques
+    - plans to flags constant & high-cardinality categories
+    - (if supervised) describes target validation & class balance checks
+    - returns a dict with dataset_header, data_audit, cleaning_recommendations
+    Follow the {analyze_requirements} to build the function.
+    Write outputs/dataset_audit.json ONLY when this function is CALLED.
+    DO not modify the data.
+    Use the pandas and numpy libraries
+    IMPORTANT: Output ONLY the raw Python code; Do NOT wrap with backticks or any Markdown fences. Do not put any text in.
+  agent: analyst_agent
+  expected_output: DatasetAudit
+  context: [design_task]
+  output_file: outputs/{analyze_module}
+
+
+clean_and_apply_task:
+  description: >
+    Prepare a python module {cleaning_module} with the class {cleaning_class}:
+      - plan(csv_path: str, analysis_kit_json: str)
+      - apply(csv_path, plan), must return the cleaned CSV path (str)
+    Based on the analysis and the domain knowledge from the domain_report, document which actions would be performed.
+    The UI passes analysis_kit_json = json.dumps(run_analysis(...)) into plan(...).
+    Intended to create a cleaned CSV at outputs/cleaned_data.csv and a cleaned_data_ref.json with before_and_after_stats.
+    Execution happens ONLY WHEN called by the UI.
+    IMPORTANT: Output ONLY the raw Python code; Do NOT wrap with backticks or any Markdown fences.
+  expected_output: CleaningWrapper
+  agent: clean_agent
+  context: [analyze_task, design_task]
+  output_file: outputs/{cleaning_module}
+
+
+visualize_task:
+  description: >
+    Write a python module {viz_module} with a class {viz_class}.
+    Put a function inside called 'visualization(cleaned_csv_path, task_type, target)' that:
+      - generates target distribution (if supervised), missing rates, correlation heatmap, numeric hists/box, and category bars.
+      - use lazy imports (seaborn/matplotlib) at top; no work at import time
+    Provide short 1-2 sentence narrative per plot.
+    Use the seaborn and matplotlib libraries.
+    MUST save plots under outputs/plots/ as PNG and write outputs/visual_summary.json ONLY WHEN called,
+    AND return a dict of figure paths (VisualSummary-like) so the UI can render a gallery without reading JSON.
+    Save files (no inline figures): do not call plt.show(); 
+    IMPORTANT: Output ONLY the raw Python code; Do NOT wrap with backticks or any Markdown fences.
+  expected_output: VisualSummary
+  agent: visualization_agent
+  context: [clean_and_apply_task, analyze_task, design_task]
+  output_file: outputs/{viz_module}
+
+
+frontend_task:
+  description: >
+    Provide a Gradio app.py at path outputs/app.py that demonstrates the given backend classes in {analyze_module}, 
+    {cleaning_module}, {viz_module} and the domain report.
+
+    Layout (Tabs):
+    - Tab "Overview":
+        - User inputs:
+          allow users to upload CSV (type="filepath"), label "Upload CSV File"
+          allow users to choose with a dropdown the "Task Type": ["supervised", "unsupervised", "not_sure"]
+          allow users to define a target as an optional option
+          allow users to define the domain as a requiraed option
+          allow users to define the company as an optional option
+          create a primary button 'Run process'
+          create a multi-line Textbox "Summary" (read-only) for a short plain-text summary.
+    
+    - Tab "Audit & Clean":
+        - Markdown area that shows:
+        - the applied cleaning steps (bullet list)
+        - a compact before/after metrics table (e.g., missing rate, duplicates, high-cardinality flags)
+    - Tab "Visuals":
+        - Gallery that displays saved PNG plots from outputs/plots/
+    - Tab "Features":
+        - Markdown that lists the selected features (one per line)
+        - Optionally append a very short rationale per feature (1 line each)
+    - Tab "Report":
+        - Markdown that shows a research summary (facts + links)
+       - If no research is available yet, show a short placeholder message
+    The system has access to all modules created by the agents. Do NOT perform any I/O at import time.
+    The Overview button must execute, in order: 
+      run_analysis(...) → plan(csv_path, analysis_kit_json=json.dumps(analysis_dict)) → apply(csv_path, plan_dict) → visualization(cleaned_csv_path, task_type, target).
+  expected_output: >
+    A gradio UI in module app.py that demonstrates the given backend classes.
+    The file should be ready so that it can be run as-is, in the same directory as the backend module, and it should import the backend classes {analyze_module},
+    {cleaning_module}, {viz_module}.
+    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
+    The output should be valid Python code that can be directly saved to a file and executed.
+  agent: frontend_agent
+  context: [design_task, analyze_task, clean_and_apply_task, visualize_task]
+  output_file: outputs/app.py
+
+
+ui_smoke_test_task:
+  enabled: false
+  description: >
+    Heuristically validate the generated UI at outputs/app.py:
+    - Confirm the file exists and is readable.
+    - Confirm it has a main-guard (`if __name__ == "__main__":`) with launch call.
+    - Confirm it has all the required tabs (Overview, Audit & Clean, Visuals, Features, Report).
+    - Confirm that the required textboxes for the user inputs are available (csv upload, task_type, target (optional), domain, company (optional))
+    Do NOT execute the file; rely on static inspection and conservative reasoning.
+    If any required element is missing, set StepAudit status=retry with ≤3 issues and one actionable recommendation.
+    Otherwise status=passed.
+    IMPORTANT: Output ONLY a compact JSON object with keys:
+      {"status": "passed|retry|failed", "issues": [str], "recommendation": str, "evidence": {"file":"outputs/app.py"}}
+      Do NOT include markdown, code fences, or prose.
+  expected_output: StepAudit
+  agent: tester_agent
+  output_file: outputs/step_audits/ui_smoke_test.json
+
+
+control_task:
+  description: >
+    Validate final pipeline artifacts exist and are readable:
+      - outputs/analysis.py
+      - outputs/cleaning.py
+      - outputs/viz.py
+      - outputs/feature.py
+      - outputs/app.py
+
+    Decision policy:
+    - status=failed if any required file is missing or unreadable.
+    - status=retry if files exist but structure is incomplete (missing required keys) or types are invalid.
+    - status=passed only if all checks succeed.
+
+    Validate the frontend step:
+    - File outputs/app.py exists and is readable (use FileReadTool).
+    - File content must NOT contain Markdown code fences (```).
+    - The file must include a `def build_demo():` definition.
+    
+    Status policy:
+    - failed: file missing/unreadable OR contains backticks OR missing build_demo
+    - passed: otherwise
+    Return a StepAudit with fields: status, issues (≤3 bullets), recommendation (1 item), evidence (key paths).
+  expected_output: StepAudit
+  agent: controller_agent
+  context: [analyze_task, clean_and_apply_task, visualize_task]
+  output_file: outputs/final_audit.json

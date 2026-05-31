@@ -1,0 +1,109 @@
+intent_recognizing_task:
+  description: >
+    Analyze user input - {input} to identify the study topic and desired
+    expertise level.  If the input expertise is unclear, try to keep it between
+    Beginner and Intermediate.  If you are able to infer anything else from the
+    input that would help in tailoring the study plan, include that as well.
+  expected_output: |
+    A json object containing topic and expertise_level fields. For example: {
+      "topic": "Quantum Physics",
+      "expertise_level": "Beginner",
+      "additional_info": "Focus on fundamental concepts and real-world applications."
+    }
+  agent: intent_recognizer
+topic_generation_task:
+  description: >
+    Analyze the context given to you and generate a list of specific sub-topics
+    that should be covered to  comprehensively study the main topic at the given
+    expertise level.  Additionally, consider the additional_info while
+    generating the sub-topics if that is helpful.
+  expected_output: >
+    A json object containing topic and expertise_level fields and subtopics. For
+    example: {
+      "topic": "Quantum Physics",
+      "expertise_level": "Beginner",
+      "additional_info": "Focus on fundamental concepts and real-world applications."
+      "subtopics": [
+        "Introduction to Quantum Mechanics",
+        "Wave-Particle Duality",
+        "Quantum Entanglement",
+        "Applications of Quantum Physics"
+      ]
+    }
+  agent: topic_generator
+  context:
+    - intent_recognizing_task
+study_content_generation_task:
+  description: >
+    Analyze the context given and for the subtopics mentioned, generate a very
+    comprehensive study material that will help the user learn the topic
+    effectively at the desired expertise level. Consider the additional_info
+    while generating content for the sub-topics if that is helpful.
+  expected_output: >
+    A json object containing topic and expertise_level fields, subtopics and
+    content. For example: {
+      "topic": "Quantum Physics",
+      "expertise_level": "Beginner",
+      "additional_info": "Focus on fundamental concepts and real-world applications."
+      "content": {
+        "Introduction to Quantum Mechanics": "Quantum mechanics is the branch of physics that deals with...",
+        "Wave-Particle Duality": "Wave-particle duality is a fundamental concept of quantum mechanics...",
+        "Quantum Entanglement": "Quantum entanglement is a physical phenomenon that occurs when pairs...",
+        "Applications of Quantum Physics": "Quantum physics has numerous applications including quantum computing..."
+      }
+      "additional_sources": [
+        "https://example.com/quantum-mechanics",
+        "https://example.com/wave-particle-duality"
+      ]
+    }
+  agent: study_content_generator
+  context:
+    - intent_recognizing_task
+question_generator_task:
+  description: >
+    Analyze the study material provided in the context and generate a set of
+    practice questions for each of the sub-topics. Strictly do not generate any
+    content. Only generate questions based on the study content provided in the
+    context. 
+  expected_output: >
+    A json object containing topic and expertise_level fields, subtopics,
+    content and questions. For example: {
+      "topic": "Quantum Physics",
+      "expertise_level": "Beginner",
+      "additional_info": "Focus on fundamental concepts and real-world applications."
+      "content": {
+        "Introduction to Quantum Mechanics": "Quantum mechanics is the branch of physics that deals with...",
+        "Wave-Particle Duality": "Wave-particle duality is a fundamental concept of quantum mechanics...",
+        "Quantum Entanglement": "Quantum entanglement is a physical phenomenon that occurs when pairs...",
+        "Applications of Quantum Physics": "Quantum physics has numerous applications including quantum computing..."
+      }
+      "additional_sources": [
+        "https://example.com/quantum-mechanics",
+        "https://example.com/wave-particle-duality"
+      ],
+      "questions": {
+        "Introduction to Quantum Mechanics": [
+          "What is the significance of the Schrödinger equation in quantum mechanics?",
+          "Explain the concept of superposition."
+        ],
+        "Wave-Particle Duality": [
+          "Describe an experiment that demonstrates wave-particle duality.",
+          "How does wave-particle duality challenge classical physics?"
+        ]
+      }
+    }
+  agent: question_generator
+  context:
+    - study_content_generation_task
+output_parser_task:
+  description: >
+    You are given with a json object containing topic, expertise_level,
+    additional_info, subtopics, content, additional sources and questions. Your
+    task is to parse this json object and convert it into a well-structured
+    markdown document. Return valid markdown format.
+  expected_output: >
+    A markdown document containing topic and expertise_level fields, subtopics,
+    content and questions. 
+  agent: output_parser
+  context:
+    - question_generator_task

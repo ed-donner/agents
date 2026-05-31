@@ -1,0 +1,71 @@
+research_topic:
+  description: >
+    Research the topic "{topic}" thoroughly. Find:
+    - 5-7 key facts, statistics, or insights that would surprise or inform {audience}
+    - 2-3 compelling angles or sub-topics worth exploring
+    - Any recent developments (within the last year if possible)
+    - Credible sources or references to cite
+
+    Focus on what would genuinely be useful and interesting to {audience}.
+  expected_output: >
+    A structured research brief with key findings, interesting angles,
+    supporting facts/stats, and source references. Written in bullet points
+    organized by sub-topic.
+  agent: researcher
+  output_file: output/research.md
+
+write_draft:
+  description: >
+    Using the research brief, write a complete blog post about "{topic}" for {audience}.
+
+    Requirements:
+    - Tone: {tone}
+    - Length: 600-900 words
+    - Structure: hook opening, 3-4 body sections with clear points, strong closing
+    - Use the research findings naturally — don't just list facts, weave them into a narrative
+    - No filler phrases like "In conclusion" or "It goes without saying"
+  expected_output: >
+    A full blog post draft in markdown format with a working title, introduction,
+    body sections, and conclusion. No meta-commentary — just the article itself.
+  agent: writer
+  context:
+    - research_topic
+  output_file: output/draft.md
+
+edit_draft:
+  description: >
+    Edit the draft blog post with a critical eye. Your job:
+    - Cut any sentence that doesn't earn its place
+    - Fix awkward phrasing or weak transitions
+    - Ensure the opening hook lands and the closing sticks
+    - Check that the tone stays consistently {tone} throughout
+    - Verify the piece genuinely serves {audience} — remove anything too basic or too advanced
+    - Do NOT change the core structure or add new sections
+  expected_output: >
+    The edited, publication-ready article in markdown. Cleaner, tighter, and
+    more compelling than the draft. Include a short editor's note at the top
+    summarizing the 2-3 most significant changes made.
+  agent: editor
+  context:
+    - write_draft
+  output_file: output/edited_article.md
+
+optimize_seo:
+  description: >
+    Create the SEO package for the final article on "{topic}". Deliver:
+    1. **SEO Title** (50-60 chars) — click-worthy and keyword-rich
+    2. **Meta Description** (150-160 chars) — summarizes value, includes focus keyword
+    3. **Focus Keyword** — the single primary search term to target
+    4. **Secondary Keywords** — 3-5 related terms to weave in naturally
+    5. **Suggested Heading Structure** — H1, H2s, and H3s optimized for both readers and crawlers
+    6. **Internal Linking Suggestions** — 2-3 topic areas that could link to/from this piece
+
+    Then produce the final article with your suggested headings applied.
+  expected_output: >
+    A markdown file with two sections:
+    1. "SEO Metadata" — all the fields listed above in a clean format
+    2. "Final Article" — the edited article with optimized headings applied
+  agent: seo_strategist
+  context:
+    - edit_draft
+  output_file: output/final_article.md

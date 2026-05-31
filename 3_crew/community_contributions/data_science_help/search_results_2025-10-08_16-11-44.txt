@@ -1,0 +1,58 @@
+{
+  "searchParameters": {
+    "q": "regulations standards for data privacy in healthcare",
+    "type": "search",
+    "num": 5,
+    "engine": "google"
+  },
+  "organic": [
+    {
+      "title": "Summary of the HIPAA Privacy Rule - HHS.gov",
+      "link": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+      "snippet": "This is a summary of key elements of the Privacy Rule including who is covered, what information is protected, and how protected health information can be used ...",
+      "position": 1
+    },
+    {
+      "title": "A Guide to Data Privacy in Healthcare: Compliance and Best Practices",
+      "link": "https://www.osano.com/articles/data-privacy-in-healthcare",
+      "snippet": "HIPAA requires healthcare providers to obtain written consent from patients for the use of or sharing of their information beyond treatment, ...",
+      "position": 2
+    },
+    {
+      "title": "Health Insurance Portability and Accountability Act of 1996 (HIPAA)",
+      "link": "https://www.cdc.gov/phlp/php/resources/health-insurance-portability-and-accountability-act-of-1996-hipaa.html",
+      "snippet": "The Privacy Rule standards address the use and disclosure of individuals' protected health information (PHI) by entities subject to the rule.",
+      "position": 3
+    },
+    {
+      "title": "Health Information Privacy Law and Policy - HealthIT.gov",
+      "link": "https://www.healthit.gov/topic/health-information-privacy-law-and-policy",
+      "snippet": "Most health care providers must follow the Health Insurance Portability and Accountability Act (HIPAA) Privacy Rule (Privacy Rule), a federal ...",
+      "position": 4
+    },
+    {
+      "title": "Data privacy in healthcare: Global challenges and solutions - PMC",
+      "link": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12138216/",
+      "snippet": "This study explores global frameworks for healthcare data privacy, focusing on the General Data Protection Regulation (GDPR), the California Consumer Privacy ...",
+      "position": 5
+    }
+  ],
+  "relatedSearches": [
+    {
+      "query": "Regulations standards for data privacy in healthcare pdf"
+    },
+    {
+      "query": "List of regulations standards for data privacy in healthcare"
+    },
+    {
+      "query": "Regulations standards for data privacy in healthcare 2022"
+    },
+    {
+      "query": "HIPAA Privacy Rule"
+    },
+    {
+      "query": "HIPAA Security Rule"
+    }
+  ],
+  "credits": 1
+}

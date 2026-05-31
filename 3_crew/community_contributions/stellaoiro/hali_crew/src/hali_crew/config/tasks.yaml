@@ -1,0 +1,28 @@
+research_task:
+  description: >
+    Research the following HPV vaccine myth: {myth}
+    Find the scientific evidence that addresses it. Include WHO or Kenya MOH 
+    sources where possible. Current year is {current_year}.
+  expected_output: >
+    5 bullet points of evidence-based facts that directly counter the myth.
+  agent: myth_researcher
+
+rebuttal_task:
+  description: >
+    Using the research findings, write a clear rebuttal to the myth: {myth}
+    The rebuttal should be logical, respectful, and grounded in the evidence provided.
+  expected_output: >
+    A 3-paragraph rebuttal. Paragraph 1 acknowledges the concern. 
+    Paragraph 2 presents the evidence. Paragraph 3 gives a clear conclusion.
+  agent: myth_buster
+
+community_message_task:
+  description: >
+    Take the rebuttal and rewrite it as a warm, simple message for a Kenyan parent.
+    Use plain English. Include 1-2 key phrases in Swahili.
+    The tone should be like a trusted nurse speaking directly to a mother.
+  expected_output: >
+    A short community message (max 150 words) ready to share via WhatsApp or 
+    a community health meeting. End with: "Chanjo salama. Binti yako anastahili."
+    (The vaccine is safe. Your daughter deserves it.)
+  agent: community_writer

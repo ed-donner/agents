@@ -1,0 +1,68 @@
+analyze_emotion:
+  description: >
+    Analyze the user's input text {user_input} and identify their current emotional state,
+    intensity level, and the most likely underlying causes or triggers.
+    Be precise and clinically grounded. Return ONLY valid JSON, no explanation,
+    no markdown, no extra text.
+  expected_output: >
+    A clear summary of the detected emotion, intensity level, and causes.
+  agent: emotion_analyst
+
+map_mind_body:
+  description: >
+    Using the detected emotion and intensity from the previous task, map the
+    user's emotional state to specific physiological needs — such as nervous
+    system regulation, sleep, hydration, or neurotransmitter support. Explain
+    the clinical reasoning behind each mapped need. Return ONLY valid JSON.
+  expected_output: >
+     A list of physiological needs with clinical reasoning for each.
+  agent: mindfulness_analyst
+  context:
+    - analyze_emotion
+
+recommend_food:
+  description: >
+    Based on the identified physiological needs, recommend 3 to 5 foods that
+    directly support those needs. Include common ingredients, meals, or pantry
+    staples that are easy to source and prepare. Provide a brief evidence-based
+    justification for each food.
+  expected_output: >
+    A list of 3 to 5 recommended foods, each with a brief justification.
+  agent: nutrition_advisor
+  context:
+    - map_mind_body
+    
+suggest_habits:
+  description: >
+    Based on the user's physiological needs and emotional state, suggest 2 to 3
+    simple, immediately actionable habits. Each habit should ideally take under
+    5 minutes and require no equipment or special environment. Ground each
+    suggestion in behavioral science principles.
+  expected_output: >
+     A list of 2 to 3 habits, each with instructions and a rationale.
+  agent: habits_coach
+  context:
+    - analyze_emotion
+    - map_mind_body
+
+generate_response:
+  description: >
+    Synthesize all upstream outputs — the detected emotion, physiological needs,
+    food recommendations, and habit suggestions — into a single, cohesive, and
+    empathetic response for the user. The tone should be warm yet clinically
+    grounded. Avoid jargon. Do not repeat raw JSON — translate everything into
+    natural, supportive language. Acknowledge the user's emotional state first
+    before offering recommendations.
+  expected_output: >
+    A final user-facing message that:
+    - Opens by acknowledging the user's emotional state with empathy
+    - Briefly explains the mind-body connection relevant to their state
+    - Lists the food recommendations naturally within the response
+    - Lists the habit suggestions naturally within the response
+    - Closes with an encouraging, non-patronizing statement
+  agent: communication_coach
+  context:
+    - analyze_emotion
+    - map_mind_body
+    - recommend_food
+    - suggest_habits

@@ -1,0 +1,12 @@
+FROM python:3.12-slim
+
+# Optional: add a few safe libs you want the REPL to have
+RUN pip install --no-cache-dir numpy sympy
+
+# Create an unprivileged user
+RUN useradd -m -u 1000 sandbox
+USER sandbox
+WORKDIR /home/sandbox
+
+# Keep Python quiet and unbuffered
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1

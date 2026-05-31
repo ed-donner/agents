@@ -1,0 +1,23 @@
+[project]
+name = "data_science_help"
+version = "0.1.0"
+description = "data_science_help using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=0.201.1,<1.0.0"
+]
+
+[project.scripts]
+data_science_help = "data_science_help.main:run"
+run_crew = "data_science_help.main:run"
+train = "data_science_help.main:train"
+replay = "data_science_help.main:replay"
+test = "data_science_help.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

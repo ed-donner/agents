@@ -1,0 +1,37 @@
+strategy_task:
+  description: >
+    Draft a 3-part social media campaign strategy to launch the new 'Auto-Pay Discounts' feature for our bill payment app. Identify the target audience and the core message for each of the 3 posts.
+  expected_output: >
+    A strategy document outlining the target audience, campaign theme, and a brief description of the goal for Post 1, Post 2, and Post 3.
+  agent: marketing_lead
+  output_file: output/campaign_strategy.md
+
+copy_task:
+  description: >
+    Review the strategy document. Write the actual ad copy for the 3 posts. Ensure the tone is reassuring and highlights the time and money saved by using Auto-Pay.
+  expected_output: >
+    Three distinct blocks of ad copy (one for each post), including strong Calls to Action (CTAs).
+  agent: content_developer
+  context: 
+    - strategy_task
+  output_file: output/campaign_copy.md
+
+design_task:
+  description: >
+    Review the ad copy. For each of the 3 posts, write a highly descriptive DALL-E prompt and use your Generate Campaign Image tool to create the image. You must use the tool 3 times.
+  expected_output: >
+    A list of 3 saved image filenames along with a description of what each image portrays.
+  agent: graphic_designer
+  context: 
+    - copy_task
+  output_file: output/campaign_images.md
+
+publish_task:
+  description: >
+    Gather the copy from the Content Developer and the image filenames from the Graphic Designer. Format them into a final Markdown document. Add appropriate emojis and platform-specific hashtags for X, Instagram, and LinkedIn.
+  expected_output: >
+    A final Markdown document containing the complete social media content calendar: Copy, Hashtags, and Image File Paths for all 3 posts.
+  agent: social_media_manager
+  context: 
+    - copy_task
+  output_file: output/campaign_publish.md

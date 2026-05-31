@@ -1,0 +1,29 @@
+{
+  "feature": "Todo App Management",
+  "created_at": "2025-10-27 19:34:51",
+  "scenarios": [
+    {
+      "scenario": "Add a new todo item",
+      "result": "passed",
+      "assertions": [
+        {
+          "type": "assert_equals",
+          "actual": "Buy groceries",
+          "expected": "Buy groceries",
+          "message": "The new todo should be visible on the page."
+        },
+        {
+          "type": "assert_count",
+          "actual": 1,
+          "expected": 1,
+          "message": "The todo list should contain exactly 1 item."
+        }
+      ],
+      "screenshots": [
+        "Add_a_new_todo_item_start.png",
+        "Add_a_new_todo_item_end.png",
+        "Add_a_new_todo_item_assertion_end.png"
+      ]
+    }
+  ]
+}

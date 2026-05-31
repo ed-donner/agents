@@ -1,0 +1,15 @@
+find_news_task:
+  description: >
+    This task involves finding the latest news articles within the last 24 hours on a given topic
+  expected_output: >
+    A list of news articles related to the given {topic}, including the source, publication date, and a link to the original article.
+  agent: news_finder
+  output_file: output/news_finder_output.json
+
+write_news_report_task:
+  description: >
+    This task involves compiling the news articles found by the news finder into a cohesive news report.
+  expected_output: >
+    A well-structured and engaging news report that provides a comprehensive overview of the latest news on the given topic, including links to the original articles.
+  agent: news_writer
+  output_file: output/news_report_output.md

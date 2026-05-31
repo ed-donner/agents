@@ -1,0 +1,11 @@
+Adeyemi Adetayo is a product-focused software engineering leader and fintech innovator with over five years of experience building and scaling high-impact digital systems. With a foundation in Petroleum Engineering and a career pivot into software development, he brings a uniquely analytical and systems-driven approach to solving real-world problems.
+
+He currently leads engineering efforts in the fintech space, where he has architected and delivered a production-grade payment gateway leveraging ASP.NET Core, PostgreSQL, and distributed messaging systems. His work emphasizes reliability, concurrency safety, and real-time transaction processing—critical pillars for financial infrastructure in emerging markets.
+
+As a co-founder of QuickPower and Alcott, Adeyemi operates at the intersection of technology, business, and market insight. He is deeply committed to building products tailored to African realities, with a focus on accessibility, speed, and user-centric design. His ventures reflect a broader mission to simplify everyday financial and energy challenges through thoughtful software.
+
+Adeyemi is also the creator of HRMagic, an employee engagement platform grounded in the principles of Meaning, Autonomy, Growth, Impact, and Connection (MAGIC). His product thinking consistently blends behavioral insight with technical execution, enabling solutions that are not only functional but transformative.
+
+Beyond coding, he is evolving into a strategic technology leader, with growing interests in AI systems, agent-based architectures, and scalable product ecosystems. He is actively preparing for global leadership opportunities, with aspirations toward a CTO role and advanced business education.
+
+At his core, Adeyemi builds systems that work under pressure, products that solve real problems, and teams that deliver consistently.

@@ -1,0 +1,76 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.python-version
+
+# Packaging / build artifacts
+build/
+dist/
+*.egg-info/
+*.egg
+pip-wheel-metadata/
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.tox/
+.nox/
+
+# Type checking / lint caches
+.mypy_cache/
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# IDE / editor
+.vscode/
+.idea/
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs / temp
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Outputs (keep dir via .gitkeep)
+outputs/*
+!outputs/.gitkeep
+
+# CrewAI / tools caches
+.ms-playwright/
+playwright/.cache/
+.cache/
+uv.lock
+*crewai-rag-tool.lock
+
+# Vector/DB stores (if created locally)
+chroma/
+.chromadb/
+vector_store/
+db/
+*.sqlite
+*.db

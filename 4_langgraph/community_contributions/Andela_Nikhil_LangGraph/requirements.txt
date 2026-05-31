@@ -1,0 +1,5 @@
+python-dotenv
+gradio
+langchain
+langgraph
+# Add any other dependencies required for your environment

@@ -1,0 +1,108 @@
+# Dynamic Configuration for Protein Food Finder
+# This file controls the dynamic behavior of store-based agents
+
+# Products per store configuration
+products_per_store:
+  min: 5  # Minimum products to find per store (increased to ensure top 3 selection)
+  max: 7  # Maximum products to find per store
+  default: 7  # Default target if not specified (more options for filtering)
+
+# Agent behavior configuration
+agent_behavior:
+  continue_on_failure: true  # If true, continue with other stores even if one agent fails
+  parallel_execution: true   # Execute store searches in parallel
+  max_parallel_agents: 5     # Maximum number of store agents to run simultaneously
+  timeout_per_agent: 300     # Timeout in seconds for each store agent (5 minutes)
+
+# Store information mapping
+# Maps store names to their websites for targeted searching
+stores:
+  "Trader Joe's":
+    website: "traderjoes.com"
+    search_aliases: ["trader joes", "tj's", "tjs"]
+  "Whole Foods":
+    website: "wholefoodsmarket.com"
+    search_aliases: ["whole foods", "wfm", "wholefoods"]
+  "Costco":
+    website: "costco.com"
+    search_aliases: ["costco", "costco wholesale"]
+  "Molly Stone's":
+    website: "mollystones.com"
+    search_aliases: ["molly stones", "molly stone's", "mollystones"]
+  "Target":
+    website: "target.com"
+    search_aliases: ["target", "target stores"]
+
+# Dietary validation rules
+dietary_validation:
+  min_protein_grams: 20  # Minimum protein content in grams
+
+  # Keywords that indicate excluded ingredients
+  exclude_keywords:
+    - "beef"
+    - "pork"
+    - "turkey"
+    - "tuna"
+
+  # Keywords that indicate acceptable protein sources
+  include_keywords:
+    - "chicken"
+    - "fish"
+    - "salmon"
+    - "shrimp"
+    - "eggs"
+    - "egg white"
+    - "plant-based"
+    - "reduced sugar"
+    - "low sugar"
+
+  # Additional dietary flags
+  gluten_free: true  # Prefer gluten-free options when possible
+  max_sugar_grams: 10  # Maximum sugar content in grams (5-10g range, using 10 as upper limit)
+  min_sugar_grams: 5   # Minimum sugar threshold for flagging
+
+# Search strategy configuration
+search_strategy:
+  # Search query templates for each store
+  # {store} will be replaced with the store name
+  query_templates:
+    - "{store} high protein products 20g"
+    - "{store} protein powder"
+    - "{store} Greek yogurt high protein"
+    - "{store} protein bars"
+    - "site:{website} protein"
+    - "{store} best high protein foods site:reddit.com"
+
+  # Minimum number of search queries per store
+  min_queries_per_store: 3
+
+  # Prioritize these product categories (frozen & convenient first)
+  priority_categories:
+    - "Frozen Chicken"
+    - "Frozen Fish"
+    - "Frozen Shrimp"
+    - "Protein Powder"
+    - "Protein Bars"
+    - "Greek Yogurt"
+    - "Rotisserie Chicken"
+    - "Ready-to-Eat Meals"
+    - "Protein Shakes"
+
+# Report generation configuration
+report:
+  top_items_per_store: 3  # Number of top items to recommend per store
+  sort_by: "protein_per_dollar"  # Options: protein_per_dollar, protein_grams, price
+  include_nutrition_facts: true
+  include_shopping_strategy: true
+
+# LLM configuration defaults
+llm:
+  default_model: "gpt-4o-mini"
+  temperature: 0.7
+  max_tokens: 4000
+
+# Logging and debugging
+logging:
+  verbose: true
+  save_intermediate_results: true
+  results_directory: "./outputs"

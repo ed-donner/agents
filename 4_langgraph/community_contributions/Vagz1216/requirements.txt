@@ -1,0 +1,13 @@
+langgraph
+aiosqlite
+groq
+langchain-openai
+langchain-community
+langchain-groq
+ddgs
+sendgrid
+resend
+gradio
+python-dotenv
+pydantic
+nest-asyncio

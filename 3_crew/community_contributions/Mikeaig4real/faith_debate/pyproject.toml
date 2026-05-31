@@ -1,0 +1,28 @@
+[project]
+name = "faith_debate"
+version = "0.1.0"
+description = "faith_debate using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai==1.11.0",
+    "litellm>=1.82.6",
+]
+
+[project.scripts]
+faith_debate = "faith_debate.main:run"
+run_crew = "faith_debate.main:run"
+train = "faith_debate.main:train"
+replay = "faith_debate.main:replay"
+test = "faith_debate.main:test"
+run_with_trigger = "faith_debate.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
+
+[tool.uv]
+required-environments = ["sys_platform == 'win32' and platform_machine == 'AMD64'"]

@@ -1,0 +1,166 @@
+breakdown_task:
+  description: >
+    Take the high level requirements described here and decompose the system
+    into a set of well-defined backend modules that can be independently implemented
+    by separate engineering teams.
+
+    Ensure that:
+    - The decomposition fully covers the entire requirements
+    - There are no redundant or overlapping modules
+    - The modules can be developed, tested, and executed independently
+    - The design supports downstream steps like test case generation, code generation, and UI integration
+    - The modules have no external dependencies
+    - Include part of the main requirements required for the module with the main product requirements information.
+
+    IMPORTANT: Only output the module breakdown in JSON format, structured as a list of module definitions.
+    IMPORTANT: Only output the backend module and class_name
+    IMPORTANT: Ignore/exclude any frontend or integration modules
+    IMPORTANT: Only include feature modules -> ignore reporting, audit trail and validation modules
+  expected_output: >
+    A JSON array of module definitions, each containing module_name, class_name,
+    description, key responsibilities, and interactions.
+  agent: system_architect
+  output_file: output/features_broken.json
+design_task:
+  description: >
+    Take the high level requirements described here and prepare a detailed design for the engineer;
+    everything should be in 1 python module, but outline the classes and methods in the module.
+    Here are the requirements: {requirements}
+    IMPORTANT: Only output the design in markdown format, laying out in detail the classes and functions in the module, describing the functionality.
+  expected_output: >
+    A detailed design for the engineer, identifying the classes and functions in the module.
+  agent: engineering_lead
+  output_file: output/{module_name}/{module_name}_design.md
+
+write_test_cases_task:
+  description: >
+    Generate structured test cases for the class {class_name} in the module {module_name}
+    based on the provided requirements and system design.
+
+    IMPORTANT: Only output the test cases as JSON, so they can be directly used by downstream agents.
+  expected_output: >
+    A JSON array of structured test cases.
+  agent: qa_test_design_lead
+  context:
+    - design_task
+  output_file: output/{module_name}/{module_name}_test_cases.json
+
+code_task:
+  description: >
+    Write a python module that implements the design described by the engineering lead, in order to achieve the requirements.
+    Here are the requirements: {requirements}
+  expected_output: >
+    A python module that implements the design and achieves the requirements.
+    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
+    The output should be valid Python code that can be directly saved to a file and executed.
+  agent: backend_engineer
+  context:
+    - design_task
+  output_file: output/{module_name}/{module_name}.py
+
+frontend_task:
+  description: >
+    Write a Gradio UI module (app.py) that demonstrates the backend class {class_name}
+    from the module {module_name}.
+
+    The UI must be simple and act as a prototype for interacting with the backend logic.
+
+    REQUIREMENTS:
+    - Import the backend class {class_name} from the module {module_name}
+    - Instantiate and use the backend class inside the UI
+    - Keep the UI minimal and focused on core functionality
+
+    STRUCTURE REQUIREMENTS:
+    - The module MUST define a function:
+        build_ui() -> gr.Interface | gr.Blocks
+    - This function must construct and return the Gradio UI
+    - DO NOT call .launch() inside build_ui()
+
+    - The module MAY include:
+        if __name__ == "__main__":
+            build_ui().launch()
+
+    - The UI must be self-contained and not depend on external services
+
+    INTEGRATION CONSTRAINTS:
+    - The build_ui() function will be used by another system to compose multiple UIs
+    - Therefore, it must NOT:
+        - execute on import
+        - create global side effects
+        - assume it is the only UI in the app
+
+    Here are the requirements:
+    {requirements}
+
+    IMPORTANT:
+    - Output ONLY raw Python code (no markdown, no backticks)
+    - The output must be valid and directly executable
+  expected_output: >
+    A Python module app.py that defines a build_ui() function returning a Gradio UI,
+    demonstrating the backend class {class_name}, and ready for integration into a larger app.
+  agent: frontend_engineer
+  context:
+    - code_task
+  output_file: output/{module_name}/app.py
+
+test_task:
+  description: >
+    Write unit tests for the given backend module {module_name} and create a test_{module_name} in the same directory as the backend module.
+  expected_output: >
+    A test_{module_name} module that tests the given backend module.
+    IMPORTANT: Output ONLY the raw Python code without any markdown formatting, code block delimiters, or backticks.
+    The output should be valid Python code that can be directly saved to a file and executed.
+  agent: test_engineer
+  context:
+    - code_task
+  output_file: output/{module_name}/test_{module_name}
+
+execute_unit_tests_task:
+  description: >
+    Execute the unit tests for the module {module_name} and produce a structured
+    test execution report.
+
+    IMPORTANT: Only output the report as JSON, so it can be directly read by downstream agents.
+  expected_output: >
+    A JSON report summarizing test results, failures, and recommendations.
+  agent: test_automation_engineer
+  context:
+    - code_task
+    - test_task
+  output_file: output/{module_name}/{module_name}_test_report.json
+integration_task:
+  description: >
+    Combine multiple independently generated frontend modules into a single unified
+    Gradio application.
+
+    Each module represents a feature and exists in its own directory:
+    output/{module_name}/app.py
+
+    Each frontend module is expected to expose a function:
+      build_ui() -> gr.Interface | gr.Blocks
+
+    Your task is to:
+    - Import each module's build_ui function
+    - Combine all UIs into a single Gradio application using Tabs
+    - Each tab must be labeled using the module_name
+    - Ensure the final application runs as a standalone Python script
+
+    The final app must:
+    - Use gr.Blocks as the root container
+    - Create one tab per module
+    - Call each module’s build_ui() inside its respective tab
+    - Be executable directly with `python app.py`
+
+    Input modules:
+    {modules}
+
+    IMPORTANT:
+    - Do NOT modify the individual module implementations
+    - Do NOT inline or rewrite module UIs
+    - Only compose them together
+    - Output ONLY raw Python code (no markdown, no backticks)
+  expected_output: >
+    A single Python file (app.py) that imports all module UIs and combines them
+    into a tabbed Gradio interface, ready to run.
+  agent: integration_engineer
+  output_file: output/app.py

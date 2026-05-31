@@ -1,0 +1,7 @@
+design_task:
+  description: >
+    Analyze the project requirements and output a structured JSON project plan.
+  expected_output: >
+    Valid JSON following ProjectSpec schema.
+  agent: engineering_lead
+  output_file: output/project_plan.json

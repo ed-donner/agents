@@ -1,0 +1,27 @@
+[project]
+name = "homeworker"
+version = "0.1.0"
+description = "homeworker using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools,azure-ai-inference]==1.9.3",
+    "litellm==1.73.0",
+    "crewai[ollama]==1.9.3",
+    "sendgrid==6.12.5"
+]
+
+[project.scripts]
+homeworker = "homeworker.main:run"
+run_crew = "homeworker.main:run"
+train = "homeworker.main:train"
+replay = "homeworker.main:replay"
+test = "homeworker.main:test"
+run_with_trigger = "homeworker.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

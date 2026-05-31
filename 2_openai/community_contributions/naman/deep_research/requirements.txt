@@ -1,0 +1,7 @@
+# openai-agents provides the `agents` package (from agents import ...)
+gradio>=5.0
+python-dotenv>=1.0
+sendgrid>=6.0
+certifi
+openai>=1.0
+openai-agents>=0.0.15

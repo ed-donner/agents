@@ -1,0 +1,55 @@
+generate_question_task:
+  description: >
+    Research the core values and mission of {company_name}. 
+    Based on this, curate 8 high-impact behavioral interview questions 
+    specifically designed to test a recent graduate's potential. 
+    Focus on soft skills: conflict resolution, learning agility, 
+    and alignment with company culture.
+  expected_output: >
+    A markdown-formatted list of 8 distinct behavioral questions, 
+    each paired with a brief note on 'What to look for' in the answer.
+    This exact list will be used for ALL candidates to ensure fair comparison.
+  agent: interviewer_agent
+
+answer_question_task:
+  description: >
+    You are being interviewed for a role at {company_name}. Below are the 
+    EXACT interview questions you must answer. Using your background in {background}, 
+    draft a comprehensive response to EACH question. 
+    Every answer must follow the STAR method: 
+    - Situation: Context of the event.
+    - Task: The challenge or goal.
+    - Action: Specifically what YOU did.
+    - Result: The quantifiable outcome or lesson learned.
+    Maintain a professional, eager, and humble tone.
+    
+    INTERVIEW QUESTIONS (answer every one):
+    {interview_questions}
+  expected_output: >
+    A structured Markdown document where each question is followed by 
+    a multi-paragraph STAR-formatted response.
+  agent: candidate_agent
+  output_file: output/candidate_{candidate_name}_answers.md
+
+hire_task:
+  description: >
+    You have conducted behavioral interviews at {company_name}. All candidates 
+    answered the SAME set of 8 questions. Your job is to compare them and 
+    recommend which candidate to hire.
+    
+    CANDIDATES' BACKGROUNDS AND ANSWERS:
+    {candidates_summary}
+    
+    Evaluate each candidate based on three pillars: Communication Clarity, 
+    Cultural Alignment with {company_name}, and Problem-Solving Depth. 
+    Compare their answers against the 'What to look for' notes from the 
+    original question set. Consider both their written responses AND their 
+    backgrounds when making your final recommendation.
+  expected_output: >
+    A formal "Hiring Recommendation Report" in Markdown. It must include:
+    - Executive Summary: Which candidate to hire and why (or No Hire for all)
+    - Comparative Scorecard: Each candidate scored 1-5 on each pillar
+    - Detailed justification comparing candidates
+    - Final recommendation with clear reasoning
+  agent: interviewer_agent
+  output_file: output/hiring_decision.md

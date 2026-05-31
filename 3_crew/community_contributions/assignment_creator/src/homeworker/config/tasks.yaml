@@ -1,0 +1,69 @@
+create_math_homework:
+  description: >
+    You are creating a math assignment for a student in grade {grade}. Come up with an interesting, fun and challenging assignment.
+  expected_output: >
+    A suitable assignment for a student in grade {grade} with clear instructions on the topic of {topic}. Do not add any salutation or signatures to the assignment. Write only the text of the assignment to the output file.
+  agent: maths_tutor
+  output_file: output/assignment.txt
+
+create_english_homework:
+  description: >
+    You are creating an English assignment for a student in grade {grade} on the topic of {topic}. Come up with an interesting, fun and challenging assignment to test comprehension, vocabulary and/or grammar skills based on the topic.
+  expected_output: >
+    A text-only assignment for a student with clear instructions. Do not add any salutation or signatures to the assignment. Write only the text
+    of the assignment to the output file.
+  agent: english_tutor
+  output_file: output/assignment.txt
+
+create_general_homework:
+  description: >
+    You are creating a homework assignment for a student in grade {grade} on the topic of {topic}. Come up with an interesting, fun and challenging assignment on {topic} suitable a student of grade {grade}.
+  expected_output: >
+    A suitable assignment for a student in grade {grade} with clear instructions. Do not add any salutation or signatures to the assignment. Write only the text of the assignment to the output file.
+  agent: general_tutor
+  output_file: output/assignment.txt
+
+principal_task:
+  description: >
+    Decide which tutor should handle the topic: {topic} for grade {grade}. Return ONLY valid JSON with:
+    {
+      "selected_tutor": "maths_tutor" | "english_tutor" | "general_tutor",
+      "reason": "short explanation"
+    }
+  expected_output: >
+    A JSON object with selected_tutor and reason.
+  agent: principal
+
+compose_email:
+  description: >
+    Use file_read_tool to read output/assignment.txt.
+    Convert the text into clean, well-structured HTML.
+    The assignment text should be broken into paragraphs using <p>, Lists should use <ul> or <ol>, bold text should use <strong>.
+    Wrap everything inside:
+    <html>
+      <body style="font-family: Arial, sans-serif; line-height: 1.5;">
+        <p>Dear Parent,</p>
+        {{ formatted_assignment_html }}
+        <p>Your Friendly Neighborhood AI Tutor</p>
+      </body>
+    </html>
+    Ensure the output is valid HTML and contains no Markdown.
+  expected_output: >
+    A complete HTML email with proper tags and formatting.
+  agent: mail_composer
+  output_file: output/email.html
+  context:
+    - create_math_homework
+    - create_english_homework
+    - create_general_homework
+
+send_email:
+  description: >
+    Read output/email.html using file_read_tool.
+    Send an email to {to_email} with subject "Homework: {topic}, Grade {grade}". Use the entire HTML file as the email body. Do not add any more
+    contents to the email, the entire email content is present in the output/email.html file.
+  expected_output: >
+    An email message.
+  agent: mailer
+  context:
+    - compose_email

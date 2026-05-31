@@ -1,0 +1,6 @@
+gradio
+python-dotenv
+gitpython
+pydantic
+openai-agents
+tree-sitter-languages

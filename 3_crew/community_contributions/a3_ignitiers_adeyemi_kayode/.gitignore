@@ -1,0 +1,10 @@
+.env
+__pycache__/
+.DS_Store
+knowledge/
+output/
+flight_ai_briefing.md
+pyproject.toml
+uv.lock
+README.md
+AGENTS.md

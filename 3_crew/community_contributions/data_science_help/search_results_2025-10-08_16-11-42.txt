@@ -1,0 +1,58 @@
+{
+  "searchParameters": {
+    "q": "data cleaning best practices healthcare domain",
+    "type": "search",
+    "num": 5,
+    "engine": "google"
+  },
+  "organic": [
+    {
+      "title": "What are the best practices for handling data cleaning in healthcare?",
+      "link": "https://www.linkedin.com/advice/1/what-best-practices-handling-data-cleaning-healthcare-rhzsf",
+      "snippet": "Best practices include: ensuring data privacy per HIPAA, careful handling of missing values through imputation, addressing outliers cautiously, validating data ...",
+      "position": 1
+    },
+    {
+      "title": "Normal Workflow and Key Strategies for Data Cleaning Toward Real ...",
+      "link": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10557005/",
+      "snippet": "Machine-based and manual methods can be selected to improve work efficiency when adopting combined human-machine cleaning strategies.",
+      "position": 2
+    },
+    {
+      "title": "Cleaning Data: The Basics - National Cancer Institute",
+      "link": "https://www.cancer.gov/about-nci/organization/cbiit/training/learn/clean",
+      "snippet": "Learn how proper data cleaning improves accuracy, helps answer research questions, and prevents costly mistakes\u2014ensuring reliable results ...",
+      "position": 3
+    },
+    {
+      "title": "Sourcing Top Healthcare Data Cleaning: Where & Why it Matters",
+      "link": "https://www.4medica.com/blog_insights/healthcare-data-cleaning/",
+      "snippet": "Healthcare data cleaning is a systematic and meticulous process that identifies and rectifies errors and inconsistencies in data to improve its quality. It ...",
+      "position": 4
+    },
+    {
+      "title": "Healthcare Data Cleansing: Frequently Asked Questions - NXUnite",
+      "link": "https://nxunite.com/healthcare-data-cleansing/",
+      "snippet": "Healthcare organizations must regularly clean their data to maintain quality standards. The frequency of data cleansing will be determined by ...",
+      "position": 5
+    }
+  ],
+  "relatedSearches": [
+    {
+      "query": "Data cleaning best practices healthcare domain pdf"
+    },
+    {
+      "query": "Data cleaning documentation"
+    },
+    {
+      "query": "Methods of data cleaning"
+    },
+    {
+      "query": "Data cleaning: detecting, diagnosing, and editing data abnormalities"
+    },
+    {
+      "query": "Data cleaning principles"
+    }
+  ],
+  "credits": 1
+}

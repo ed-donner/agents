@@ -1,0 +1,365 @@
+flight_research_task:
+  description: >
+    IMPORTANT: If a step does not require a tool call, include that reasoning
+    directly in your Final Answer. Do NOT output "Action: None" — either call
+    a tool or move on to the next step.
+
+    1. **Race Dates:** Use your search tool to find the official race weekend
+       dates for the {grand_prix} in {current_year}. Do not guess.
+    2. **Travel Dates:** The user wants to stay for {days} days total. Using
+       the race dates from step 1, determine the best arrival and departure
+       dates that centre the race weekend within the trip. State these dates
+       explicitly in your Final Answer — this is a reasoning step, not a
+       tool call.
+    3. **Flight Routing:** Use the "Search Flight Prices" tool to find flights
+       from {source_city} to the nearest major airport for the {grand_prix}.
+       Use the arrival and departure dates from step 2, and set the currency
+       to {currency_code}. You will need the IATA airport codes for both cities.
+       Report the departure time, arrival time, airline, flight number, and
+       price exactly as returned by the tool. Do NOT invent or estimate any
+       flight details — use only what the tool returns.
+    4. **Currency Conversion:** If any flight prices are returned in a different
+       currency, convert them to {currency_code} and state the exchange rate used.
+  expected_output: >
+    A Flight Research Report in Markdown including:
+    - Official race weekend dates for the {grand_prix}.
+    - Recommended arrival date and departure date for a {days}-day stay.
+    - Top flight options with airline, flight number, departure/arrival times,
+      and price in {currency_code} as returned by the Search Flight Prices tool.
+    - Booking link (the Google Flights URL returned by the tool, if available).
+    Do NOT wrap the output in code fences.
+  agent: travel_logistics_agent
+  output_file: output/flight_research.md
+
+accommodation_research_task:
+  description: >
+    IMPORTANT: If a step does not require a tool call, include that reasoning
+    directly in your Final Answer. Do NOT output "Action: None" — either call
+    a tool or move on to the next step.
+
+    Using the arrival and departure dates from the flight_research_task context,
+    find accommodation options for the user's {days}-night stay in
+    {destination_city}.
+
+    1. **Accommodation Analysis:** Use the "Search Hotel Prices" tool to find
+       hotels for {days} nights using the check-in and check-out dates from
+       flight_research_task, with currency set to {currency_code}. Run three
+       separate searches — one per tier — using different queries and sort orders:
+       - 'The Trackside': Search for "luxury hotel walking distance [circuit name]"
+         with sort_by "8" (highest rating). Pick a 4-5 star hotel.
+       - 'The Hub': Search for "mid-range hotel city centre [destination city]"
+         with sort_by "13" (most reviewed). Pick a 3-star hotel.
+       - 'The Value Play': Search for "budget hotel or hostel [destination city]"
+         with sort_by "3" (lowest price). Pick the cheapest viable option.
+       **Tier Ordering Check:** After selecting all three, verify the nightly
+       rates are in descending order: Trackside > Hub > Value Play. If any tier
+       is out of order (e.g. Hub costs more than Trackside), reject that pick
+       and choose the next cheaper option from the same search results.
+       Re-verify until the ordering holds.
+       Report nightly rates and total costs exactly as returned by the tool.
+       Do NOT invent or estimate hotel prices — use only what the tool returns.
+    2. **Local Transit:** Calculate the specific transit method from the airport
+       to each hotel option, and the daily hotel-to-circuit commute time using
+       local trains, shuttles, or walking paths.
+    3. **Currency Conversion:** All prices must be reported in {currency_code}.
+       If any search results return prices in a different currency, convert them
+       and state the exchange rate used.
+  expected_output: >
+    An Accommodation Report in Markdown including:
+    - Three hotel recommendations (one per tier), each with:
+      - Hotel name and nightly rate in {currency_code} as returned by the
+        Search Hotel Prices tool.
+      - Total stay cost for {days} nights.
+      - Booking link if available.
+      - Commute time to the circuit.
+    - A transport recommendation on whether to use public transport or
+      rideshares based on local race-day traffic patterns.
+    Do NOT wrap the output in code fences.
+  agent: travel_logistics_agent
+  context:
+    - flight_research_task
+  output_file: output/accommodation.md
+
+f1_experience_strategist_task:
+  description: >
+    The user has a total budget of {amount} {currency_code} for the entire trip to 
+    the {grand_prix} (flights, hotel, food, and tickets included). The race ticket 
+    is a major expense, so your recommendation must be realistic.
+
+    1. **Search for Official Ticket Info:** Use your search tool to find the 
+       official {current_year} ticket categories, grandstand names, and price 
+       tiers for the {grand_prix}. Look for the circuit's official website or 
+       authorized resellers. Note the original currency the prices are listed 
+       in on the source (e.g. SGD, EUR, GBP). Do NOT use your training 
+       knowledge to estimate ticket prices — use only prices found in search 
+       results.
+    2. **Currency Conversion:** If the official prices are not in {currency_code}, 
+       use the "Get Currency Exchange Rate" tool to get the live exchange rate 
+       from the source currency to {currency_code}. Do NOT guess or estimate the 
+       exchange rate — use only the rate returned by the tool. Show the source 
+       currency price, the exact exchange rate from the tool, and the converted 
+       {currency_code} price for every ticket option.
+    3. **Circuit Analysis:** Identify the key overtaking zones, DRS zones, and 
+       the best viewing sections specific to this circuit.
+    4. **Recommend ONE Specific Grandstand:** Based on the best value-for-money 
+       (not the cheapest, not the most expensive), recommend one specific 
+       grandstand or zone by name. Explain why it offers the best race-day 
+       experience for the price.
+    5. **Provide Price Tiers:** List at least 3 ticket options (budget, mid-tier, 
+       premium) with actual prices found from your search. For each option, show 
+       the original source currency price and the converted {currency_code} price.
+    6. **Budget Consideration:** Calculate: 40% of {amount} {currency_code} = the 
+       threshold. For every ticket option, compare its {currency_code} price against 
+       this threshold. Only flag an option if its price is GREATER than the threshold. 
+       If the price is less than the threshold, explicitly state it is within budget — 
+       do NOT flag it.
+  expected_output: >
+    A Ticket Strategy Report in Markdown:
+    - **Exchange Rate:** The source currency, the exchange rate used, and where 
+      it was sourced from.
+    - **Primary Recommendation:** One specific grandstand/zone with name, price 
+      in both source currency and {currency_code}, and justification.
+    - **Alternative Options:** 2-3 other options (cheaper and more premium) with 
+      prices in both source currency and {currency_code}.
+    - **Circuit Map Insight:** Which turns/zones offer the best action for this 
+      specific track.
+    - **Budget Assessment (per ticket):** For each ticket option, write the 
+      comparison on its own line in this exact format:
+      "[ticket price] vs 40% threshold [40% of {amount} = X {currency_code}] → Within budget / Exceeds budget"
+      Only mark "Exceeds budget" if the ticket price is numerically greater than X.
+    Do NOT wrap the output in code fences.
+  agent: f1_experience_strategist
+  output_file: output/race_ticket.md
+
+budget_planner_task:
+  description: >
+    1. **Fixed Costs:** Take the flight costs from 'flight_research_task' and 
+       the ticket costs from 'f1_experience_strategist_task'.
+    2. **Select Accommodation (top-down trial):** Try each hotel tier from 
+       accommodation_research_task in this order: The Trackside, The Hub, The Value Play. 
+       For each tier, calculate:
+         Total Fixed Costs = Flights + Tickets + (Nightly Rate x {days})
+       Accept the FIRST tier where Total Fixed Costs is at most 70% of 
+       {amount} {currency_code} (leaving at least 30% for daily spending). 
+       If NO tier satisfies this condition, select The Value Play anyway 
+       and flag the budget as CRITICAL in step 4. 
+       Show the trial calculation for each tier in your report. 
+       Do NOT research accommodation independently.
+    3. **Budget Calculation:** Subtract (Flights + Tickets + Accommodation) from 
+       {amount} {currency_code}. Divide the remainder by {days} to get the 
+       Daily Allowance in {currency_code}.
+    4. **Budget Classification (two-factor analysis):**
+       Evaluate the budget using both of the following factors:
+       **Factor A — Fixed Cost Ratio:** Calculate what percentage of the total 
+       budget ({amount} {currency_code}) was consumed by fixed costs 
+       (Flights + Tickets + Accommodation).
+       **Factor B — Daily Allowance vs Destination Cost of Living:** Use your 
+       search tool to find the average daily tourist spending in 
+       {destination_city} for {current_year}. Convert it to {currency_code} 
+       if needed. Compare the Daily Allowance against this average.
+       Then classify using both factors together:
+       - CRITICAL: Fixed Cost Ratio > 80%, OR Daily Allowance < 50% of the 
+         average daily tourist spend.
+       - BUDGET: Fixed Cost Ratio 60-80%, OR Daily Allowance between 50-100% 
+         of the average daily tourist spend.
+       - COMFORTABLE: Fixed Cost Ratio 40-60%, AND Daily Allowance between 
+         100-200% of the average daily tourist spend.
+       - LUXURY: Fixed Cost Ratio < 40%, AND Daily Allowance > 200% of the 
+         average daily tourist spend.
+       If the two factors point to different tiers, use the more conservative 
+       (tighter) label. Show both factor values in your report.
+    5. **Allocation (tier-specific):** Allocate the Daily Allowance using the 
+       split that matches the classification from step 4:
+       - CRITICAL: Food 40%, Transport 25%, Contingency 20%, Experiences 10%, 
+         Discretionary 5%.
+       - BUDGET: Food 30%, Transport 20%, Contingency 20%, Experiences 15%, 
+         Discretionary 15%.
+       - COMFORTABLE: Food 25%, Transport 15%, Experiences 25%, 
+         Contingency 15%, Discretionary 20%.
+       - LUXURY: Food 20%, Transport 10%, Experiences 35%, Contingency 15%, 
+         Discretionary 20%.
+    All amounts must be in {currency_code}.
+  expected_output: >
+    A Budget Feasibility Report in Markdown.
+    - **Accommodation Selection Trial:** For each tier (Trackside, Hub, Value Play), 
+      show: Nightly Rate x {days} = accommodation total, then 
+      Flights + Tickets + accommodation total = Fixed Costs, then 
+      Fixed Costs / {amount} = X%. Mark which tier was selected and why.
+    - **Fixed Costs Breakdown:** (Flights, Tickets, Hotel) with source noted.
+    - **Daily Allowance:** The amount left per day in {currency_code}.
+    - **Classification Reasoning:** Show both factors used:
+      - Fixed Cost Ratio (percentage of total budget consumed by fixed costs).
+      - Average daily tourist spend for {destination_city} (searched value) 
+        and how the Daily Allowance compares to it.
+      - Final classification (CRITICAL / BUDGET / COMFORTABLE / LUXURY) with 
+        a one-line explanation of why this tier was assigned.
+    - **Allocation Table:** How the Daily Allowance is split across categories 
+      using the tier-specific percentages.
+    - **Optimization Advice:** Specific tips to save money if the status is 
+      CRITICAL or BUDGET.
+    Do NOT wrap the output in code fences.
+  agent: budget_planner_agent
+  context:
+    - flight_research_task
+    - accommodation_research_task
+    - f1_experience_strategist_task
+  output_file: output/budget_plan.md
+
+local_guide_task:
+  description: >
+    The user is staying in {destination_city} for {days} days in total.
+
+    IMPORTANT: Call tools ONE AT A TIME. Do NOT batch multiple searches into
+    a single Action Input — each search must be its own separate action with
+    a single JSON object (not an array). If you receive a tool error, retry
+    the search with a corrected input. Do NOT give up and list your planned
+    actions as your Final Answer.
+
+    If a step does not require a tool call, include that reasoning directly
+    in your Final Answer. Do NOT output "Action: None".
+
+    Your context already contains the complete output from flight_research_task
+    (flight details, travel dates) and accommodation_research_task (hotel options,
+    commute times) and budget_planner_task (daily allowance, budget status, fixed
+    costs). Extract all hotel, accommodation, and budget information directly
+    from that context.
+    Do NOT search for hotels, flights, or accommodation prices — that data is
+    already in your context.
+
+    1. **Daily Allowance and Allocation:** Extract the per-day spending limit
+       AND the allocation table from the budget_planner_task output. Write the
+       extracted values at the top of your output:
+         - Daily Allowance: [amount]
+         - Food budget per day: [amount]
+         - Transport budget per day: [amount]
+         - Experiences budget per day: [amount]
+       CRITICAL: Your itinerary spending for each day MUST aim to use at least
+       70% of each allocated category. If Food is allocated ₹4,800/day, plan
+       3 proper meals totalling ₹3,500-4,800, not one ₹700 hawker meal. If
+       Experiences is allocated ₹2,400/day, include at least one paid attraction
+       per day — do NOT make every experience free. The budget has already
+       accounted for these amounts; underspending wastes the user's planning.
+    2. **Hotel Location:** Extract the user's hotel from the
+       accommodation_research_task output so you can suggest nearby activities.
+    3. **Day Classification:** Make ONE search call for the official {current_year}
+       session times for the {grand_prix}. Wait for the result before proceeding.
+       Then classify each of the {days} days into one of two types:
+       - **F1 Day:** A day with at least one official session (Practice,
+         Qualifying, or Race).
+       - **Free Day:** Any other day — arrival, departure, or mid-trip days
+         with no F1 sessions.
+       List this classification at the top of your output.
+    4. **Activity Selection (based on budget status from budget_planner_task):**
+       Make ONE search call for top-rated tourist activities and restaurants in
+       {destination_city} for {current_year}. Wait for the result before proceeding.
+       Then select activities that fit the budget tier:
+       - CRITICAL: Mostly free experiences — public parks, free viewpoints,
+         street markets, walking tours. Limit paid activities to 1-2 across
+         the entire trip.
+       - BUDGET: A mix of free and paid experiences — include at least one
+         paid attraction per day (museums, food tours, cultural sites) plus
+         proper sit-down meals, not just hawker stalls. The daily Experiences
+         allocation should be spent, not saved.
+       - COMFORTABLE: Multiple paid attractions and quality dining each day.
+       - LUXURY: Premium experiences — observation decks, fine dining,
+         exclusive local tours.
+    5. **Transit Optimization:** Group activities geographically (near the hotel
+       or near the circuit) to minimize travel time and cost.
+    6. **Full Coverage:** Build an itinerary for every single one of the {days}
+       days. This includes arrival day, departure day, race weekend days, and
+       any days in between that have no F1 sessions.
+    All amounts must be in {currency_code}.
+  expected_output: >
+    A day-by-day city itinerary covering all {days} days in Markdown, starting 
+    with the day classification list.
+
+    For F1 Session Days, use this format:
+    - **Morning:** 1-2 activities before sessions start, with estimated cost.
+    - **Session Block:** F1 session timings with food suggestions near the circuit.
+    - **Late Night:** Post-session atmosphere spots.
+    - **Day Spend Breakdown:** Food: X, Transport: X, Experiences: X.
+    - **Estimated Day Cost:** Total spend for the day in {currency_code}.
+
+    For Free Days (no F1 sessions), use this format:
+    - **Morning:** Cultural or food activity with estimated cost.
+    - **Afternoon:** Landmark, tour, or neighbourhood exploration with cost.
+    - **Evening:** Dining recommendation with cost.
+    - **Night:** Local nightlife or relaxation spot.
+    - **Day Spend Breakdown:** Food: X, Transport: X, Experiences: X.
+    - **Estimated Day Cost:** Total spend for the day in {currency_code}.
+
+    At the end, show a summary table with each day's cost and the grand total 
+    for all {days} days.
+
+    Do NOT wrap the output in code fences.
+  agent: local_guide
+  context:
+    - budget_planner_task
+    - flight_research_task
+    - accommodation_research_task
+  output_file: output/local_guide.md
+
+master_planner_task:
+  description: >
+    Synthesize all reports into a single, cohesive final itinerary.
+
+    **Synthesis Rules:**
+    1. **Race Priority:** If the budget is tight, reduce local sightseeing 
+       expenses first, then consider a lower-tier hotel, but never downgrade 
+       the race ticket.
+    2. **Logistics Override:** If the travel logistics report flags a commute 
+       longer than 90 minutes, override the budget planner's hotel choice and 
+       recommend a closer option, even if it costs more.
+    3. **Currency Consistency:** Ensure all costs across the plan use 
+       {currency_code} consistently.
+    4. **Full Coverage:** The itinerary must cover all {days} days, including 
+       arrival, departure, and any free days with no F1 sessions.
+    5. **Local Guide Handling:** First check if the local_guide_task output
+       contains day-by-day entries with "Estimated Day Cost" amounts in
+       {currency_code}. If it DOES, the local guide has SUCCEEDED — copy
+       its activities, costs, and daily totals directly into the Day-by-Day
+       Itinerary table. Do NOT replace or rewrite them.
+       Only if the output does NOT contain "Estimated Day Cost" lines — or
+       if it contains raw "Action:" / "Thought:" text instead of an
+       itinerary — treat it as FAILED:
+       - State "Local guide itinerary not available" at the top of the
+         Day-by-Day section.
+       - Only include rows for known logistics: arrival flight, departure
+         flight, and F1 session blocks (Practice, Qualifying, Race).
+       - Do NOT invent activities, restaurant names, costs, or daily spend
+         totals. Leave the Daily Spending Total as "Not available — local
+         guide failed."
+    6. **No Fabrication:** Do NOT invent any data that is not present in
+       the other agents' reports. Use ONLY what the upstream agents provided.
+    7. **No Double-Counting:** Race tickets are a fixed cost paid once. Do NOT
+       include the ticket price as a daily cost in the itinerary table.
+  expected_output: >
+    An Executive Briefing in Markdown:
+    - **Summary:** One-line verdict on the trip's feasibility and character.
+    - **Budget Overview:** Total budget, total fixed costs, daily allowance, 
+      and classification status.
+    - **Day-by-Day Itinerary:** A table covering all {days} days with columns 
+      for Day, Time, Activity, and Cost in {currency_code}. Each day must end 
+      with an "Estimated Day Cost" row showing that day's total spend.
+    - **Total Trip Cost:** A clear breakdown showing:
+      - Fixed Costs total (Flights + Tickets + Hotel).
+      - Daily Spending total (sum of all estimated day costs from the
+        itinerary, or "Not available" if local guide failed).
+      - **Grand Total** = Fixed Costs + Daily Spending (or Fixed Costs
+        only if daily spending is not available).
+      - **Remaining Budget** = {amount} {currency_code} minus Grand Total.
+    - **Risks and Mitigations:** At least 2 specific risks with actionable 
+      mitigations relevant to this trip. Focus on logistics and financial risks 
+      (e.g. flight delays, race-day traffic, budget overruns, sold-out hotels). 
+      Do NOT include pandemic or general health risks.
+    - **Booking Priorities:** Top 3 things the user must book immediately 
+      with estimated cost in {currency_code}.
+    Do NOT wrap the output in code fences.
+  agent: master_planner
+  context:
+    - flight_research_task
+    - accommodation_research_task
+    - f1_experience_strategist_task
+    - budget_planner_task
+    - local_guide_task
+  output_file: output/master_planner.md

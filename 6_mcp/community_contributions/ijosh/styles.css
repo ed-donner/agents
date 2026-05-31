@@ -1,0 +1,322 @@
+/* ── Global ─────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* { font-family: 'Inter', sans-serif !important; }
+
+.gradio-container {
+    background: #0D0D1A !important;
+    max-width: 1100px !important;
+    margin: 0 auto !important;
+}
+
+/* ── Header ──────────────────────────────────────── */
+.cari-header {
+    background: linear-gradient(135deg, #00A651 0%, #007A3D 50%, #004D26 100%);
+    border-radius: 16px;
+    padding: 24px 32px;
+    margin-bottom: 8px;
+    box-shadow: 0 8px 32px rgba(0, 166, 81, 0.25);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.cari-logo {
+    font-size: 48px;
+    line-height: 1;
+}
+
+.cari-title {
+    color: #FFFFFF !important;
+    font-size: 32px !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+    letter-spacing: -0.5px;
+}
+
+.cari-subtitle {
+    color: rgba(255,255,255,0.75) !important;
+    font-size: 14px !important;
+    margin: 4px 0 0 0 !important;
+    font-weight: 400 !important;
+}
+
+.cari-badge {
+    margin-left: auto;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 6px 16px;
+    color: white !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px;
+}
+
+/* ── KPI Cards ───────────────────────────────────── */
+.kpi-row {
+    display: flex;
+    gap: 12px;
+    margin: 12px 0;
+}
+
+.kpi-card {
+    flex: 1;
+    background: #161627;
+    border-radius: 12px;
+    padding: 18px 20px;
+    border: 1px solid #252540;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    border-color: #00A651;
+}
+
+.kpi-label {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #666688 !important;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.kpi-value {
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    color: #00A651 !important;
+    font-family: 'Inter', monospace !important;
+}
+
+.kpi-value.expense { color: #E74C3C !important; }
+.kpi-value.balance-neg { color: #E74C3C !important; }
+
+/* ── Tabs ────────────────────────────────────────── */
+.tab-nav {
+    background: #161627 !important;
+    border-radius: 12px !important;
+    border: 1px solid #252540 !important;
+    padding: 4px !important;
+    gap: 4px !important;
+}
+
+.tab-nav button {
+    border-radius: 8px !important;
+    color: #888899 !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    padding: 10px 20px !important;
+    border: none !important;
+    transition: all 0.2s !important;
+}
+
+.tab-nav button.selected {
+    background: #00A651 !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 12px rgba(0, 166, 81, 0.3) !important;
+}
+
+.tab-nav button:hover:not(.selected) {
+    background: #1E1E35 !important;
+    color: #CCCCDD !important;
+}
+
+/* ── Chat ────────────────────────────────────────── */
+.chatbot-wrap {
+    background: #161627 !important;
+    border-radius: 16px !important;
+    border: 1px solid #252540 !important;
+    overflow: hidden !important;
+}
+
+/* User bubbles */
+.message.user {
+    background: linear-gradient(135deg, #00A651, #007A3D) !important;
+    color: #FFFFFF !important;
+    border-radius: 18px 18px 4px 18px !important;
+    padding: 12px 16px !important;
+    max-width: 75% !important;
+    margin-left: auto !important;
+    box-shadow: 0 4px 12px rgba(0,166,81,0.2) !important;
+}
+
+/* Bot bubbles */
+.message.bot {
+    background: #1E1E35 !important;
+    color: #E0E0F0 !important;
+    border-radius: 18px 18px 18px 4px !important;
+    padding: 12px 16px !important;
+    max-width: 80% !important;
+    border: 1px solid #2A2A45 !important;
+}
+
+body.light  .message.bot, .gradio-container.light .message.bot  {
+    color: #E0E0F0 !important;
+    color: #E0E0F0 !important;
+    border-radius: 18px 18px 18px 4px !important;
+    padding: 12px 16px !important;
+    max-width: 80% !important;
+    border: 1px solid #2A2A45 !important;
+}
+
+/* Input area */
+.chat-input-row {
+    background: #161627 !important;
+    border-top: 1px solid #252540 !important;
+    padding: 12px !important;
+    border-radius: 0 0 16px 16px !important;
+}
+
+/* Textbox */
+textarea, input[type="text"] {
+    background: #0D0D1A !important;
+    border: 1px solid #2A2A45 !important;
+    border-radius: 12px !important;
+    color: #E0E0F0 !important;
+    font-size: 14px !important;
+    padding: 12px 16px !important;
+    transition: border-color 0.2s !important;
+}
+
+textarea:focus, input[type="text"]:focus {
+    border-color: #00A651 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(0, 166, 81, 0.15) !important;
+}
+
+/* ── Buttons ─────────────────────────────────────── */
+button.primary, .btn-primary {
+    background: linear-gradient(135deg, #00A651, #007A3D) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    padding: 10px 24px !important;
+    cursor: pointer !important;
+    transition: all 0.2s !important;
+    box-shadow: 0 4px 12px rgba(0, 166, 81, 0.25) !important;
+}
+
+button.primary:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(0, 166, 81, 0.35) !important;
+}
+
+button.secondary {
+    background: #1E1E35 !important;
+    color: #AAAACC !important;
+    border: 1px solid #2A2A45 !important;
+    border-radius: 10px !important;
+    font-weight: 500 !important;
+}
+
+/* ── Labels & Text ───────────────────────────────── */
+label, .label-wrap {
+    color: #888899 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+}
+
+/* ── Sidebar / Settings panel ────────────────────── */
+.settings-panel {
+    background: #161627;
+    border-radius: 14px;
+    border: 1px solid #252540;
+    padding: 20px;
+}
+
+/* ── DataFrame / Table ───────────────────────────── */
+.dataframe {
+    background: #161627 !important;
+    border-radius: 12px !important;
+    border: 1px solid #252540 !important;
+    overflow: hidden !important;
+}
+
+.dataframe thead {
+    background: #1E1E35 !important;
+    color: #00A651 !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+}
+
+.dataframe tbody tr {
+    background: #161627 !important;
+    color: #C0C0D8 !important;
+    border-bottom: 1px solid #1E1E35 !important;
+    font-size: 13px !important;
+}
+
+.dataframe tbody tr:hover {
+    background: #1E1E35 !important;
+}
+
+/* ── Examples ────────────────────────────────────── */
+.examples-holder {
+    background: #161627 !important;
+    border-radius: 12px !important;
+    border: 1px solid #252540 !important;
+    padding: 8px !important;
+}
+
+.example-btn {
+    background: #1E1E35 !important;
+    border: 1px solid #2A2A45 !important;
+    border-radius: 8px !important;
+    color: #AAAACC !important;
+    font-size: 13px !important;
+    padding: 8px 14px !important;
+    transition: all 0.2s !important;
+}
+
+.example-btn:hover {
+    border-color: #00A651 !important;
+    color: #00A651 !important;
+}
+
+/* ── Status / notification strip ─────────────────── */
+.status-bar {
+    background: linear-gradient(90deg, #004D26, #006B35);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    margin: 8px 0;
+    border-left: 3px solid #00A651;
+}
+
+/* ── Scrollbar ───────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0D0D1A; }
+::-webkit-scrollbar-thumb { background: #252540; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #00A651; }
+
+/* ── Accordion ───────────────────────────────────── */
+.accordion {
+    background: #161627 !important;
+    border: 1px solid #252540 !important;
+    border-radius: 12px !important;
+}
+
+.accordion .label-wrap {
+    color: #CCCCEE !important;
+    font-size: 13px !important;
+    text-transform: none !important;
+}
+
+/* ── Footer ──────────────────────────────────────── */
+.cari-footer {
+    text-align: center;
+    color: #333355 !important;
+    font-size: 11px !important;
+    margin-top: 16px;
+    padding: 8px;
+}

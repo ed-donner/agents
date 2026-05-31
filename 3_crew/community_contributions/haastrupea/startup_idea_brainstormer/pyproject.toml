@@ -1,0 +1,28 @@
+[project]
+name = "startup_idea_brainstormer"
+version = "0.1.0"
+description = "startup-idea-brainstormer using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[litellm,tools]==1.11.1",
+]
+
+[project.scripts]
+startup_idea_brainstormer = "startup_idea_brainstormer.main:run"
+run_crew = "startup_idea_brainstormer.main:run"
+train = "startup_idea_brainstormer.main:train"
+replay = "startup_idea_brainstormer.main:replay"
+test = "startup_idea_brainstormer.main:test"
+run_with_trigger = "startup_idea_brainstormer.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+# lancedb 0.30.1 ships no win_amd64 wheel; crewai[tools] pulls lancedb transitively.
+override-dependencies = ["lancedb==0.30.0"]
+
+[tool.crewai]
+type = "crew"

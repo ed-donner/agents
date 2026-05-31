@@ -1,0 +1,46 @@
+# Environment variables
+.env
+.env.local
+
+# Data directory - keep folder but ignore all contents
+data/*
+!data/.gitkeep
+
+# Personal information - keep folder but ignore all contents
+me/*
+!me/.gitkeep
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Evaluation results
+evaluations/*.json
+evaluations/*.csv
+evaluations/*.txt
+
+# Model cache
+.cache/
+*.bin
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+

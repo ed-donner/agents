@@ -31,9 +31,17 @@ If you don't do this, then CrewAI will fail with an obscure error involving Chro
 
 
 Then, you will need to run this command in a Cursor Terminal in the project root directory in order to run the Crew commands:  
-`uv tool install crewai`   
+`uv tool install crewai==0.130.0 --python 3.12`   
 And in case you've used Crew before, it might be worth doing this to make sure you have the latest:  
-`uv tool upgrade crewai`  
+`uv tool upgrade crewai==0.130.0 --python 3.12`  
+
+This command pins Crew to the same version that I use on the course. If you have any problems with Crew, you could try using the latest version instead, by running this command:  
+`uv tool upgrade crewai --python 3.12`  
+
+At any point, you can see which version of Crew you have installed with this:  
+`uv tool list`
+
+Sidenote: a "tool" with uv is a utility that is installed globally by uv. After installing this tool, you can use "crewai" as a command, and it runs the code associated with this tool.
 
 Then please keep in mind for Crew:
 
@@ -45,7 +53,8 @@ Then please keep in mind for Crew:
 
 - The course [resources](https://edwarddonner.com/2025/04/21/the-complete-agentic-ai-engineering-course/) with videos
 - Many essential guides in the [guides](guides/01_intro.ipynb) section
-- The [troubleshooting](setup/troubleshooting.ipynb) notebook
+- The [troubleshooting](setup/troubleshooting.ipynb) notebook  
+- My overall [FAQ](https://edwarddonner.com/faq) page with common issues and questions
 
 ### API costs - please read me!
 

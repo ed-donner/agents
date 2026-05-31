@@ -1,0 +1,10 @@
+architecture_task:
+  description: >
+    Design a modular Python e-commerce backend for these requirements: {requirements}
+    Decide the backend modules, the classes and module-level functions in each module,
+    the dependency graph between modules, and the full build order.
+    Do not include app.py or any test files in the module list.
+    Return a valid SystemArchitecture response.
+  expected_output: >
+    A valid SystemArchitecture with modules and build_order.
+  agent: system_architect

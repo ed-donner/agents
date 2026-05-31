@@ -1,0 +1,17 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+env/
+uv.lock
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# Gradio cache / temporary output
+gradio_app_cache/

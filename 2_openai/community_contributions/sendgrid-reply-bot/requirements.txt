@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+python-dotenv
+sendgrid
+openai
+openai-agents
+python-multipart

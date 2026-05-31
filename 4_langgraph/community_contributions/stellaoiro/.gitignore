@@ -1,0 +1,3 @@
+hali_memory.db
+*.db-shm
+*.db-wal

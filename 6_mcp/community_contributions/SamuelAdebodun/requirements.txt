@@ -1,0 +1,4 @@
+# Week 6 K8s Health MCP — install in a venv or: pip install -r requirements.txt
+mcp>=1.9
+openai-agents>=0.3
+python-dotenv>=1.0

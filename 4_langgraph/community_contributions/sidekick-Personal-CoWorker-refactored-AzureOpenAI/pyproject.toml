@@ -1,0 +1,23 @@
+[project]
+name = "sidekick"
+version = "0.1.0"
+description = "AI agent that completes tasks step-by-step with intelligent evaluation feedback"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aiosqlite>=0.22.1",
+    "beautifulsoup4>=4.14.3",
+    "gradio>=6.3.0",
+    "langchain>=1.2.3",
+    "langchain-community>=0.4.1",
+    "langchain-experimental>=0.4.1",
+    "langchain-openai>=1.1.7",
+    "langgraph>=1.0.5",
+    "langgraph-checkpoint-sqlite>=3.0.1",
+    "lxml>=6.0.2",
+    "openai>=2.15.0",
+    "playwright>=1.57.0",
+    "python-dotenv>=1.2.1",
+    "requests>=2.32.5",
+    "wikipedia>=1.4.0",
+]

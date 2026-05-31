@@ -1,0 +1,24 @@
+[project]
+name = "modular_code_gen"
+version = "0.1.0"
+description = "modular_code_gen using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]==1.4.1"
+]
+
+[project.scripts]
+modular_code_gen = "modular_code_gen.main:run"
+run_crew = "modular_code_gen.main:run"
+train = "modular_code_gen.main:train"
+replay = "modular_code_gen.main:replay"
+test = "modular_code_gen.main:test"
+run_with_trigger = "modular_code_gen.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
