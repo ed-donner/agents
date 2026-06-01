@@ -1,0 +1,17 @@
+ask_question:
+  description: "Ask a question to the user and get their response."
+  expected_output: "A question to ask the user."
+  agent: "interviewer"
+  output_file: "output/interviewer_response.md"
+
+give_answer:
+  description: "Provide an answer to a question asked by the interviewer."
+  expected_output: "An answer to the question asked by the interviewer."
+  agent: "candidate"
+  output_file: "output/candidate_response.md"
+
+evaluate_candidate:
+  description: "Evaluate the candidate's response and provide feedback." 
+  expected_output: "An evaluation of the candidate's response, including strengths and areas for improvement."
+  agent: "recruiter"
+  output_file: "output/recruiter_evaluation.md"
