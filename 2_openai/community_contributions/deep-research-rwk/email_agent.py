@@ -1,0 +1,37 @@
+# import os
+from typing import Dict
+# import sendgrid
+# from sendgrid.helpers.mail import Email, Mail, Content, To
+from agents import Agent, function_tool
+import parameters as param
+
+'''
+@function_tool
+def send_email(subject: str, html_body: str) -> Dict[str, str]:
+    """Send an email with the given subject and HTML body"""
+    sg = sendgrid.SendGridAPIClient(api_key=os.environ.get("SENDGRID_API_KEY"))
+    from_email = Email("ed@edwarddonner.com")  # put your verified sender here
+    to_email = To("ed.donner@gmail.com")  # put your recipient here
+    content = Content("text/html", html_body)
+    mail = Mail(from_email, to_email, subject, content).get()
+    response = sg.client.mail.send.post(request_body=mail)
+    print("Email response", response.status_code)
+    return "success"
+'''
+
+@function_tool
+def publish_report(report_file_name: str, report_with_title_html: str) -> Dict[str, str]:
+    """Publish a report with titleas html"""
+    print(f"\n\nPublish report {report_file_name}")
+    
+    with open(report_file_name, "w", encoding="utf-8") as f:
+        f.write(report_with_title_html)
+    print(f'\nsaved report to file {report_file_name}')
+    return "success"
+
+email_agent = Agent(
+    name="EmailAgent",
+    instructions= param.INSTRUCTIONS_EMAIL,
+    tools=[publish_report],
+    model= param.MODEL_EMAIL,
+)
