@@ -103,9 +103,9 @@ And marvel at the speed and reliability! If necessary, uv should install python 
 Any problems with uv, please see [Q11 on my FAQ page](https://edwarddonner.com/faq/#11).
 
 Finally, run these commands to be ready to use CrewAI in week 3 - but please note that this needs you to have installed Microsoft Build Tools (#4 in the 'gotchas' section at the top of this doc):  
-`uv tool install crewai`   
+`uv tool install crewai==0.130.0 --python 3.12`    
 Followed by:  
-`uv tool upgrade crewai`  
+`uv tool upgrade crewai==0.130.0 --python 3.12`  
 
 Checking that everything is set up nicely:  
 1. Confirm that you now have a folder called '.venv' in your project root directory (agents)
