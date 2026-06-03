@@ -23,11 +23,12 @@ def send_email(subject: str, html_body: str) -> Dict[str, str]:
 def publish_report(report_file_name: str, report_with_title_html: str) -> Dict[str, str]:
     """Publish a report with titleas html"""
     print(f"\n\nPublish report {report_file_name}")
-    
-    with open(report_file_name, "w", encoding="utf-8") as f:
+    output_file_address = param.OUTPUT_FILE_ADDRESS / report_file_name
+    with open(output_file_address, "w", encoding="utf-8") as f:
         f.write(report_with_title_html)
     print(f'\nsaved report to file {report_file_name}')
     return "success"
+
 
 email_agent = Agent(
     name="EmailAgent",

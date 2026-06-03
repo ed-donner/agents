@@ -103,12 +103,13 @@ class ResearchManager:
                 yield 'Redrafting report...'
                 iterations += 1
 
-            print("Report written, printing email...")
-            yield "\nReport written, printing email..."
-            await self.print_email(report)
-            print("Email printed, research complete\n")
-            yield "Email printed, research complete"
+        # publish the report
+            # report is a ReportData object (writer_agent.py)
+            report = await self.publish_report(report)
+            print("Report published, research complete\n")
+            yield "Report published, research complete"
             yield report.markdown_report
+            
         
 
     async def plan_searches(self, query: str) -> WebSearchPlan:
@@ -184,7 +185,7 @@ class ResearchManager:
         return result.final_output_as(ReviewResult)
         
     
-    async def print_email(self, report: ReportData) -> None:
+    async def publish_report(self, report: ReportData) -> None:
         print("\nWriting email...")
         result = await Runner.run(
             email_agent,

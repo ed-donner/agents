@@ -1,6 +1,8 @@
 # from openai import ContentFilterFinishReasonError
+from pathlib import Path
 
-HOW_MANY_SEARCHES = 15                            # instructions_planner (below)
+
+HOW_MANY_SEARCHES = 15                           # instructions_planner (below)
 HOW_MANY_SITES = 5                               # instructions_search (below)
 HOW_MANY_PARAGRAPHS = 3                          # instructions_search (below)
 HOW_MANY_WORDS = 300                             # instructions_search (below)
@@ -8,7 +10,8 @@ HOW_MANY_RELEVANT_RESULTS = 8                    # instructions_filter (below)
 
 MAX_REVIEW_ITERATIONS = 4                        # loop for drafting reportin research_manager
 
-EMAIL_FILE_NAME = "Deep_Research_Report"         # email_agent
+CWD = Path.cwd()                                 # current working directory
+OUTPUT_FILE_ADDRESS = CWD / "output"             # email_agent
 
 # models to use for the agents
 MODEL_PLANNER = "gpt-5.4-mini"                   # planner_agent
@@ -117,5 +120,6 @@ INSTRUCTIONS_EMAIL = (
     "that you created above as the first line of the new report. "
     "You should convert this new report with title into clean, well-presented HTML, using UTF-8 encoding. "
     "Any browser should be able to read and display this HTML report cleanly and properly without any errors. "
-    "You should use your tool to write this HTML report to a file with the File Name you created."
+    f"You should use your publish_report tool to write this HTML report to {OUTPUT_FILE_ADDRESS} directory "
+    "with the File Name you created above."
 )

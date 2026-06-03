@@ -2,19 +2,15 @@
     gradio interface to run the deep research project
     takes a query and yields the progress and the final report
 
-    calls run which calls ResearchManager().run(query) -- the research_manager
-    which calls plan_searches which calls planner_agent
-    which calls perform_searches which calls search_agent
-    which calls write_report which calls writer_agent
-    which calls publish_email which calls publish_email
+    calls run which calls ResearchManager().run(query) -- the research_manager, which:
+        calls plan_searches which calls planner_agent to produce WebSearchPlan
+        calls perform_searches which calls search_agent to produce SearchResults
+        calls filter_results which calls filter_agent to produce FilteredResults
+        calls write_report which calls writer_agent to produce ReportData
+        call review_report which calls review_agent to produce ReviewResult
+            if review_agent finds the report not acceptable, call write_report again
+        calls publish_email which calls publish_report to produce an html report file
 
-    added orchestrator, which includes agents to evaluate and optimize
-    evaluate the current report
-        if the report seems incomplete, request more information
-        if the report has factual errors, request corrections
-        if the report is not written clearly and concisely, rewrite
-        repeat until the report passes
-    show the report
  """
 
 import gradio as gr
