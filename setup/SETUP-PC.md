@@ -68,8 +68,8 @@ A word about Cursor: it's a cool product, but it's not to everyone's liking. It 
 
 After you start Cursor, you can pick the defaults for all its questions.  
 When it's time to open the project in Cursor:  
-1. Launch Cursor, if it's not already running  
-2. File menu >> New Window  
+1. Launch Cursor, if it's not already running.     
+2. File menu >> New Window. But note that the very latest version of Cursor will start by opening a special new window called their 'Agents' interface. To get to the New Window screen, press Ctrl+Shift+N.   
 3. Click "Open project"  
 4. Navigate into the project root directory called `agents` (probably within projects) and click Open
 5. When your project opens, you may be prompted to "install recommended extensions" for Python and Jupyter. If so, choose Yes! Otherwise:
@@ -103,9 +103,9 @@ And marvel at the speed and reliability! If necessary, uv should install python 
 Any problems with uv, please see [Q11 on my FAQ page](https://edwarddonner.com/faq/#11).
 
 Finally, run these commands to be ready to use CrewAI in week 3 - but please note that this needs you to have installed Microsoft Build Tools (#4 in the 'gotchas' section at the top of this doc):  
-`uv tool install crewai`   
+`uv tool install crewai==0.130.0 --python 3.12`    
 Followed by:  
-`uv tool upgrade crewai`  
+`uv tool upgrade crewai==0.130.0 --python 3.12`  
 
 Checking that everything is set up nicely:  
 1. Confirm that you now have a folder called '.venv' in your project root directory (agents)

@@ -1,0 +1,8 @@
+I'm Ahmed Mosad android developer with 4 years of experiences build native applications with kotlin
+I build applications with clean code and clean architecture,I'm expert with MVVM architecture
+I always concered about new technologies like JetPack Compose
+I built two big applications from scartch, one of them I already punlished on google play called achiever
+Achiever Application built to help achievers to achieve their goals and record their journey
+I also built E commerce application which simulates e commerce applications with payments
+I have great experiences as a social media reviewer with appen 
+I love marketing field and I already made a campaign for a teacher on facebook
