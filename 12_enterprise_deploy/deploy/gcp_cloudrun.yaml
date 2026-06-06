@@ -1,0 +1,65 @@
+# GCP Cloud Run deployment for the enterprise agent.
+# Usage:
+#   gcloud run services replace gcp_cloudrun.yaml --region=us-central1
+#
+# Pre-requisites:
+#   gcloud auth login
+#   gcloud config set project YOUR_PROJECT_ID
+#   docker build -t gcr.io/YOUR_PROJECT/enterprise-agent:latest .
+#   docker push gcr.io/YOUR_PROJECT/enterprise-agent:latest
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: enterprise-agent
+  labels:
+    cloud.googleapis.com/location: us-central1
+  annotations:
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        # Scale to zero when idle (cost saving)
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "10"
+        # Max concurrent requests per instance
+        run.googleapis.com/execution-environment: gen2
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 60
+      serviceAccountName: enterprise-agent-sa@YOUR_PROJECT.iam.gserviceaccount.com
+      containers:
+        - image: gcr.io/YOUR_PROJECT/enterprise-agent:latest
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          env:
+            # Store secrets in Secret Manager, not here
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: openai-api-key
+                  key: latest
+            - name: GLOBAL_BUDGET_USD
+              value: "50.0"
+            - name: PER_USER_BUDGET_USD
+              value: "2.0"
+            - name: AUDIT_LOG_FILE
+              value: ""   # disable file logging; use Cloud Logging instead
+          livenessProbe:
+            httpGet:
+              path: /health
+            initialDelaySeconds: 5
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+            initialDelaySeconds: 3
+            periodSeconds: 10
+  traffic:
+    - percent: 100
+      latestRevision: true
