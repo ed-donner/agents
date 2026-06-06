@@ -18,6 +18,8 @@ The main course leaves eight topics either untouched or only briefly covered:
 | CI/CD eval gate | Not covered | Lab 6 |
 | Fine-tuning & distillation | Not covered | Lab 7 |
 | Vision & multimodal agents | Single `MultiModalMessage` only | Lab 8 |
+| Consistency / cost-quality / fairness evals | Not covered | Lab 9 |
+| Enterprise middleware & cloud IaC | Not covered | Lab 10 |
 
 ---
 
@@ -145,6 +147,34 @@ Key packages: `openai`, `pydantic`, `numpy`
 
 ---
 
+### [Lab 9 — Advanced Evaluation: Consistency, Cost-Quality & Fairness](9_lab9_advanced_evals.ipynb)
+**The eval dimensions beyond correctness — what separates a mid from a senior answer**
+
+- **Consistency** — same input × N runs; measure output stability, and understand why the right target is task-dependent (medical agent → high; brainstorm agent → low)
+- Temperature's effect on variance, plus the interview gotcha: temperature 0 is low-variance, *not* deterministic
+- **Cost-quality Pareto** — run the same suite across models, pick the cheapest one that clears your bar instead of defaulting to the biggest model
+- **Fairness audit** — counterfactual demographic testing: change only a name/age/gender signal, check that answer quality stays equal; flag spreads to investigate
+- Builds directly on Lab 2's eval harness (reuse its LLM-as-judge for grading)
+
+Key files: `advanced_evals.py` (`consistency_score`, `pareto_analysis`, `fairness_audit`)
+
+---
+
+### [Lab 10 — Enterprise Deployment: Middleware, Circuit Breakers & Cloud IaC](10_lab10_enterprise_deploy.ipynb)
+**Everything an enterprise demands on top of the Lab 3 service**
+
+- **Composable middleware** — `AuditLogger → PIIScrubber → BudgetMiddleware → CircuitBreaker → LLM`, and why the stacking order is deliberate
+- **Budget middleware** — per-user and global hard spend caps; the $10 fix for the $10,000 runaway-loop problem
+- **Audit logging** — immutable JSONL trail storing prompt *hashes* (never raw PII) for GDPR/HIPAA review, with a right-to-forget pattern
+- **Circuit breaker** — CLOSED/OPEN/HALF_OPEN state machine so an upstream LLM outage fails fast instead of exhausting threads and budget
+- **Cloud IaC** — the same container on AWS Lambda (Terraform), GCP Cloud Run (YAML), and Azure Container Apps (Bicep), with a decision rule for choosing
+
+Key files: `enterprise_middleware.py`, `circuit_breaker.py`, `deploy/{aws_lambda.tf, gcp_cloudrun.yaml, azure_container_apps.bicep}`
+
+> **Note:** Labs 9 and 10 absorb the former standalone Weeks 11 & 12. Their unique code now lives here as `advanced_evals.py`, `enterprise_middleware.py`, and `circuit_breaker.py`, so Week 7 is the single canonical home for production concerns.
+
+---
+
 ## End-to-end architecture
 
 After completing all 8 labs, the pieces fit together like this:
@@ -186,9 +216,10 @@ Security should come **before** deployment — don't ship an agent and then secu
 CI/CD comes last — you need evals (Lab 2) before you can gate on them.
 
 ```
-Lab 1 (RAG) → Lab 2 (Evals) → Lab 5 (Secure it) → Lab 3 (Deploy it safely) → Lab 4 (Monitor it) → Lab 6 (Gate it) → Lab 7 (Fine-tune it) → Lab 8 (Add vision)
+Lab 1 (RAG) → Lab 2 (Evals) → Lab 9 (Advanced evals) → Lab 5 (Secure it) → Lab 3 (Deploy it safely) → Lab 10 (Enterprise middleware + cloud) → Lab 4 (Monitor it) → Lab 6 (Gate it) → Lab 7 (Fine-tune it) → Lab 8 (Add vision)
 ```
 
-Labs 7 and 8 are independent of the deployment pipeline — you can do them at any point after Lab 2.
+Labs 7 and 8 are independent of the deployment pipeline — you can do them at any point after Lab 2.  
+Lab 9 extends Lab 2 (do it right after). Lab 10 extends Labs 3 and 5 (do it after both).
 
 After completing all 8 labs you'll have the skills to take any agent from the main course and ship it as a production system.

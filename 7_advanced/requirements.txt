@@ -36,3 +36,10 @@ uvicorn[standard]>=0.34.2
 
 # Lab 8 — Vision & Multimodal Agents
 numpy>=1.26.0
+
+# Lab 9 — Advanced Evals (consistency / Pareto / fairness)
+# (covered by openai above)
+
+# Lab 10 — Enterprise Deployment (middleware / circuit breaker / cloud IaC)
+# (covered by openai + fastapi above; cloud IaC files are read-only templates —
+#  deploy with: terraform / gcloud / az CLI, no extra Python packages needed)

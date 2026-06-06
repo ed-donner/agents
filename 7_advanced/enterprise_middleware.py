@@ -10,6 +10,10 @@ Usage:
     agent = your_agent_fn
     agent = AuditLogger(PIIScrubber(BudgetMiddleware(agent, budget_usd=1.0)))
     result = agent("user query")
+
+Contract: every wrapped callable MUST accept (prompt, **kwargs). The layers pass
+extra kwargs (e.g. user_id) straight through, so the innermost base agent has to
+swallow unknown kwargs or it will raise TypeError when called as agent(prompt, user_id=...).
 """
 
 from __future__ import annotations
@@ -66,6 +70,11 @@ class BudgetMiddleware:
         self._user_spent: dict[str, float] = defaultdict(float)
 
     def _estimate_cost(self, prompt: str) -> float:
+        # SIMPLIFICATION: this charges a pre-call *estimate* from a word-count
+        # heuristic, not the actual token usage. It's adequate for a hard-stop
+        # safety cap, but in production charge the real cost from resp.usage
+        # AFTER the call (see advanced_evals.pareto_analysis for that pattern),
+        # and keep this estimate only for the pre-call "would this exceed?" gate.
         token_estimate = len(prompt.split()) * 1.5 * 2  # input + expected output
         return token_estimate * self.cost_per_token
 
