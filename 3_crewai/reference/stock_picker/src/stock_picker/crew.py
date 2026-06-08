@@ -41,8 +41,8 @@ class StockPicker():
     
     @agent
     def financial_researcher(self) -> Agent:
-        return Agent(config=self.agents_config['financial_researcher'], 
-                     tools=[SerperDevTool()])
+        return Agent(config=self.agents_config['financial_researcher'],
+                     tools=[SerperDevTool()], memory=True)
 
     @agent
     def stock_picker(self) -> Agent:

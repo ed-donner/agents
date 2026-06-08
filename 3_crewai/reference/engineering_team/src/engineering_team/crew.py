@@ -34,7 +34,8 @@ class EngineeringTeam():
         return Agent(
             config=self.agents_config['frontend_engineer'],
             verbose=True,
-            tools=sandbox_tools
+            tools=sandbox_tools,
+            mcps=["https://mcp.context7.com/mcp"],
         )
     
     @agent
@@ -61,7 +62,6 @@ class EngineeringTeam():
     def frontend_task(self) -> Task:
         return Task(
             config=self.tasks_config['frontend_task'],
-            mcps=["https://mcp.context7.com/mcp"]
         )
 
     @task

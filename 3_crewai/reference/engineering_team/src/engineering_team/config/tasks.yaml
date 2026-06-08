@@ -40,6 +40,7 @@ frontend_task:
   agent: frontend_engineer
   context:
     - code_task
+    - design_task
 
 test_task:
   description: >
@@ -47,6 +48,8 @@ test_task:
     Do not write tests for app.py (the gradio frontend).
     Fix any errors in the backend code so that the unit tests pass.
     Keep working until all unit tests pass.
+    If you change any backend code, ensure that the unit tests pass and that the gradio app in app.py will still work.
+    Avoid making any changes that might break the gradio app in app.py.
   expected_output: >
     A single test file that can be run to test the backend module.
     IMPORTANT: Use your sandbox tools to write and run the unit tests.
@@ -54,4 +57,5 @@ test_task:
   agent: test_engineer
   context:
     - code_task
+    - design_task
   output_file: sandbox/test_summary.md

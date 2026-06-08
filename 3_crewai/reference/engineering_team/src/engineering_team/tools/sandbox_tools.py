@@ -82,7 +82,7 @@ def run_sandbox_python(filename: str) -> str:
             "-v", f"{SANDBOX_DIR}:/workspace",
             "-w", "/workspace",
             "ghcr.io/astral-sh/uv:python3.13-bookworm-slim",
-            "uv", "run", "python", filename,
+            "uv", "run", filename,
         ],
         capture_output=True,
         text=True,
@@ -91,3 +91,13 @@ def run_sandbox_python(filename: str) -> str:
     return result.stdout
 
 sandbox_tools = [list_sandbox_files, read_sandbox_file, write_sandbox_file, run_sandbox_python]
+
+
+def _never_cache(*_args, **_kwargs) -> bool:
+    return False
+
+
+# Sandbox state changes between calls (files appear/change/run), so caching tool
+# results would feed agents stale data. Opt out of CrewAI's default tool caching.
+for _t in sandbox_tools:
+    _t.cache_function = _never_cache
