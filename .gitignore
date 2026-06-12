@@ -195,5 +195,6 @@ memory.db
 6_mcp/memory/*.db
 # Week 4 LangChain/LangGraph transient artifacts
 .playwright-mcp/
-4_langchain_langgraph/sandbox/
+4_langchain_langgraph/sandbox/*
+!4_langchain_langgraph/sandbox/skills/
 4_langchain_langgraph/.playwright-mcp/

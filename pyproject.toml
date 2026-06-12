@@ -17,6 +17,7 @@ dependencies = [
     "openai-agents[viz]>=0.15.1",
     "pydantic>=2.13.3",
     "pypdf>=6.10.2",
+    "python-pptx>=1.0.2",
     "requests>=2.33.1",
     "rich>=15.0.0",
     "wikipedia>=1.4.0",
