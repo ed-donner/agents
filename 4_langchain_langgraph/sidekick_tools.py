@@ -1,11 +1,16 @@
-"""Tools for the Sidekick: a mix of MCP servers and our own LangChain tools."""
+"""Tools for the Sidekick: a mix of MCP servers, ready-made LangChain tools and our own."""
 
 import os
-from urllib.parse import quote
 
 import requests
+import wikipedia
+from langchain_community.tools import WikipediaQueryRun
+from langchain_community.utilities import WikipediaAPIWrapper
 from langchain_core.tools import tool
 from langchain_mcp_adapters.client import MultiServerMCPClient
+
+# Wikimedia rejects the wikipedia library's default user agent, so identify ourselves properly
+wikipedia.set_user_agent("agentic-track-course (https://edwarddonner.com)")
 
 
 @tool
@@ -36,11 +41,7 @@ def send_push_notification(text: str) -> str:
     return "Notification sent"
 
 
-@tool
-def wikipedia_lookup(title: str) -> str:
-    """Look up a topic on Wikipedia and return a short summary."""
-    response = requests.get(f"https://en.wikipedia.org/api/rest_v1/page/summary/{quote(title)}")
-    return response.json().get("extract", "No summary found")
+wikipedia_lookup = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
 
 
 def mcp_connections(sandbox: str, config_path: str) -> dict:
