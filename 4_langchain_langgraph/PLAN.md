@@ -117,7 +117,9 @@ checkpointing - not the reducer - is what gives you memory *between* invocations
 
 **Lab 2** - a tight, modern condensation of `old_4_langgraph/1_lab1.ipynb` + `2_lab2.ipynb`:
 - Build a graph with no LLM (functions only) to prove "LangGraph is just Python functions", then again with an LLM.
-- Add tools (`@tool` decorator + `ToolNode` + `tools_condition`), conditional edges, the tool loop.
+- Add tools (one off the shelf via `GoogleSerperRun` from langchain-community, one hand-made with the `@tool`
+  decorator, plus `ToolNode` + `tools_condition`), conditional edges, the tool loop. Note the langchain-community
+  deprecation warning in a markdown cell and point students at `langchain-tavily` as a supported alternative.
 - **LangSmith** for observability (smith.langchain.com) - introduced once here, reused everywhere after.
 - Memory: `MemorySaver`, then **SQLite checkpointing**; show `get_state` / `get_state_history` / time-travel.
 - A small Gradio `ChatInterface` to make it tangible.
@@ -165,36 +167,112 @@ Python, etc.).
 
 ---
 
-## Playwright MCP - ensuring HEADFUL
+## Playwright MCP - the verified facts (updated 2026-06-12 from playwright monorepo source)
 
 We use Microsoft's `@playwright/mcp` (loaded via `langchain-mcp-adapters`) so the browser is **visible**.
 
-- Its default *is* headed; there is **no `--headed` flag** (headed is the default, `--headless` turns it off).
-- Ed has seen it come up headless in practice - almost certainly because a client injected `--headless`. Since
-  **we** spawn it (stdio transport, we own the args), we force headed two ways for certainty:
-  - omit `--headless`, AND
-  - pass `--config config.json` with `{ "browser": { "launchOptions": { "headless": false } } }`
-  - (and ensure the env var `PLAYWRIGHT_MCP_HEADLESS` is not set true).
+- Default browser: chromium engine with **channel `chrome`**, i.e. the system-installed Google Chrome
+  (`validateBrowserConfig` in packages/playwright-core/src/tools/mcp/config.ts). Chrome must be installed but
+  NOT running; Playwright launches its own instance (with `--isolated`, a throwaway profile). If Chrome is
+  missing the launch error says to run `npx playwright install chrome`.
+- Headless default: headed everywhere EXCEPT Linux with no `DISPLAY`, where it auto-falls back to headless
+  (`headless = os.platform() === 'linux' && !process.env.DISPLAY`). This explains the historical "came up
+  headless" sighting. There is no `--headed` flag; `--headless` turns headed off.
+- Config precedence: defaults < `--config` file < `PLAYWRIGHT_MCP_*` env vars < CLI flags. `envToBoolean`
+  parses "false"/"0" correctly, so the env var route works, but since we spawn the server ourselves and headed
+  is already the default, Lab 3 now sets NOTHING (no config file, no env var) - which also degrades gracefully
+  for students on display-less Linux. playwright-config.json remains only for the Day 5 Sidekick (sidekick.py),
+  to be simplified the same way when Day 5 is refreshed.
+- Lab 3 preflight (added 2026-06-12): `!node --version` / `!npx --version`, then a no-AI smoke test
+  `npx -y playwright@latest screenshot --channel=chrome https://news.ycombinator.com playwright_check.png`
+  (verified locally: ~16s first run including the npx fetch, renders via system Chrome, no `playwright install`
+  needed since `--channel=chrome` bypasses Playwright's managed browsers).
+- Windows, Jupyter, no WSL: works with current deps. `mcp` 1.27.0 merges provided `env` over
+  `get_default_environment()` (PATH/PATHEXT survive), resolves `npx` -> `npx.cmd` via `shutil.which`, and
+  falls back to a sync `subprocess.Popen` wrapper when the Jupyter SelectorEventLoop raises
+  NotImplementedError for async subprocesses (mcp/os/win32/utilities.py). The WSL advice in SETUP-node.md is
+  legacy week-6 material, and its `uv run playwright install` lines are for the PYTHON playwright package -
+  irrelevant to this lab's Node-side MCP server.
 - **Gotcha for a `stop.png` callout**: on macOS, headed mode genuinely grabs the cursor/foreground while it
   drives the browser (it can hijack the OS cursor). Warn students.
 
 ---
 
-## Tools inventory & task design (TO DO before Days 4-5)
+## Tools inventory & task design (VERIFIED with live runs)
 
-Chicken-and-egg: survey what's *readily available and reliably impressive* first, then reverse-engineer 3-4
-tangible, useful Sidekick / Deep Agent tasks with great visible outcomes. Candidate tools:
+Every tool below was exercised live end to end (see "Verified runtime recipes"). All work.
 
-- **Serper.dev web search** - account already set up, key in `SERPER_API_KEY`. Strong default. Wrap via `@tool`
-  (or `langchain_community.utilities.GoogleSerperAPIWrapper`).
-- **Playwright MCP (headful)** - visible browsing, navigation, extraction, screenshots.
-- **Filesystem / sandbox MCP server** - read/write a sandbox dir (the Anthropic reference server).
-- **Pushover push** - `PUSHOVER_TOKEN` / `PUSHOVER_USER` already set.
-- **Python REPL**, **Wikipedia** - from the old labs.
-- **Deep Agents built-ins** - planning tool, sub-agents, virtual filesystem.
+| Tool | Verified | Notes |
+|---|---|---|
+| `ChatOpenAI` gpt-5.4-mini | yes | live call returns text |
+| `create_agent` + `@tool` | yes | runs loop, returns answer, `agent.get_graph().draw_mermaid_png()` renders |
+| `response_format` structured | yes | result in `result["structured_response"]` |
+| Serper web search | yes | `GoogleSerperRun(api_wrapper=GoogleSerperAPIWrapper())` reads `SERPER_API_KEY`; used off the shelf in Lab 2 |
+| Wikipedia (community tool) | yes | `WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())`; needs `wikipedia` pip package AND `wikipedia.set_user_agent(...)` (Wikimedia rejects the library default); used in Sidekick |
+| Filesystem MCP (npx) | yes | 14 tools, write+read round-trip works; pass an absolute sandbox path |
+| Playwright MCP headful | yes | 23 tools, ~1s load (browsers cached), agent navigates and extracts |
+| Pushover push | (reuse) | from old labs, keys present |
 
-Run a read-only survey of these, confirm which combinations are robust and visually compelling, then draft the
-concrete task list here.
+Gotcha learned: MCP tool results come back as content-block lists like
+`[{'type': 'text', 'text': '...'}]`, not bare strings. Agents handle this transparently; only matters if a demo
+cell reads a tool result directly.
+
+### Concrete task designs (robust, visible, live-tested targets)
+
+Targets chosen for stability and no bot-blocking: `example.com`, `news.ycombinator.com`, Wikipedia.
+
+- **Lab 3 Part 6 (create_agent + Playwright MCP)**: agent visits `news.ycombinator.com`, reads the front page,
+  and reports the current top stories. Visible browser, clear outcome.
+- **Day 4 (Deep Agent)**: "Research a topic and write a briefing." The deep agent plans with its todo tool,
+  uses a Serper `@tool` (and optionally Playwright to open one source), writes `report.md` into its filesystem,
+  then we display it. Shows planning + filesystem + (optional) sub-agent.
+- **Day 5 (Sidekick)** showcase tasks, all success-criteria driven:
+  1. "Go to Hacker News, find the top 3 AI-related stories, and push me a summary." (Playwright + push)
+  2. "Research X with web search and write your recommendation to the sandbox." (Serper + filesystem + push)
+  3. A task that triggers a clarifying question, to demo human-in-the-loop.
+
+### Verified runtime recipes (copy these exactly)
+
+`load_dotenv(override=True)` works from inside the project tree (notebooks live under
+`4_langchain_langgraph/`, so `find_dotenv` walks up to the project root `.env`).
+
+Playwright MCP headful (config file forces headed; `--isolated` gives a clean profile per run):
+```python
+# playwright-config.json  ->  { "browser": { "launchOptions": { "headless": false } } }
+{
+  "playwright": {
+    "transport": "stdio",
+    "command": "npx",
+    "args": ["@playwright/mcp@latest", "--config", "<abs path>/playwright-config.json", "--isolated"],
+    "env": {"PLAYWRIGHT_MCP_HEADLESS": "false"},
+  }
+}
+```
+
+Filesystem MCP (absolute sandbox path, created beforehand):
+```python
+{
+  "filesystem": {
+    "transport": "stdio",
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-filesystem", "<abs path>/sandbox"],
+  }
+}
+```
+
+MCP tools are async, so load with `await client.get_tools()` and drive the agent with `await agent.ainvoke(...)`.
+
+### Testing notebooks (Gradio launch caveat)
+
+`demo.launch()` / `gr.ChatInterface(...).launch()` blocks, so a plain `nbconvert --execute` would hang on it.
+Tag those final cells with `metadata.tags = ["skip-execution"]` and strip them at test time:
+```
+uv run jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=600 \
+  --TagRemovePreprocessor.enabled=True --TagRemovePreprocessor.remove_cell_tags skip-execution \
+  --output <tmp> <nb>.ipynb
+```
+The shipped notebook keeps the normal `.launch()`; only the test run strips it. Verify the chat callback by
+calling it directly in a tagged-for-test cell where useful.
 
 ---
 

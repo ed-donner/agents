@@ -11,13 +11,17 @@ PC users take note: if you are using WSL (which you will need to in Week 6), the
 Check if you have node installed - should be v22 or later:  
 `!node --version` 
 
-Here are super clear installation instructions, courtesy of our AI friend:
+If you need to install it, use your platform's package manager - one command, no decisions to make:
 
-https://chatgpt.com/share/68103af2-e2dc-8012-b259-bc135a23273b
+On Windows, in PowerShell:  
+`winget install OpenJS.NodeJS.LTS`
 
-In most cases, this involves simply visiting https://nodejs.org and follow the instructions. PC users on WSL, remember to follow the Linux instructions.
+On Mac, in Terminal:  
+`brew install node`
 
-When complete, check that this works in the notebook. You may need to quit and relaunch Cursor (also close any open terminals in Cursor).
+On Linux (and PC users on WSL, which you will need in Week 6), follow the Linux instructions at https://nodejs.org/en/download - or if the package managers above aren't available to you (for example a locked-down work machine), go to that same page, ignore the Docker and version-manager options, and use the **Windows Installer (.msi)** / **macOS Installer (.pkg)** button with all the defaults.
+
+**After installing, quit Cursor completely and start it again** (and close any open terminals). A freshly installed Node is invisible to programs that were already running, and restarting just the notebook kernel is not enough - the kernel inherits its environment from Cursor. After the restart, check that this works in the notebook:
 
 `!node --version`  
 `!npx --version`
@@ -25,6 +29,10 @@ When complete, check that this works in the notebook. You may need to quit and r
 ## Installing Playwright
 
 Playwright is the browser automation software from Microsoft that we use in weeks 4 and 6.
+
+**Week 4 (refreshed labs): there is nothing to install.** The lab runs Playwright's MCP server with `npx`, which fetches it on demand, and it drives the copy of Google Chrome already on your machine (Chrome needs to be installed, but not running). The Week 4 Day 3 lab includes a check cell that proves the whole chain before you use it. If that cell reports Chrome is not found, install Chrome normally or run `npx playwright install chrome` in a terminal.
+
+**Week 6 only**, where the labs use the Python playwright package, you also need its managed browsers:
 
 On Mac / PC:  
 `uv run playwright install`
