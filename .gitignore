@@ -198,3 +198,4 @@ memory.db
 4_langchain_langgraph/sandbox/*
 !4_langchain_langgraph/sandbox/skills/
 4_langchain_langgraph/.playwright-mcp/
+4_langchain_langgraph/graph.png
