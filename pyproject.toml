@@ -4,6 +4,7 @@ version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
     "deepagents>=0.6.8",
+    "google-adk[a2a,mcp]>=2.2.0",
     "gradio>=6.14.0",
     "ipykernel>=7.2.0",
     "ipywidgets>=8.1.8",
@@ -17,6 +18,7 @@ dependencies = [
     "openai-agents[viz]>=0.15.1",
     "pydantic>=2.13.3",
     "pypdf>=6.10.2",
+    "python-dotenv>=1.2.2",
     "python-pptx>=1.0.2",
     "requests>=2.33.1",
     "rich>=15.0.0",

@@ -199,3 +199,10 @@ memory.db
 !4_langchain_langgraph/sandbox/skills/
 4_langchain_langgraph/.playwright-mcp/
 4_langchain_langgraph/graph.png
+
+# Week 5 Agent Frameworks runtime artifacts
+5_agent_frameworks/**/board.sqlite
+5_agent_frameworks/**/board.sqlite-wal
+5_agent_frameworks/**/board.sqlite-shm
+5_agent_frameworks/**/workspace/spanish.txt
+5_agent_frameworks/**/.adk/
