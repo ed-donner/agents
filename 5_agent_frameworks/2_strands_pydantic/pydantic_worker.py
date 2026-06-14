@@ -1,0 +1,97 @@
+"""Run the Day 2 Pydantic AI worker against the board as a plain subprocess.
+
+Seeds one goal ("read notes.txt, translate to Spanish, write spanish.txt"),
+then lets the Pydantic AI agent loop work it: plan the steps on the board, read
+the file through the filesystem MCP server, translate, write the Spanish back,
+and tick each step off before closing the goal. This is the same worker the
+notebook builds in step 5, packaged as a script you can run from the terminal.
+It is also the shape every worker takes on Day 5.
+
+    uv run pydantic_worker.py
+"""
+
+from __future__ import annotations
+
+import asyncio
+import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+from pydantic_ai import Agent
+from pydantic_ai.mcp import MCPToolset
+from fastmcp.client.transports import StdioTransport
+
+import board
+
+load_dotenv(override=True)
+
+MODEL = "openai-chat:gpt-5.4-mini"
+WORKSPACE = Path(__file__).resolve().parent / "workspace"
+GOAL = "Read notes.txt, translate its contents into natural Spanish, and write the Spanish to spanish.txt."
+
+
+def show_todos() -> list[dict]:
+    """List every todo on the board. A goal has parent_id None; a step has parent_id set to its goal's id."""
+    return board.list_todos()
+
+
+def plan_steps(goal_id: int, steps: list[str]) -> dict:
+    """Break a goal into an ordered checklist of steps on the board. Pass the goal's id and a short list of step descriptions."""
+    return {"goal_id": goal_id, "step_ids": [board.add_step(goal_id, step) for step in steps]}
+
+
+def complete_task(task_id: int, result: str) -> dict:
+    """Mark a todo (a step or the goal) with this id as done and record a short result summary."""
+    board.complete_todo(task_id, result)
+    return {"task_id": task_id, "status": "done"}
+
+
+INSTRUCTIONS = """
+You are a careful worker with a shared todo board and a set of file tools.
+
+Take the pending goal and see it through. Begin by laying out a short plan: the handful of concrete steps the work itself breaks down into, added to the board under the goal. Then carry them out with your file tools, marking each step done as you finish it. Once the steps are all done, close the goal. Your files live in the single folder your tools are allowed to use.
+"""
+
+filesystem = MCPToolset(
+    StdioTransport(
+        command="npx",
+        args=["-y", "@modelcontextprotocol/server-filesystem", str(WORKSPACE)],
+        log_file=Path(os.devnull),
+    )
+)
+
+
+def seed() -> int:
+    """Reset the board, clear any old output, and add the one goal."""
+    board.reset_board()
+    WORKSPACE.mkdir(exist_ok=True)
+    (WORKSPACE / "spanish.txt").unlink(missing_ok=True)
+    goal_id = board.add_goal(GOAL)
+    board.claim_todo(goal_id)  # the worker picks up the goal: pending -> in_progress
+    return goal_id
+
+
+async def main() -> None:
+    goal_id = seed()
+    print(f"Seeded goal {goal_id}: {GOAL}\n")
+
+    worker = Agent(
+        MODEL,
+        instructions=INSTRUCTIONS,
+        tools=[show_todos, plan_steps, complete_task],
+        toolsets=[filesystem],
+    )
+    async with worker:
+        result = await worker.run("Please work the pending goal on the board.")
+    print(result.output)
+
+    print("\nBoard after the run:")
+    board.show_board()
+
+    spanish = WORKSPACE / "spanish.txt"
+    if spanish.exists():
+        print("\nspanish.txt:\n" + spanish.read_text(encoding="utf-8"))
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
