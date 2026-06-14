@@ -206,3 +206,5 @@ memory.db
 5_agent_frameworks/**/board.sqlite-shm
 5_agent_frameworks/**/workspace/spanish.txt
 5_agent_frameworks/**/.adk/
+5_agent_frameworks/4_mastra/node_modules/
+5_agent_frameworks/4_mastra/.mastra/
