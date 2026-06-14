@@ -33,7 +33,7 @@ Each model sits in a separate rate limit pool — no shared token budgets.
 - **Docker code execution** — custom tool replaces CrewAI's buggy built-in Code Interpreter
 - **Markdown-free output** — auto-strips thinking tags and markdown from generated files
 - **CLI with stdin support** — pipe in custom requirements or use the built-in trading simulator spec
-- **LangSmith observability** — every agent trace logged (configured via `.env`)
+- **LangFuse observability** — every agent trace logged (configure via `.env`, free at cloud.langfuse.com)
 
 ## Quick Start
 
@@ -104,9 +104,9 @@ advanced-engineering-team/
 └── output/                      # Generated files
 ```
 
-## LangSmith
+## LangFuse
 
-Set the `LANGSMITH_*` env vars in `.env` to trace every agent call at [smith.langchain.com](https://smith.langchain.com).
+Set the `LANGFUSE_*` env vars in `.env` to trace every agent call. Free account at [cloud.langfuse.com](https://cloud.langfuse.com).
 
 ## Acknowledgements
 

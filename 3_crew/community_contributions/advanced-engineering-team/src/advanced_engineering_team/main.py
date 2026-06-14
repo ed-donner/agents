@@ -88,8 +88,23 @@ def _extract_code_from_markdown(text: str) -> str:
             seen_def = True
         if seen_def:
             code_lines.append(line)
+
     if code_lines:
-        return "\n".join(code_lines)
+        return _find_valid_python(code_lines)
+
+    return stripped
+
+
+def _find_valid_python(lines: list[str]) -> str:
+    """Find the longest valid Python prefix from a list of lines."""
+    for i in range(len(lines), 0, -1):
+        block = "\n".join(lines[:i])
+        try:
+            compile(block, "<output>", "exec")
+            return block.strip()
+        except SyntaxError:
+            continue
+    return "\n".join(lines).strip()
 
     return stripped
 

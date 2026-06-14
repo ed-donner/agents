@@ -1,8 +1,19 @@
+import os
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 
 from .llm import create_llm
 from .tools import DockerCodeExecutor
+
+callbacks = []
+_lf_public = os.environ.get("LANGFUSE_PUBLIC_KEY")
+_lf_secret = os.environ.get("LANGFUSE_SECRET_KEY")
+if _lf_public and _lf_secret:
+    try:
+        from langfuse.callback import CallbackHandler
+        callbacks.append(CallbackHandler())
+    except ImportError:
+        pass
 
 
 @CrewBase
@@ -77,4 +88,5 @@ class AdvancedEngineeringTeam():
             tasks=self.tasks,
             process=Process.sequential,
             verbose=True,
+            callbacks=callbacks,
         )
