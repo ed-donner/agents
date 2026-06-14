@@ -57,6 +57,7 @@ filesystem = McpToolset(
         server_params=StdioServerParameters(
             command="npx",
             args=["-y", "@modelcontextprotocol/server-filesystem", str(WORKSPACE)],
+            cwd=str(WORKSPACE),  # start the server in the workspace so relative file names resolve there
         ),
     ),
     # Send the server's stderr to DEVNULL. This quiets its startup logging, and

@@ -1,29 +1,36 @@
-"""Run the Day 2 Strands worker against the board as a plain subprocess.
+"""Run the Day 3 Agno worker against the board as a plain subprocess.
 
-Seeds one goal ("read notes.txt, translate to Spanish, write spanish.txt"),
-then lets the Strands agent loop work it: plan the steps on the board, read the
-file through the filesystem MCP server, translate, write the Spanish back, and
-tick each step off before closing the goal. This is the same worker the notebook
-builds in step 5, packaged as a script you can run from the terminal. It is also
-the shape every worker takes on Day 5.
+Seeds one goal ("read notes.txt, translate to Spanish, write spanish.txt"), then
+lets the Agno agent loop work it: plan the steps on the board, read the file through
+the filesystem MCP server, translate, write the Spanish back, and tick each step off
+before closing the goal. This is the same worker the notebook builds in step 5,
+packaged as a script you can run from the terminal. It is also the shape every
+worker takes on Day 5.
 
-    uv run strands_worker.py
+    uv run agno_worker.py
 """
 
 from __future__ import annotations
 
 import asyncio
-import os
+import functools
 import subprocess
 from pathlib import Path
 
 from dotenv import load_dotenv
-from strands import Agent, tool
-from strands.models.openai import OpenAIModel
-from strands.tools.mcp import MCPClient
-from mcp import stdio_client, StdioServerParameters
+from agno.agent import Agent
+from agno.models.openai import OpenAIChat
+from agno.tools.mcp import MCPTools
+from mcp import StdioServerParameters
 
-import board
+# Agno's MCP tools do not expose the server's stderr, so we point its stdio client
+# at DEVNULL. That quiets the filesystem server's startup banner and lets it run
+# from a Jupyter kernel on Windows. It is the same fix every framework needs this week.
+import agno.tools.mcp.mcp as agno_mcp
+
+agno_mcp.stdio_client = functools.partial(agno_mcp.stdio_client, errlog=subprocess.DEVNULL)
+
+import board  # noqa: E402
 
 load_dotenv(override=True)
 
@@ -31,34 +38,21 @@ MODEL = "gpt-5.4-mini"
 WORKSPACE = Path(__file__).resolve().parent / "workspace"
 GOAL = "Read notes.txt, translate its contents into natural Spanish, and write the Spanish to spanish.txt."
 
-model = OpenAIModel(client_args={"api_key": os.environ["OPENAI_API_KEY"]}, model_id=MODEL)
+model = OpenAIChat(id=MODEL)
 
 
-@tool
 def show_todos() -> list[dict]:
     """List every todo on the board. A goal has parent_id None; a step has parent_id set to its goal's id."""
     return board.list_todos()
 
 
-@tool
 def plan_steps(goal_id: int, steps: list[str]) -> dict:
-    """Break a goal into an ordered checklist of steps on the board.
-
-    Args:
-        goal_id: The id of the goal to break down.
-        steps: Short descriptions of the steps to take, in order.
-    """
+    """Break a goal into an ordered checklist of steps on the board. Pass the goal's id and a short list of step descriptions."""
     return {"goal_id": goal_id, "step_ids": [board.add_step(goal_id, step) for step in steps]}
 
 
-@tool
 def complete_task(task_id: int, result: str) -> dict:
-    """Mark a todo (a step or the goal) done and record a short result summary.
-
-    Args:
-        task_id: The id of the todo to mark done.
-        result: A short summary of what was accomplished.
-    """
+    """Mark a todo (a step or the goal) with this id as done and record a short result summary."""
     board.complete_todo(task_id, result)
     return {"task_id": task_id, "status": "done"}
 
@@ -68,17 +62,6 @@ You are a careful worker with a shared todo board and a set of file tools.
 
 Take the pending goal and see it through. Begin by laying out a short plan: the handful of concrete steps the work itself breaks down into, added to the board under the goal. Then carry them out with your file tools, marking each step done as you finish it. Once the steps are all done, close the goal. Your files live in the single folder your tools are allowed to use.
 """
-
-filesystem = MCPClient(
-    lambda: stdio_client(
-        StdioServerParameters(
-            command="npx",
-            args=["-y", "@modelcontextprotocol/server-filesystem", str(WORKSPACE)],
-            cwd=str(WORKSPACE),  # start the server in the workspace so relative file names resolve there
-        ),
-        errlog=subprocess.DEVNULL,
-    )
-)
 
 
 def seed() -> int:
@@ -95,12 +78,18 @@ async def main() -> None:
     goal_id = seed()
     print(f"Seeded goal {goal_id}: {GOAL}\n")
 
-    worker = Agent(
-        model=model,
-        system_prompt=INSTRUCTIONS,
-        tools=[show_todos, plan_steps, complete_task, filesystem],
+    server = StdioServerParameters(
+        command="npx",
+        args=["-y", "@modelcontextprotocol/server-filesystem", str(WORKSPACE)],
+        cwd=str(WORKSPACE),
     )
-    await worker.invoke_async("Please work the pending goal on the board.")
+    async with MCPTools(server_params=server) as filesystem:
+        worker = Agent(
+            model=model,
+            instructions=INSTRUCTIONS,
+            tools=[show_todos, plan_steps, complete_task, filesystem],
+        )
+        await worker.arun(input="Please work the pending goal on the board.")
 
     print("\nBoard after the run:")
     board.show_board()
