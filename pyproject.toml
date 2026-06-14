@@ -17,11 +17,13 @@ dependencies = [
     "openai>=2.34.0",
     "openai-agents[viz]>=0.15.1",
     "pydantic>=2.13.3",
+    "pydantic-ai-slim[mcp,openai]>=1.107.0",
     "pypdf>=6.10.2",
     "python-dotenv>=1.2.2",
     "python-pptx>=1.0.2",
     "requests>=2.33.1",
     "rich>=15.0.0",
+    "strands-agents[openai]>=1.43.0",
     "wikipedia>=1.4.0",
 ]
 
