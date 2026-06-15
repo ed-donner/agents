@@ -1,0 +1,40 @@
+name: Run Python script
+
+on:
+  push:
+    branches:
+      - feature/foundations
+    paths:
+      - 'apps/foundation/**' # Only trigger if files in this subfolder change
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # This sets the default execution path for all 'run' steps to your app folder
+    defaults:
+      run:
+        working-directory: apps/foundation
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4 # Updated from v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v5 # Updated from v2
+      with:
+        python-version: '3.9'
+        cache: 'pip' # Optional: Speeds up subsequent runs by caching pip packages
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install gradio huggingface_hub
+
+    - name: Log in to Hugging Face
+      env:
+        HF_TOKEN: ${{ secrets.hf_token }}
+      run: python -c 'import os, huggingface_hub; huggingface_hub.login(token=os.environ["HF_TOKEN"])'
+
+    - name: Deploy to Spaces
+      run: gradio deploy
