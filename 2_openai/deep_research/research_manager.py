@@ -1,84 +1,89 @@
+"""Coordinates deep research: guardrails, clarifying questions, then agentic manager (tools + handoffs) with streaming."""
 from agents import Runner, trace, gen_trace_id
-from search_agent import search_agent
-from planner_agent import planner_agent, WebSearchItem, WebSearchPlan
-from writer_agent import writer_agent, ReportData
-from email_agent import email_agent
-import asyncio
+from clarifier_agent import clarifier_agent
+from manager_agent import manager_agent
+from guardrails import run_guardrails, GuardrailResult
+
 
 class ResearchManager:
 
-    async def run(self, query: str):
-        """ Run the deep research process, yielding the status updates and the final report"""
-        trace_id = gen_trace_id()
-        with trace("Research trace", trace_id=trace_id):
-            print(f"View trace: https://platform.openai.com/traces/trace?trace_id={trace_id}")
-            yield f"View trace: https://platform.openai.com/traces/trace?trace_id={trace_id}"
-            print("Starting research...")
-            search_plan = await self.plan_searches(query)
-            yield "Searches planned, starting to search..."     
-            search_results = await self.perform_searches(search_plan)
-            yield "Searches complete, writing report..."
-            report = await self.write_report(query, search_results)
-            yield "Report written, sending email..."
-            await self.send_email(report)
-            yield "Email sent, research complete"
-            yield report.markdown_report
-        
+    async def get_clarifying_questions(self, query: str) -> list[str]:
+        result = await Runner.run(clarifier_agent, f"Query: {query}")
+        return result.final_output.questions
 
-    async def plan_searches(self, query: str) -> WebSearchPlan:
-        """ Plan the searches to perform for the query """
-        print("Planning searches...")
-        result = await Runner.run(
-            planner_agent,
-            f"Query: {query}",
-        )
-        print(f"Will perform {len(result.final_output.searches)} searches")
-        return result.final_output_as(WebSearchPlan)
+    def refine_query_with_answers(
+        self,
+        query: str,
+        questions: list[str],
+        answers: list[str],
+        recipient_email: str | None = None,
+    ) -> str:
+        parts = [query]
+        if questions and answers:
+            qa = []
+            for q, a in zip(questions, answers or []):
+                a = (a or "").strip()
+                if a:
+                    qa.append(f"Q: {q}\nA: {a}")
+            if qa:
+                parts.append("Clarifications:\n" + "\n\n".join(qa))
+        if recipient_email and str(recipient_email).strip():
+            parts.append("Recipient email: " + str(recipient_email).strip())
+        return "\n\n".join(parts)
 
-    async def perform_searches(self, search_plan: WebSearchPlan) -> list[str]:
-        """ Perform the searches to perform for the query """
-        print("Searching...")
-        num_completed = 0
-        tasks = [asyncio.create_task(self.search(item)) for item in search_plan.searches]
-        results = []
-        for task in asyncio.as_completed(tasks):
-            result = await task
-            if result is not None:
-                results.append(result)
-            num_completed += 1
-            print(f"Searching... {num_completed}/{len(tasks)} completed")
-        print("Finished searching")
-        return results
+    def _intent_query_from_refined(self, refined_query: str) -> str:
+        q = (refined_query or "").split("Clarifications:")[0].split("Recipient email:")[0].strip()
+        return q
 
-    async def search(self, item: WebSearchItem) -> str | None:
-        """ Perform a search for the query """
-        input = f"Search term: {item.query}\nReason for searching: {item.reason}"
-        try:
-            result = await Runner.run(
-                search_agent,
-                input,
+    async def run(self, refined_query: str, skip_guardrails: bool = False):
+      
+        if not skip_guardrails:
+            intent_query = self._intent_query_from_refined(refined_query)
+            gr = run_guardrails(
+                refined_query,
+                answers=[],
+                intent_query=intent_query,
+                check_pii=True,
+                check_intent=True,
+                check_length=True,
+                allow_recipient_email=True,
             )
-            return str(result.final_output)
-        except Exception:
-            return None
+            if not gr.passed:
+                yield f"**Input guardrail:** {gr.message}"
+                return
 
-    async def write_report(self, query: str, search_results: list[str]) -> ReportData:
-        """ Write the report for the query """
-        print("Thinking about report...")
-        input = f"Original query: {query}\nSummarized search results: {search_results}"
-        result = await Runner.run(
-            writer_agent,
-            input,
-        )
-
-        print("Finished writing report")
-        return result.final_output_as(ReportData)
-    
-    async def send_email(self, report: ReportData) -> None:
-        print("Writing email...")
-        result = await Runner.run(
-            email_agent,
-            report.markdown_report,
-        )
-        print("Email sent")
-        return report
+        trace_id = gen_trace_id()
+        with trace("Deep research trace", trace_id=trace_id):
+            yield f"View trace: https://platform.openai.com/traces/trace?trace_id={trace_id}\n\n"
+            yield "Starting autonomous research (plan → search → write → evaluate → optimize → email)...\n\n"
+            report_snapshot = ""
+            result = Runner.run_streamed(manager_agent, refined_query)
+            async for event in result.stream_events():
+                if event.type == "agent_updated_stream_event":
+                    yield f"**{event.new_agent.name}** is working…\n"
+                elif event.type == "run_item_stream_event":
+                    if event.item.type == "tool_call_item":
+                        name = getattr(event.item.raw_item, "name", None) or "tool"
+                        yield f"Calling: **{name}**\n"
+                    elif event.item.type == "tool_call_output_item":
+                        out = getattr(event.item, "output", None)
+                        if out:
+                            if isinstance(out, str) and ("#" in out or "**" in out) and len(out) > 200:
+                                report_snapshot = out
+                            elif isinstance(out, dict):
+                                report_snapshot = (
+                                    out.get("improved_markdown_report")
+                                    or out.get("markdown_report")
+                                    or report_snapshot
+                                )
+                        yield "Tool completed.\n"
+            try:
+                final = result.final_output
+                if isinstance(final, str) and len(final) > 100:
+                    report_snapshot = final
+            except Exception:
+                pass
+            if report_snapshot:
+                yield "\n---\n\n# Report\n\n" + report_snapshot
+            else:
+                yield "\nResearch run finished. Check trace for full output.\n"

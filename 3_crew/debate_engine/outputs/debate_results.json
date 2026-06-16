@@ -1,0 +1,152 @@
+[
+  {
+    "timestamp": "2026-03-18T11:45:14.232136",
+    "motion": "AI Hiring Discrimination",
+    "winner": "prosecution",
+    "scores": {
+      "prosecution": {
+        "logic": 8,
+        "evidence": 7,
+        "rebuttal": 8,
+        "clarity": 8,
+        "total": 31
+      },
+      "defense": {
+        "logic": 5,
+        "evidence": 4,
+        "rebuttal": 5,
+        "clarity": 6,
+        "total": 20
+      }
+    },
+    "confidence": 0.85,
+    "reasoning": "The prosecution has provided a compelling argument regarding the potential liability of the defendant's AI hiring system under Title VII, leveraging the legal principle of disparate impact theory. They established that the AI system is alleged to result in disproportionate adverse effects on protected demographic groups, which is aligned with Title VII standards. Although they do lack specific data on the demographics affected and the internal audit procedures, the nature of disparate impact does not require direct causation, only evidence of adverse effects. The defense's counter-claim was weak due to vague assertions that did not sufficiently challenge the premise of discriminatory impact, especially considering established case law concerning AI's role in discrimination. While the defense pointed out the lack of concrete proof, their argument did not sufficiently undermine the prosecution's case. Overall, the prosecution presented a stronger, more coherent case for liability under Title VII, despite certain gaps in specific evidence.",
+    "models": {
+      "prosecutor": "gpt-4o",
+      "defense": "gpt-3.5-turbo",
+      "judge": "gpt-4o-mini",
+      "evidence_analyst": "gpt-4o-mini",
+      "fact_checker": "gpt-4o-mini"
+    }
+  },
+  {
+    "timestamp": "2026-03-18T11:48:21.219223",
+    "motion": "AI Hiring Discrimination",
+    "winner": "prosecution",
+    "scores": {
+      "prosecution": {
+        "logic": 8,
+        "evidence": 8,
+        "rebuttal": 7,
+        "clarity": 8,
+        "total": 31
+      },
+      "defense": {
+        "logic": 6,
+        "evidence": 5,
+        "rebuttal": 6,
+        "clarity": 7,
+        "total": 24
+      }
+    },
+    "confidence": 0.85,
+    "reasoning": "The prosecution effectively established a case for discriminatory practices by illustrating how the AI hiring system may lead to disparate impacts under Title VII. They provided logical arguments that connected the evidence of demographic disparities in hiring outcomes to the AI system, placing the burden of proof on the defendant to demonstrate non-discriminatory criteria. The clarity of the prosecution's assertions was strong, presenting a clear narrative on the implications of the AI's performance. Conversely, while the defense identified potential rationalizations for the AI's operation, it failed to sufficiently address the core issue of the disproportionate impact observed. Their arguments suffered from a lack of concrete evidence linking alternate factors to the hiring decisions and an insufficient rebuttal of the prosecution's claims. Overall, the prosecution presented a more compelling case for liability under Title VII, highlighting serious concerns about the AI system without adequate safeguards against discrimination.",
+    "models": {
+      "prosecutor": "gpt-4o",
+      "defense": "gpt-3.5-turbo",
+      "judge": "gpt-4o-mini",
+      "evidence_analyst": "gpt-4o-mini",
+      "fact_checker": "gpt-4o-mini"
+    }
+  },
+  {
+    "timestamp": "2026-03-18T11:49:36.174500",
+    "motion": "AI Copyright Infringement",
+    "winner": "prosecution",
+    "scores": {
+      "prosecution": {
+        "logic": 9,
+        "evidence": 8,
+        "rebuttal": 8,
+        "clarity": 9,
+        "total": 8.5
+      },
+      "defense": {
+        "logic": 7,
+        "evidence": 6,
+        "rebuttal": 7,
+        "clarity": 7,
+        "total": 6.75
+      }
+    },
+    "confidence": 0.85,
+    "reasoning": "The prosecution presented strong logic in asserting that the defendant's AI-generated artwork infringes on the plaintiff's copyrighted images, directly linking the training data to the artwork generated. Their argument about the lack of transformative nature and failure to satisfy fair use criteria was thorough and substantiated. The evidence provided showcased a clear connection between the dataset and the resulting images, solidifying the infringement claim. On the other hand, the defense's logic exhibited some strengths, particularly in addressing general assumptions on copyright infringement; however, their evidence was less compelling and relied heavily on the assertion of coincidences or transformative claims that lacked substantial backing. Therefore, the prosecution's position is stronger and more cohesive in this context, leading to the conclusion of their victory.",
+    "models": {
+      "prosecutor": "gpt-4o-mini",
+      "defense": "gpt-3.5-turbo",
+      "judge": "gpt-4o-mini",
+      "evidence_analyst": "gpt-4o-mini",
+      "fact_checker": "gpt-4o-mini"
+    }
+  },
+  {
+    "timestamp": "2026-03-18T11:52:14.101612",
+    "motion": "Autonomous Vehicle Liability",
+    "winner": "prosecution",
+    "scores": {
+      "prosecution": {
+        "logic": 8,
+        "evidence": 8,
+        "rebuttal": 7,
+        "clarity": 9,
+        "total": 8
+      },
+      "defense": {
+        "logic": 7,
+        "evidence": 6,
+        "rebuttal": 7,
+        "clarity": 6,
+        "total": 6.5
+      }
+    },
+    "confidence": 0.8,
+    "reasoning": "The prosecution's argument is strongly supported by the principles of strict liability, which establishes clear manufacturer responsibility without the need to prove negligence. The argument maintains that the self-driving technology directly relates to the manufacturer's accountability for any accidents caused by the vehicle. The potential precedent set by this case is another considerable factor. The defense does present valid points regarding external factors, user error, and operational conditions, but these concerns don\u2019t effectively dismantle the fundamental assertion of strict liability. The logic, clarity, and strength of evidence provided by the prosecution outweigh those of the defense, leading to a decision in favor of the prosecution.",
+    "models": {
+      "prosecutor": "gpt-3.5-turbo",
+      "defense": "gpt-4o-mini",
+      "judge": "gpt-4o-mini",
+      "evidence_analyst": "gpt-4o-mini",
+      "fact_checker": "gpt-4o-mini"
+    }
+  },
+  {
+    "timestamp": "2026-03-18T11:53:51.510768",
+    "motion": "AI Content Moderation",
+    "winner": "defense",
+    "scores": {
+      "prosecution": {
+        "logic": 6,
+        "evidence": 6,
+        "rebuttal": 6,
+        "clarity": 7,
+        "total": 6.25
+      },
+      "defense": {
+        "logic": 8,
+        "evidence": 8,
+        "rebuttal": 7,
+        "clarity": 8,
+        "total": 7.75
+      }
+    },
+    "confidence": 0.9,
+    "reasoning": "The prosecution argues that the AI content moderation system violates the First Amendment by suppressing lawful speech, largely relying on user complaints and claims of inaccuracies in the moderation process. However, these arguments face weaknesses in establishing that the moderation actions qualify as state actions, which is crucial for invoking First Amendment scrutiny. Furthermore, the prosecution's claims generally lack extensive legal precedents supporting the assertion of First Amendment rights against private companies that moderate content based on community standards. The defense counters this by emphasizing that the First Amendment protections mainly apply to government action and that users have implicitly consented to the community standards, which diminishes their claims of violation. The defense provides solid logic and supporting evidence that outlines the framework under which private platforms operate, further supported by their argument regarding the effectiveness of the appeal process. Thus, the defense presents a stronger case overall.",
+    "models": {
+      "prosecutor": "gpt-4o",
+      "defense": "gpt-4o-mini",
+      "judge": "gpt-4o-mini",
+      "evidence_analyst": "gpt-4o-mini",
+      "fact_checker": "gpt-4o-mini"
+    }
+  }
+]

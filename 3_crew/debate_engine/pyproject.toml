@@ -1,0 +1,25 @@
+[project]
+name = "debate_engine"
+version = "0.1.0"
+description = "debate_engine using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[google-genai,litellm,tools]==1.10.1",
+    "python-dotenv>=1.0.1",
+]
+
+[project.scripts]
+debate_engine = "debate_engine.main:run"
+run_crew = "debate_engine.main:run"
+train = "debate_engine.main:train"
+replay = "debate_engine.main:replay"
+test = "debate_engine.main:test"
+run_with_trigger = "debate_engine.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
