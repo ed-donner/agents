@@ -87,12 +87,17 @@ def show_board(path: Path = BOARD_PATH) -> None:
     done todos struck through in green and anything in progress in yellow. This
     is just a pretty view; the agent's show_todos tool still gets plain dicts.
     """
-    console = Console()
     todos = list_todos(path)
+    lines = []
     for goal in [t for t in todos if t["parent_id"] is None]:
-        console.print(_format(goal, "Goal", ""))
+        lines.append(_format(goal, "Goal", ""))
         for step in [t for t in todos if t["parent_id"] == goal["id"]]:
-            console.print(_format(step, "Step", "  "))
+            lines.append(_format(step, "Step", "  "))
+    if lines:
+        # Print the whole board in one go. Printing line by line makes a Jupyter
+        # kernel emit a separate block per line, which stacks with gaps; soft_wrap
+        # keeps a long goal line from wrapping.
+        Console().print("\n".join(lines), soft_wrap=True)
 
 
 def _format(todo: dict, kind: str, indent: str) -> str:

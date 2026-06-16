@@ -18,7 +18,7 @@ root_agent = LlmAgent(
     name="task_worker",
     description="Works one task from the SQLite board using its files.",
     instruction=...,        # unchanged
-    tools=[show_todos, complete_task, filesystem],
+    tools=[show_todos, plan_steps, complete_task, filesystem],
 )
 ```
 
