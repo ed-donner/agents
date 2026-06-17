@@ -1,0 +1,11 @@
+# Week 5 — AutoGen
+# Tested: Python 3.11, May 2026
+# Pin versions to avoid breaking changes in rapidly evolving SDKs.
+
+autogen-agentchat>=0.4.9
+autogen-ext[openai]>=0.4.9
+openai>=1.78.0
+python-dotenv>=1.1.0
+gradio>=5.29.1
+# For distributed runtime (Lab 4):
+# autogen-ext[grpc]>=0.4.9

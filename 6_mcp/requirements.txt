@@ -1,0 +1,15 @@
+# Week 6 — Model Context Protocol (MCP)
+# Tested: Python 3.11, May 2026
+# Pin versions to avoid breaking changes in rapidly evolving SDKs.
+
+openai>=1.78.0
+openai-agents>=0.0.19
+python-dotenv>=1.1.0
+requests>=2.32.3
+
+# MCP servers are spawned as subprocesses — Node.js required for JS-based servers.
+# Install Node.js from https://nodejs.org (LTS recommended).
+# Windows users: if MCP subprocess spawning fails, use WSL2 (see Lab 1 warning cell).
+
+# Optional: Playwright for browser automation MCP server
+# playwright>=1.52.0

@@ -4,6 +4,16 @@
 
 ![Autonomous Agent](assets/autonomy.png)
 
+> ### 📘 Studying for mastery / interviews?
+> A structured curriculum has been layered on top of this course to take a software
+> engineer all the way to **interview-ready AI agent engineer** — with a mental-model
+> **primer** for every week, an **interview question bank**, and an integration
+> **capstone**. Start here: **[MASTERY_CURRICULUM.md](MASTERY_CURRICULUM.md)**.
+> (See also [INTERVIEW_BANK.md](INTERVIEW_BANK.md) and [CAPSTONE.md](CAPSTONE.md).)
+>
+> The advanced track now runs Weeks 1–10; the former standalone Weeks 11–12 were
+> merged into Week 7 (Labs 9 & 10) so each production topic has one canonical home.
+
 _If you're looking at this in Cursor, please right click on the filename in the Explorer on the left, and select "Open preview", to view the formatted version._
 
 I couldn't be more excited to welcome you! This is the start of your 6 week adventure into the powerful, astonishing and often surreal world of Agentic AI.

@@ -1,0 +1,45 @@
+# Week 7 — Advanced (RAG, Evals, Deployment, Observability, Security, CI/CD, Fine-tuning, Vision)
+# Tested: Python 3.11, May 2026
+# Pin versions to avoid breaking changes in rapidly evolving SDKs.
+
+openai>=1.78.0
+python-dotenv>=1.1.0
+pydantic>=2.11.4
+
+# Lab 1 — Deep RAG
+chromadb>=1.0.7
+langchain>=0.3.23
+langchain-openai>=0.3.14
+langchain-core>=0.3.52
+langchain-chroma>=0.2.4
+langgraph>=0.3.34
+
+# Lab 2 — Agent Evals
+# (covered by openai + pydantic above)
+
+# Lab 3 — Production Deployment
+fastapi>=0.115.12
+uvicorn[standard]>=0.34.2
+
+# Lab 4 — Observability
+# (stdlib only for core tracer; optional prometheus below)
+# prometheus-client>=0.21.1
+
+# Lab 5 — Security & Safety
+# (covered by openai + pydantic + re stdlib above)
+
+# Lab 6 — CI/CD Eval Gate
+# (covered by openai + pydantic above; GitHub Actions runs in CI — no extra packages)
+
+# Lab 7 — Fine-tuning & Knowledge Distillation
+# (covered by openai + pydantic above)
+
+# Lab 8 — Vision & Multimodal Agents
+numpy>=1.26.0
+
+# Lab 9 — Advanced Evals (consistency / Pareto / fairness)
+# (covered by openai above)
+
+# Lab 10 — Enterprise Deployment (middleware / circuit breaker / cloud IaC)
+# (covered by openai + fastapi above; cloud IaC files are read-only templates —
+#  deploy with: terraform / gcloud / az CLI, no extra Python packages needed)
