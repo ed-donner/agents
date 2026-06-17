@@ -2,7 +2,15 @@
 import sys
 import warnings
 import os
+from pathlib import Path
 from datetime import datetime
+
+project_root = Path(__file__).resolve().parents[2]
+crewai_home = project_root / ".crewai_home"
+crewai_home.mkdir(parents=True, exist_ok=True)
+# Ensure CrewAI's appdirs-based storage lands in-project (not ~/Library/...),
+# which avoids permission issues in sandboxed/restricted environments.
+os.environ["HOME"] = str(crewai_home)
 
 from coder.crew import Coder
 
@@ -18,8 +26,8 @@ def run():
     """
     Run the crew.
     """
-    inputs = {
-        'assignment': assignment,
+    inputs={
+        'assignment': assignment
     }
     
     result = Coder().crew().kickoff(inputs=inputs)
