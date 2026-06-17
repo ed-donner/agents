@@ -1,21 +1,32 @@
-"""Run the Day 3 Microsoft Agent Framework worker against the board as a subprocess.
+"""Run the Microsoft Agent Framework worker against the board as a subprocess.
 
-Seeds one goal ("read notes.txt, translate to Spanish, write spanish.txt"), then
-lets the MAF agent loop work it: plan the steps on the board, read the file through
-the filesystem MCP server, translate, write the Spanish back, and tick each step off
-before closing the goal. This is the same worker the notebook builds in step 5,
-packaged as a script you can run from the terminal. It is also the shape every
-worker takes on Day 5.
+Run bare, it seeds and works its own Day 3 goal (read notes.txt, translate to
+Spanish, write spanish.txt): plan the steps on the board, read the file through the
+filesystem MCP server, translate, write the Spanish back, and tick each step off
+before closing the goal.
 
-    uv run maf_worker.py
+Given a task id and a shared board path, the same worker joins the Day 5 agent loop
+instead: it points its board and file tools at the shared board and site, claims that
+one task, builds what the task asks, and exits, leaving the rest of the board alone.
+
+    uv run maf_worker.py                       # standalone Day 3 demo
+    uv run maf_worker.py <taskId> <boardPath>  # Day 5: work one task on a shared board
 """
 
 from __future__ import annotations
 
 import asyncio
+import os
 import subprocess
+import sys
 import warnings
 from pathlib import Path
+
+# Day 5 mode is "<taskId> <boardPath>". Read it before importing board, because the
+# board picks its file from BOARD_PATH at import. Run bare, none of this fires.
+TASK_ID = int(sys.argv[1]) if len(sys.argv) > 2 else None
+if TASK_ID is not None:
+    os.environ.setdefault("BOARD_PATH", sys.argv[2])
 
 warnings.filterwarnings("ignore", message=r".*experimental.*")  # quiet MAF's import-time notices
 
@@ -27,9 +38,12 @@ import board  # noqa: E402
 
 load_dotenv(override=True)
 
-MODEL = "gpt-5.4-mini"
+MODEL = os.environ.get("WORKER_MODEL", "gpt-5.4-mini")
 WORKSPACE = Path(__file__).resolve().parent / "workspace"
 GOAL = "Read notes.txt, translate its contents into natural Spanish, and write the Spanish to spanish.txt."
+# Where the file tools may write: this worker's own workspace when standalone, or
+# the shared site (the board file's folder) when working a Day 5 task.
+WORK_DIR = WORKSPACE if TASK_ID is None else Path(sys.argv[2]).resolve().parent
 
 client = OpenAIChatClient(model=MODEL)
 
@@ -52,19 +66,19 @@ def complete_task(task_id: int, result: str) -> dict:
 
 class FilesystemMCP(MCPStdioTool):
     """The filesystem MCP server with its stderr sent to DEVNULL and its working
-    directory set to the workspace.
+    directory set to the work dir.
 
     MAF's MCPStdioTool does not expose the server's stderr, so we override the one
     method that builds the stdio client. errlog=DEVNULL quiets the server's startup
     banner and lets it run from a Jupyter kernel on Windows; cwd starts the server in
-    the workspace, so the agent's file names resolve there.
+    the work dir, so the agent's file names resolve there.
     """
 
     def get_mcp_client(self):
         from mcp.client.stdio import StdioServerParameters, stdio_client
 
         params = StdioServerParameters(
-            command=self.command, args=self.args, env=self.env, cwd=str(WORKSPACE)
+            command=self.command, args=self.args, env=self.env, cwd=str(WORK_DIR)
         )
         return stdio_client(server=params, errlog=subprocess.DEVNULL)
 
@@ -87,13 +101,21 @@ def seed() -> int:
 
 
 async def main() -> None:
-    goal_id = seed()
-    print(f"Seeded goal {goal_id}: {GOAL}\n")
+    if TASK_ID is None:
+        goal_id = seed()
+        print(f"Seeded goal {goal_id}: {GOAL}\n")
+        message = "Please work the pending goal on the board."
+    else:
+        board.claim_todo(TASK_ID)  # light up this one task on the shared board
+        message = (
+            f"You have claimed task #{TASK_ID} on the shared board. Work only that task and its steps. "
+            f"When the work is built and checked, mark task #{TASK_ID} itself done with complete_task, then stop."
+        )
 
     filesystem = FilesystemMCP(
         name="filesystem",
         command="npx",
-        args=["-y", "@modelcontextprotocol/server-filesystem", str(WORKSPACE)],
+        args=["-y", "@modelcontextprotocol/server-filesystem", str(WORK_DIR)],
     )
     async with filesystem:
         worker = Agent(
@@ -101,14 +123,14 @@ async def main() -> None:
             instructions=INSTRUCTIONS,
             tools=[show_todos, plan_steps, complete_task, filesystem],
         )
-        await worker.run("Please work the pending goal on the board.")
+        await worker.run(message)
 
-    print("\nBoard after the run:")
-    board.show_board()
-
-    spanish = WORKSPACE / "spanish.txt"
-    if spanish.exists():
-        print("\nspanish.txt:\n" + spanish.read_text(encoding="utf-8"))
+    if TASK_ID is None:  # standalone: show the result; on Day 5 the orchestrator owns the console
+        print("\nBoard after the run:")
+        board.show_board()
+        spanish = WORKSPACE / "spanish.txt"
+        if spanish.exists():
+            print("\nspanish.txt:\n" + spanish.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

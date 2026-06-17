@@ -11,12 +11,13 @@ at once without tripping over each other.
 
 from __future__ import annotations
 
+import os
 import sqlite3
 from pathlib import Path
 
 from rich.console import Console
 
-BOARD_PATH = Path(__file__).resolve().parent / "board.sqlite"
+BOARD_PATH = Path(os.environ.get("BOARD_PATH", Path(__file__).resolve().parent / "board.sqlite"))
 
 
 def _connect(path: Path = BOARD_PATH) -> sqlite3.Connection:

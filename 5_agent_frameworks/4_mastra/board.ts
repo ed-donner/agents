@@ -18,7 +18,8 @@ import { DatabaseSync } from "node:sqlite";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
-export const BOARD_PATH = join(dirname(fileURLToPath(import.meta.url)), "board.sqlite");
+export const BOARD_PATH =
+  process.env.BOARD_PATH ?? join(dirname(fileURLToPath(import.meta.url)), "board.sqlite");
 
 export interface Todo {
   id: number;

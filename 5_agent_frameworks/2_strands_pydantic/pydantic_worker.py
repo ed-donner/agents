@@ -1,33 +1,46 @@
-"""Run the Day 2 Pydantic AI worker against the board as a plain subprocess.
+"""Run the Pydantic AI worker against the board as a plain subprocess.
 
-Seeds one goal ("read notes.txt, translate to Spanish, write spanish.txt"),
-then lets the Pydantic AI agent loop work it: plan the steps on the board, read
-the file through the filesystem MCP server, translate, write the Spanish back,
-and tick each step off before closing the goal. This is the same worker the
-notebook builds in step 5, packaged as a script you can run from the terminal.
-It is also the shape every worker takes on Day 5.
+Run bare, it seeds and works its own Day 2 goal (read notes.txt, translate to
+Spanish, write spanish.txt): plan the steps on the board, read the file through the
+filesystem MCP server, translate, write the Spanish back, and tick each step off
+before closing the goal.
 
-    uv run pydantic_worker.py
+Given a task id and a shared board path, the same worker joins the Day 5 agent loop
+instead: it points its board and file tools at the shared board and site, claims that
+one task, builds what the task asks, and exits, leaving the rest of the board alone.
+
+    uv run pydantic_worker.py                       # standalone Day 2 demo
+    uv run pydantic_worker.py <taskId> <boardPath>  # Day 5: work one task on a shared board
 """
 
 from __future__ import annotations
 
 import asyncio
 import os
+import sys
 from pathlib import Path
 
-from dotenv import load_dotenv
-from pydantic_ai import Agent
-from pydantic_ai.mcp import MCPToolset
-from fastmcp.client.transports import StdioTransport
+# Day 5 mode is "<taskId> <boardPath>". Read it before importing board, because the
+# board picks its file from BOARD_PATH at import. Run bare, none of this fires.
+TASK_ID = int(sys.argv[1]) if len(sys.argv) > 2 else None
+if TASK_ID is not None:
+    os.environ.setdefault("BOARD_PATH", sys.argv[2])
 
-import board
+from dotenv import load_dotenv  # noqa: E402
+from pydantic_ai import Agent  # noqa: E402
+from pydantic_ai.mcp import MCPToolset  # noqa: E402
+from fastmcp.client.transports import StdioTransport  # noqa: E402
+
+import board  # noqa: E402
 
 load_dotenv(override=True)
 
-MODEL = "openai-chat:gpt-5.4-mini"
+MODEL = f"openai-chat:{os.environ.get('WORKER_MODEL', 'gpt-5.4-mini')}"
 WORKSPACE = Path(__file__).resolve().parent / "workspace"
 GOAL = "Read notes.txt, translate its contents into natural Spanish, and write the Spanish to spanish.txt."
+# Where the file tools may write: this worker's own workspace when standalone, or
+# the shared site (the board file's folder) when working a Day 5 task.
+WORK_DIR = WORKSPACE if TASK_ID is None else Path(sys.argv[2]).resolve().parent
 
 
 def show_todos() -> list[dict]:
@@ -55,8 +68,8 @@ Take the pending goal and see it through. Begin by laying out a short plan: the 
 filesystem = MCPToolset(
     StdioTransport(
         command="npx",
-        args=["-y", "@modelcontextprotocol/server-filesystem", str(WORKSPACE)],
-        cwd=str(WORKSPACE),  # start the server in the workspace so relative file names resolve there
+        args=["-y", "@modelcontextprotocol/server-filesystem", str(WORK_DIR)],
+        cwd=str(WORK_DIR),  # start the server in the work dir so relative file names resolve there
         log_file=Path(os.devnull),
     )
 )
@@ -73,8 +86,16 @@ def seed() -> int:
 
 
 async def main() -> None:
-    goal_id = seed()
-    print(f"Seeded goal {goal_id}: {GOAL}\n")
+    if TASK_ID is None:
+        goal_id = seed()
+        print(f"Seeded goal {goal_id}: {GOAL}\n")
+        message = "Please work the pending goal on the board."
+    else:
+        board.claim_todo(TASK_ID)  # light up this one task on the shared board
+        message = (
+            f"You have claimed task #{TASK_ID} on the shared board. Work only that task and its steps. "
+            f"When the work is built and checked, mark task #{TASK_ID} itself done with complete_task, then stop."
+        )
 
     worker = Agent(
         MODEL,
@@ -83,15 +104,15 @@ async def main() -> None:
         toolsets=[filesystem],
     )
     async with worker:
-        result = await worker.run("Please work the pending goal on the board.")
-    print(result.output)
+        result = await worker.run(message)
 
-    print("\nBoard after the run:")
-    board.show_board()
-
-    spanish = WORKSPACE / "spanish.txt"
-    if spanish.exists():
-        print("\nspanish.txt:\n" + spanish.read_text(encoding="utf-8"))
+    if TASK_ID is None:  # standalone: show the result; on Day 5 the orchestrator owns the console
+        print(result.output)
+        print("\nBoard after the run:")
+        board.show_board()
+        spanish = WORKSPACE / "spanish.txt"
+        if spanish.exists():
+            print("\nspanish.txt:\n" + spanish.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":
