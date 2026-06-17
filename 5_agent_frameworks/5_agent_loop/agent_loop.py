@@ -17,9 +17,16 @@ from __future__ import annotations
 
 import argparse
 import os
+import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
+
+# The orchestrator prints the agents' own words, which can include characters beyond
+# the Windows console's default code page (an emoji in a summary, for instance). Make
+# stdout UTF-8 so that text renders rather than crashing the run on Windows.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 load_dotenv(override=True)  # the orchestrator and its sub-agents make ADK calls, so they need the API keys
 os.environ.setdefault("GOOGLE_GENAI_USE_VERTEXAI", "FALSE")  # use the Gemini API, not Vertex, as on Day 1

@@ -46,6 +46,7 @@ _APP = "agent_loop"
 _MAX_TURNS = 80  # bounds the outer loop so it cannot thrash; the happy path is far fewer
 GAME_FILES = ("game.html", "game.css", "game.js")
 WORKER_TIMEOUT = int(os.environ.get("WORKER_TIMEOUT_S", "300"))  # a worker hung past this is stopped so the run never stalls
+QA_TIMEOUT = int(os.environ.get("QA_TIMEOUT_S", "150"))  # a browser QA wedged past this is given up on so the run never stalls
 _TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.IGNORECASE | re.DOTALL)
 
 
@@ -207,7 +208,10 @@ def make_tools(team: Team) -> list:
         uri = (team.site_dir / slug / "game.html").resolve().as_uri()
         live_board.console.print(f"Playing {worker['name']}'s game to check it", style=worker["colour"])
         try:
-            verdict = await qa_agent.judge_game(team.language, team.objectives.get(slug, ""), uri)
+            verdict = await asyncio.wait_for(
+                qa_agent.judge_game(team.language, team.objectives.get(slug, ""), uri),
+                timeout=QA_TIMEOUT,
+            )
         except Exception as exc:
             live_board.console.print(f"  could not finish checking {worker['name']} ({type(exc).__name__})", style="dim")
             return f"Could not finish checking {slug} ({type(exc).__name__}); leave it as built."
@@ -283,6 +287,12 @@ async def _run(team: Team) -> None:
         # The orchestrator used its whole turn budget. Stop cleanly and let the safety
         # net below finish the site; the games it did build are still on disk.
         print(f"\n  NOTE: the orchestrator reached its {_MAX_TURNS}-step budget; wrapping up with what is built.")
+    except Exception as exc:
+        # A transient model or network error (a DNS blip, a 5xx from the API) on the
+        # orchestrator's own call would otherwise crash the whole run with a traceback.
+        # The games are already built on disk, so stop cleanly and let the safety net
+        # below finish the hub. The type is printed so a real fault is still visible.
+        print(f"\n  NOTE: the orchestrator stopped early after an error ({type(exc).__name__}); wrapping up with what is built.")
     finally:
         try:
             await runner.close()

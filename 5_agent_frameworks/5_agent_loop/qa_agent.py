@@ -37,6 +37,7 @@ import prompts  # noqa: E402
 
 _APP = "agent_loop"
 _MAX_CALLS = 25  # the QA agent's budget for one game; a quick check needs far fewer
+_CLOSE_TIMEOUT = 10  # bound the browser teardown so a wedged MCP close cannot hang the run
 
 
 async def judge_game(language: str, objective: str, uri: str) -> dict | None:
@@ -97,15 +98,14 @@ async def judge_game(language: str, objective: str, uri: str) -> dict | None:
         return verdict or None
     finally:
         # Close the MCP toolset (and so the npx browser subprocess) inside the loop,
-        # before it ends, or its transport's __del__ fires later on a closed loop.
-        try:
-            await browser.close()
-        except Exception:
-            pass
-        try:
-            await runner.close()
-        except Exception:
-            pass
+        # before it ends, or its transport's __del__ fires later on a closed loop. Bound
+        # each close, so if the caller gives up on a slow check and cancels this game, a
+        # wedged browser cannot hang the teardown and freeze the run.
+        for close in (browser.close, runner.close):
+            try:
+                await asyncio.wait_for(close(), timeout=_CLOSE_TIMEOUT)
+            except Exception:
+                pass
         # Let the subprocess transport's close callbacks drain while the loop is still
         # alive, so nothing is left for __del__ to clean up after the loop has closed.
         await asyncio.sleep(0.1)

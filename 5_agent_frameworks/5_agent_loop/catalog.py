@@ -9,6 +9,7 @@ folder rename is a one-line fix here.
 
 from __future__ import annotations
 
+import shutil
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -39,8 +40,13 @@ def discover(skip: tuple[str, ...] = ()) -> list[dict]:
 
 
 def launch_argv(worker: dict, task_id: int, board_path: Path) -> list[str]:
-    """The subprocess argv that runs a worker in Day 5 mode against the shared board."""
+    """The subprocess argv that runs a worker in Day 5 mode against the shared board.
+
+    The launcher (uv or npx) is resolved to its full path with shutil.which. On Windows
+    a bare "npx" is not found by subprocess.Popen, because npx is a .cmd shim and Popen
+    does not consult PATHEXT; resolving it first is what the MCP libraries do to spawn
+    npx, and on Mac and Linux which returns the same plain path."""
     path = str((HERE / worker["file"]).resolve())
     if worker["runner"] == "python":
-        return ["uv", "run", path, str(task_id), str(board_path)]
-    return ["npx", "tsx", path, str(task_id), str(board_path)]
+        return [shutil.which("uv") or "uv", "run", path, str(task_id), str(board_path)]
+    return [shutil.which("npx") or "npx", "tsx", path, str(task_id), str(board_path)]
