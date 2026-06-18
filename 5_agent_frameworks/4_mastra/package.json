@@ -10,6 +10,7 @@
     "step3": "node --disable-warning=ExperimentalWarning --import tsx step3.ts",
     "step4": "node --disable-warning=ExperimentalWarning --import tsx step4.ts",
     "step5": "node --disable-warning=ExperimentalWarning --import tsx step5.ts",
+    "worker": "node --disable-warning=ExperimentalWarning --import tsx worker.ts",
     "dev": "node --import tsx scripts/dev.ts"
   },
   "dependencies": {

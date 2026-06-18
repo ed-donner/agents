@@ -93,13 +93,13 @@ The agent reads `notes.txt` through the filesystem server and summarizes it in o
 
 ## Step 5: Put it in a loop with a goal
 
-Open `step5.ts`. Now the payoff. Give one agent all three board tools and the filesystem server, hand it the goal, and let it run. It plans its own steps on the board, works them with its file tools, ticks each one off, and closes the goal when the work is done. That is the agent loop running on its own: read, plan, act, check off, repeat. The `onStepFinish` callback prints each tool call as it happens, so you can watch the loop turn.
+Open `step5.ts`. Now the payoff. Give one agent all three board tools and the filesystem server, hand it the goal, and let it run. It plans its own steps on the board, works them with its file tools, ticks each one off, and closes the goal when the work is done. That is the agent loop running on its own: read, plan, act, check off, repeat.
 
 ```bash
 npm run step5
 ```
 
-Watch the board fill with steps and then strike through in green, with the Spanish written into `workspace/spanish.txt`. This is the shape every worker takes on Day 5, where a Google ADK orchestrator launches one of these per framework as a parallel subprocess against a single shared board, starting the TypeScript one with `npx tsx step5.ts` exactly as it starts the Python ones with `uv run`.
+Watch the board fill with steps and then strike through in green, with the Spanish written into `workspace/spanish.txt`.
 
 ## The one cool thing: Studio
 
@@ -109,7 +109,7 @@ Mastra's developer experience is its calling card, and Studio is the centerpiece
 npm run dev
 ```
 
-then open `http://localhost:4111`. Pick the Worker agent and chat with it: ask it to plan steps and tick them off, and watch each model step, each tool call and each result render live, with full traces you can replay. You can switch models and adjust settings in the same panel.
+then open `http://localhost:4111`. Pick the Worker agent and ask it to work the goal on the board. It reads the English note waiting there, translates it into Spanish, marks the goal done with the translation, and replies with it, while each model step, each tool call and each result renders live, with full traces you can replay. You can switch models and adjust settings in the same panel.
 
 Two asides in the same spirit as the rest of the week. The model is a routing string, so pointing the worker at any OpenAI-compatible endpoint is a one-line change; `SWAP_AI.md` in this folder shows it. And Mastra has first-class native A2A: any agent you register is automatically exposed with an agent card and a JSON-RPC endpoint, with no extra work. We do not build with A2A this week, but it is a nice thing to get for free.
 
@@ -120,7 +120,7 @@ Two asides in the same spirit as the rest of the week. The model is a routing st
         </td>
         <td>
             <h2 style="color:#ff7800;">Exercise</h2>
-            <span style="color:#ff7800;">Change the goal in <code>step5.ts</code>, for example "write a short haiku about Madrid into madrid.txt", and run it again. Does the agent plan sensible steps and pick the right file tools? Then open Studio with <code>npm run dev</code> and watch the same loop in the browser, and try pointing the model at another OpenAI-compatible endpoint by following <code>SWAP_AI.md</code>.</span>
+            <span style="color:#ff7800;">Change the goal in <code>step5.ts</code>, for example "write a short haiku about Madrid into madrid.txt", and run it again. Does the agent plan sensible steps and pick the right file tools? Then open Studio with <code>npm run dev</code>, watch the worker translate its note live in the browser, and try pointing the model at another OpenAI-compatible endpoint by following <code>SWAP_AI.md</code>.</span>
         </td>
     </tr>
 </table>

@@ -105,7 +105,7 @@ async def main() -> None:
         args=["-y", "@modelcontextprotocol/server-filesystem", str(WORK_DIR)],
         cwd=str(WORK_DIR),
     )
-    async with MCPTools(server_params=server) as filesystem:
+    async with MCPTools(server_params=server, timeout_seconds=60) as filesystem:
         worker = Agent(
             model=model,
             instructions=INSTRUCTIONS,

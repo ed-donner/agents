@@ -27,13 +27,7 @@ Run everything below from a terminal in **this folder**, `agents/5_agent_framewo
 
 ## The shared board, one file this time
 
-Open `board.py`. It is the same board you have used all week, with one small change on the line that sets `BOARD_PATH`: it now reads an environment variable first.
-
-```python
-BOARD_PATH = Path(os.environ.get("BOARD_PATH", Path(__file__).resolve().parent / "board.sqlite"))
-```
-
-That one line is what lets six separate processes share one board. The orchestrator sets `BOARD_PATH` to a single file inside `site/` and launches the workers, which inherit it. Every worker's board tools, and the live view, all point at the same SQLite file. With the variable unset, the board falls back to a local file, which is exactly how Days 1 to 4 behaved, so your standalone workers still run unchanged. WAL mode and a busy timeout, both already in the board, are what let five workers write while the orchestrator reads.
+Open `board.py`. It is the same board you have used all week, set to use a common board across all Agents.
 
 ## The workers are the ones you already built
 

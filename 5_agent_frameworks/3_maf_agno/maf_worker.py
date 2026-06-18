@@ -17,7 +17,6 @@ from __future__ import annotations
 
 import asyncio
 import os
-import subprocess
 import sys
 import warnings
 from pathlib import Path
@@ -64,25 +63,6 @@ def complete_task(task_id: int, result: str) -> dict:
     return {"task_id": task_id, "status": "done"}
 
 
-class FilesystemMCP(MCPStdioTool):
-    """The filesystem MCP server with its stderr sent to DEVNULL and its working
-    directory set to the work dir.
-
-    MAF's MCPStdioTool does not expose the server's stderr, so we override the one
-    method that builds the stdio client. errlog=DEVNULL quiets the server's startup
-    banner and lets it run from a Jupyter kernel on Windows; cwd starts the server in
-    the work dir, so the agent's file names resolve there.
-    """
-
-    def get_mcp_client(self):
-        from mcp.client.stdio import StdioServerParameters, stdio_client
-
-        params = StdioServerParameters(
-            command=self.command, args=self.args, env=self.env, cwd=str(WORK_DIR)
-        )
-        return stdio_client(server=params, errlog=subprocess.DEVNULL)
-
-
 INSTRUCTIONS = """
 You are a careful worker with a shared todo board and a set of file tools.
 
@@ -112,10 +92,11 @@ async def main() -> None:
             f"When the work is built and checked, mark task #{TASK_ID} itself done with complete_task, then stop."
         )
 
-    filesystem = FilesystemMCP(
+    filesystem = MCPStdioTool(
         name="filesystem",
         command="npx",
         args=["-y", "@modelcontextprotocol/server-filesystem", str(WORK_DIR)],
+        cwd=str(WORK_DIR),  # start the server in the work dir so relative file names resolve there
     )
     async with filesystem:
         worker = Agent(

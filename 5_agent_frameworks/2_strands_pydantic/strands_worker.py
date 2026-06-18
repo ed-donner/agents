@@ -90,7 +90,8 @@ filesystem = MCPClient(
             cwd=str(WORK_DIR),  # start the server in the work dir so relative file names resolve there
         ),
         errlog=subprocess.DEVNULL,
-    )
+    ),
+    startup_timeout=60
 )
 
 

@@ -71,7 +71,8 @@ filesystem = MCPToolset(
         args=["-y", "@modelcontextprotocol/server-filesystem", str(WORK_DIR)],
         cwd=str(WORK_DIR),  # start the server in the work dir so relative file names resolve there
         log_file=Path(os.devnull),
-    )
+    ),
+    init_timeout=60
 )
 
 
