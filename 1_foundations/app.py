@@ -6,18 +6,29 @@ import requests
 from pypdf import PdfReader
 import gradio as gr
 
-
-load_dotenv(override=True)
+# Try to load .env file if it exists (for local development)
+# On Hugging Face Spaces, use environment variables directly
+try:
+    load_dotenv(override=True)
+except:
+    pass  # .env file not required for HF Spaces
 
 def push(text):
-    requests.post(
-        "https://api.pushover.net/1/messages.json",
-        data={
-            "token": os.getenv("PUSHOVER_TOKEN"),
-            "user": os.getenv("PUSHOVER_USER"),
-            "message": text,
-        }
-    )
+    """Send notification via Pushover if credentials are available"""
+    token = os.getenv("PUSHOVER_TOKEN")
+    user = os.getenv("PUSHOVER_USER")
+    if token and user:
+        try:
+            requests.post(
+                "https://api.pushover.net/1/messages.json",
+                data={
+                    "token": token,
+                    "user": user,
+                    "message": text,
+                }
+            )
+        except Exception as e:
+            print(f"Push notification failed: {e}", flush=True)
 
 
 def record_user_details(email, name="Name not provided", notes="not provided"):
@@ -77,7 +88,7 @@ class Me:
 
     def __init__(self):
         self.openai = OpenAI()
-        self.name = "Ed Donner"
+        self.name = "Keerthi Bheemagani"
         reader = PdfReader("me/linkedin.pdf")
         self.linkedin = ""
         for page in reader.pages:
@@ -126,7 +137,7 @@ If the user is engaging in discussion, try to steer them towards getting in touc
             else:
                 done = True
         return response.choices[0].message.content
-    
+ 
 
 if __name__ == "__main__":
     me = Me()
