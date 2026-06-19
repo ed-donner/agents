@@ -44,7 +44,7 @@ def researcher_mcp_server_params(name: str):
         },
         {
             "command": "uv",
-            "args": ["run", "/home/prasad/projects/agents/6_mcp/community_contributions/PrasadGaitonde/6_MCP_GitHubProject/github_server.py"],
+            "args": ["run", os.path.join(os.path.dirname(__file__), "github_server.py")],
             "env": {"GITHUB_TOKEN": os.getenv("GITHUB_TOKEN")},
         },
     ]

@@ -2,6 +2,15 @@ import os
 from typing import List, Optional
 from fastmcp import FastMCP
 from github import Github, GithubException
+from dotenv import load_dotenv
+
+# Path to the .env file in the parent's parent directory
+ENV_PATH = "/home/prasad/projects/agents/.env"
+load_dotenv(ENV_PATH)
+
+# Workaround for the token name in the .env file
+if os.getenv("GITLAB_PERSONAL_ACCESS_TOKEN") and not os.getenv("GITHUB_TOKEN"):
+    os.environ["GITHUB_TOKEN"] = os.getenv("GITLAB_PERSONAL_ACCESS_TOKEN")
 
 # Initialize FastMCP server
 mcp = FastMCP("GitHub Agent")
