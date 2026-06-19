@@ -1,0 +1,28 @@
+[project]
+name = "housepurchase_debate"
+version = "0.1.0"
+description = "housepurchase_Debate using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai>=0.148.0,<1.0.0",
+    "openai>=1.0.0",
+    "anthropic>=0.25.0"
+]
+
+[project.scripts]
+housepurchase_debate = "housepurchase_debate.main:run"
+run_crew = "housepurchase_debate.main:run"
+train = "housepurchase_debate.main:train"
+replay = "housepurchase_debate.main:replay"
+test = "housepurchase_debate.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
+
+[tool.uv]
+dev-dependencies = []

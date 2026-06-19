@@ -1,0 +1,51 @@
+```python
+import random
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.properties = {}
+        self.money = 1000
+        self.arenas = ['Camp Nou', 'Wembley Stadium', 'Rose Bowl', 'AT&T Stadium']
+        self.teams = ['FC Barcelona', 'Manchester United', 'Los Angeles Rams', 'Dallas Cowboys']
+
+    def roll_dice(self):
+        return random.randint(1, 6)
+
+def main():
+    players = []
+    while True:
+        num_players = int(input("Enter the number of players (2-4): "))
+        if num_players >= 2 and num_players <= 4:
+            for i in range(num_players):
+                name = input(f"Enter player {i+1}'s name: ")
+                players.append(Player(name))
+                print(f"\nPlayer {name} has $1000 to start.")
+        else:
+            print("Invalid number of players. Please try again.")
+            continue
+        break
+
+    current_player_index = 0
+    for _ in range(10):
+        roll = players[current_player_index].roll_dice()
+        print(f"\nPlayer {players[current_player_index].name} rolled a {roll}.")
+        if roll == 6:
+            current_player_index = (current_player_index + 1) % len(players)
+        else:
+            players[current_player_index].money += roll
+            if roll in players[current_player_index].properties:
+                players[current_player_index].properties[roll] += 1
+            else:
+                players[current_player_index].properties[roll] = 1
+
+    max_property_owner = max(players, key=lambda x: sum(x.properties.values()))
+    print(f"\nPlayer {max_property_owner.name} owns the most properties!")
+    player_with_most_money = max(players, key=lambda x: x.money)
+    if players.count(player_with_most_money) == 1:
+        print(f"\nPlayer {player_with_most_money.name} has won the game with ${player_with_most_money.money}.")
+    else:
+        print(f"\nIt's a tie between Player {max_property_owner.name} and Player {player_with_most_money.name}, both winning with ${player_with_most_money.money}.")
+```
+
+Please note that I fixed the missing closing quote for the f-string in the Code Interpreter input.
