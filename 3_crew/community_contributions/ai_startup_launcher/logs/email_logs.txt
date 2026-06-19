@@ -1,0 +1,276 @@
+ERROR:crewai.utilities.llm_utils:Error instantiating LLM from environment/fallback: ImportError: Error importing native provider: OPENAI_API_KEY is required
+ERROR:crewai.utilities.llm_utils:Error instantiating LLM from environment/fallback: ImportError: Error importing native provider: OPENAI_API_KEY is required
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI API usage: {'prompt_tokens': 985, 'completion_tokens': 61, 'total_tokens': 1046, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI API usage: {'prompt_tokens': 513, 'completion_tokens': 247, 'total_tokens': 760, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'code_interpreter'
+INFO:root:OpenAI: Successfully validated tool 'code_interpreter'
+INFO:root:OpenAI API usage: {'prompt_tokens': 952, 'completion_tokens': 276, 'total_tokens': 1228, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 995, 'completion_tokens': 87, 'total_tokens': 1082, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+ERROR:root:[Errno 60] Operation timed out
+ERROR:root:[Errno 60] Operation timed out
+ERROR:root:[Errno 60] Operation timed out
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 1508, 'completion_tokens': 50, 'total_tokens': 1558, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI API usage: {'prompt_tokens': 826, 'completion_tokens': 190, 'total_tokens': 1016, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI API usage: {'prompt_tokens': 744, 'completion_tokens': 117, 'total_tokens': 861, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'code_interpreter'
+INFO:root:OpenAI: Successfully validated tool 'code_interpreter'
+INFO:root:OpenAI API usage: {'prompt_tokens': 1178, 'completion_tokens': 280, 'total_tokens': 1458, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 971, 'completion_tokens': 71, 'total_tokens': 1042, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+ERROR:root:[Errno 60] Operation timed out
+ERROR:root:[Errno 60] Operation timed out
+ERROR:root:[Errno 60] Operation timed out
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 2070, 'completion_tokens': 25, 'total_tokens': 2095, 'cached_prompt_tokens': 0}
+INFO:crewai.cli.config:Using config path: /Users/sirphiltechpaxe/.config/crewai/settings.json
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI API usage: {'prompt_tokens': 900, 'completion_tokens': 141, 'total_tokens': 1041, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI API usage: {'prompt_tokens': 591, 'completion_tokens': 335, 'total_tokens': 926, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI API usage: {'prompt_tokens': 576, 'completion_tokens': 1061, 'total_tokens': 1637, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 1926, 'completion_tokens': 69, 'total_tokens': 1995, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+ERROR:root:[Errno 60] Operation timed out
+ERROR:root:[Errno 60] Operation timed out
+ERROR:root:[Errno 60] Operation timed out
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 2395, 'completion_tokens': 54, 'total_tokens': 2449, 'cached_prompt_tokens': 1664}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI API usage: {'prompt_tokens': 1135, 'completion_tokens': 141, 'total_tokens': 1276, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI API usage: {'prompt_tokens': 1168, 'completion_tokens': 309, 'total_tokens': 1477, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI API usage: {'prompt_tokens': 2187, 'completion_tokens': 1206, 'total_tokens': 3393, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 3747, 'completion_tokens': 69, 'total_tokens': 3816, 'cached_prompt_tokens': 1920}
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 4259, 'completion_tokens': 35, 'total_tokens': 4294, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI API usage: {'prompt_tokens': 439, 'completion_tokens': 178, 'total_tokens': 617, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI API usage: {'prompt_tokens': 494, 'completion_tokens': 164, 'total_tokens': 658, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI API usage: {'prompt_tokens': 442, 'completion_tokens': 1022, 'total_tokens': 1464, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 1775, 'completion_tokens': 77, 'total_tokens': 1852, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+ERROR:root:[Errno 60] Operation timed out
+ERROR:root:[Errno 60] Operation timed out
+ERROR:root:[Errno 60] Operation timed out
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 3004, 'completion_tokens': 15, 'total_tokens': 3019, 'cached_prompt_tokens': 1792}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI API usage: {'prompt_tokens': 811, 'completion_tokens': 167, 'total_tokens': 978, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI API usage: {'prompt_tokens': 528, 'completion_tokens': 337, 'total_tokens': 865, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI API usage: {'prompt_tokens': 604, 'completion_tokens': 1002, 'total_tokens': 1606, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 1901, 'completion_tokens': 78, 'total_tokens': 1979, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+ERROR:root:[Errno 60] Operation timed out
+ERROR:root:[Errno 60] Operation timed out
+ERROR:root:[Errno 60] Operation timed out
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 2355, 'completion_tokens': 8, 'total_tokens': 2363, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI API usage: {'prompt_tokens': 985, 'completion_tokens': 130, 'total_tokens': 1115, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI API usage: {'prompt_tokens': 582, 'completion_tokens': 150, 'total_tokens': 732, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI API usage: {'prompt_tokens': 380, 'completion_tokens': 990, 'total_tokens': 1370, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 1657, 'completion_tokens': 70, 'total_tokens': 1727, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+ERROR:root:timed out
+ERROR:root:timed out
+ERROR:root:timed out
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 2117, 'completion_tokens': 8, 'total_tokens': 2125, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI API usage: {'prompt_tokens': 776, 'completion_tokens': 151, 'total_tokens': 927, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI API usage: {'prompt_tokens': 468, 'completion_tokens': 296, 'total_tokens': 764, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI API usage: {'prompt_tokens': 547, 'completion_tokens': 923, 'total_tokens': 1470, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 1827, 'completion_tokens': 46, 'total_tokens': 1873, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+ERROR:root:timed out
+ERROR:root:timed out
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 2125, 'completion_tokens': 8, 'total_tokens': 2133, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI API usage: {'prompt_tokens': 768, 'completion_tokens': 193, 'total_tokens': 961, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI API usage: {'prompt_tokens': 504, 'completion_tokens': 222, 'total_tokens': 726, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI API usage: {'prompt_tokens': 515, 'completion_tokens': 956, 'total_tokens': 1471, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 1678, 'completion_tokens': 25, 'total_tokens': 1703, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+ERROR:root:timed out
+ERROR:root:timed out
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 1962, 'completion_tokens': 8, 'total_tokens': 1970, 'cached_prompt_tokens': 0}
+INFO:crewai.cli.config:Using config path: /Users/sirphiltechpaxe/.config/crewai/settings.json
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_memory'
+INFO:root:OpenAI: Successfully validated tool 'save_to_memory'
+INFO:root:OpenAI API usage: {'prompt_tokens': 774, 'completion_tokens': 185, 'total_tokens': 959, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI: Successfully validated tool 'search_the_internet_with_serper'
+INFO:root:OpenAI API usage: {'prompt_tokens': 629, 'completion_tokens': 277, 'total_tokens': 906, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI API usage: {'prompt_tokens': 562, 'completion_tokens': 1015, 'total_tokens': 1577, 'cached_prompt_tokens': 0}
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI: Successfully validated tool 'investor_finder_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 1868, 'completion_tokens': 76, 'total_tokens': 1944, 'cached_prompt_tokens': 1536}
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+ERROR:root:timed out
+ERROR:root:timed out
+ERROR:root:timed out
+INFO:root:OpenAI: Successfully validated tool 'email_sender_tool'
+INFO:root:OpenAI: Successfully validated tool 'reply_tracker_tool'
+INFO:root:OpenAI API usage: {'prompt_tokens': 2342, 'completion_tokens': 12, 'total_tokens': 2354, 'cached_prompt_tokens': 0}

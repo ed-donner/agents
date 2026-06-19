@@ -1,0 +1,24 @@
+discover_idea:
+  description: Find a profitable SaaS idea
+  expected_output: A SaaS idea with problem, solution, and target market
+  agent: market_researcher
+
+validate_idea:
+  description: Validate the SaaS idea with market data
+  expected_output: Validation report with demand, competitors, and opportunity
+  agent: idea_validator
+
+build_mvp:
+  description: Create an MVP plan for the startup
+  expected_output: MVP architecture and development plan
+  agent: mvp_builder
+
+find_investors:
+  description: Find investors interested in this startup
+  expected_output: List of investors with emails and investment focus
+  agent: investor_finder
+
+send_outreach:
+  description: Send outreach emails to investors
+  expected_output: Emails successfully sent and logged
+  agent: outreach_agent
