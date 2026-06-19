@@ -11,7 +11,8 @@ def run():
     Run the research crew.
     """
     inputs = {
-        'company': 'Apple'
+        'company': 'Apple',
+        'current_date': __import__('datetime').date.today().isoformat(),
     }
 
     # Create and run the crew

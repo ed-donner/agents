@@ -1,7 +1,7 @@
 # src/research_crew/config/tasks.yaml
 research_task:
   description: >
-    Conduct thorough research on company {company}. Focus on:
+    Today is {current_date}. Conduct thorough, up-to-date research on company {company}. Focus on:
     1. Current company status and health
     2. Historical company performance
     3. Major challenges and opportunities
@@ -17,7 +17,7 @@ research_task:
 
 analysis_task:
   description: >
-    Analyze the research findings and create a comprehensive report on {company}.
+    Today is {current_date}. Analyze the research findings and create a comprehensive report on {company}.
     Your report should:
     1. Begin with an executive summary
     2. Include all key information from the research
