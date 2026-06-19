@@ -103,7 +103,7 @@ class StockPicker():
                         embedder_config={
                             "provider": "openai",
                             "config": {
-                                "model": 'text-embedding-3-small'
+                                "model_name": 'text-embedding-3-small'
                             }
                         },
                         type="short_term",
@@ -115,7 +115,7 @@ class StockPicker():
                     embedder_config={
                         "provider": "openai",
                         "config": {
-                            "model": 'text-embedding-3-small'
+                            "model_name": 'text-embedding-3-small'
                         }
                     },
                     type="short_term",
