@@ -1,2 +1,5 @@
-My name is Ed Donner. I'm an entrepreneur, software engineer and data scientist. I'm originally from London, England, but I moved to NYC in 2000.
-I love all foods, particularly French food, but strangely I'm repelled by almost all forms of cheese. I'm not allergic, I just hate the taste! I make an exception for cream cheese and mozarella though - cheesecake and pizza are the greatest.
+Versatile Software Engineer with a 3+ years of strong foundation in data-driven system design and AI-powered solutions.
+Combines technical expertise across full-stack development, machine learning, and cloud infrastructure to deliver scalable
+enterprise solutions. Proven ability to translate complex requirements into efficient architectures while driving measur-
+able business impact through automation, optimization, and cross-functional collaboration. Passionate about leveraging
+emerging technologies to solve real-world challenges in fast-paced, innovation-focused environments.
