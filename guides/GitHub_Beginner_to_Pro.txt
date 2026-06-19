@@ -1,0 +1,358 @@
+
+GITHUB FROM BEGINNER TO PRO
+======================================================
+
+
+
+1. First idea: what is Git and what is GitHub?
+----------------------------------------------
+
+
+Think about drawing.
+ * Git = your magic time machine notebook. It remembers every version of your drawing.
+ * GitHub = your online shelf where you store that notebook, share it, and work with friends.
+
+So:
+ * Git works on your computer.
+ * GitHub works on the internet.
+
+
+2. The 3 places your code lives
+-------------------------------
+
+
+Every project has 3 places:
+1. Working folder: where you edit files now.
+2. Staging area: files you pick for next save point.
+3. Repository history: saved snapshots (commits).
+
+Simple flow:
+ * edit file
+ * stage it (git add)
+ * save snapshot (git commit)
+ * send to GitHub (git push)
+
+
+3. The 5 commands you use all the time
+--------------------------------------
+
+
+1. git status
+ * Shows what changed.
+
+2. git add .
+ * Picks changed files for next save.
+
+3. git commit -m "message"
+ * Saves a snapshot with a message.
+
+4. git pull
+ * Gets latest changes from GitHub.
+
+5. git push
+ * Sends your commits to GitHub.
+
+If you only remember one daily routine, remember:
+git pull -> edit -> git add . -> git commit -m "..." -> git push
+
+
+4. What is a commit?
+--------------------
+
+
+A commit is a save point.
+ * It has an ID (like a fingerprint).
+ * It has author, time, and message.
+ * You can go back to it any time.
+
+Good commit messages:
+ * Fix login bug when password has spaces
+ * Add evaluator model switch to gpt-5-mini
+
+Bad commit messages:
+ * update
+ * changes
+
+
+5. Branches (your safe playgrounds)
+-----------------------------------
+
+
+Branch = a separate line of work.
+ * main is the main road.
+ * Feature branch is side road.
+
+Why branches are great:
+ * You can try new things safely.
+ * If experiment fails, main stays clean.
+
+Typical branch flow:
+1. git checkout -b feature/add-chat-ui
+2. Make changes and commit.
+3. Push branch: git push -u origin feature/add-chat-ui
+4. Open Pull Request on GitHub.
+5. Merge into main.
+
+
+6. Pull Requests (PRs)
+----------------------
+
+
+PR = "Please review my work before we merge it."
+
+A good PR has:
+ * clear title
+ * short summary (what and why)
+ * test notes (how you checked it)
+ * screenshots if UI changed
+
+Keep PRs small. Small PRs are easier to review and safer.
+
+
+7. Merge conflicts (when Git gets confused)
+-------------------------------------------
+
+
+Conflict means:
+ * You changed a line.
+ * Someone else changed same line.
+ * Git asks: "Which one should I keep?"
+
+How to fix:
+1. Pull latest changes.
+2. Open conflicted file.
+3. Pick correct code (or combine both).
+4. git add <file>
+5. git commit
+6. git push
+
+Conflicts are normal. Even pros get them.
+
+
+8. How to see old versions
+--------------------------
+
+
+ * git log --oneline --graph --decorate
+  See history.
+
+ * git show <commit_id>
+  See one commit details.
+
+ * git diff
+  See unsaved differences.
+
+ * git diff <old> <new>
+  Compare two versions.
+
+
+9. Undo safely (super important)
+--------------------------------
+
+
+### Undo unstaged file edits
+git restore <file>
+
+### Unstage file
+git restore --staged <file>
+
+### Make a new commit that reverses old one
+git revert <commit_id>
+
+Beginner rule:
+ * Prefer git revert over risky history rewrites.
+
+
+10. The .gitignore file
+-----------------------
+
+
+.gitignore tells Git what NOT to track.
+
+Common things to ignore:
+ * .env
+ * .venv/
+ * __pycache__/
+ * big temporary files
+
+Why:
+ * keep secrets safe
+ * keep repo small and clean
+
+
+11. Secrets and safety
+----------------------
+
+
+Never commit:
+ * API keys
+ * passwords
+ * private tokens
+
+Use:
+ * .env for local secrets
+ * GitHub Secrets for CI/CD and deployments
+
+If secret is leaked:
+1. Revoke/rotate key immediately.
+2. Remove secret from code.
+3. Commit fix.
+
+
+12. GitHub Issues, Projects, Discussions
+----------------------------------------
+
+
+ * Issues: bug reports and tasks.
+ * Projects: board to track work (To do, Doing, Done).
+ * Discussions: community Q and A.
+
+Pro teams use all three.
+
+
+13. Actions (automation robot)
+------------------------------
+
+
+GitHub Actions = robot that runs when you push.
+
+Use it for:
+ * tests
+ * lint checks
+ * build
+ * deploy
+
+Why pro teams love this:
+ * catches mistakes early
+ * keeps quality high
+
+
+14. Releases and tags
+---------------------
+
+
+Tag = name for a specific commit (like v1.0.0).
+Release = packaged version with notes.
+
+Version pattern (SemVer):
+ * MAJOR.MINOR.PATCH
+ * Example: 2.3.1
+
+Meaning:
+ * MAJOR: breaking change
+ * MINOR: new feature
+ * PATCH: bug fix
+
+
+15. Forks vs clones
+-------------------
+
+
+ * Clone: copy repo to your computer.
+ * Fork: copy someone else's repo to your GitHub account.
+
+Open source flow:
+1. Fork repo.
+2. Clone your fork.
+3. Create branch.
+4. Commit changes.
+5. Push to your fork.
+6. Open PR to original repo.
+
+
+16. Good habits that make you look pro
+--------------------------------------
+
+
+1. Commit often, but with meaningful messages.
+2. Keep PRs small.
+3. Pull before push.
+4. Write README clearly.
+5. Add tests for important logic.
+6. Protect main branch.
+7. Do code reviews kindly and clearly.
+
+
+17. Fast daily checklist
+------------------------
+
+
+Before coding:
+1. git pull
+2. git status
+
+After coding:
+1. git status
+2. git add .
+3. git commit -m "clear message"
+4. git push
+
+Before sleeping:
+1. Confirm changes are pushed.
+2. Check PR status.
+3. Check CI (Actions) is green.
+
+
+18. Beginner mistakes and fixes
+-------------------------------
+
+
+Mistake: "I forgot to pull first"
+ * Fix: git pull --rebase then push.
+
+Mistake: "I committed wrong file"
+ * Fix: git restore --staged <file> then recommit.
+
+Mistake: "I broke main"
+ * Fix: create a revert commit fast.
+
+Mistake: "My notebook outputs created huge diffs"
+ * Fix: clear outputs before commit if project expects clean notebooks.
+
+
+19. 30 day learning plan (easy)
+-------------------------------
+
+
+Week 1:
+ * Learn status, add, commit, push, pull.
+ * Make 1 repo and 10 small commits.
+
+Week 2:
+ * Learn branches and PRs.
+ * Open and merge at least 3 PRs.
+
+Week 3:
+ * Learn conflicts and safe undo.
+ * Practice git diff, git show, git revert.
+
+Week 4:
+ * Add GitHub Actions for lint and tests.
+ * Add releases and tags.
+ * Review one open source PR flow.
+
+
+20. Tiny cheat sheet
+--------------------
+
+
+ * New repo: git init
+ * Connect remote: git remote add origin <url>
+ * First push: git push -u origin main
+ * New branch: git checkout -b <branch>
+ * Switch branch: git checkout <branch>
+ * Show history: git log --oneline
+
+
+21. Final simple story
+----------------------
+
+
+Git is your save button with memory.
+GitHub is your online team notebook.
+Branches are safe sandboxes.
+Commits are save points.
+PRs are "please check my homework".
+Actions are robots checking homework.
+
+If you keep code small, clear, and frequent, you will become very strong very fast.
