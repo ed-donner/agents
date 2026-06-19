@@ -1,0 +1,3 @@
+My name is Adeel Khan. I'm an entrepreneur, central banker, AI afficianado and film enthusiast. I'm originally from India, but I curently live in Lucknow. I have also been posted in New Delhi and Shimla as RBI officer. 
+I want to implement latest AI tools and knowledge to work in RBI.
+I am uploading the chapter Monetary Policy Operations from RBI Annual Report and want to make a chatbot that can answer questions based on that.
