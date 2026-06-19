@@ -1,0 +1,71 @@
+system_design_task:
+  name: System Design
+  description: >
+    IMPORTANT: If file output/system-design.md in the output directory exists, skip instruction in below. Do not create system design again.
+    Take the requirements described here and analyze/prepare a system design for coworkers.
+    You identify requried modules to achieve the requriements.
+    Each module should includes classes and functions, describing the functionality.
+
+    Requirements: {requirements}
+
+    Do not develop python code by yourself.
+
+  expected_output: >
+    - Ouput is the system design document that you crafted using description and use ONLY markdown format.
+  agent: engineering_lead
+
+development_task:
+  name: >
+    Python Engineer
+  description: >
+    IMPORTANT: If any python file exists in the output directory, skip instruction in below. Do not create python code agin.
+    Analyze Step 
+    - Take a system design from output/system-design.md
+    - Analyze the sytem design and develop all modules defined in the system deisgn document using your 20 years of python development experience.
+
+    Development Step
+    - When you develop the modules use Pyhon. Your code must be clean, efficient code, and completely self-contained.
+    - Create unit test cases of each method that you develop. The Python code of unit test cases is stored in ./test directory.
+    - Run the test cases and make sure there is no error. If an error occurs, address the issue. Your code should be error-free.
+
+  expected_output: >
+    - Output is the raw python code that implements all modules in the system design document.
+    - Do not use code block delimiters or backticks in your code output.
+  agent: python_engineer  
+
+ui_design_task:
+  name: >
+    Web Application UI Designer
+  description: > 
+    IMPORTANT: If output/ui-design.md exists in the output directory, skip instruction in below. Do not create UI design again.
+    Create UI Design Step:
+    - Take a system design from output/system-design.md.
+    - Create UI design based on the system desig document using your Web Application UI Designer knowledge. 
+    - The created UI design will be used by Python Frontend Engineer to implement it.
+    - UI design should be applicable to a Web Browser.
+    - Use your UI design skill and experience during design, so UI becomes intuitive and user friendly.
+    - Do not design UI too complicated to implement.
+
+  expected_output: >
+    - Output is the UI design document that you crafted using the description, and use ONLY markdown format.
+  agent: ui_designer
+
+
+frontend_development_task:
+  name: >
+    Python Frontend Engineer
+  description: >
+    IMPORTANT: If output/ui-frontend.py exists, skip instruction in below. Do not create python code agin.
+    UI Development Instruction:
+    - Take a UI design from output/ui-design.md.
+    - Take all python code (except python module starting test_).
+    - Analyze UI design document and python code, and implement UI design document using Gradio package.
+    - All modules in python code that took from the output directory must be connected in Web browser to trigger all features implemented in the python code.
+    - Make your python code as executable, so application can start by invoking your python code.
+    - Create unit test cases of each method that you develop. The Python code of unit test cases is stored in the test directory.
+    - Run the test cases and make sure there is no error. If an error occurs, address the issue. Your code should be error-free.
+    - Save the result of execution of unit test code in the test directory.
+  expected_output: >
+    - Output is the raw python code that implements UI design document.
+    - Do not use code block delimiters or backticks in your code output.
+  agent: frontend_engineer
