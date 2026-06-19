@@ -1,0 +1,28 @@
+trending_topics_task:
+  description: >
+    Research and identify the current trending book titles for 2025, including at least five book names and their publication or anticipated release dates, and popular genres.
+  expected_output: >
+    A concise Markdown report listing the trending book titles for 2025 with names, dates, and brief notes, along with genre classification, key insights, data points, and sources.
+  agent: trending_books_agent
+  output_file: output/trending_books.md
+  # Provide a search query for SerperDevTool to fetch real-time data
+  search_query: "trending book topics 2025"
+
+
+
+top_novelists_task:
+  description: >
+    Research leading novelists and list their upcoming book releases, including release dates and brief descriptions.
+  expected_output: >
+    A concise Markdown summary of top novelists and their upcoming books.
+  agent: top_novelists_agent
+  output_file: output/top_novelists.md
+
+
+genre_research_task:
+  description: >
+    For the given genre {genre}, conduct an in-depth market analysis covering market size, audience demographics, key authors, and emerging subgenres.
+  expected_output: >
+    A concise Markdown report detailing genre performance, demographics, authors, and trends.
+  agent: genre_research_agent
+  output_file: output/genre_research.md

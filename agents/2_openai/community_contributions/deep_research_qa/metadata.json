@@ -1,0 +1,21 @@
+{
+  "title": "Deep Research Assistant",
+  "emoji": "🔍",
+  "colorFrom": "blue",
+  "colorTo": "purple",
+  "sdk": "gradio",
+  "sdk_version": "5.22.0",
+  "app_file": "app.py",
+  "pinned": false,
+  "license": "mit",
+  "short_description": "AI-powered research assistant with quality assurance and email delivery",
+  "tags": [
+    "research",
+    "ai",
+    "gradio",
+    "openai",
+    "quality-assurance",
+    "email",
+    "web-search"
+  ]
+} 
