@@ -1,27 +1,35 @@
-# Banoffee Pie Recipe
+# Easy Banoffee Pie
+
+Source: Good Food (BBC Good Food)
+
+## Why this recipe
+A classic, highly rated banoffee pie with a simple biscuit base, caramel, bananas, and whipped cream. It’s quick to assemble and crowd-pleasing.
+
+## Details
+- Servings: 8–10
+- Difficulty: Easy
+- Prep time: 25 mins, plus chilling
+- Rating: 4/5 from 93 ratings
+- Dietary notes: Vegetarian, nut-free
 
 ## Ingredients
-- 4 bananas, sliced
-- 394g caramel or dulce de leche
+- 225g digestive biscuits
+- 150g butter, melted
+- 397g can caramel, or 400g dulce de leche
+- 3 small bananas, sliced
 - 300ml double cream
-- Dark chocolate (optional)
-
-### For the pastry
-- 100g butter, chilled (plus extra for greasing)
-- 200g plain flour
-- 1 medium egg, separated
-- 1 tbsp golden caster sugar
+- 1 tbsp icing sugar
+- 1 square dark chocolate, optional for garnish
 
 ## Method
-1. Make the pastry case: Put butter and flour in a food processor and pulse until it resembles fresh breadcrumbs. Add egg yolk and sugar, pulse again, then add very cold water a tbsp at a time until dough comes together.
-2. Knead dough gently by hand until smooth ball forms. Wrap in cling film and chill for 30 minutes.
-3. Heat oven to 190C/170C fan/gas 4. Grease a 23cm loose bottomed fluted tart tin. Roll out pastry and line the tin, leaving about 0.5cm of pastry over the edge and snip to length.
-4. Line base with baking parchment and weigh down with baking beans/uncooked rice. Bake for 15 minutes. Remove parchment and beans, brush pastry with beaten egg white and bake another 15-20 minutes until golden and cooked. Cool completely.
-5. Spread half the caramel on the pastry case, layer bananas on top, then cover with remaining caramel. Chill in fridge.
-6. Whip the cream until thick and spoon over the tart. Grate dark chocolate over to garnish if using.
+1. Crush the biscuits into fine crumbs, then mix with the melted butter.
+2. Press the mixture into a 23cm loose-bottomed fluted tart tin, covering the base and sides evenly. Chill for 1 hour or overnight.
+3. Beat the caramel briefly just to loosen it, then spread it over the biscuit base.
+4. Add the sliced bananas over the caramel and return to the fridge.
+5. Whip the cream with the icing sugar until thick and billowy.
+6. Spoon the cream over the bananas and grate over dark chocolate if using. Serve.
 
 ## Notes
-- Serves 8-10.
-- Prep time: 30 minutes.
-- Cook time: 30-35 minutes.
-- An easy family favorite. Recommended to serve with a generous dollop of cream.
+- Chill the base well so it holds together.
+- Serve soon after assembling for best texture.
+- Leftovers keep in the fridge for a day or so before separating.

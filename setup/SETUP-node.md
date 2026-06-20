@@ -4,7 +4,7 @@ _In Cursor, right click on this file in the Explorer and select "Open Preview" t
 
 In weeks 4 and 6, we will make use of NodeJS on your computer.
 
-PC users take note: if you are using WSL (which you will need to in Week 6), then at that point you will need to install node again on your Ubuntu side.
+PC users take note: if you choose to use WSL, then you will need to install node again on your Ubuntu side.
 
 ## Instructions for installing Node
 
@@ -19,7 +19,7 @@ On Windows, in PowerShell:
 On Mac, in Terminal:  
 `brew install node`
 
-On Linux (and PC users on WSL, which you will need in Week 6), follow the Linux instructions at https://nodejs.org/en/download - or if the package managers above aren't available to you (for example a locked-down work machine), go to that same page, ignore the Docker and version-manager options, and use the **Windows Installer (.msi)** / **macOS Installer (.pkg)** button with all the defaults.
+On Linux (and PC users on WSL), follow the Linux instructions at https://nodejs.org/en/download - or if the package managers above aren't available to you (for example a locked-down work machine), go to that same page, ignore the Docker and version-manager options, and use the **Windows Installer (.msi)** / **macOS Installer (.pkg)** button with all the defaults.
 
 **After installing, quit Cursor completely and start it again** (and close any open terminals). A freshly installed Node is invisible to programs that were already running, and restarting just the notebook kernel is not enough - the kernel inherits its environment from Cursor. After the restart, check that this works in the notebook:
 

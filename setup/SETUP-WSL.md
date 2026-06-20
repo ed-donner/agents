@@ -8,9 +8,7 @@ _NOTE 2: In Cursor, remember to Right Click on this file in the Explorer and cho
 
 Welcome back to Setup-land, PC people!
 
-I expect you're here because you've reached Week 6, and discovered the unpleasant news that MCP Servers are only working on Windows under WSL.
-
-I'm so sorry to put you through this! The good news is, several students have confirmed that MCP Servers are working under WSL. Also, WSL is generally considered a great way to build on Windows. And the other good news is that you've already done the setup once, so surely this will be relatively painless? Fingers crossed.
+Good news: the Week 6 MCP labs now run natively on Windows, so you do not need WSL. This guide is here as an option, for anyone who hits trouble running MCP servers on Windows or who simply prefers to work in Linux. WSL is widely considered a great way to build on Windows, and since you've already done the setup once, getting going here is relatively painless.
 
 ### Part 1: Install WSL if you haven't before
 
