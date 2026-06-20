@@ -1,5 +1,5 @@
 from mcp.server.fastmcp import FastMCP
-from market import get_share_price
+from .market import get_share_price
 
 mcp = FastMCP("market_server")
 

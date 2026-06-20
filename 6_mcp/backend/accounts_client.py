@@ -1,10 +1,16 @@
 import mcp
+from pathlib import Path
 from mcp.client.stdio import stdio_client
 from mcp import StdioServerParameters
 from agents import FunctionTool
 import json
 
-params = StdioServerParameters(command="uv", args=["run", "accounts_server.py"], env=None)
+params = StdioServerParameters(
+    command="uv",
+    args=["run", "-m", "backend.accounts_server"],
+    cwd=str(Path(__file__).resolve().parent.parent),
+    env=None,
+)
 
 
 async def list_accounts_tools():

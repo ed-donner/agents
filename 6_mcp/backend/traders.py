@@ -1,20 +1,19 @@
 from contextlib import AsyncExitStack
-from accounts_client import read_accounts_resource, read_strategy_resource
-from tracers import make_trace_id
+from .accounts_client import read_accounts_resource, read_strategy_resource
+from .tracers import make_trace_id
 from agents import Agent, Tool, Runner, OpenAIChatCompletionsModel, trace
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
 import os
 import json
-from agents.mcp import MCPServerStdio
-from templates import (
+from .templates import (
     researcher_instructions,
     trader_instructions,
     trade_message,
     rebalance_message,
     research_tool,
 )
-from mcp_params import trader_mcp_server_params, researcher_mcp_server_params
+from .mcp_servers import trader_mcp_servers, researcher_mcp_servers
 
 load_dotenv(override=True)
 
@@ -65,7 +64,7 @@ async def get_researcher_tool(mcp_servers, model_name) -> Tool:
 
 
 class Trader:
-    def __init__(self, name: str, lastname="Trader", model_name="gpt-4o-mini"):
+    def __init__(self, name: str, lastname="Trader", model_name="gpt-5.4-mini"):
         self.name = name
         self.lastname = lastname
         self.agent = None
@@ -102,20 +101,14 @@ class Trader:
 
     async def run_with_mcp_servers(self):
         async with AsyncExitStack() as stack:
-            trader_mcp_servers = [
-                await stack.enter_async_context(
-                    MCPServerStdio(params, client_session_timeout_seconds=120)
-                )
-                for params in trader_mcp_server_params
+            trader_servers = [
+                await stack.enter_async_context(server) for server in trader_mcp_servers()
             ]
-            async with AsyncExitStack() as stack:
-                researcher_mcp_servers = [
-                    await stack.enter_async_context(
-                        MCPServerStdio(params, client_session_timeout_seconds=120)
-                    )
-                    for params in researcher_mcp_server_params(self.name)
-                ]
-                await self.run_agent(trader_mcp_servers, researcher_mcp_servers)
+            researcher_servers = [
+                await stack.enter_async_context(server)
+                for server in researcher_mcp_servers(self.name)
+            ]
+            await self.run_agent(trader_servers, researcher_servers)
 
     async def run_with_trace(self):
         trace_name = f"{self.name}-trading" if self.do_trade else f"{self.name}-rebalancing"

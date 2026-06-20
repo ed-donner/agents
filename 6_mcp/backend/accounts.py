@@ -2,8 +2,8 @@ from pydantic import BaseModel
 import json
 from dotenv import load_dotenv
 from datetime import datetime
-from market import get_share_price
-from database import write_account, read_account, write_log
+from .market import get_share_price
+from .database import write_account, read_account, write_log
 
 load_dotenv(override=True)
 
@@ -52,7 +52,7 @@ class Account(BaseModel):
     def save(self):
         write_account(self.name.lower(), self.model_dump())
 
-    def reset(self, strategy: str):
+    def reset(self, strategy: str=""):
         self.balance = INITIAL_BALANCE
         self.strategy = strategy
         self.holdings = {}

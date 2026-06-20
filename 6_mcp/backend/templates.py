@@ -1,12 +1,10 @@
 from datetime import datetime
-from market import is_paid_polygon, is_realtime_polygon
+from .market import massive_api_key
 
-if is_realtime_polygon:
-    note = "You have access to realtime market data tools; use your get_last_trade tool for the latest trade price. You can also use tools for share information, trends and technical indicators and fundamentals."
-elif is_paid_polygon:
-    note = "You have access to market data tools but without access to the trade or quote tools; use your get_snapshot_ticker tool to get the latest share price on a 15 min delay. You can also use tools for share information, trends and technical indicators and fundamentals."
+if massive_api_key:
+    note = "You have access to live market data tools; use them to look up share prices, trends, technical indicators and fundamentals."
 else:
-    note = "You have access to end of day market data; use you get_share_price tool to get the share price as of the prior close."
+    note = "You have access to a market data tool; use your lookup_share_price tool to get the current share price for any symbol."
 
 
 def researcher_instructions():
@@ -40,8 +38,9 @@ You actively manage your portfolio according to your strategy.
 You have access to tools including a researcher to research online for news and opportunities, based on your request.
 You also have tools to access to financial data for stocks. {note}
 And you have tools to buy and sell stocks using your account name {name}.
-You can use your entity tools as a persistent memory to store and recall information; you share
-this memory with other traders and can benefit from the group's knowledge.
+Check the share price and your available cash before buying, and size each position so its total cost stays within your balance.
+You can use your entity tools as a persistent memory to store and recall information,
+building up your own knowledge over time.
 Use these tools to carry out research, make decisions, and execute trades.
 After you've completed trading, send a push notification with a brief summary of activity, then reply with a 2-3 sentence appraisal.
 Your goal is to maximize your profits according to your strategy.
@@ -52,7 +51,7 @@ def trade_message(name, strategy, account):
 Use the research tool to find news and opportunities consistent with your strategy.
 Do not use the 'get company news' tool; use the research tool instead.
 Use the tools to research stock price and other company information. {note}
-Finally, make you decision, then execute trades using the tools.
+Finally, make your decision, then execute trades using the tools.
 Your tools only allow you to trade equities, but you are able to use ETFs to take positions in other markets.
 You do not need to rebalance your portfolio; you will be asked to do so later.
 Just make trades based on your strategy as needed.
@@ -63,7 +62,7 @@ Here is your current account:
 Here is the current datetime:
 {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 Now, carry out analysis, make your decision and execute trades. Your account name is {name}.
-After you've executed your trades, send a push notification with a brief sumnmary of trades and the health of the portfolio, then
+After you've executed your trades, send a push notification with a brief summary of trades and the health of the portfolio, then
 respond with a brief 2-3 sentence appraisal of your portfolio and its outlook.
 """
 
@@ -71,7 +70,7 @@ def rebalance_message(name, strategy, account):
     return f"""Based on your investment strategy, you should now examine your portfolio and decide if you need to rebalance.
 Use the research tool to find news and opportunities affecting your existing portfolio.
 Use the tools to research stock price and other company information affecting your existing portfolio. {note}
-Finally, make you decision, then execute trades using the tools as needed.
+Finally, make your decision, then execute trades using the tools as needed.
 You do not need to identify new investment opportunities at this time; you will be asked to do so later.
 Just rebalance your portfolio based on your strategy as needed.
 Your investment strategy:
@@ -82,5 +81,5 @@ Here is your current account:
 Here is the current datetime:
 {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 Now, carry out analysis, make your decision and execute trades. Your account name is {name}.
-After you've executed your trades, send a push notification with a brief sumnmary of trades and the health of the portfolio, then
+After you've executed your trades, send a push notification with a brief summary of trades and the health of the portfolio, then
 respond with a brief 2-3 sentence appraisal of your portfolio and its outlook."""

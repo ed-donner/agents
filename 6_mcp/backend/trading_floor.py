@@ -1,9 +1,9 @@
-from traders import Trader
+from .traders import Trader
 from typing import List
 import asyncio
-from tracers import LogTracer
+from .tracers import LogTracer
 from agents import add_trace_processor
-from market import is_market_open
+from .market import is_market_open
 from dotenv import load_dotenv
 import os
 
@@ -20,15 +20,15 @@ lastnames = ["Patience", "Bold", "Systematic", "Crypto"]
 
 if USE_MANY_MODELS:
     model_names = [
-        "gpt-4.1-mini",
-        "deepseek-chat",
-        "gemini-2.5-flash-preview-04-17",
-        "grok-3-mini-beta",
+        "gpt-5.5",
+        "deepseek-v4-flash",
+        "gemini-3.5-flash",
+        "grok-4.3",
     ]
-    short_model_names = ["GPT 4.1 Mini", "DeepSeek V3", "Gemini 2.5 Flash", "Grok 3 Mini"]
+    short_model_names = ["GPT 5.5", "DeepSeek V4", "Gemini 3.5 Flash", "Grok 4.3"]
 else:
-    model_names = ["gpt-4o-mini"] * 4
-    short_model_names = ["GPT 4o mini"] * 4
+    model_names = ["gpt-5.4-mini"] * 4
+    short_model_names = ["GPT 5.4 mini"] * 4
 
 
 def create_traders() -> List[Trader]:
