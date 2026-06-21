@@ -214,3 +214,5 @@ memory.db
 
 6_mcp/sandbox/banoffee.md
 6_mcp/playwright_check.png
+6_mcp/frontend/node_modules/
+6_mcp/frontend/*.tsbuildinfo
