@@ -3,7 +3,7 @@ from langchain_community.agent_toolkits import PlayWrightBrowserToolkit
 from dotenv import load_dotenv
 import os
 import requests
-from langchain.agents import Tool
+from langchain_core.tools import Tool
 from langchain_community.agent_toolkits import FileManagementToolkit
 from langchain_community.tools.wikipedia.tool import WikipediaQueryRun
 from langchain_experimental.tools import PythonREPLTool
