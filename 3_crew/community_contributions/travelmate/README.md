@@ -21,7 +21,7 @@ Create comprehensive travel guides using 7 specialized AI agents that work toget
 
 ### 1. Install
 ```bash
-pip install crewai[tools] markdown weasyprint jinja2
+pip install 'crewai[tools]' markdown weasyprint jinja2
 ```
 
 ### 2. Setup API Key
