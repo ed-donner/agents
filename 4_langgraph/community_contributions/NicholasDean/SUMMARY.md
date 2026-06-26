@@ -20,9 +20,11 @@ LangGraph manages the state flowing through it. Great when you need loops, branc
   it against a `success_criteria`, and routes back to the worker until it passes (tools include
   Playwright browser, files, Python REPL, web search, push).
 
-**Built:** `graph_agent.py` - a minimal tool-using agent graph: `add_messages` state, a worker LLM +
-`ToolNode`, a conditional edge looping until the model stops calling tools, and a `MemorySaver`
-checkpointer so the same `thread_id` remembers earlier turns. ~40 lines - the skeleton Sidekick builds on.
+**Built:** `sidekick.py` - the full Sidekick: a worker LLM (with `calculator` + `save_note` tools)
+works against a `success_criteria`, then an **evaluator** node grades the result with structured
+output (`EvaluatorOutput`) and either ends (criteria met / needs the user) or routes back to the
+worker with feedback to try again. `add_messages` state, `ToolNode`, two conditional edges, and a
+`MemorySaver` checkpointer. The evaluator loop is what makes it a Sidekick, not just a tool agent.
 
 ## Distilled learning
 

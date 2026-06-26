@@ -1,10 +1,12 @@
 # Nicholas Dean - Week 4 (LangGraph)
 
-A minimal tool-using agent drawn as an explicit graph.
+Sidekick - a worker that is checked by an evaluator until the work passes.
 
-- `graph_agent.py` - a State with the `add_messages` reducer, a worker LLM + `ToolNode`, a
-  conditional edge that loops until the model stops calling tools, and a `MemorySaver`
-  checkpointer so a `thread_id` remembers the conversation.
+- `sidekick.py` - a worker LLM (with `calculator` and `save_note` tools) does the task against a
+  `success_criteria`; an **evaluator** node then grades the result with structured output
+  (`EvaluatorOutput`) and either ends (criteria met, or it needs the user) or routes back to the
+  worker with feedback to try again. Built on `add_messages` state, a `ToolNode`, two conditional
+  edges, and a `MemorySaver` checkpointer.
 - `SUMMARY.md` - what I learned this week.
 
-Run: `uv run python graph_agent.py` (needs `OPENAI_API_KEY`).
+Run: `uv run python sidekick.py` (needs `OPENAI_API_KEY`). Writes to a local `sandbox/` folder.
