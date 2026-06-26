@@ -52,7 +52,7 @@ export class TraderPanel {
     this.heatmap = new Heatmap(this.root.querySelector(".panel-heatmap")!);
     this.log = new LogView(this.root.querySelector(".panel-log")!);
     this.transactions = new TransactionsView(this.root.querySelector(".panel-transactions")!);
-    // Chart is created in mount(), after the panel is in the DOM — uPlot misbehaves
+    // Chart is created in mount(), after the panel is in the DOM, because uPlot misbehaves
     // when its host is not laid out at construction time.
   }
 

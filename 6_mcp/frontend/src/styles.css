@@ -219,7 +219,7 @@ body {
   transition: border-color 200ms, box-shadow 200ms;
 }
 
-/* Live leader — the trader with the highest portfolio value right now. */
+/* Live leader: the trader with the highest portfolio value right now. */
 .panel[data-leader="true"] {
   border-color: var(--yellow);
   box-shadow: 0 0 0 1px var(--yellow), 0 0 20px color-mix(in srgb, var(--yellow) 22%, transparent);

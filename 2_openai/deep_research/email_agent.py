@@ -12,7 +12,7 @@ settings = ModelSettings(tool_choice="required")
 @function_tool
 def send_email_tool(subject: str, text_body: str, html_body: str) -> str:
     """
-    Send out an email with the given subject and body to all sales prospects
+    Send out an email with the given subject and body
     
     Args:
         subject: The subject of the email
