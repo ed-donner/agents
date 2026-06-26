@@ -54,7 +54,7 @@ Then please keep in mind for Crew:
 - The course [resources](https://edwarddonner.com/2025/04/21/the-complete-agentic-ai-engineering-course/) with videos
 - Many essential guides in the [guides](guides/01_intro.ipynb) section
 - The [troubleshooting](setup/troubleshooting.ipynb) notebook  
-- My overall [FAQ](https://edwarddonner.com/faq) page with common issues and questions
+- My overall [FAQ](https://edwarddonner.com/avatar) page with common issues and questions
 
 ### API costs - please read me!
 

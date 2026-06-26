@@ -96,7 +96,7 @@ Follow the instructions here to install uv - I recommend using the Standalone In
 
 https://docs.astral.sh/uv/getting-started/installation/
 
-Any installation problems with uv, please see [Q11 on my FAQ page](https://edwarddonner.com/faq/#11).
+Any installation problems with uv, please see [Q11 on my FAQ page](https://edwarddonner.com/avatar?q=11).
 
 Then within Cursor, select View >> Terminal, to see a Terminal window within Cursor.  
 Type `pwd` to see the current directory, and check you are in the 'agents' directory. For me it is `/Users/ed/projects/agents` and it should be something similar for you.
@@ -107,12 +107,11 @@ And now simply run:
 `uv sync`  
 And marvel at the speed and reliability! If necessary, uv should install python 3.12, and then it should install all the packages.  
 
-Any uv problems, please see [Q11 on my FAQ page](https://edwarddonner.com/faq/#11).
+Any uv problems, please see [Q11 on my FAQ page](https://edwarddonner.com/avatar?q=11).
 
 Checking that everything is set up nicely:  
 1. Confirm that you now have a folder called '.venv' in your project root directory (agents)
 2. If you run `uv python list` you should see a Python 3.12 version in your list (there might be several)
-3. If you run `uv tool list` you should see crewai as a tool
 
 Just FYI on using uv:  
 With uv, you do a few things differently:  
@@ -164,8 +163,6 @@ In Cursor, right click in the space below the list of files in the File Explorer
 Here's the thing: it **needs** to be in the directory named `agents` and it **needs** to be named precisely `.env` -- not "env" and not "env.txt" or ".env.txt" but exactly the 4 characters `.env` otherwise it won't work!! 
 
 Within the file, type the following, being SUPER careful that you get this exactly right:
-
-Type the following, being SUPER careful that you get this exactly right:
 
 `OPENAI_API_KEY=`
 

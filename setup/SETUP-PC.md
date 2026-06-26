@@ -113,7 +113,7 @@ You might need to open a new terminal (with the + button, or Ctrl+Shift+backtick
 
 Then run: `uv --version` and you should get the version number.
 
-Any installation problems with uv, please see [Q11 on my FAQ page](https://edwarddonner.com/faq/#11).
+Any installation problems with uv, please see [Q11 on my FAQ page](https://edwarddonner.com/avatar?q=11).
 
 Then within the project inCursor, select View >> Terminal, to see a Terminal window within Cursor.  
 Type `pwd` to see the current directory, and check you are in the 'agents' directory - like `C:\Users\YourUsername\Documents\Projects\agents` or similar
@@ -124,12 +124,11 @@ And now simply run:
 `uv sync`  
 And marvel at the speed and reliability! If necessary, uv should install python 3.12, and then it should install all the packages.  
 
-Any problems with uv, please see [Q11 on my FAQ page](https://edwarddonner.com/faq/#11).
+Any problems with uv, please see [Q11 on my FAQ page](https://edwarddonner.com/avatar?q=11).
 
 Checking that everything is set up nicely:  
 1. Confirm that you now have a folder called '.venv' in your project root directory (agents)
 2. If you run `uv python list` you should see a Python 3.12 version in your list (there might be several)
-3. If you run `uv tool list` you should see crewai as a tool
 
 Just FYI on using uv:  
 With uv, you do a few things differently:  

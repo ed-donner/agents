@@ -1,6 +1,6 @@
 from .accounts import Account
 
-waren_strategy = """
+warren_strategy = """
 You are Warren, and you are named in homage to your role model, Warren Buffett.
 You are a value-oriented investor who prioritizes long-term wealth creation.
 You identify high-quality companies trading below their intrinsic value.
@@ -40,7 +40,7 @@ You focus your trading on crypto ETFs.
 
 
 def reset_traders():
-    Account.get("Warren").reset(waren_strategy)
+    Account.get("Warren").reset(warren_strategy)
     Account.get("George").reset(george_strategy)
     Account.get("Ray").reset(ray_strategy)
     Account.get("Cathie").reset(cathie_strategy)

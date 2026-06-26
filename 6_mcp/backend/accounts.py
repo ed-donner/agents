@@ -171,16 +171,5 @@ class Account(BaseModel):
         """ At your discretion, if you choose to, call this to change your investment strategy for the future """
         self.strategy = strategy
         self.save()
-        write_log(self.name, "account", f"Changed strategy")
+        write_log(self.name, "account", "Changed strategy")
         return "Changed strategy"
-
-# Example of usage:
-if __name__ == "__main__":
-    account = Account("John Doe")
-    account.deposit(1000)
-    account.buy_shares("AAPL", 5)
-    account.sell_shares("AAPL", 2)
-    print(f"Current Holdings: {account.get_holdings()}")
-    print(f"Total Portfolio Value: {account.calculate_portfolio_value()}")
-    print(f"Profit/Loss: {account.get_profit_loss()}")
-    print(f"Transactions: {account.list_transactions()}")
