@@ -20,8 +20,10 @@ tasks they pass between each other.
 - Course projects: *debate*, *financial_researcher*, *stock_picker* (hierarchical + manager +
   Pydantic + push), *engineering_team* (lead -> backend -> frontend -> tests), *coder*.
 
-**Built:** `research_crew.py` - a minimal **sequential** crew in one file: a Researcher agent finds
-5 key points on a topic, a Writer agent turns them into a one-page briefing. The writer's task lists
+**Built:** a research crew the **idiomatic** way - config-as-data. `config/agents.yaml` +
+`config/tasks.yaml` define a Researcher and a Writer; a `@CrewBase` class (`crew.py`) wires them with
+`@agent` / `@task` / `@crew` decorators; `main.py` runs `ResearchCrew().crew().kickoff(inputs=...)`.
+The Researcher finds 5 key points and the Writer turns them into a briefing - the write task lists
 the research task as `context`, so CrewAI hands the research straight through. Writes `briefing.md`.
 
 ## Distilled learning
