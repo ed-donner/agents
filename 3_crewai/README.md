@@ -51,3 +51,15 @@ From the `3_crewai` directory:
 ## Community Contributions
 
 It would be great to see your PRs in community_contributions! But please trim back the projects - make them concise.
+
+## Docker for the coding crews
+
+Two of the reference crews, `coder` and `engineering_team`, run the code their agents write inside a Docker container, so anything generated stays sandboxed away from your machine. To run those two projects you'll need Docker installed and running first (the other crews don't need it).
+
+Install Docker Desktop here, then start it so the Docker engine is running before you `crewai run`:
+
+https://www.docker.com/products/docker-desktop/
+
+On Linux, use Docker Desktop for Linux from that page, or install Docker Engine directly: https://docs.docker.com/engine/install/
+
+The first run downloads the container image, so give it a minute the first time.

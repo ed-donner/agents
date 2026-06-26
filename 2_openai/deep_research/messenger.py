@@ -4,7 +4,6 @@ import os
 import smtplib
 from email.message import EmailMessage
 load_dotenv(override=True)
-MODEL_NAME = os.getenv("DEFAULT_MODEL_NAME", "gpt-5.4-mini")
 
 
 EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")

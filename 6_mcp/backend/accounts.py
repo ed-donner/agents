@@ -159,12 +159,12 @@ class Account(BaseModel):
         data = self.model_dump()
         data["total_portfolio_value"] = portfolio_value
         data["total_profit_loss"] = pnl
-        write_log(self.name, "account", f"Retrieved account details")
+        write_log(self.name, "account", "Retrieved account details")
         return json.dumps(data)
     
     def get_strategy(self) -> str:
         """ Return the strategy of the account """
-        write_log(self.name, "account", f"Retrieved strategy")
+        write_log(self.name, "account", "Retrieved strategy")
         return self.strategy
     
     def change_strategy(self, strategy: str) -> str:
