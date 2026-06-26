@@ -1,4 +1,4 @@
-"""Week 5 (AutoGen) deliverable — a minimal two-agent reflection team.
+"""Week 5 (AutoGen) deliverable - a minimal two-agent reflection team.
 
 AutoGen AgentChat is conversational: agents take turns in a team and refine each other's work. Here
 a Writer drafts and a Critic reviews; a RoundRobinGroupChat alternates them, and the loop ends when

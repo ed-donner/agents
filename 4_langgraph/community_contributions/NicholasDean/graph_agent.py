@@ -1,4 +1,4 @@
-"""Week 4 (LangGraph) deliverable — a minimal tool-using agent as a graph.
+"""Week 4 (LangGraph) deliverable - a minimal tool-using agent as a graph.
 
 The five LangGraph ideas in ~40 lines: a State whose `messages` field uses the add_messages
 reducer, a StateGraph with two nodes (worker LLM + ToolNode), a conditional edge that loops

@@ -1,4 +1,4 @@
-"""Week 2 (OpenAI Agents SDK) deliverable — a minimal deep-research agent.
+"""Week 2 (OpenAI Agents SDK) deliverable - a minimal deep-research agent.
 
 Shows the SDK's core moves: an Agent with a Pydantic `output_type` (the planner returns structured
 searches), agents run in parallel with asyncio.gather, a hosted WebSearchTool, and the whole run
@@ -32,7 +32,7 @@ planner = Agent(
     instructions=f"You plan web research. Given a query, output {HOW_MANY} focused web searches "
                  "that together answer it.",
     model="gpt-4o-mini",
-    output_type=SearchPlan,                      # structured output — guaranteed schema
+    output_type=SearchPlan,                      # structured output - guaranteed schema
 )
 
 searcher = Agent(

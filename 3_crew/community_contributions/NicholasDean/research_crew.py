@@ -1,4 +1,4 @@
-"""Week 3 (CrewAI) deliverable — a minimal two-agent research crew, in one file.
+"""Week 3 (CrewAI) deliverable - a minimal two-agent research crew, in one file.
 
 CrewAI is normally config-driven (agents.yaml + tasks.yaml + a @CrewBase class). Here it's the same
 primitives inline to stay minimal: two Agents, two Tasks (the second takes the first as `context`),

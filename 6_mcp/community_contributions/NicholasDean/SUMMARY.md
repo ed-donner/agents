@@ -1,13 +1,13 @@
-# Week 6 — MCP (Model Context Protocol)
+# Week 6 - MCP (Model Context Protocol)
 
-The capstone idea: stop hand-wiring tools into each agent. **MCP** is a client–server protocol that
+The capstone idea: stop hand-wiring tools into each agent. **MCP** is a client-server protocol that
 exposes tools, resources and prompts behind a standard interface, so any MCP-aware agent can plug in.
 
 - **Three pieces a server can expose:** **tools** (callable functions), **resources** (read-only
   content addressed by a URI), and **prompts** (templates).
 - **Three transports:** **stdio** (spawn a local process), **SSE/HTTP** (streamable), and remote
   (hosted over HTTPS).
-- **Write a server with FastMCP** — tiny:
+- **Write a server with FastMCP** - tiny:
   ```python
   from mcp.server.fastmcp import FastMCP
   mcp = FastMCP("accounts")
@@ -20,7 +20,7 @@ exposes tools, resources and prompts behind a standard interface, so any MCP-awa
 
   mcp.run(transport="stdio")
   ```
-- **Consume it from the OpenAI Agents SDK** — pass servers to the agent and tools are auto-discovered:
+- **Consume it from the OpenAI Agents SDK** - pass servers to the agent and tools are auto-discovered:
   ```python
   async with MCPServerStdio(params={"command": "uv", "args": ["run", "python", "server.py"]}) as s:
       agent = Agent(name="Trader", mcp_servers=[s], model="gpt-4o-mini")
@@ -28,14 +28,14 @@ exposes tools, resources and prompts behind a standard interface, so any MCP-awa
   ```
 - **Stacking servers:** nest many with `AsyncExitStack` (each `MCPServerStdio` is an async context).
   Mix your own servers with third-party ones (memory, web fetch/search, push).
-- **Agents as tools:** `agent.as_tool()` lets a Trader embed a Researcher agent — hierarchical composition.
+- **Agents as tools:** `agent.as_tool()` lets a Trader embed a Researcher agent - hierarchical composition.
 - The course capstone is an autonomous **trading floor**: an `accounts` MCP server, a market-data
   server and a push server, plus four trader agents (Warren / George / Ray / Cathie) that loop on a
-  timer, research, trade, and even call `change_strategy()` — all watched in a Gradio UI.
+  timer, research, trade, and even call `change_strategy()` - all watched in a Gradio UI.
 
 **Built:** `accounts_server.py` (a FastMCP server: `get_balance` / `buy_shares` tools + an
 `accounts://report` resource over a toy account) and `trader.py` (an Agents-SDK agent that spawns it
-over stdio and trades). Two sides of MCP — writing a server and consuming one — in ~30 lines each.
+over stdio and trades). Two sides of MCP - writing a server and consuming one - in ~30 lines each.
 
 ## Distilled learning
 
@@ -49,7 +49,7 @@ automatically. Now tools are shareable and reusable across agents and projects.
 @mcp.tool()
 def buy_shares(symbol: str, quantity: int) -> str: ...
 
-# client side: the agent discovers them — no per-tool wiring
+# client side: the agent discovers them - no per-tool wiring
 async with MCPServerStdio(params={"command": "uv", "args": ["run", "python", "accounts_server.py"]}) as s:
     agent = Agent(name="Trader", mcp_servers=[s])
 ```

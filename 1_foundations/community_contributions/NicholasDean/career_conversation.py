@@ -1,4 +1,4 @@
-"""Week 1 (Foundations) deliverable — a minimal "career conversation" agent.
+"""Week 1 (Foundations) deliverable - a minimal "career conversation" agent.
 
 Answers as Nicholas on his website: reads a short bio (me.md), chats with tool use, and pushes a
 phone notification when a visitor leaves an email or asks something it can't answer. This is the
@@ -38,7 +38,7 @@ def record_unknown_question(question):
     return {"recorded": "ok"}
 
 
-# Tool schemas — the JSON the model sees so it knows what it's allowed to call.
+# Tool schemas - the JSON the model sees so it knows what it's allowed to call.
 TOOLS = [
     {"type": "function", "function": {
         "name": "record_user_details",
@@ -55,7 +55,7 @@ TOOLS = [
 
 SYSTEM = (
     f"You are acting as {NAME}, answering questions on his website about his career, skills and "
-    f"background — professional and engaging, as if to a future employer, always in character as "
+    f"background - professional and engaging, as if to a future employer, always in character as "
     f"{NAME}. If you don't know an answer, call record_unknown_question. If the visitor seems "
     f"interested, ask for their email and call record_user_details.\n\n## About {NAME}\n{BIO}"
 )
@@ -67,9 +67,9 @@ def chat(message, history):
         response = openai.chat.completions.create(model="gpt-4o-mini", messages=messages, tools=TOOLS)
         choice = response.choices[0]
         if choice.finish_reason != "tool_calls":
-            return choice.message.content                  # model is done → final answer
+            return choice.message.content                  # model is done -> final answer
         messages.append(choice.message)
-        for call in choice.message.tool_calls:             # model asked for a tool → run it, loop
+        for call in choice.message.tool_calls:             # model asked for a tool -> run it, loop
             result = globals()[call.function.name](**json.loads(call.function.arguments))
             messages.append({"role": "tool", "tool_call_id": call.id, "content": json.dumps(result)})
 

@@ -1,7 +1,7 @@
-"""Week 6 (MCP) deliverable — an Agents-SDK agent that *consumes* the MCP server.
+"""Week 6 (MCP) deliverable - an Agents-SDK agent that *consumes* the MCP server.
 
 Spawns accounts_server.py over stdio, hands its tools to an OpenAI Agents-SDK agent, and asks the
-agent to trade. The agent auto-discovers the server's tools — no tool wiring on this side. That is
+agent to trade. The agent auto-discovers the server's tools - no tool wiring on this side. That is
 the whole point of MCP: tools live behind a standard protocol, so any MCP-aware agent can use them.
 
 Run: uv run python trader.py     (needs OPENAI_API_KEY)

@@ -1,4 +1,4 @@
-"""Week 6 (MCP) deliverable — a tiny MCP *server*.
+"""Week 6 (MCP) deliverable - a tiny MCP *server*.
 
 Exposes a toy trading account over the Model Context Protocol with FastMCP: two tools (check the
 balance, buy shares) and one read-only resource (a portfolio report). The client spawns this over
