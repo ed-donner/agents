@@ -19,9 +19,11 @@ A lightweight framework that replaces last week's hand-rolled tool loop with rea
 - The course capstone is a **Deep Research** agent: Planner (structured plan) -> parallel Search
   agents (WebSearchTool) -> Writer -> Email (SendGrid).
 
-**Built:** `deep_research.py` - a minimal deep-research agent. A planner returns a structured
-`SearchPlan`, the search agents run **in parallel** with `asyncio.gather`, a writer synthesizes one
-markdown report, and the whole thing runs inside a single `trace()`. ~50 lines, no email step.
+**Built:** `deep_research.py` - the full Deep Research capstone. An input **guardrail** screens the
+request first; a Planner returns a structured `WebSearchPlan`; the search agents run **in parallel**
+with `asyncio.gather` (WebSearchTool); a Writer returns a structured `ReportData`; and an **Email
+agent** sends it via a `send_report` tool (SendGrid if configured, else writes `report.md`). All
+inside one `trace()`. Every step uses `output_type`, plus a guardrail and a `@function_tool`.
 
 ## Distilled learning
 
