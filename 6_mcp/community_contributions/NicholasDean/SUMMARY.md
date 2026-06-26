@@ -33,9 +33,12 @@ exposes tools, resources and prompts behind a standard interface, so any MCP-awa
   server and a push server, plus four trader agents (Warren / George / Ray / Cathie) that loop on a
   timer, research, trade, and even call `change_strategy()` - all watched in a Gradio UI.
 
-**Built:** `accounts_server.py` (a FastMCP server: `get_balance` / `buy_shares` tools + an
-`accounts://report` resource over a toy account) and `trader.py` (an Agents-SDK agent that spawns it
-over stdio and trades). Two sides of MCP - writing a server and consuming one - in ~30 lines each.
+**Built:** a mini **trading floor** - the capstone architecture. Two FastMCP servers:
+`accounts_server.py` (`get_balance` / `buy_shares` + an `accounts://report` resource) and
+`market_server.py` (`get_price` + a `market://prices` resource). `trading_floor.py` runs multiple
+trader agents concurrently (`asyncio.gather`); each is an Agents-SDK agent that **stacks both MCP
+servers** via `AsyncExitStack`, looks up prices from the market and records trades through its
+account. The full course version adds a push server and a Gradio dashboard; same architecture.
 
 ## Distilled learning
 

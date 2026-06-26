@@ -1,14 +1,13 @@
-"""Week 6 (MCP) deliverable - a tiny MCP *server*.
+"""Week 6 (MCP) - the accounts server.
 
-Exposes a toy trading account over the Model Context Protocol with FastMCP: two tools (check the
-balance, buy shares) and one read-only resource (a portfolio report). The client spawns this over
-stdio and the agent discovers these tools automatically.
+A FastMCP server that holds one trading account and records trades. It deliberately knows nothing
+about prices - the trader gets those from the separate market server and passes the price in. Tools:
+get_balance, buy_shares; resource: accounts://report. Spawned over stdio by trading_floor.py.
 """
 from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("accounts")
 account = {"cash": 10_000.0, "holdings": {}}
-PRICES = {"AAPL": 200.0, "NVDA": 120.0, "MSFT": 400.0}     # toy fixed prices
 
 
 @mcp.tool()
@@ -18,23 +17,21 @@ def get_balance() -> float:
 
 
 @mcp.tool()
-def buy_shares(symbol: str, quantity: int) -> str:
-    """Buy `quantity` shares of `symbol` if there is enough cash."""
+def buy_shares(symbol: str, quantity: int, price: float) -> str:
+    """Buy `quantity` shares of `symbol` at `price` (look the price up from the market server first)."""
     symbol = symbol.upper()
-    cost = PRICES.get(symbol, 0) * quantity
-    if cost == 0:
-        return f"Unknown symbol {symbol}"
+    cost = price * quantity
     if cost > account["cash"]:
-        return f"Insufficient cash: need {cost}, have {account['cash']}"
+        return f"Insufficient cash: need {cost:.2f}, have {account['cash']:.2f}"
     account["cash"] -= cost
     account["holdings"][symbol] = account["holdings"].get(symbol, 0) + quantity
-    return f"Bought {quantity} {symbol} for {cost}. Cash left: {account['cash']}"
+    return f"Bought {quantity} {symbol} @ {price}. Cash left: {account['cash']:.2f}"
 
 
 @mcp.resource("accounts://report")
 def report() -> str:
     """A read-only snapshot of cash + holdings."""
-    return f"Cash: {account['cash']}; Holdings: {account['holdings']}"
+    return f"Cash: {account['cash']:.2f}; Holdings: {account['holdings']}"
 
 
 if __name__ == "__main__":
