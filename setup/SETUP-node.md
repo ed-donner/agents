@@ -11,7 +11,7 @@ PC users take note: if you choose to use WSL, then you will need to install node
 Check if you have node installed - should be v22 or later:  
 `!node --version` 
 
-If you need to install it, use your platform's package manager - one command, no decisions to make:
+If you need to install it, use your platform's package manager:
 
 On Windows, in PowerShell:  
 `winget install OpenJS.NodeJS.LTS`
@@ -25,51 +25,3 @@ On Linux (and PC users on WSL), follow the Linux instructions at https://nodejs.
 
 `!node --version`  
 `!npx --version`
-
-## Installing Playwright
-
-Playwright is the browser automation software from Microsoft that we use in weeks 4 and 6.
-
-**Week 4 (refreshed labs): there is nothing to install.** The lab runs Playwright's MCP server with `npx`, which fetches it on demand, and it drives the copy of Google Chrome already on your machine (Chrome needs to be installed, but not running). The Week 4 Day 3 lab includes a check cell that proves the whole chain before you use it. If that cell reports Chrome is not found, install Chrome normally or run `npx playwright install chrome` in a terminal.
-
-**Week 6 only**, where the labs use the Python playwright package, you also need its managed browsers:
-
-On Mac / PC:  
-`uv run playwright install`
-
-On Linux / WSL:  
-`uv run playwright install --with-deps chromium`
-
-## Troubleshooting - if node-based MCP servers hang on Windows / WSL
-
-For some WSL users, running npx based MCP servers seems to hang. Here is the fix!
-
-First, quit and relaunch Cursor, to pick up any changes since you installed node. Also, exit any open Terminals in Cursor and open a new terminal.
-
-In the terminal, run:  
-`which node`
-
-This should give you a path to node running on your WSL subsystem. Suppose it's something like:  
-`/home/user/.nvm/versions/node/v22.18.0/bin`
-
-Then run this command, carefully replacing the path here with your one:   
-`!export PATH="/home/user/.nvm/versions/node/v22.18.0/bin:$PATH"`  
-
-Also this, again carefully replacing the path with your one:  
-`os.environ["PATH"] = "/home/user/.nvm/versions/node/v22.18.0/bin:" + os.environ["PATH"]`
-
-And then try the prior cell again.  
-And if even that doesn't work, try changing the MCP params with the full path of npx:
-
-```python
-playwright_params = {"command": "/home/user/.nvm/versions/node/v22.18.0/bin/npx","args": [ "@playwright/mcp@latest"]}
-```
-
-And / or this approach:
-
-```python
-env = {"PATH": "/home/user/.nvm/versions/node/v22.18.0/bin:" + os.environ["PATH"]}
-playwright_params = {"command": "npx","args": [ "@playwright/mcp@latest"], "env": env}
-```
-
-If that doesn't work, let me know! A heartfelt thank you to Radoslav R. and André R. for battling with this, finding the fixes and sharing them!
