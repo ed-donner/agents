@@ -35,7 +35,8 @@ class ResearchManager:
     async def search(self, item: WebSearchItem) -> str | None:
         """ Perform a search for the query """
         input_message = f"Search term: {item.query}\nReason for searching: {item.reason}"
-        return await Runner.run(search_agent, input_message)
+        result = await Runner.run(search_agent, input_message)
+        return result.final_output
 
     async def write_report(self, query: str, search_results: list[str]) -> ReportData:
         """ Write the report for the query """

@@ -201,6 +201,7 @@ memory.db
 !4_langchain_langgraph/sandbox/skills/
 4_langchain_langgraph/.playwright-mcp/
 4_langchain_langgraph/graph.png
+4_langchain_langgraph/playwright_check.png
 
 # Week 5 Agent Frameworks runtime artifacts
 5_agent_frameworks/**/board.sqlite

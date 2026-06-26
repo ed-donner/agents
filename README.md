@@ -1,6 +1,6 @@
 ## Master AI Agentic Engineering -  build autonomous AI Agents
 
-### 6 week journey to code and deploy AI Agents with OpenAI Agents SDK, CrewAI, LangGraph, AutoGen and MCP
+### 6 week journey to code and deploy AI Agents with OpenAI Agents SDK, CrewAI, LangGraph, Google ADK, Pydantic AI and MCP
 
 ![Autonomous Agent](assets/autonomy.png)
 
