@@ -16,9 +16,11 @@ First week of the agentic course: build agents from raw LLM calls - no framework
 - **Pushover** sends a phone push from a tool (e.g. "someone left their email").
 - Deploy a Gradio app to **HuggingFace Spaces** with `uv run gradio deploy`.
 
-**Built:** `career_conversation.py` - a minimal "talk to Nicholas" agent. Reads a short bio,
-answers as me, and uses two tools (record an interested visitor's email; record an unanswerable
-question) that push to my phone. The week-1 agent loop in ~50 lines, no framework.
+**Built:** `app.py` - "Professionally You", the full week-1 capstone, deployable to HuggingFace
+Spaces. It answers as me with two tools (record an interested visitor's email; record an
+unanswerable question) that push to my phone via Pushover, runs the tool-calling loop, and adds an
+evaluator-optimizer pass: a second model grades each reply (Pydantic `Evaluation`) and a rejected
+reply is regenerated with the feedback before the visitor sees it. No framework.
 
 ## Distilled learning
 
