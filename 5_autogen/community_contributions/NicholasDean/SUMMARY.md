@@ -22,9 +22,14 @@ team; **Core** = a lower-level async message-passing runtime for decoupled (even
   files at runtime*, registers them on a distributed runtime, and they bounce business ideas off each
   other - a self-growing mesh of agents.
 
-**Built:** `reflection_team.py` - a minimal **reflection** team: a Writer drafts, a Critic gives
-feedback, `RoundRobinGroupChat` alternates them, and `TextMentionTermination("APPROVE")` ends the
-loop once the Critic is satisfied. The whole back-and-forth streams to the terminal via `Console`.
+**Built:** both AutoGen layers.
+- `reflection_team.py` (**AgentChat**) - a Writer drafts, a Critic gives feedback, a
+  `RoundRobinGroupChat` alternates them, and `TextMentionTermination("APPROVE")` ends the loop once
+  the Critic is satisfied; streamed to the terminal via `Console`.
+- `agent_world.py` (**autogen-core**) - a `SingleThreadedAgentRuntime` delivers typed messages
+  between `RoutedAgent`s (`@message_handler`). A coordinator `send_message`s an `Ask` to several
+  domain agents (each LLM-backed) and collects their `Idea` replies - the message-passing backbone
+  the distributed agent-world capstone is built on.
 
 ## Distilled learning
 
