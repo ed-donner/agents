@@ -2,7 +2,7 @@
 
 ### 6 week journey to code and deploy AI Agents with OpenAI Agents SDK, CrewAI, LangGraph, Google ADK, Pydantic AI and MCP
 
-![Autonomous Agent](assets/autonomy.png)
+![Autonomous Agent](assets/agentic.jpg)
 
 _If you're looking at this in Cursor, please right click on the filename in the Explorer on the left, and select "Open preview", to view the formatted version._
 
@@ -10,7 +10,19 @@ I couldn't be more excited to welcome you! This is the start of your 6 week adve
 
 ### This is the refreshed version from Summer 2026
 
-This has fully refreshed content with the latest tools, models and techniques.
+This has fully refreshed content with the latest tools, models and techniques. Answers to common questions:  
+[What changed in the upgrade?](https://edwarddonner.com/avatar?q=67)  
+[Why was there an upgrade?](https://edwarddonner.com/avatar?q=65)  
+[I was in the middle of the course - how do I upgrade my code](https://edwarddonner.com/avatar?q=66)  
+
+### Answers to the most common questions
+
+[My Cursor looks different to yours (new splash screen)](https://edwarddonner.com/avatar?q=54)  
+[Can I use Gemini or free models instead of OpenAI Yes!](https://edwarddonner.com/avatar?q=8)  
+[Where are the course resources](https://edwarddonner.com/2025/04/21/the-complete-agentic-ai-engineering-course/)   
+[How does this course fit in with your others?](https://edwarddonner.com/curriculum)  
+[Can I take this course with no programming background?](https://edwarddonner.com/avatar?q=2)  
+[What job can I get after taking this course?](https://edwarddonner.com/avatar?q=3)  
 
 ### Before you begin
 
@@ -34,7 +46,6 @@ Any problems, please do contact me.
 
 - The course [resources](https://edwarddonner.com/2025/04/21/the-complete-agentic-ai-engineering-course/) with videos
 - Many essential guides in the [guides](guides/01_intro.ipynb) section
-- The [troubleshooting](setup/troubleshooting.ipynb) notebook  
 - My [Avatar](https://edwarddonner.com/avatar) that can answer all common questions
 
 ### API costs - please read me!
