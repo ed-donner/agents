@@ -1,0 +1,26 @@
+research_task:
+  description: >
+    Research this CrewAI question: {question}
+    Use framework_search at least twice with different queries (e.g. API name,
+    decorator name, or concept from the question).
+    Produce structured notes: key facts, relevant code patterns, and source paths
+    (file paths from search results).
+    Do not invent APIs or packages.
+  expected_output: >
+    Structured research notes with bullet points and source file paths for each fact.
+  agent: framework_researcher
+
+answer_task:
+  description: >
+    Using the research notes, write a markdown answer for: {question}
+    Include:
+    - A short explanation
+    - One minimal code example (Python, no markdown fences in the file body)
+    - A Sources section listing upstream file paths from framework_search
+    Do not recommend APIs that were not found in the research.
+  expected_output: >
+    Markdown answer with explanation, code example, and Sources section.
+  agent: framework_advisor
+  context:
+    - research_task
+  output_file: output/answer.md

@@ -1,0 +1,4 @@
+Always call framework_search before answering CrewAI API questions.
+Never invent package names or modules (e.g. do not use crew_ai).
+Cite source file paths from search results in every answer.
+Prefer official patterns from lib/crewai and docs/edge/en.
