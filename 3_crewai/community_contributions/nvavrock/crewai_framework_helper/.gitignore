@@ -1,0 +1,10 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.rag_index/
+upstream/
+output/
+.uv/
+.DS_Store
+eval/results/

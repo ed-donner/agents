@@ -1,0 +1,47 @@
+# Golden queries for RAG evaluation. Pass = min_hits relevant results in top_k.
+
+pass_threshold_pct: 80
+top_k: 3
+
+queries:
+  - id: crew_base
+    category: Crew API
+    query: "CrewBase agent decorator"
+    kinds: [source]
+    source_patterns: ["lib/crewai", "lib/cli"]
+    min_hits: 1
+
+  - id: flow_listen
+    category: Flow API
+    query: "Flow listen start decorator"
+    kinds: [docs, source]
+    source_patterns: ["docs/edge/en", "lib/crewai"]
+    min_hits: 1
+
+  - id: knowledge_source
+    category: Knowledge
+    query: "TextFileKnowledgeSource file_paths"
+    kinds: [source]
+    source_patterns: ["lib/crewai"]
+    min_hits: 1
+
+  - id: base_tool
+    category: Tools
+    query: "BaseTool args_schema _run"
+    kinds: [source]
+    source_patterns: ["lib/crewai", "lib/crewai-tools"]
+    min_hits: 1
+
+  - id: cli_create
+    category: CLI
+    query: "crewai create crew template pyproject"
+    kinds: [source]
+    source_patterns: ["lib/cli"]
+    min_hits: 1
+
+  - id: crew_kickoff
+    category: Crew API
+    query: "crew kickoff inputs"
+    kinds: [source, docs]
+    source_patterns: ["lib/crewai", "docs/edge/en"]
+    min_hits: 1
