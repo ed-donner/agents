@@ -1,0 +1,21 @@
+[project]
+name = "advanced-engineering-team"
+version = "0.1.0"
+description = "Multi-agent AI software engineering team with Groq, OpenRouter, and LangSmith"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "crewai[tools]>=0.108.0,<1.0.0",
+    "python-dotenv>=1.0.0",
+    "gradio>=5.0.0",
+]
+
+[project.scripts]
+advanced-engineering-team = "advanced_engineering_team.main:run"
+run-crew = "advanced_engineering_team.main:run"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
