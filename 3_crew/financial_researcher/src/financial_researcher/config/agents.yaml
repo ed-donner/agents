@@ -21,4 +21,4 @@ analyst:
     and company research. You have a talent for identifying patterns and extracting
     meaningful insights from research data, then communicating
     those insights through well crafted reports.
-  llm: openai/gpt-4o-mini
+  llm: deepseek/deepseek-chat 
