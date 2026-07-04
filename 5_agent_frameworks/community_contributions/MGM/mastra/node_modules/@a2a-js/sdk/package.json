@@ -1,0 +1,128 @@
+{
+  "name": "@a2a-js/sdk",
+  "version": "0.3.13",
+  "description": "Server & Client SDK for Agent2Agent protocol",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a2aproject/a2a-js.git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "typesVersions": {
+    "*": {
+      "server": [
+        "./dist/server/index.d.ts"
+      ],
+      "server/express": [
+        "./dist/server/express/index.d.ts"
+      ],
+      "server/grpc": [
+        "./dist/server/grpc/index.d.ts"
+      ],
+      "client": [
+        "./dist/client/index.d.ts"
+      ],
+      "client/grpc": [
+        "./dist/client/transports/grpc/index.d.ts"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./server": {
+      "types": "./dist/server/index.d.ts",
+      "import": "./dist/server/index.js",
+      "require": "./dist/server/index.cjs"
+    },
+    "./server/express": {
+      "types": "./dist/server/express/index.d.ts",
+      "import": "./dist/server/express/index.js",
+      "require": "./dist/server/express/index.cjs"
+    },
+    "./server/grpc": {
+      "types": "./dist/server/grpc/index.d.ts",
+      "import": "./dist/server/grpc/index.js",
+      "require": "./dist/server/grpc/index.cjs"
+    },
+    "./client": {
+      "types": "./dist/client/index.d.ts",
+      "import": "./dist/client/index.js",
+      "require": "./dist/client/index.cjs"
+    },
+    "./client/grpc": {
+      "types": "./dist/client/transports/grpc/index.d.ts",
+      "import": "./dist/client/transports/grpc/index.js",
+      "require": "./dist/client/transports/grpc/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.map",
+    "README.md"
+  ],
+  "devDependencies": {
+    "@betterer/cli": "^6.0.0-alpha.1",
+    "@betterer/typescript": "^6.0.0-alpha.1",
+    "@bufbuild/buf": "^1.61.0",
+    "@bufbuild/protobuf": "^2.10.2",
+    "@cloudflare/vitest-pool-workers": "^0.12.5",
+    "@eslint/js": "^9.39.1",
+    "@grpc/grpc-js": "^1.11.0",
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.13.14",
+    "@types/supertest": "^6.0.3",
+    "@vitest/coverage-v8": "^3.2.4",
+    "esbuild": "^0.27.0",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "express": "^5.1.0",
+    "json-schema-to-typescript": "^15.0.4",
+    "prettier": "^3.6.2",
+    "supertest": "^7.1.4",
+    "tsup": "^8.5.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.4",
+    "vitest": "^3.2.4"
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:edge": "vitest run --config vitest.edge.config.ts",
+    "lint": "tsc --noEmit && npx eslint . --fix && betterer precommit",
+    "lint:ci": "tsc --noEmit && npx eslint . && betterer ci",
+    "format:readme": "prettier --write ./README.md",
+    "coverage": "vitest run --coverage",
+    "generate": "curl https://raw.githubusercontent.com/google-a2a/A2A/refs/heads/main/specification/json/a2a.json > spec.json && node scripts/generateTypes.js && rm spec.json",
+    "test-build": "esbuild ./dist/client/index.js ./dist/server/index.js ./dist/index.js --bundle --platform=neutral --outdir=dist/tmp-checks --outbase=./dist"
+  },
+  "dependencies": {
+    "uuid": "^11.1.0"
+  },
+  "peerDependencies": {
+    "@bufbuild/protobuf": "^2.10.2",
+    "@grpc/grpc-js": "^1.11.0",
+    "express": "^4.21.2 || ^5.1.0"
+  },
+  "peerDependenciesMeta": {
+    "express": {
+      "optional": true
+    },
+    "@grpc/grpc-js": {
+      "optional": true
+    },
+    "@bufbuild/protobuf": {
+      "optional": true
+    }
+  }
+}

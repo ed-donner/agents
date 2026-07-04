@@ -1,0 +1,300 @@
+---
+title: Markdown
+description: AST builder functions and utilities for programmatic message formatting.
+type: reference
+---
+
+The SDK uses [mdast](https://github.com/syntax-tree/mdast) (Markdown AST) as the canonical format for message formatting. Each adapter converts the AST to the platform's native format.
+
+```typescript
+import {
+  root, paragraph, text, strong, emphasis, strikethrough,
+  inlineCode, codeBlock, link, blockquote,
+  parseMarkdown, stringifyMarkdown, toPlainText, walkAst,
+  tableToAscii, tableElementToAscii,
+} from "chat";
+```
+
+## Type re-exports
+
+The chat package re-exports mdast's union and content types so adapters and downstream code can build exhaustively-typed AST walkers without depending on `mdast` directly:
+
+```typescript
+import type { Nodes, Root, Content } from "chat";
+
+function render(node: Nodes): string {
+  switch (node.type) {
+    case "text": return node.value;
+    case "strong": return node.children.map(render).join("");
+    // ...
+    default: throw new Error(`Unhandled: ${node satisfies never}`);
+  }
+}
+```
+
+Adapters use this pattern to make the type checker reject the build when a new mdast node type is introduced upstream.
+
+## Node builders
+
+### root
+
+Root node — the required top-level wrapper for an AST.
+
+```typescript
+root([
+  paragraph([text("Hello, world!")]),
+])
+```
+
+<TypeTable
+  type={{
+    children: {
+      description: 'Top-level content nodes (paragraphs, code blocks, blockquotes, lists).',
+      type: 'Content[]',
+    },
+  }}
+/>
+
+### paragraph
+
+A paragraph block.
+
+```typescript
+paragraph([text("Hello "), strong([text("world")])])
+```
+
+### text
+
+Plain text node.
+
+```typescript
+text("Hello, world!")
+```
+
+### strong
+
+**Bold** text.
+
+```typescript
+strong([text("important")])
+```
+
+### emphasis
+
+_Italic_ text.
+
+```typescript
+emphasis([text("emphasized")])
+```
+
+### strikethrough
+
+~~Strikethrough~~ text.
+
+```typescript
+strikethrough([text("removed")])
+```
+
+### inlineCode
+
+`Inline code` span.
+
+```typescript
+inlineCode("const x = 1")
+```
+
+### codeBlock
+
+Fenced code block with optional language.
+
+```typescript
+codeBlock("const x = 1;", "typescript")
+```
+
+<TypeTable
+  type={{
+    value: {
+      description: 'Code content.',
+      type: 'string',
+    },
+    lang: {
+      description: 'Language identifier for syntax highlighting.',
+      type: 'string | undefined',
+    },
+  }}
+/>
+
+### link
+
+Hyperlink.
+
+```typescript
+link("https://example.com", [text("click here")])
+link("https://example.com", [text("click here")], "tooltip title")
+```
+
+<TypeTable
+  type={{
+    url: {
+      description: 'Link URL.',
+      type: 'string',
+    },
+    children: {
+      description: 'Link text content.',
+      type: 'Content[]',
+    },
+    title: {
+      description: 'Optional tooltip text.',
+      type: 'string | undefined',
+    },
+  }}
+/>
+
+### blockquote
+
+Block quotation.
+
+```typescript
+blockquote([paragraph([text("Quoted text")])])
+```
+
+## Parsing and stringifying
+
+### parseMarkdown
+
+Parse a markdown string into an mdast AST.
+
+```typescript
+const ast = parseMarkdown("**Hello** world");
+```
+
+### stringifyMarkdown
+
+Convert an mdast AST back to a markdown string.
+
+```typescript
+const md = stringifyMarkdown(ast); // "**Hello** world"
+```
+
+### toPlainText
+
+Strip all formatting and return plain text.
+
+```typescript
+const plain = toPlainText(ast); // "Hello world"
+```
+
+### markdownToPlainText
+
+Shorthand for parsing markdown and extracting plain text.
+
+```typescript
+const plain = markdownToPlainText("**Hello** world"); // "Hello world"
+```
+
+## AST utilities
+
+### walkAst
+
+Transform an AST by visiting each node. Return a new value to replace the node, or `undefined` to keep it unchanged.
+
+```typescript
+const transformed = walkAst(ast, (node) => {
+  if (isStrongNode(node)) {
+    return emphasis(getNodeChildren(node));
+  }
+  return undefined;
+});
+```
+
+### Type guards
+
+Functions for checking node types:
+
+| Guard | Matches |
+|-------|---------|
+| `isTextNode(node)` | Plain text |
+| `isParagraphNode(node)` | Paragraph |
+| `isStrongNode(node)` | Bold |
+| `isEmphasisNode(node)` | Italic |
+| `isDeleteNode(node)` | Strikethrough |
+| `isInlineCodeNode(node)` | Inline code |
+| `isCodeNode(node)` | Code block |
+| `isLinkNode(node)` | Link |
+| `isBlockquoteNode(node)` | Blockquote |
+| `isListNode(node)` | List |
+| `isListItemNode(node)` | List item |
+| `isTableNode(node)` | Table |
+| `isTableRowNode(node)` | Table row |
+| `isTableCellNode(node)` | Table cell |
+
+### getNodeChildren / getNodeValue
+
+Safely access node properties without type narrowing.
+
+```typescript
+const children = getNodeChildren(node); // Content[] | undefined
+const value = getNodeValue(node);       // string | undefined
+```
+
+## Table utilities
+
+### tableToAscii
+
+Render an mdast `Table` node as a padded ASCII table string. Used by adapters that lack native table support (Google Chat, Discord, Telegram).
+
+```typescript
+import { parseMarkdown, tableToAscii, isTableNode } from "chat";
+
+const ast = parseMarkdown("| Name | Role |\n|------|------|\n| Alice | Engineer |");
+// Find the table node and convert it
+```
+
+Output:
+
+```
+Name  | Role
+------|--------
+Alice | Engineer
+```
+
+### tableElementToAscii
+
+Render a table from headers and string row arrays as a padded ASCII table. Used for card `TableElement` fallback rendering.
+
+```typescript
+import { tableElementToAscii } from "chat";
+
+const ascii = tableElementToAscii(
+  ["Name", "Age", "Role"],
+  [
+    ["Alice", "30", "Engineer"],
+    ["Bob", "25", "Designer"],
+  ]
+);
+```
+
+## Platform formatting
+
+The SDK uses mdast as the canonical format and each adapter converts it to the platform's native syntax. You write standard markdown and the SDK handles the translation — but it helps to know how each platform renders common formatting.
+
+| Feature | Slack | Teams | Google Chat |
+|---------|-------|-------|-------------|
+| Bold | `**text**` | `**text**` | `*text*` |
+| Italic | `_text_` | `_text_` | `_text_` |
+| Strikethrough | `~~text~~` | `~~text~~` | `~text~` |
+| Code | `` `code` `` | `` `code` `` | `` `code` `` |
+| Code blocks | ```` ``` ```` | ```` ``` ```` | ```` ``` ```` |
+| Links | `[text](url)` | `[text](url)` | `[text](url)` |
+| Lists | Supported | Supported | Supported |
+| Blockquotes | `>` | `>` | Simulated with `>` prefix |
+| Tables | Native (markdown_text) | Native GFM | ASCII fallback |
+| Mentions | `<@USER>` | `<at>name</at>` | `<users/{id}>` |
+
+<Callout type="info">
+Slack accepts standard markdown via the `markdown_text` field on `chat.postMessage` and friends, so the SDK passes markdown through directly. Incoming Slack messages still arrive as legacy mrkdwn (`*bold*`, `<url|text>`) and are parsed transparently. If you need to send mrkdwn yourself, use `{ raw: "..." }`.
+</Callout>
+
+<Callout type="info">
+You don't need to worry about these differences when using the SDK — the AST builders and `parseMarkdown` handle conversion automatically. This table is useful if you're working with `raw` platform payloads or debugging formatting issues.
+</Callout>

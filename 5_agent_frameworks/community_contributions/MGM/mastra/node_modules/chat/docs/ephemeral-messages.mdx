@@ -1,0 +1,77 @@
+---
+title: Ephemeral Messages
+description: Send messages visible only to a specific user.
+type: guide
+prerequisites:
+  - /docs/usage
+related:
+  - /docs/direct-messages
+---
+
+Ephemeral messages are visible only to a specific user within a thread. They're useful for confirmations, hints, and private notifications.
+
+## Send an ephemeral message
+
+```typescript title="lib/bot.ts" lineNumbers
+await thread.postEphemeral(user, "Only you can see this!", {
+  fallbackToDM: true,
+});
+```
+
+The `fallbackToDM` option is required and controls behavior on platforms without native ephemeral support:
+
+- `fallbackToDM: true` — send as a DM if native ephemeral is not supported
+- `fallbackToDM: false` — return `null` if native ephemeral is not supported
+
+## Platform behavior
+
+| Platform | Native support | Behavior | Persistence |
+|----------|---------------|----------|-------------|
+| Slack | Yes | Ephemeral in channel | Session-only (disappears on reload) |
+| Google Chat | Yes | Private message in space | Persists until deleted |
+| Discord | No | DM fallback | Persists in DM |
+| Teams | No | DM fallback | Persists in DM |
+
+## Check for fallback
+
+```typescript title="lib/bot.ts" lineNumbers
+const result = await thread.postEphemeral(user, "Private notification", {
+  fallbackToDM: true,
+});
+
+if (result?.usedFallback) {
+  console.log("Sent as DM instead of ephemeral");
+}
+```
+
+## Graceful degradation
+
+Only send if the platform supports native ephemeral:
+
+```typescript title="lib/bot.ts" lineNumbers
+const result = await thread.postEphemeral(user, "Contextual hint", {
+  fallbackToDM: false,
+});
+
+if (!result) {
+  // Platform doesn't support native ephemeral
+  // Message was not sent
+}
+```
+
+## Ephemeral cards
+
+Cards work with ephemeral messages too:
+
+```tsx title="lib/bot.tsx" lineNumbers
+await thread.postEphemeral(
+  event.user,
+  <Card title="Ephemeral Card">
+    <CardText>Only you can see this card.</CardText>
+    <Actions>
+      <Button id="open_modal" style="primary">Open Modal</Button>
+    </Actions>
+  </Card>,
+  { fallbackToDM: true }
+);
+```

@@ -1,0 +1,320 @@
+---
+title: Slack Low-Level APIs
+description: Use Slack request verification, formatting, Web API, and Block Kit helpers without the full Chat runtime.
+type: guide
+prerequisites:
+  - /adapters/official/slack
+related:
+  - /docs/handling-events
+  - /docs/cards
+  - /docs/slash-commands
+---
+
+The Slack adapter is the right default for most bots. It verifies requests, resolves tokens, parses Slack payloads, stores thread state, and routes events through `Chat`.
+
+Use the low-level Slack subpaths when your app already owns routing, state, sessions, or workflow execution and only needs the Slack-specific primitives.
+
+| Subpath | Use for |
+|---------|---------|
+| `@chat-adapter/slack/webhook` | Request verification, body parsing, Events API payloads, slash commands, interactions, and continuation data |
+| `@chat-adapter/slack/format` | Slack mrkdwn tokens, text objects, dates, links, mentions, and simple mrkdwn to Markdown conversion |
+| `@chat-adapter/slack/api` | Fetch-based Slack Web API calls, thread replies, views, and files without `@slack/web-api` |
+| `@chat-adapter/slack/blocks` | Runtime-free conversion from simple card objects and input requests to Slack Block Kit |
+
+<Callout type="info">
+  These subpaths are for custom runtimes. If you want Chat SDK to handle webhook routing, state, subscriptions, and platform normalization, use `createSlackAdapter` from `@chat-adapter/slack`.
+</Callout>
+
+## Webhooks
+
+[Slack signs incoming HTTP requests](https://docs.slack.dev/authentication/verifying-requests-from-slack/) with `x-slack-signature` and `x-slack-request-timestamp`. `verifySlackRequest` reads the request body, verifies the signature with your signing secret, and returns the raw body so you can parse it once.
+
+```typescript title="app/api/slack/route.ts" lineNumbers
+import {
+  parseSlackWebhookBody,
+  verifySlackRequest,
+} from "@chat-adapter/slack/webhook";
+import { postSlackMessage } from "@chat-adapter/slack/api";
+
+export async function POST(request: Request) {
+  const body = await verifySlackRequest(request, {
+    signingSecret: process.env.SLACK_SIGNING_SECRET!,
+  });
+
+  const payload = parseSlackWebhookBody(body, {
+    contentType: request.headers.get("content-type"),
+    headers: request.headers,
+  });
+
+  if (payload.kind === "url_verification") {
+    return Response.json({ challenge: payload.challenge });
+  }
+
+  if (payload.kind === "app_mention") {
+    await postSlackMessage({
+      channel: payload.continuation.channelId,
+      markdownText: `received: ${payload.text}`,
+      threadTs: payload.continuation.threadTs,
+      token: process.env.SLACK_BOT_TOKEN!,
+    });
+  }
+
+  return new Response(null, { status: 200 });
+}
+```
+
+[Slack slash commands](https://docs.slack.dev/interactivity/implementing-slash-commands/) and interactions should be acknowledged quickly. Slack documents a 3000 ms acknowledgement window for slash commands, so do slow work in your queue or workflow runtime after returning a 2xx response.
+
+If you do not need direct access to the verified raw body, `readSlackWebhook` combines verification and parsing:
+
+```typescript
+import { readSlackWebhook } from "@chat-adapter/slack/webhook";
+
+const payload = await readSlackWebhook(request, {
+  signingSecret: process.env.SLACK_SIGNING_SECRET!,
+});
+```
+
+If your framework already buffered the request body, use `verifySlackSignature` with the raw body and headers, then pass that same body to `parseSlackWebhookBody`.
+
+### Payloads
+
+`parseSlackWebhookBody` returns typed payloads:
+
+| Kind | Slack surface |
+|------|---------------|
+| `url_verification` | Events API URL verification |
+| `app_mention` | App mention events |
+| `direct_message` | Direct message events |
+| `slash_command` | Slash command form posts |
+| `block_actions` | Button, select, and Block Kit action payloads |
+| `block_suggestion` | External select suggestion payloads |
+| `view_submission` | Modal submissions |
+| `view_closed` | Modal close events |
+| `unsupported` | Valid Slack payloads not normalized by this helper yet |
+
+Message-like payloads include `continuation`, which contains provider-native reply context:
+
+```typescript
+type SlackContinuation = {
+  channelId: string;
+  enterpriseId?: string;
+  teamId?: string;
+  threadTs: string;
+};
+```
+
+This is not a Chat SDK `Thread`. It is the durable Slack data you need to reply later with `@chat-adapter/slack/api`.
+
+App mention and direct message payloads also include typed `files` parsed from Slack file objects. Each file keeps the raw Slack object plus common fields like `id`, `name`, `mimeType`, `size`, `url`, and `downloadUrl`.
+
+Interaction payloads expose convenience fields from Slack's raw payload:
+
+- `block_actions` includes `actions`, `messageBlocks`, `messagePromptBlock`, `messagePromptText`, `messageTs`, `triggerId`, `responseUrl`, `user`, and `continuation`
+- `view_submission` includes `callbackId`, `privateMetadata`, `values`, `responseUrls`, and `user`
+
+## Formatting
+
+Slack uses mrkdwn and special tokens for mentions, channels, dates, and links. The format subpath gives you small helpers for those strings.
+
+The helper surface includes `escapeSlackText`, `unescapeSlackText`, `createSlackPlainText`, `createSlackMrkdwn`, `formatSlackUser`, `formatSlackChannel`, `formatSlackUserGroup`, `formatSlackSpecialMention`, `formatSlackLink`, `formatSlackDate`, and simple mrkdwn to Markdown normalization.
+
+```typescript title="format.ts" lineNumbers
+import {
+  createSlackMrkdwn,
+  formatSlackDate,
+  formatSlackLink,
+  formatSlackUser,
+  slackMrkdwnToMarkdown,
+} from "@chat-adapter/slack/format";
+
+const text = createSlackMrkdwn(
+  `${formatSlackUser("U123")} approved ${formatSlackLink("https://example.com", "the deploy")}`
+);
+
+const when = formatSlackDate(
+  new Date("2026-05-27T12:00:00Z"),
+  "{date_short_pretty} at {time}",
+  "May 27 at 12:00"
+);
+
+const markdown = slackMrkdwnToMarkdown("hello <@U123|jane>, see <https://example.com|this>");
+```
+
+`linkBareSlackMentions` only links Slack user IDs like `@U123`. It does not resolve display names, because Slack mentions are ID-based.
+
+## Web API
+
+The API subpath calls [Slack Web API](https://docs.slack.dev/apis/web-api/) methods with `fetch`. It does not import `@slack/web-api`.
+
+```typescript title="slack.ts" lineNumbers
+import {
+  postSlackMessage,
+  sendSlackResponseUrl,
+  updateSlackMessage,
+} from "@chat-adapter/slack/api";
+
+const posted = await postSlackMessage({
+  channel: "C123",
+  markdownText: "**hello**",
+  token: process.env.SLACK_BOT_TOKEN!,
+});
+
+await updateSlackMessage({
+  channel: "C123",
+  text: "updated",
+  token: process.env.SLACK_BOT_TOKEN!,
+  ts: posted.id,
+});
+
+await sendSlackResponseUrl("https://hooks.slack.com/actions/T/1/abc", {
+  replaceOriginal: true,
+  text: "done",
+});
+```
+
+Use `callSlackApi` when you need a Slack method that does not have a helper yet:
+
+```typescript
+import { callSlackApi } from "@chat-adapter/slack/api";
+
+const result = await callSlackApi(
+  "reactions.add",
+  { channel: "C123", name: "white_check_mark", timestamp: "1710000000.000001" },
+  { token: process.env.SLACK_BOT_TOKEN! }
+);
+```
+
+`markdownText` maps to the `markdown_text` field on [`chat.postMessage`](https://docs.slack.dev/reference/methods/chat.postMessage/) and cannot be combined with `text` or `blocks`. Use `text` with `blocks` when you need fallback text.
+
+The subpath also includes `postSlackEphemeral`, `deleteSlackMessage`, `resolveSlackBotToken`, `encodeSlackApiBody`, and `assertSlackOk`.
+
+Use `fetchSlackThreadReplies` when a custom runtime needs to refresh a thread with [`conversations.replies`](https://docs.slack.dev/reference/methods/conversations.replies/):
+
+```typescript
+import { fetchSlackThreadReplies } from "@chat-adapter/slack/api";
+
+const replies = await fetchSlackThreadReplies({
+  channel: payload.continuation.channelId,
+  limit: 50,
+  token: process.env.SLACK_BOT_TOKEN!,
+  ts: payload.continuation.threadTs,
+});
+```
+
+Use `openSlackView` to open a modal from an interaction `trigger_id`:
+
+```typescript
+import { openSlackView } from "@chat-adapter/slack/api";
+
+await openSlackView({
+  token: process.env.SLACK_BOT_TOKEN!,
+  triggerId: payload.triggerId,
+  view: {
+    type: "modal",
+    title: { type: "plain_text", text: "Answer" },
+    blocks: [],
+  },
+});
+```
+
+### Files
+
+[Slack's current external upload flow](https://docs.slack.dev/changelog/2024-04-a-better-way-to-upload-files-is-here-to-stay) uses `files.getUploadURLExternal`, then uploads bytes to the returned URL, then calls `files.completeUploadExternal`.
+
+```typescript
+import { uploadSlackFiles } from "@chat-adapter/slack/api";
+
+await uploadSlackFiles(
+  [{ data: new Uint8Array([1, 2, 3]), filename: "report.txt" }],
+  {
+    channelId: "C123",
+    initialComment: "report attached",
+    token: process.env.SLACK_BOT_TOKEN!,
+  }
+);
+```
+
+Use `fetchSlackFile` for private Slack file URLs that require bearer token authorization.
+
+## Blocks
+
+The blocks subpath converts simple card objects into Slack Block Kit without importing the full `chat` JSX runtime.
+
+It exports `cardToSlackBlocks`, `cardToBlockKit`, `cardToSlackFallbackText`, `cardToFallbackText`, and `convertSlackEmojiPlaceholders`.
+
+```typescript title="blocks.ts" lineNumbers
+import {
+  cardToSlackBlocks,
+  cardToSlackFallbackText,
+} from "@chat-adapter/slack/blocks";
+import { postSlackMessage } from "@chat-adapter/slack/api";
+
+const card = {
+  children: [
+    { content: "deploy v2.4.1?", type: "text" },
+    {
+      children: [
+        { id: "approve", label: "Approve", style: "primary", type: "button" },
+        { id: "deny", label: "Deny", style: "danger", type: "button" },
+      ],
+      type: "actions",
+    },
+  ],
+  title: "Deployment",
+  type: "card",
+} as const;
+
+await postSlackMessage({
+  blocks: cardToSlackBlocks(card),
+  channel: "C123",
+  text: cardToSlackFallbackText(card),
+  token: process.env.SLACK_BOT_TOKEN!,
+});
+```
+
+Use the full Chat SDK card JSX when you want cross-platform rendering. Use `@chat-adapter/slack/blocks` when you are building a Slack-only runtime and want Block Kit output directly.
+
+The blocks subpath also includes small input request helpers for Slack-only runtimes:
+
+```typescript
+import {
+  inputRequestToSlackBlocks,
+  parseSlackInputResponse,
+} from "@chat-adapter/slack/blocks";
+import { postSlackMessage } from "@chat-adapter/slack/api";
+
+await postSlackMessage({
+  blocks: inputRequestToSlackBlocks({
+    options: [
+      { id: "approve", label: "Approve", style: "primary" },
+      { id: "deny", label: "Deny", style: "danger" },
+    ],
+    prompt: "Approve deploy?",
+    requestId: "deploy-1",
+  }),
+  channel: "C123",
+  text: "Approve deploy?",
+  token: process.env.SLACK_BOT_TOKEN!,
+});
+
+if (payload.kind === "block_actions") {
+  const action = payload.actions[0];
+  const response = action ? parseSlackInputResponse(action) : null;
+}
+```
+
+Set `display: "radio"` for radio buttons, or `display: "select"` for a static select menu. Set `allowFreeform: true` to add a "Type your answer" button next to the provided options.
+
+For freeform answers, use `buildSlackFreeformView` with `openSlackView`, then read the submitted value from `payload.values` with `parseSlackFreeformValue`.
+
+## Import boundaries
+
+The low-level Slack subpaths are designed to avoid the full runtime import graph:
+
+- no `chat` import
+- no `@chat-adapter/shared` import
+- no `@slack/web-api` import
+- no `@slack/socket-mode` import
+
+The package still installs the full Slack adapter dependencies. The subpaths keep your source and bundle imports clean, but they are not a package-size split.

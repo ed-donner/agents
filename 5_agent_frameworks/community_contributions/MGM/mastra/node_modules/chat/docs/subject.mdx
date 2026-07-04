@@ -1,0 +1,53 @@
+---
+title: Message Subject
+description: Fetch the parent resource that a message is about.
+type: guide
+prerequisites:
+  - /docs/handling-events
+related:
+  - /docs/conversation-history
+---
+
+When your bot receives a comment on a Linear issue or GitHub PR, `message.subject` resolves the parent resource so your handler knows what the conversation is about.
+
+## Usage
+
+```typescript title="lib/bot.ts" lineNumbers
+bot.onNewMention(async (thread, message) => {
+  const subject = await message.subject;
+
+  if (subject) {
+    await thread.post(
+      `This is about: ${subject.title} (${subject.status})\n${subject.url}`
+    );
+  }
+});
+```
+
+On Linear and GitHub, comment webhooks deliver the comment text but not the parent issue or pull request — `message.subject` fetches it from the platform API on first access. The result is cached on the message instance. On chat platforms (which have no parent-resource concept), or if the API call fails, it returns `null`.
+
+See [`MessageSubject`](/docs/api/message#messagesubject) for the full type shape.
+
+### Platform support
+
+| Platform | `message.subject` returns |
+|----------|--------------------------|
+| Linear | Parent issue (from comment webhooks) |
+| GitHub | Parent issue or PR (from comment webhooks) |
+
+All other platforms return `null`.
+
+## User info
+
+For user profile details, use [`bot.getUser`](/docs/api/chat#getuser):
+
+```typescript title="lib/bot.ts" lineNumbers
+bot.onNewMention(async (thread, message) => {
+  const user = await bot.getUser(message.author);
+  if (user) {
+    await thread.post(`Hi ${user.fullName} (${user.email})`);
+  }
+});
+```
+
+For anything beyond `message.subject`, access the platform's typed API client via [`bot.getAdapter("github").octokit`](/docs/api/chat#getadapter) or [`bot.getAdapter("linear").linearClient`](/docs/api/chat#getadapter).

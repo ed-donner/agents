@@ -1,0 +1,25 @@
+{
+  "name": "mastra-worker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Week 5 Day 4: Additional Mastra (TypeScript) labs",
+  "scripts": {
+    "workflow": "node --disable-warning=ExperimentalWarning --import tsx workflow.ts",
+    "dev": "node --import tsx scripts/dev.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^3.0.80",
+    "@mastra/core": "^1.42.0",
+    "@mastra/libsql": "^1.15.0",
+    "@mastra/mcp": "^1.10.0",
+    "dotenv": "^17.2.3",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.0",
+    "mastra": "^1.13.0",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}

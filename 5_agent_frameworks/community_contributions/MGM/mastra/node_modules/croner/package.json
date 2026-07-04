@@ -1,0 +1,73 @@
+{
+  "name": "croner",
+  "description": "Trigger functions and/or evaluate cron expressions in JavaScript. No dependencies. Most features. All environments.",
+  "author": "Hexagon <github.com/hexagon>",
+  "homepage": "https://croner.56k.guru",
+  "contributors": [
+    {
+      "name": "Pehr Boman",
+      "email": "github.com/unkelpehr"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hexagon/croner"
+  },
+  "bugs": {
+    "url": "https://github.com/hexagon/croner/issues"
+  },
+  "funding": [
+    {
+      "type": "other",
+      "url": "https://paypal.me/hexagonpp"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/hexagon"
+    }
+  ],
+  "files": [
+    "dist/*.js",
+    "dist/*.cjs",
+    "dist/*.d.ts",
+    "dist/*.d.cts"
+  ],
+  "engines": {
+    "node": ">=18.0"
+  },
+  "keywords": [
+    "cron",
+    "front-end",
+    "backend",
+    "parser",
+    "croner",
+    "schedule",
+    "scheduler",
+    "timer",
+    "task",
+    "job",
+    "isomorphic",
+    "crontab"
+  ],
+  "type": "module",
+  "main": "./dist/croner.cjs",
+  "browser": "./dist/croner.umd.js",
+  "module": "./dist/croner.js",
+  "types": "./dist/croner.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/croner.d.ts",
+        "default": "./dist/croner.js"
+      },
+      "require": {
+        "types": "./dist/croner.d.cts",
+        "default": "./dist/croner.cjs"
+      },
+      "browser": "./dist/croner.umd.js"
+    }
+  },
+  "license": "MIT",
+  "version": "10.0.1"
+}

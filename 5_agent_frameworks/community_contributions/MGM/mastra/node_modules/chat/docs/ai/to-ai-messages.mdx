@@ -1,0 +1,203 @@
+---
+title: toAiMessages
+description: Convert Chat SDK messages to AI SDK conversation format.
+type: reference
+related:
+  - /docs/ai
+  - /docs/ai/ai-sdk-tools
+  - /docs/ai/types
+  - /docs/streaming
+---
+
+Convert an array of [`Message`](/docs/api/message) objects into the `{ role, content }[]` format expected by the AI SDK. The output is structurally compatible with AI SDK's `ModelMessage[]`.
+
+```typescript
+import { toAiMessages } from "chat/ai";
+```
+
+<Callout>
+  `toAiMessages` is also re-exported from the main `chat` entrypoint
+  for backwards compatibility (with a `@deprecated` JSDoc hint), but
+  new code should import it from [`chat/ai`](/docs/ai) alongside
+  [`createChatTools`](/docs/ai/ai-sdk-tools) and the rest of the AI
+  utilities.
+</Callout>
+
+## Usage
+
+```typescript title="lib/bot.ts" lineNumbers
+import { toAiMessages } from "chat/ai";
+
+bot.onSubscribedMessage(async (thread, message) => {
+  const result = await thread.adapter.fetchMessages(thread.id, { limit: 20 });
+  const history = await toAiMessages(result.messages);
+  const response = await agent.stream({ prompt: history });
+  await thread.post(response.fullStream);
+});
+```
+
+## Signature
+
+```typescript
+function toAiMessages(
+  messages: Message[],
+  options?: ToAiMessagesOptions
+): Promise<AiMessage[]>
+```
+
+### Parameters
+
+<TypeTable
+  type={{
+    messages: {
+      description: 'Array of Chat SDK Message objects. Works with FetchResult.messages, thread.recentMessages, or any collected iterable.',
+      type: 'Message[]',
+    },
+    options: {
+      description: 'Optional configuration.',
+      type: 'ToAiMessagesOptions',
+      default: '{}',
+    },
+  }}
+/>
+
+### Options
+
+<TypeTable
+  type={{
+    includeNames: {
+      description: 'Prefix user messages with [username]: for multi-user context.',
+      type: 'boolean',
+      default: 'false',
+    },
+    transformMessage: {
+      description: 'Transform or filter each message after default processing. Return null to skip the message.',
+      type: '(aiMessage: AiMessage, source: Message) => AiMessage | null | Promise<AiMessage | null>',
+    },
+    onUnsupportedAttachment: {
+      description: 'Called when an attachment type is not supported (video, audio).',
+      type: '(attachment: Attachment, message: Message) => void',
+      default: 'console.warn',
+    },
+  }}
+/>
+
+### Returns
+
+`Promise<AiMessage[]>` — an array of messages with `role` and `content` fields, directly assignable to AI SDK's `ModelMessage[]`.
+
+## Behavior
+
+- **Role mapping** — `author.isMe === true` maps to `"assistant"`, all others to `"user"`
+- **Filtering** — Messages with empty or whitespace-only text are removed
+- **Sorting** — Messages are sorted chronologically (oldest first) by `metadata.dateSent`
+- **Links** — Link metadata (URL, title, description, site name) is appended to message content. Embedded message links are labeled as `[Embedded message: ...]`
+- **Attachments** — Images and text files (JSON, XML, YAML, etc.) are included as multipart content using `fetchData()`. Video and audio attachments trigger `onUnsupportedAttachment`
+
+## Return types
+
+```typescript
+type AiMessage = AiUserMessage | AiAssistantMessage;
+
+interface AiUserMessage {
+  role: "user";
+  content: string | AiMessagePart[];
+}
+
+interface AiAssistantMessage {
+  role: "assistant";
+  content: string;
+}
+```
+
+User messages have multipart `content` when attachments are present:
+
+```typescript
+type AiMessagePart = AiTextPart | AiImagePart | AiFilePart;
+
+interface AiTextPart {
+  type: "text";
+  text: string;
+}
+
+interface AiImagePart {
+  type: "image";
+  image: DataContent | URL;
+  mediaType?: string;
+}
+
+interface AiFilePart {
+  type: "file";
+  data: DataContent | URL;
+  filename?: string;
+  mediaType: string;
+}
+```
+
+## Examples
+
+### Multi-user context
+
+Prefix each user message with their username so the AI model can distinguish speakers:
+
+```typescript
+const history = await toAiMessages(result.messages, { includeNames: true });
+// [{ role: "user", content: "[alice]: Hello" },
+//  { role: "assistant", content: "Hi there!" },
+//  { role: "user", content: "[bob]: Thanks" }]
+```
+
+### Transforming messages
+
+Replace raw user IDs with readable names:
+
+```typescript
+const history = await toAiMessages(result.messages, {
+  transformMessage: (aiMessage) => {
+    if (typeof aiMessage.content === "string") {
+      return {
+        ...aiMessage,
+        content: aiMessage.content.replace(/<@U123>/g, "@VercelBot"),
+      };
+    }
+    return aiMessage;
+  },
+});
+```
+
+### Filtering messages
+
+Skip messages from a specific user:
+
+```typescript
+const history = await toAiMessages(result.messages, {
+  transformMessage: (aiMessage, source) => {
+    if (source.author.userId === "U_NOISY_BOT") return null;
+    return aiMessage;
+  },
+});
+```
+
+### Handling unsupported attachments
+
+```typescript
+const history = await toAiMessages(result.messages, {
+  onUnsupportedAttachment: (attachment, message) => {
+    logger.warn(`Skipped ${attachment.type} attachment in message ${message.id}`);
+  },
+});
+```
+
+## Supported attachment types
+
+| Type | MIME types | Included as |
+|------|-----------|-------------|
+| `image` | Any image MIME type | `FilePart` with base64 data |
+| `file` | `text/*`, `application/json`, `application/xml`, `application/javascript`, `application/typescript`, `application/yaml`, `application/toml` | `FilePart` with base64 data |
+| `video` | Any | Skipped (triggers `onUnsupportedAttachment`) |
+| `audio` | Any | Skipped (triggers `onUnsupportedAttachment`) |
+| `file` | Other (e.g. `application/pdf`) | Silently skipped |
+
+<Callout type="info">
+Attachments require `fetchData()` to be available on the attachment object. Attachments without `fetchData()` are silently skipped.
+</Callout>

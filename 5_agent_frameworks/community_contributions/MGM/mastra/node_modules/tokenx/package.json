@@ -1,0 +1,65 @@
+{
+  "name": "tokenx",
+  "type": "module",
+  "version": "1.3.0",
+  "packageManager": "pnpm@10.28.1",
+  "description": "Fast token estimation at 96% accuracy of a full tokenizer in a 2kB bundle",
+  "author": "Johann Schopplich <hello@johannschopplich.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/johannschopplich/tokenx#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johannschopplich/tokenx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/johannschopplich/tokenx/issues"
+  },
+  "keywords": [
+    "ai",
+    "llm",
+    "token",
+    "tokenizer",
+    "estimation",
+    "tiktoken",
+    "anthropic",
+    "openai"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "automd": "tsx scripts/generate-bench.ts && automd",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest",
+    "test:types": "tsc --noEmit",
+    "release": "bumpp"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^7.2.0",
+    "@types/node": "^24.10.9",
+    "automd": "^0.4.2",
+    "bumpp": "^10.4.0",
+    "eslint": "^9.39.2",
+    "gpt-tokenizer": "^3.4.0",
+    "tsdown": "^0.19.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.17"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild"
+    ]
+  }
+}

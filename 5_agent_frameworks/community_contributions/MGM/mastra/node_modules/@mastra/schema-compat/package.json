@@ -1,0 +1,147 @@
+{
+  "name": "@mastra/schema-compat",
+  "version": "1.3.3",
+  "description": "Tool schema compatibility layer for Mastra.ai",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./schema": {
+      "import": {
+        "types": "./dist/schema.d.ts",
+        "default": "./dist/schema.js"
+      },
+      "require": {
+        "types": "./dist/schema.d.ts",
+        "default": "./dist/schema.cjs"
+      }
+    },
+    "./zod-to-json": {
+      "import": {
+        "types": "./dist/zod-to-json.d.ts",
+        "default": "./dist/zod-to-json.js"
+      },
+      "require": {
+        "types": "./dist/zod-to-json.d.ts",
+        "default": "./dist/zod-to-json.cjs"
+      }
+    },
+    "./json-to-zod": {
+      "import": {
+        "types": "./dist/json-to-zod.d.ts",
+        "default": "./dist/json-to-zod.js"
+      },
+      "require": {
+        "types": "./dist/json-to-zod.d.ts",
+        "default": "./dist/json-to-zod.cjs"
+      }
+    },
+    "./adapters/ai-sdk": {
+      "import": {
+        "types": "./dist/standard-schema/adapters/ai-sdk.d.ts",
+        "default": "./dist/standard-schema/adapters/ai-sdk.js"
+      },
+      "require": {
+        "types": "./dist/standard-schema/adapters/ai-sdk.d.ts",
+        "default": "./dist/standard-schema/adapters/ai-sdk.cjs"
+      }
+    },
+    "./adapters/json-schema": {
+      "import": {
+        "types": "./dist/standard-schema/adapters/json-schema.d.ts",
+        "default": "./dist/standard-schema/adapters/json-schema.js"
+      },
+      "require": {
+        "types": "./dist/standard-schema/adapters/json-schema.d.ts",
+        "default": "./dist/standard-schema/adapters/json-schema.cjs"
+      }
+    },
+    "./adapters/zod-v3": {
+      "import": {
+        "types": "./dist/standard-schema/adapters/zod-v3.d.ts",
+        "default": "./dist/standard-schema/adapters/zod-v3.js"
+      },
+      "require": {
+        "types": "./dist/standard-schema/adapters/zod-v3.d.ts",
+        "default": "./dist/standard-schema/adapters/zod-v3.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "keywords": [
+    "mastra",
+    "schema",
+    "tool",
+    "compatibility",
+    "zod"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "json-schema-to-zod": "^2.7.0",
+    "zod-from-json-schema": "^0.5.2",
+    "zod-from-json-schema-v3": "npm:zod-from-json-schema@^0.0.5",
+    "zod-to-json-schema": "^3.25.1"
+  },
+  "peerDependencies": {
+    "zod": "^3.25.0 || ^4.0.0"
+  },
+  "devDependencies": {
+    "@ai-sdk/anthropic": "^3.0.82",
+    "@ai-sdk/google": "^3.0.70",
+    "@ai-sdk/openai": "^3.0.63",
+    "@standard-schema/spec": "^1.1.0",
+    "@types/json-schema": "^7.0.15",
+    "@types/node": "22.19.21",
+    "@vitest/coverage-v8": "4.1.8",
+    "@vitest/ui": "4.1.8",
+    "ajv": "^8.20.0",
+    "arktype": "^2.2.0",
+    "eslint": "^10.4.1",
+    "json-schema-traverse": "^1.0.0",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "vitest": "4.1.8",
+    "zod": "^4.4.3",
+    "zod-v3": "npm:zod@^3.25.76",
+    "@internal/ai-sdk-v4": "0.0.58",
+    "@internal/lint": "0.0.111",
+    "@internal/ai-v6": "0.0.58",
+    "@internal/test-utils": "0.0.47",
+    "@internal/llm-recorder": "0.0.47",
+    "@internal/types-builder": "0.0.86",
+    "@internal/ai-sdk-v5": "0.0.58"
+  },
+  "homepage": "https://mastra.ai",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mastra-ai/mastra.git",
+    "directory": "packages/schema-compat"
+  },
+  "bugs": {
+    "url": "https://github.com/mastra-ai/mastra/issues"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "build": "tsup --silent --config tsup.config.ts",
+    "build:watch": "tsup --watch --silent --config tsup.config.ts",
+    "test": "vitest run",
+    "lint": "eslint ."
+  }
+}

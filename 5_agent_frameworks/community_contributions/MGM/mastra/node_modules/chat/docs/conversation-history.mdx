@@ -1,0 +1,137 @@
+---
+title: Conversation History
+description: Persist messages per user across every platform — for LLM context, audit, or compliance.
+type: guide
+prerequisites:
+  - /docs/state
+related:
+  - /docs/handling-events
+  - /docs/api/transcripts
+---
+
+Bots that hold context across a user's conversations need somewhere to store it. The platform's own message history won't do — a user might talk to your bot in Slack today and Discord tomorrow, and you want the same memory to follow them.
+
+`bot.transcripts` keeps a per-user transcript in your state adapter, keyed by a stable identifier you choose (an email, an internal user ID, anything that's the same person no matter where they are).
+
+## Setup
+
+You opt in by setting two fields on `ChatConfig`:
+
+```typescript title="lib/bot.ts" lineNumbers
+import { Chat } from "chat";
+import { createSlackAdapter } from "@chat-adapter/slack";
+import { createDiscordAdapter } from "@chat-adapter/discord";
+import { createRedisState } from "@chat-adapter/state-redis";
+
+const bot = new Chat({
+  userName: "mybot",
+  adapters: {
+    slack: createSlackAdapter(),
+    discord: createDiscordAdapter(),
+  },
+  state: createRedisState({ url: process.env.REDIS_URL! }),
+
+  // Resolve the cross-platform identifier for an inbound message.
+  // Return null for messages you don't want to remember.
+  identity: ({ author }) => author.email ?? null,
+
+  // Storage tuning. retention is the list TTL, refreshed on every append.
+  transcripts: {
+    retention: "30d",
+    maxPerUser: 200,
+  },
+});
+```
+
+`transcripts` and `identity` are paired — set one without the other and the constructor throws. This keeps the API loud rather than silently no-op'ing on every call.
+
+## Building LLM context
+
+The most common pattern: append the user's message, build a prompt from recent transcript entries, post the reply, append the reply too.
+
+```typescript title="lib/bot.ts" lineNumbers
+bot.onSubscribedMessage(async (thread, msg) => {
+  await bot.transcripts.append(thread, msg);
+
+  const recent = await bot.transcripts.list({
+    userKey: msg.userKey!,
+    limit: 20,
+  });
+
+  const reply = await generateReply(recent, msg);
+  await thread.post(reply);
+
+  await bot.transcripts.append(
+    thread,
+    { role: "assistant", text: reply },
+    { userKey: msg.userKey! }
+  );
+});
+```
+
+A few things worth knowing:
+
+- **`msg.userKey`** is set automatically from your `identity` resolver before your handler runs. If the resolver returned `null`, it stays `undefined` and the `append` call no-ops.
+- **Bot replies are explicit.** The SDK doesn't auto-capture `thread.post()` output — you decide what gets remembered. That's important for retries, intermediate streaming chunks, and anything you don't want feeding back into the model later.
+- **Order is chronological.** `list` returns oldest-first, ready to feed into a model. Set `limit` to keep prompts bounded.
+
+## Identity resolution
+
+`identity` runs once per inbound message during dispatch. The `author`, `message`, and `adapter` name are all available:
+
+```typescript
+identity: async ({ adapter, author, message }) => {
+  // Look up by email when the platform exposes it
+  if (author.email) {
+    return author.email;
+  }
+  // Or map a platform user to an internal ID
+  return await lookupUser(adapter, author.userId);
+}
+```
+
+Return `null` when you can't resolve a key. The SDK won't fall back to a platform-specific ID — that would silently fragment a user's transcript across platforms, which is exactly what this feature is here to prevent.
+
+If your resolver throws, the SDK logs a warning and dispatches the message without a `userKey`. Handlers still run; only the persistence is skipped.
+
+## Filtering entries
+
+`list` accepts a few filters. They compose, and they're applied after `getList` — useful for narrowing prompts without restructuring storage.
+
+```typescript
+// Recent N across all platforms
+await bot.transcripts.list({ userKey: "mike@acme.com", limit: 50 });
+
+// Single platform
+await bot.transcripts.list({ userKey: "mike@acme.com", platforms: ["slack"] });
+
+// Single thread
+await bot.transcripts.list({
+  userKey: "mike@acme.com",
+  threadId: "slack:C123:1234.5678",
+});
+
+// Only the user's own messages
+await bot.transcripts.list({ userKey: "mike@acme.com", roles: ["user"] });
+```
+
+## Deleting a user's transcript
+
+For data-subject requests or simple "forget me" flows:
+
+```typescript
+await bot.transcripts.delete({ userKey: "mike@acme.com" });
+// → { deleted: 47 }
+```
+
+This wipes every entry stored under the key. Single-entry and time-range deletes aren't part of the API — `appendToList` doesn't support them safely under concurrent writes.
+
+## Where it's stored
+
+`bot.transcripts` is backed by `StateAdapter.appendToList` / `getList` / `delete`. Every built-in state adapter (`memory`, `redis`, `ioredis`, `pg`) supports these primitives, so this works on whichever one you've already configured.
+
+Entries are written under the key `transcripts:user:{userKey}` as a capped list. `appendToList` is atomic, so concurrent inbound messages on the same user don't race.
+
+## Reference
+
+See [Transcripts](/docs/api/transcripts) for full type signatures, configuration options, and the entry shape.

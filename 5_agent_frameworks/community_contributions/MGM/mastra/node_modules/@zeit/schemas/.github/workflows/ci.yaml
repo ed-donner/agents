@@ -1,0 +1,23 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v3
+        timeout-minutes: 5 # See https://github.com/actions/cache/issues/810
+        with:
+          cache: 'yarn'
+
+      - run: yarn install --network-timeout 1000000 --frozen-lockfile
+      - run: yarn test

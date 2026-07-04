@@ -1,0 +1,188 @@
+---
+title: Posting Messages
+description: Different ways to render and send messages with thread.post().
+type: guide
+prerequisites:
+  - /docs/usage
+related:
+  - /docs/cards
+  - /docs/streaming
+  - /docs/files
+---
+
+`thread.post()` accepts several message formats, each suited to different use cases. Choose the format that best fits your content — from plain strings to structured AST to rich interactive cards.
+
+## Plain text
+
+The simplest option. Pass a string and it goes through as-is to the platform.
+
+```typescript title="lib/bot.ts" lineNumbers
+await thread.post("Hello world");
+```
+
+This sends the string directly without any formatting conversion.
+
+## Markdown
+
+Pass a `{ markdown }` object to have the SDK render standard markdown on each platform — passed through to Slack's native `markdown_text` field, converted to HTML for Teams, and so on.
+
+```typescript title="lib/bot.ts" lineNumbers
+await thread.post({
+  markdown: "**Bold**, _italic_, and `code`",
+});
+```
+
+Under the hood, the SDK parses the markdown into an mdast AST, then each adapter handles it natively or converts it to the platform's format.
+
+## AST builders
+
+For programmatic control over message formatting, use the mdast AST builder functions exported from `chat`. This is the recommended approach for most use cases — it gives you fine-grained control without the overhead of card rendering.
+
+```typescript title="lib/bot.ts" lineNumbers
+import { root, paragraph, text, strong, link } from "chat";
+
+await thread.post({
+  ast: root([
+    paragraph([
+      strong([text("Deployment complete")]),
+      text(" — "),
+      link("https://example.com", [text("View site")]),
+    ]),
+  ]),
+});
+```
+
+### Available builders
+
+| Builder | Description | Example |
+|---------|-------------|---------|
+| `root(children)` | Root node (required wrapper) | `root([paragraph([...])])` |
+| `paragraph(children)` | Paragraph block | `paragraph([text("Hello")])` |
+| `text(value)` | Plain text | `text("Hello")` |
+| `strong(children)` | **Bold** text | `strong([text("bold")])` |
+| `emphasis(children)` | _Italic_ text | `emphasis([text("italic")])` |
+| `strikethrough(children)` | ~~Strikethrough~~ text | `strikethrough([text("done")])` |
+| `inlineCode(value)` | `Inline code` | `inlineCode("const x = 1")` |
+| `codeBlock(value, lang?)` | Fenced code block | `codeBlock("const x = 1", "ts")` |
+| `link(url, children, title?)` | Hyperlink | `link("https://...", [text("click")])` |
+| `blockquote(children)` | Block quote | `blockquote([paragraph([text("...")])])` |
+
+### Parsing markdown to AST
+
+You can also parse a markdown string into an AST, manipulate it, then send it:
+
+```typescript title="lib/bot.ts" lineNumbers
+import { parseMarkdown, stringifyMarkdown } from "chat";
+
+const ast = parseMarkdown("**Hello** world");
+// Manipulate the AST...
+await thread.post({ ast });
+```
+
+## Cards
+
+When you need interactive elements like buttons, dropdowns, or structured layouts, use cards. Cards render natively on each platform — Block Kit on Slack, Adaptive Cards on Teams, and Google Chat Cards.
+
+### Function syntax
+
+Use the function-call API for type-safe card construction:
+
+```typescript title="lib/bot.ts" lineNumbers
+import { Card, Text, Actions, Button } from "chat";
+
+await thread.post(
+  Card({
+    title: "Order #1234",
+    children: [
+      Text("Your order has been received!"),
+      Actions([
+        Button({ id: "approve", label: "Approve", style: "primary" }),
+        Button({ id: "reject", label: "Reject", style: "danger" }),
+      ]),
+    ],
+  })
+);
+```
+
+### JSX syntax
+
+You can also use JSX if you configure the `chat` JSX runtime:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "chat"
+  }
+}
+```
+
+```tsx title="lib/bot.tsx"
+import { Card, CardText, Actions, Button } from "chat";
+
+await thread.post(
+  <Card title="Order #1234">
+    <CardText>Your order has been received!</CardText>
+    <Actions>
+      <Button id="approve" style="primary">Approve</Button>
+      <Button id="reject" style="danger">Reject</Button>
+    </Actions>
+  </Card>
+);
+```
+
+<Callout type="warn">
+The JSX syntax requires `jsxImportSource: "chat"` in your `tsconfig.json` (or a per-file `/** @jsxImportSource chat */` pragma). Without this, TypeScript won't recognize the card JSX types. If you run into type issues with JSX, use the function-call syntax instead — it produces the same output with better type inference.
+</Callout>
+
+See the [Cards](/docs/cards) page for the full list of card components.
+
+## Streaming
+
+Pass an AI SDK stream to `thread.post()` to stream a message in real time. The SDK uses platform-native streaming where available and falls back to post-then-edit or buffered delivery depending on the platform.
+
+```typescript title="lib/bot.ts" lineNumbers
+import { ToolLoopAgent } from "ai";
+
+const agent = new ToolLoopAgent({ model, instructions: "You are a helpful assistant." });
+const result = await agent.stream({ prompt: message.text });
+await thread.post(result.fullStream);
+```
+
+Both `fullStream` and `textStream` are supported. Use `fullStream` with multi-step agents — it preserves paragraph breaks between steps. Any `AsyncIterable<string>` also works for custom streams.
+
+For multi-turn conversations, use [`toAiMessages()`](/docs/ai/to-ai-messages) to convert thread history into the `{ role, content }[]` format expected by AI SDKs.
+
+To pass platform-specific streaming options (e.g. Slack task grouping or stop blocks), wrap the stream in a [`StreamingPlan`](/docs/streaming#streaming-with-options) and post that.
+
+See the [Streaming](/docs/streaming) page for details on platform behavior and configuration.
+
+## Attachments and files
+
+Any structured message format (`markdown`, `ast`, or `card`) supports `files` for uploading attachments alongside the message:
+
+```typescript title="lib/bot.ts" lineNumbers
+await thread.post({
+  markdown: "Here's the report:",
+  files: [{ data: buffer, filename: "report.pdf" }],
+});
+```
+
+Use `attachments` on `{ raw }`, `{ markdown }`, or `{ ast }` when an adapter supports typed media uploads, such as Telegram's single image/audio/video/file upload support.
+
+See the [Files](/docs/files) page for more on attachments.
+
+## Choosing a format
+
+| Format | Use when | Example |
+|--------|----------|---------|
+| Plain string | Simple, unformatted text | Status updates, acknowledgements |
+| `{ markdown }` | You have a markdown string (e.g. from a template) | Notifications with links and formatting |
+| `{ ast }` | You need programmatic formatting control | Dynamic messages built from data |
+| Card (function) | You need buttons, fields, or structured layouts | Approval flows, dashboards |
+| Card (JSX) | Same as above, with JSX syntax preference | Same use cases as function cards |
+| `AsyncIterable` | Streaming AI responses | Chat with LLMs |
+| [`Plan`](/docs/streaming#plan-api) | Step-by-step tasks that mutate after posting | Multi-step agents, deploy progress |
+| [`StreamingPlan`](/docs/streaming#streaming-with-options) | Streaming with platform-specific options | Slack streaming with grouped tasks or stop blocks |
+
+For most cases, **AST builders** give the best balance of control and simplicity. Reach for **cards** when you need interactive elements like buttons or dropdowns.

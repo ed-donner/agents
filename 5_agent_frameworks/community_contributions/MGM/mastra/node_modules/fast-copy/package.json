@@ -1,0 +1,103 @@
+{
+  "author": "tony_quetano@planttheidea.com",
+  "browser": "dist/umd/index.js",
+  "bugs": {
+    "url": "https://github.com/planttheidea/fast-copy/issues"
+  },
+  "contributors": [
+    "Dariusz Rzepka <rzepkadarek@gmail.com>"
+  ],
+  "description": "A blazing fast deep object copier",
+  "devDependencies": {
+    "@planttheidea/build-tools": "^1.2.2",
+    "@types/lodash": "^4.17.21",
+    "@types/node": "^24.10.1",
+    "@types/ramda": "^0.31.1",
+    "@types/react": "^19.2.7",
+    "@vitest/coverage-v8": "^4.0.15",
+    "cli-table3": "^0.6.5",
+    "clone": "^2.1.2",
+    "deepclone": "^1.0.2",
+    "eslint": "^9.39.1",
+    "fast-clone": "^1.5.13",
+    "lodash": "^4.17.21",
+    "prettier": "^3.7.4",
+    "ramda": "^0.32.0",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "release-it": "19.0.6",
+    "rollup": "^4.53.3",
+    "tinybench": "^6.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.6",
+    "vitest": "^4.0.15"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/es/index.d.mts",
+        "default": "./dist/es/index.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.cts",
+        "default": "./dist/cjs/index.cjs"
+      },
+      "default": {
+        "types": "./dist/umd/index.d.ts",
+        "default": "./dist/umd/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "index.d.ts",
+    "package.json"
+  ],
+  "homepage": "https://github.com/planttheidea/fast-copy#readme",
+  "keywords": [
+    "clone",
+    "deep",
+    "copy",
+    "fast"
+  ],
+  "license": "MIT",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/es/index.mjs",
+  "name": "fast-copy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/planttheidea/fast-copy.git"
+  },
+  "scripts": {
+    "benchmark": "npm run build && node benchmark/index.js",
+    "build": "npm run clean && npm run build:dist && npm run build:types",
+    "build:dist": "NODE_ENV=production rollup -c config/rollup.config.js",
+    "build:types": "pti fix-types -l dist",
+    "clean": "rm -rf dist",
+    "clean:cjs": "rm -rf dist/cjs",
+    "clean:es": "rm -rf dist/es",
+    "clean:esm": "rm -rf dist/esm",
+    "clean:min": "rm -rf dist/min",
+    "dev": "vite --config=config/vite.config.ts",
+    "format": "prettier . --log-level=warn --write",
+    "format:check": "prettier . --log-level=warn --check",
+    "lint": "eslint --max-warnings=0",
+    "lint:fix": "npm run lint -- --fix",
+    "release:alpha": "release-it --config=config/release-it/alpha.json",
+    "release:beta": "release-it --config=config/release-it/beta.json",
+    "release:dry": "release-it --dry-run",
+    "release:rc": "release-it --config=config/release-it/rc.json",
+    "release:scripts": "npm run format:check && npm run typecheck && npm run lint && npm run test && npm run build",
+    "release:stable": "release-it --config=config/release-it/stable.json",
+    "start": "npm run dev",
+    "test": "vitest run --config=config/vitest.config.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "types": "./index.d.ts",
+  "version": "4.0.3"
+}

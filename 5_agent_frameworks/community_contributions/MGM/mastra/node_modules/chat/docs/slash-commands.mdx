@@ -1,0 +1,133 @@
+---
+title: Slash Commands
+description: Handle slash command invocations and respond with messages or modals.
+type: guide
+prerequisites:
+  - /docs/getting-started
+related:
+  - /docs/modals
+  - /adapters/official/slack
+  - /adapters/official/discord
+---
+
+Slash commands let users invoke your bot with `/command` syntax. Register handlers with `onSlashCommand` to respond.
+
+Slash commands are supported on [Slack](/adapters/official/slack) and [Discord](/adapters/official/discord).
+
+## Handle a specific command
+
+```typescript title="lib/bot.ts" lineNumbers
+bot.onSlashCommand("/status", async (event) => {
+  await event.channel.post("All systems operational!");
+});
+```
+
+## Handle multiple commands
+
+```typescript title="lib/bot.ts" lineNumbers
+bot.onSlashCommand(["/help", "/info"], async (event) => {
+  await event.channel.post(`You invoked ${event.command}`);
+});
+```
+
+## Catch-all handler
+
+Register a handler without a command to catch all slash commands:
+
+```typescript title="lib/bot.ts" lineNumbers
+bot.onSlashCommand(async (event) => {
+  console.log(`Command: ${event.command}, Args: ${event.text}`);
+});
+```
+
+## SlashCommandEvent
+
+The `event` object passed to slash command handlers:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `command` | `string` | The command name (e.g., `/status`) |
+| `text` | `string` | Arguments after the command |
+| `user` | `Author` | The user who invoked the command |
+| `channel` | `Channel` | The channel where the command was invoked |
+| `adapter` | `Adapter` | The platform adapter |
+| `triggerId` | `string` (optional) | Platform trigger ID for opening modals |
+| `openModal` | `(modal) => Promise<{ viewId: string } \| undefined>` | Open a modal dialog |
+| `raw` | `unknown` | Platform-specific payload |
+
+## Respond to a command
+
+Use `event.channel` to post messages:
+
+```typescript title="lib/bot.ts" lineNumbers
+bot.onSlashCommand("/greet", async (event) => {
+  // Public message to the channel
+  await event.channel.post(`Hello, ${event.user.fullName}!`);
+
+  // Ephemeral message (only visible to the user)
+  await event.channel.postEphemeral(
+    event.user,
+    "This message is just for you!",
+    { fallbackToDM: false }
+  );
+});
+```
+
+## Open a modal
+
+Use `event.openModal()` to open a [modal](/docs/modals) in response to a slash command:
+
+```tsx title="lib/bot.tsx" lineNumbers
+import { Modal, TextInput, Select, SelectOption } from "chat";
+
+bot.onSlashCommand("/feedback", async (event) => {
+  const result = await event.openModal(
+    <Modal callbackId="feedback_form" title="Send Feedback" submitLabel="Send">
+      <TextInput id="message" label="Your Feedback" multiline />
+      <Select id="category" label="Category">
+        <SelectOption label="Bug" value="bug" />
+        <SelectOption label="Feature" value="feature" />
+      </Select>
+    </Modal>
+  );
+
+  if (!result) {
+    await event.channel.post("Couldn't open the feedback form. Please try again.");
+  }
+});
+```
+
+<Callout type="info">
+When a modal is opened from a slash command, the submit handler receives `relatedChannel` instead of `relatedThread`. Use this to post back to the channel where the command was invoked.
+</Callout>
+
+```typescript title="lib/bot.ts" lineNumbers
+bot.onModalSubmit("feedback_form", async (event) => {
+  const { message, category } = event.values;
+
+  // Post to the channel where the slash command was invoked
+  if (event.relatedChannel) {
+    await event.relatedChannel.post(`Feedback received! Category: ${category}`);
+  }
+});
+```
+
+## Discord
+
+Discord slash commands are received via [HTTP Interactions](/adapters/official/discord#http-interactions-vs-gateway) — no Gateway connection is needed. The adapter automatically sends a deferred response to Discord, then resolves it when your handler calls `event.channel.post()`.
+
+### Subcommands
+
+Discord supports subcommand groups and subcommands. The adapter flattens these into the `event.command` path:
+
+| Discord command | `event.command` | `event.text` |
+|-----------------|-----------------|--------------|
+| `/status` | `/status` | `""` |
+| `/project create --name="Acme"` | `/project create` | `Acme` |
+| `/project issue list --status="open"` | `/project issue list` | `open` |
+
+For full option details (names, types), use `event.raw` to access the original Discord interaction payload.
+
+### Registering commands with Discord
+
+You need to register slash commands with the [Discord API](https://discord.com/developers/docs/interactions/application-commands) before they appear in the client. The Chat SDK handles incoming commands but does not register them for you.

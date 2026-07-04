@@ -1,0 +1,243 @@
+---
+title: Types
+description: TypeScript types exported from the chat/ai subpath.
+type: reference
+related:
+  - /docs/ai
+  - /docs/ai/ai-sdk-tools
+  - /docs/ai/to-ai-messages
+---
+
+Every type exported from `chat/ai`. Pulling these from the subpath keeps the optional `ai` and `zod` peer deps out of bundles that don't import them.
+
+```ts
+import type {
+  AiMessage,
+  AiUserMessage,
+  AiAssistantMessage,
+  AiMessagePart,
+  AiTextPart,
+  AiImagePart,
+  AiFilePart,
+  ToAiMessagesOptions,
+  ChatBinding,
+  ChatTools,
+  ChatToolName,
+  ChatToolPreset,
+  ChatWriteToolName,
+  ApprovalConfig,
+  ToolOptions,
+  ToolOverrides,
+} from "chat/ai";
+```
+
+## Conversation messages
+
+Used by [`toAiMessages`](/docs/ai/to-ai-messages) and any agent prompt you build by hand. The shapes are structurally compatible with AI SDK's `ModelMessage` so the result is directly assignable to `prompt` / `messages`.
+
+### AiMessage
+
+```typescript
+type AiMessage = AiUserMessage | AiAssistantMessage;
+```
+
+A single normalized turn in a conversation — the array form is what AI SDK calls expect.
+
+### AiUserMessage
+
+```typescript
+interface AiUserMessage {
+  role: "user";
+  content: string | AiMessagePart[];
+}
+```
+
+User content can be plain text, or a multipart array when attachments are present.
+
+### AiAssistantMessage
+
+```typescript
+interface AiAssistantMessage {
+  role: "assistant";
+  content: string;
+}
+```
+
+Assistant turns are always plain strings — `toAiMessages` produces this for any message authored by the bot itself (`author.isMe === true`).
+
+### AiMessagePart
+
+```typescript
+type AiMessagePart = AiTextPart | AiImagePart | AiFilePart;
+```
+
+The discriminated union used inside multipart user messages.
+
+### AiTextPart
+
+```typescript
+interface AiTextPart {
+  type: "text";
+  text: string;
+}
+```
+
+### AiImagePart
+
+```typescript
+interface AiImagePart {
+  type: "image";
+  image: DataContent | URL;
+  mediaType?: string;
+}
+```
+
+`DataContent` matches AI SDK's type — `string | Uint8Array | ArrayBuffer | Buffer`.
+
+### AiFilePart
+
+```typescript
+interface AiFilePart {
+  type: "file";
+  data: DataContent | URL;
+  filename?: string;
+  mediaType: string;
+}
+```
+
+`toAiMessages` emits text-like attachments (JSON, XML, YAML, source files, etc.) as file parts.
+
+### ToAiMessagesOptions
+
+```typescript
+interface ToAiMessagesOptions {
+  includeNames?: boolean;
+  transformMessage?: (
+    aiMessage: AiMessage,
+    source: Message
+  ) => AiMessage | null | Promise<AiMessage | null>;
+  onUnsupportedAttachment?: (
+    attachment: Attachment,
+    message: Message
+  ) => void;
+}
+```
+
+See [`toAiMessages`](/docs/ai/to-ai-messages) for behavior and examples.
+
+## Tools
+
+Returned by [`createChatTools`](/docs/ai/ai-sdk-tools) and used to configure it.
+
+### ChatBinding
+
+```typescript
+type ChatBinding = Chat<any, any>;
+```
+
+Whatever [`Chat`](/docs/api/chat) instance the tools should dispatch operations against. The generics are intentionally loose so any strongly-typed `Chat<TAdapters, TState>` is assignable.
+
+### ChatTools
+
+```typescript
+type ChatTools = ReturnType<typeof createChatTools>;
+```
+
+Convenience alias for the object returned by `createChatTools` — handy when you want to type a wrapper or pass the toolset around.
+
+### ChatToolPreset
+
+```typescript
+type ChatToolPreset = "reader" | "messenger" | "moderator";
+```
+
+Predefined toolset scopes. See [Presets](/docs/ai/ai-sdk-tools#presets) for the exact tool list per preset.
+
+### ChatToolName
+
+```typescript
+type ChatToolName =
+  | "fetchMessages"
+  | "fetchChannelMessages"
+  | "fetchThread"
+  | "listThreads"
+  | "getThreadParticipants"
+  | "getChannelInfo"
+  | "getUser"
+  | "startTyping"
+  | "postMessage"
+  | "postChannelMessage"
+  | "sendDirectMessage"
+  | "editMessage"
+  | "deleteMessage"
+  | "addReaction"
+  | "removeReaction"
+  | "subscribeThread"
+  | "unsubscribeThread";
+```
+
+The names of every generated tool. Useful when typing per-tool overrides.
+
+### ChatWriteToolName
+
+```typescript
+type ChatWriteToolName =
+  | "postMessage"
+  | "postChannelMessage"
+  | "sendDirectMessage"
+  | "editMessage"
+  | "deleteMessage"
+  | "addReaction"
+  | "removeReaction"
+  | "subscribeThread"
+  | "unsubscribeThread";
+```
+
+The names of every mutating tool. Useful when wiring per-tool approval overrides.
+
+### ApprovalConfig
+
+```typescript
+type ApprovalConfig =
+  | boolean
+  | Partial<Record<ChatWriteToolName, boolean>>;
+```
+
+Controls the `requireApproval` option:
+
+- `true` (default) — every write tool needs approval.
+- `false` — no write tool needs approval.
+- object — per-tool override; unspecified write tools fall back to `true`.
+
+### ToolOptions
+
+```typescript
+interface ToolOptions {
+  needsApproval?: boolean;
+}
+```
+
+Common options accepted by every standalone write-tool factory (e.g. `postMessage(chat, { needsApproval: false })`).
+
+### ToolOverrides
+
+```typescript
+type ToolOverrides = Partial<
+  Pick<
+    Tool,
+    | "description"
+    | "inputExamples"
+    | "metadata"
+    | "needsApproval"
+    | "onInputAvailable"
+    | "onInputDelta"
+    | "onInputStart"
+    | "providerOptions"
+    | "strict"
+    | "title"
+    | "toModelOutput"
+  >
+>;
+```
+
+Per-tool overrides accepted by `createChatTools({ overrides })`. Core fields like `execute`, `inputSchema`, `outputSchema`, `type`, `id`, and `args` are intentionally excluded so tool semantics stay stable across upgrades.

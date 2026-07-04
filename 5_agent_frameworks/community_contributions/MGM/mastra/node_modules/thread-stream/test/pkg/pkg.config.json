@@ -1,0 +1,14 @@
+{
+    "pkg": {
+        "assets": [
+            "../custom-worker.js",
+            "../to-file.js"
+        ],
+        "targets": [
+            "node20",
+            "node22",
+            "node24"
+        ],
+        "outputPath": "test/pkg"
+    }
+}

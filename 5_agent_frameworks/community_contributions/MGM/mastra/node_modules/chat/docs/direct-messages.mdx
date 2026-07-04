@@ -1,0 +1,74 @@
+---
+title: Direct Messages
+description: Initiate DM conversations with users programmatically.
+type: guide
+prerequisites:
+  - /docs/usage
+---
+
+Open direct message conversations with users using `bot.openDM()`. For globally recognizable user IDs, the adapter is automatically inferred from the ID format.
+
+## DM behavior
+
+DMs behave slightly differently from channel messages:
+
+- **Direct message handlers** — if you register `onDirectMessage`, every incoming DM routes there before `onSubscribedMessage`, `onNewMention`, and pattern handlers. This keeps DM-centric flows like WhatsApp conversations, Telegram DMs, and web chat on one consistent handler.
+- **Mention fallback** — if no `onDirectMessage` handlers are registered, DMs continue through normal routing. Unsubscribed DMs are treated as mentions, so existing `onNewMention` bots keep working without requiring the user to @-mention the bot.
+- **Per-conversation threading** — Each top-level DM starts a new conversation. Thread replies within a DM continue the same conversation, giving you the same per-thread isolation as channels.
+
+## Handle incoming DMs
+
+```typescript title="lib/bot.ts" lineNumbers
+bot.onDirectMessage(async (thread, message) => {
+  await thread.post(`You said: ${message.text}`);
+});
+```
+
+## Open a DM
+
+### From an Author object
+
+The most common pattern — use the `author` from an incoming message:
+
+```typescript title="lib/bot.ts" lineNumbers
+bot.onSubscribedMessage(async (thread, message) => {
+  if (message.text === "DM me") {
+    const dmThread = await bot.openDM(message.author);
+    await dmThread.post("Hello! This is a private message.");
+  }
+});
+```
+
+### From a user ID
+
+Pass a user ID string directly. The adapter is inferred from the ID format:
+
+```typescript title="lib/bot.ts"
+const dmThread = await bot.openDM("U1234567890"); // Slack
+```
+
+| Format | Platform |
+|--------|----------|
+| `U...` / `W...` | Slack |
+| `29:...` | Teams |
+| `users/...` | Google Chat |
+| Numeric ID | Discord or Telegram |
+
+<Callout type="info">
+  Numeric IDs can be ambiguous when multiple numeric-ID adapters are registered. For platforms whose user IDs are not globally distinguishable, call the adapter directly and wrap the returned thread ID with `bot.thread()`.
+</Callout>
+
+```typescript title="lib/bot.ts"
+const threadId = await bot.getAdapter("whatsapp").openDM("15551234567");
+const dmThread = bot.thread(threadId);
+```
+
+## Check if a thread is a DM
+
+```typescript title="lib/bot.ts" lineNumbers
+bot.onSubscribedMessage(async (thread, message) => {
+  if (thread.isDM) {
+    await thread.post("This is a private conversation.");
+  }
+});
+```

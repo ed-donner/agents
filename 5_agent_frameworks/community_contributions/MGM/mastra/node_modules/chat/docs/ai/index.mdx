@@ -1,0 +1,69 @@
+---
+title: Overview
+description: AI utilities that ship with Chat SDK — agent tools, message conversion, and supporting types.
+type: overview
+---
+
+The `chat/ai` subpath is the home for AI utilities that ship with Chat SDK.
+
+```ts
+import { createChatTools, toAiMessages } from "chat/ai";
+```
+
+Add the optional peers if you don't already have them:
+
+<PackageInstall package="ai zod" />
+
+## What's included
+
+| Page | What it gives you |
+|---|---|
+| [AI SDK Tools](/docs/ai/ai-sdk-tools) | `createChatTools` and standalone tool factories that let an agent post messages, send DMs, react, edit, delete, and manage subscriptions across every adapter your `Chat` instance has registered. Built-in approval gates and presets keep writes safe. |
+| [`toAiMessages`](/docs/ai/to-ai-messages) | Convert Chat SDK [`Message[]`](/docs/api/message) into the `{ role, content }[]` shape expected by AI SDK calls. Handles role mapping, attachments, links, sorting, and optional per-message transforms. |
+| [Types](/docs/ai/types) | Reference for every type exported from `chat/ai` — agent message shapes, tool option contracts, presets, approval config, and the binding type that ties tools to your `Chat` instance. |
+
+## Typical flow
+
+A Chat SDK bot wired to a tool-calling agent usually looks like this:
+
+```typescript title="lib/agent.ts" lineNumbers
+import { Chat } from "chat";
+import { createChatTools, toAiMessages } from "chat/ai";
+import { ToolLoopAgent } from "ai";
+
+const chat = new Chat({ /* adapters, state, ... */ });
+
+const agent = new ToolLoopAgent({
+  model: "anthropic/claude-sonnet-4.6",
+  instructions: "You operate inside a chat workspace via Chat SDK tools.",
+  tools: createChatTools({ chat, preset: "messenger", requireApproval: true }),
+});
+
+bot.onSubscribedMessage(async (thread) => {
+  const { messages } = await thread.adapter.fetchMessages(thread.id, {
+    limit: 20,
+  });
+  const history = await toAiMessages(messages);
+  const result = await agent.stream({ prompt: history });
+  await thread.post(result.fullStream);
+});
+```
+
+1. [`toAiMessages`](/docs/ai/to-ai-messages) converts messages into an output compatible with AI SDK's `ModelMessage[]`.
+2. [`createChatTools`](/docs/ai/ai-sdk-tools) gives the agent pre-built and fully customizable AI SDK tools.
+3. The streamed response is rendered back into the thread via the standard [`thread.post(stream)`](/docs/streaming) flow.
+
+## Backwards compatibility
+
+`toAiMessages` and the related `Ai*` types are still re-exported from the top-level `chat` package so older bots keep working. Those re-exports are now flagged with `@deprecated` JSDoc — your editor will surface a hint pointing at `chat/ai`. Migrating is a one-line import change:
+
+```diff
+- import { toAiMessages } from "chat";
++ import { toAiMessages } from "chat/ai";
+```
+
+## Resources
+
+- [Human-in-the-Loop with Chat SDK and Workflow SDK](https://vercel.com/kb/guide/human-in-the-loop-with-chat-sdk-and-workflow-sdk) — Pause durable workflows on Slack approval cards using Chat SDK and Workflow SDK. Uses `createWebhook` to suspend workflows until a button click, with patterns for multi-stage approvals, timeouts via durable sleep, and approver validation.
+
+See all guides and templates on the [resources](/resources) page.

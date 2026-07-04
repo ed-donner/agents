@@ -1,0 +1,50 @@
+{
+  "name": "thread-stream",
+  "version": "4.2.0",
+  "description": "A streaming way to send data to a Node.js Worker Thread",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "real-require": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.2",
+    "@yao-pkg/pkg": "^6.0.0",
+    "borp": "^1.0.0",
+    "desm": "^1.3.0",
+    "eslint": "^9.39.1",
+    "fastbench": "^1.0.1",
+    "neostandard": "^0.13.0",
+    "pino-elasticsearch": "^9.0.0",
+    "sonic-boom": "^5.0.0",
+    "ts-node": "^10.8.0",
+    "typescript": "~5.7.3"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "eslint",
+    "test": "npm run lint && npm run build && npm run transpile && borp --pattern \"test/*.test.{js,mjs}\"",
+    "test:ci": "npm run lint && npm run transpile && borp --pattern \"test/*.test.{js,mjs}\"",
+    "test:yarn": "npm run transpile && borp --pattern \"test/*.test.js\"",
+    "transpile": "sh ./test/ts/transpile.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcollina/thread-stream.git"
+  },
+  "keywords": [
+    "worker",
+    "thread",
+    "threads",
+    "stream"
+  ],
+  "author": "Matteo Collina <hello@matteocollina.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mcollina/thread-stream/issues"
+  },
+  "homepage": "https://github.com/mcollina/thread-stream#readme"
+}

@@ -1,0 +1,272 @@
+---
+title: Modals
+description: Modal form components for collecting user input.
+type: reference
+---
+
+Modals display form dialogs that collect structured user input. Currently supported on Slack and Teams.
+
+```typescript
+import { Modal, TextInput, Select, RadioSelect, SelectOption } from "chat";
+```
+
+## Modal
+
+Top-level container for a form dialog. Open a modal from an `onAction` or `onSlashCommand` handler using `event.openModal()`.
+
+```typescript
+bot.onAction("open-form", async (event) => {
+  await event.openModal(
+    Modal({
+      callbackId: "feedback",
+      title: "Submit Feedback",
+      submitLabel: "Send",
+      children: [
+        TextInput({ id: "comment", label: "Comment", multiline: true }),
+      ],
+    })
+  );
+});
+```
+
+<TypeTable
+  type={{
+    callbackId: {
+      description: 'Unique ID for routing to onModalSubmit/onModalClose handlers.',
+      type: 'string',
+    },
+    title: {
+      description: 'Modal title displayed in the header.',
+      type: 'string',
+    },
+    submitLabel: {
+      description: 'Label for the submit button.',
+      type: 'string',
+      default: '"Submit"',
+    },
+    closeLabel: {
+      description: 'Label for the close/cancel button.',
+      type: 'string',
+      default: '"Cancel"',
+    },
+    notifyOnClose: {
+      description: 'Whether to fire onModalClose when the user dismisses the modal.',
+      type: 'boolean',
+      default: 'false',
+    },
+    callbackUrl: {
+      description: 'URL to POST form values to when the modal is submitted.',
+      type: 'string',
+    },
+    privateMetadata: {
+      description: 'Arbitrary string passed through the modal lifecycle (e.g., JSON context).',
+      type: 'string',
+    },
+    children: {
+      description: 'Form input elements.',
+      type: 'ModalChild[]',
+    },
+  }}
+/>
+
+## TextInput
+
+A text input field.
+
+```typescript
+TextInput({
+  id: "name",
+  label: "Your name",
+  placeholder: "Enter your name",
+})
+
+TextInput({
+  id: "description",
+  label: "Description",
+  multiline: true,
+  maxLength: 500,
+  optional: true,
+})
+```
+
+<TypeTable
+  type={{
+    id: {
+      description: 'Input ID — used as the key in event.values.',
+      type: 'string',
+    },
+    label: {
+      description: 'Label displayed above the input.',
+      type: 'string',
+    },
+    placeholder: {
+      description: 'Placeholder text.',
+      type: 'string',
+    },
+    initialValue: {
+      description: 'Pre-filled value.',
+      type: 'string',
+    },
+    multiline: {
+      description: 'Render as a textarea.',
+      type: 'boolean',
+      default: 'false',
+    },
+    optional: {
+      description: 'Whether the field can be left empty.',
+      type: 'boolean',
+      default: 'false',
+    },
+    maxLength: {
+      description: 'Maximum character length.',
+      type: 'number',
+    },
+  }}
+/>
+
+## Select
+
+Dropdown menu.
+
+```typescript
+Select({
+  id: "priority",
+  label: "Priority",
+  placeholder: "Select priority",
+  options: [
+    SelectOption({ label: "High", value: "high", description: "Urgent tasks" }),
+    SelectOption({ label: "Medium", value: "medium" }),
+    SelectOption({ label: "Low", value: "low" }),
+  ],
+})
+```
+
+<TypeTable
+  type={{
+    id: {
+      description: 'Input ID — used as the key in event.values.',
+      type: 'string',
+    },
+    label: {
+      description: 'Label displayed above the select.',
+      type: 'string',
+    },
+    placeholder: {
+      description: 'Placeholder text.',
+      type: 'string',
+    },
+    initialOption: {
+      description: 'Pre-selected option value.',
+      type: 'string',
+    },
+    optional: {
+      description: 'Whether the field can be left empty.',
+      type: 'boolean',
+      default: 'false',
+    },
+    options: {
+      description: 'Select options.',
+      type: 'SelectOptionElement[]',
+    },
+  }}
+/>
+
+## ExternalSelect
+
+Dropdown that loads options dynamically from a handler as the user types. Slack-only. Pair with [`bot.onOptionsLoad`](/docs/api/chat#onoptionsload) to supply options. See [Modals → ExternalSelect](/docs/modals#externalselect) for a full example, grouped-options support, and Slack setup notes.
+
+```typescript
+ExternalSelect({
+  id: "assignee",
+  label: "Assignee",
+  placeholder: "Search people",
+  minQueryLength: 1,
+  initialOption: { label: "Alice", value: "U123" },
+})
+```
+
+<TypeTable
+  type={{
+    id: {
+      description: 'Input ID — used as the key in event.values.',
+      type: 'string',
+    },
+    label: {
+      description: 'Label displayed above the select.',
+      type: 'string',
+    },
+    placeholder: {
+      description: 'Placeholder text.',
+      type: 'string',
+    },
+    minQueryLength: {
+      description: 'Minimum characters before the loader fires (Slack default: 3).',
+      type: 'number',
+    },
+    initialOption: {
+      description: 'Pre-selected option when the modal opens. Unlike static Select where initialOption is a value string, ExternalSelect needs the full label/value object since the loader has not run yet.',
+      type: '{ label: string, value: string }',
+    },
+    optional: {
+      description: 'Whether the field can be left empty.',
+      type: 'boolean',
+      default: 'false',
+    },
+  }}
+/>
+
+The loader registered via `bot.onOptionsLoad("assignee", handler)` returns either a flat `SelectOptionElement[]` or `OptionsLoadGroup[]` (`{ label, options }[]`) for grouped options.
+
+## RadioSelect
+
+Radio button group for mutually exclusive choices.
+
+```typescript
+RadioSelect({
+  id: "status",
+  label: "Status",
+  options: [
+    SelectOption({ label: "Open", value: "open" }),
+    SelectOption({ label: "Closed", value: "closed" }),
+  ],
+})
+```
+
+Same props as `Select` (except `placeholder`).
+
+## SelectOption
+
+An option used inside `Select` and `RadioSelect`.
+
+```typescript
+SelectOption({ label: "High", value: "high", description: "Urgent tasks" })
+```
+
+<TypeTable
+  type={{
+    label: {
+      description: 'Display text.',
+      type: 'string',
+    },
+    value: {
+      description: 'Value sent in event.values when selected.',
+      type: 'string',
+    },
+    description: {
+      description: 'Optional description shown below the label.',
+      type: 'string',
+    },
+  }}
+/>
+
+## ModalChild types
+
+The `children` array in `Modal` accepts these element types:
+
+| Type | Created by |
+|------|-----------|
+| `TextInputElement` | `TextInput()` |
+| `SelectElement` | `Select()` |
+| `RadioSelectElement` | `RadioSelect()` |
+| `TextElement` | `Text()` — static text content |
+| `FieldsElement` | `Fields()` — key-value display |

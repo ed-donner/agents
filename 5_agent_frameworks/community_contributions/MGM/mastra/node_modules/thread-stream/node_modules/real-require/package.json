@@ -1,0 +1,38 @@
+{
+  "name": "real-require",
+  "version": "1.0.0",
+  "description": "Keep require and import consistent after bundling or transpiling",
+  "author": "Paolo Insogna <shogun@cowtech.it>",
+  "homepage": "https://github.com/pinojs/real-require",
+  "contributors": [
+    {
+      "name": "Paolo Insogna",
+      "url": "https://github.com/ShogunPanda"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pinojs/real-require.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pinojs/real-require/issues"
+  },
+  "main": "src/index.js",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "test": "c8 --reporter=text --reporter=html borp 'test/*.test.js'",
+    "test:ci": "c8 --reporter=text --reporter=json --check-coverage --branches 90 --functions 90 --lines 90 --statements 90 borp 'test/*.test.js'",
+    "ci": "npm run lint && npm run test:ci"
+  },
+  "devDependencies": {
+    "borp": "^1.0.0",
+    "c8": "^8.0.0",
+    "eslint": "^9.39.4",
+    "neostandard": "^0.13.0"
+  }
+}

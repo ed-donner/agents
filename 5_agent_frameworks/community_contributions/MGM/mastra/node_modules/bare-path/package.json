@@ -1,0 +1,44 @@
+{
+  "name": "bare-path",
+  "version": "3.0.1",
+  "description": "Path manipulation library for JavaScript",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./package": "./package.json",
+    "./posix": "./lib/posix.js",
+    "./win32": "./lib/win32.js"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "lib",
+    "NOTICE"
+  ],
+  "scripts": {
+    "format": "prettier --write . && lunte --fix",
+    "lint": "prettier --check . && lunte",
+    "test": "brittle-bare --coverage test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holepunchto/bare-path.git"
+  },
+  "author": "Holepunch",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/holepunchto/bare-path/issues"
+  },
+  "homepage": "https://github.com/holepunchto/bare-path#readme",
+  "dependencies": {
+    "bare-os": "^3.0.1"
+  },
+  "devDependencies": {
+    "brittle": "^3.3.2",
+    "lunte": "^1.8.0",
+    "prettier": "^3.6.2",
+    "prettier-config-holepunch": "^2.0.0"
+  }
+}

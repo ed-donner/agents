@@ -1,0 +1,24 @@
+{
+  "templates": [
+    {
+      "title": "Chat SDK Liveblocks Bot",
+      "description": "Build a bot that you can engage with inside Liveblocks.",
+      "href": "https://vercel.com/templates/next.js/chat-sdk-liveblocks-bot"
+    },
+    {
+      "title": "Durable iMessage Agent",
+      "description": "Durable iMessage agent powered by the Sendblue adapter.",
+      "href": "https://vercel.com/templates/nitro/durable-imessage-ai-agent"
+    },
+    {
+      "title": "Knowledge Agent",
+      "description": "Open source file-system and knowledge based agent template. Build AI agents that stay up to date with your knowledge base.",
+      "href": "https://vercel.com/templates/nuxt/chat-sdk-knowledge-agent"
+    },
+    {
+      "title": "Community Agent",
+      "description": "Open source AI-powered Slack community management bot with a built-in Next.js admin panel. Uses Chat SDK, AI SDK, and Vercel Workflow.",
+      "href": "https://vercel.com/templates/next.js/chat-sdk-community-agent"
+    }
+  ]
+}

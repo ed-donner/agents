@@ -1,0 +1,220 @@
+---
+title: Transcripts
+description: Cross-platform per-user transcript persistence — configuration, methods, and entry shape.
+type: reference
+---
+
+`bot.transcripts` provides per-user message persistence keyed by a stable cross-platform identifier. See the [Conversation history](/docs/conversation-history) guide for usage patterns.
+
+```typescript
+import { Chat } from "chat";
+```
+
+## Configuration
+
+`transcripts` and `identity` are configured on `ChatConfig`. Both must be set together — passing `transcripts` without `identity` throws at construction.
+
+### ChatConfig.transcripts
+
+<TypeTable
+  type={{
+    retention: {
+      description: 'List TTL, refreshed on every append. Accepts ms or a duration string ("45s", "30m", "6h", "7d"). Omit for no expiry.',
+      type: 'number | DurationString | undefined',
+    },
+    maxPerUser: {
+      description: 'Hard cap per user. Older entries are evicted on append.',
+      type: 'number',
+      default: '200',
+    },
+    storeFormatted: {
+      description: 'Persist the mdast `formatted` field alongside `text`. Off by default to keep storage small.',
+      type: 'boolean',
+      default: 'false',
+    },
+  }}
+/>
+
+### ChatConfig.identity
+
+```typescript
+identity: (context: IdentityContext) => string | null | Promise<string | null>;
+```
+
+Called once per inbound message during dispatch. The result is attached to the `Message` instance as `message.userKey`. Return `null` to skip persistence for an event.
+
+#### IdentityContext
+
+<TypeTable
+  type={{
+    adapter: {
+      description: 'Adapter name (e.g. "slack", "discord").',
+      type: 'string',
+    },
+    author: {
+      description: 'Message author info.',
+      type: 'Author',
+    },
+    message: {
+      description: 'The inbound message.',
+      type: 'Message',
+    },
+  }}
+/>
+
+## Methods
+
+Access via `bot.transcripts`. Throws if `transcripts` was not configured on the `Chat` instance.
+
+### append
+
+Persist a `Message` (typically the inbound user message) or an `AppendInput` (typically a bot reply you just posted).
+
+```typescript
+append(
+  thread: Postable,
+  message: Message | AppendInput,
+  options?: AppendOptions,
+): Promise<TranscriptEntry | null>;
+```
+
+When `message` is a `Message`, `userKey` is read from the instance. If it's `undefined` (the resolver returned `null`), the call is a no-op and returns `null`. When `message` is an `AppendInput`, `options.userKey` is required.
+
+#### AppendInput
+
+<TypeTable
+  type={{
+    role: {
+      description: 'Role tag for the entry.',
+      type: '"user" | "assistant" | "system"',
+    },
+    text: {
+      description: 'Plain-text body.',
+      type: 'string',
+    },
+    formatted: {
+      description: 'Optional mdast AST. Only stored when `transcripts.storeFormatted` is true.',
+      type: 'FormattedContent | undefined',
+    },
+    platformMessageId: {
+      description: 'Platform-native message ID, when known.',
+      type: 'string | undefined',
+    },
+  }}
+/>
+
+#### AppendOptions
+
+<TypeTable
+  type={{
+    userKey: {
+      description: 'Required when appending an `AppendInput` (assistant or system role); ignored when appending a `Message`.',
+      type: 'string | undefined',
+    },
+  }}
+/>
+
+### list
+
+Returns entries in chronological order (oldest first). When `limit` is set, returns the newest `N` entries — still chronologically.
+
+```typescript
+list(query: ListQuery): Promise<TranscriptEntry[]>;
+```
+
+#### ListQuery
+
+<TypeTable
+  type={{
+    userKey: {
+      description: 'Cross-platform user key.',
+      type: 'string',
+    },
+    limit: {
+      description: 'Maximum entries returned. Cannot exceed `maxPerUser` because that is the storage cap.',
+      type: 'number',
+      default: '50',
+    },
+    platforms: {
+      description: 'Filter to a subset of adapter names.',
+      type: 'string[] | undefined',
+    },
+    threadId: {
+      description: 'Filter to a single thread.',
+      type: 'string | undefined',
+    },
+    roles: {
+      description: 'Filter to specific roles.',
+      type: '("user" | "assistant" | "system")[] | undefined',
+    },
+  }}
+/>
+
+### count
+
+```typescript
+count(query: CountQuery): Promise<number>;
+```
+
+Returns the total number of entries stored under the user key. `CountQuery` has a single field, `userKey: string`.
+
+### delete
+
+```typescript
+delete(target: { userKey: string }): Promise<{ deleted: number }>;
+```
+
+Wipes every entry stored under the user key. Returns the count that was removed. Single-entry and time-range deletes are not supported — the underlying `appendToList` primitive can't support them safely under concurrent writes.
+
+## TranscriptEntry
+
+Returned by `append` and `list`.
+
+<TypeTable
+  type={{
+    id: {
+      description: 'UUID assigned by the SDK at append time.',
+      type: 'string',
+    },
+    userKey: {
+      description: 'Cross-platform user key from the IdentityResolver.',
+      type: 'string',
+    },
+    role: {
+      description: 'Role tag.',
+      type: '"user" | "assistant" | "system"',
+    },
+    text: {
+      description: 'Plain-text body — canonical for prompt building.',
+      type: 'string',
+    },
+    formatted: {
+      description: 'mdast AST. Only present when `transcripts.storeFormatted` is true.',
+      type: 'FormattedContent | undefined',
+    },
+    platform: {
+      description: 'Originating adapter name.',
+      type: 'string',
+    },
+    threadId: {
+      description: 'Originating thread ID.',
+      type: 'string',
+    },
+    platformMessageId: {
+      description: 'Platform-native message ID, when known.',
+      type: 'string | undefined',
+    },
+    timestamp: {
+      description: 'ms-since-epoch, set at append time on the SDK side.',
+      type: 'number',
+    },
+  }}
+/>
+
+## Storage
+
+Backed by `StateAdapter.appendToList` / `getList` / `delete`. Every built-in state adapter (`memory`, `redis`, `ioredis`, `pg`) supports these primitives.
+
+Entries are stored under `transcripts:user:{userKey}` as a capped list. `appendToList` is atomic, so concurrent inbound messages don't race.
+
+The `retention` value is applied as the list TTL and refreshed on every append. With `retention: "30d"`, a user who hasn't talked to the bot in 30 days has their transcript expire automatically.

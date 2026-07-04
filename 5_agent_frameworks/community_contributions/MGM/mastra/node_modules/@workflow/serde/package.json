@@ -1,0 +1,35 @@
+{
+  "name": "@workflow/serde",
+  "description": "Serialization symbols for custom class serialization in Workflow DevKit",
+  "version": "4.1.0-beta.2",
+  "type": "module",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vercel/workflow.git",
+    "directory": "packages/serde"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "devDependencies": {
+    "@types/node": "22.19.0",
+    "@workflow/tsconfig": "4.0.1-beta.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "tsc --build --clean && rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  }
+}

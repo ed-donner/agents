@@ -1,0 +1,304 @@
+---
+title: Modals
+description: Collect structured user input through modal dialogs with text fields, dropdowns, and validation.
+type: guide
+prerequisites:
+  - /docs/actions
+---
+
+Modals open form dialogs in response to button clicks or [slash commands](/docs/slash-commands). They support text inputs, dropdowns, radio buttons, and server-side validation. Currently supported on Slack and Teams.
+
+## Open a modal
+
+Modals are opened from [action handlers](/docs/actions) or [slash command handlers](/docs/slash-commands) using `event.openModal()`:
+
+```tsx title="lib/bot.tsx" lineNumbers
+import { Modal, TextInput, Select, SelectOption } from "chat";
+
+bot.onAction("feedback", async (event) => {
+  await event.openModal(
+    <Modal
+      callbackId="feedback_form"
+      title="Send Feedback"
+      submitLabel="Send"
+      closeLabel="Cancel"
+      notifyOnClose
+    >
+      <TextInput
+        id="message"
+        label="Your Feedback"
+        placeholder="Tell us what you think..."
+        multiline
+      />
+      <Select id="category" label="Category" placeholder="Select a category">
+        <SelectOption label="Bug Report" value="bug" />
+        <SelectOption label="Feature Request" value="feature" />
+        <SelectOption label="General" value="general" />
+      </Select>
+      <TextInput
+        id="email"
+        label="Email (optional)"
+        placeholder="your@email.com"
+        optional
+      />
+    </Modal>
+  );
+});
+```
+
+## Components
+
+### Modal
+
+The top-level container for the form.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `callbackId` | `string` | Identifier for matching submit/close handlers |
+| `title` | `string` | Modal title |
+| `submitLabel` | `string` (optional) | Submit button text (defaults to "Submit") |
+| `closeLabel` | `string` (optional) | Cancel button text (defaults to "Cancel") |
+| `notifyOnClose` | `boolean` (optional) | Fire `onModalClose` when user cancels |
+| `callbackUrl` | `string` (optional) | URL to POST form values to on submit |
+| `privateMetadata` | `string` (optional) | Custom context passed through to handlers |
+
+### TextInput
+
+A text field for user input.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `id` | `string` | Field identifier (key in `event.values`) |
+| `label` | `string` | Field label |
+| `placeholder` | `string` (optional) | Placeholder text |
+| `initialValue` | `string` (optional) | Pre-filled value |
+| `multiline` | `boolean` (optional) | Render as textarea |
+| `optional` | `boolean` (optional) | Allow empty submission |
+| `maxLength` | `number` (optional) | Maximum character count |
+
+### Select
+
+A dropdown for selecting a single option.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `id` | `string` | Field identifier |
+| `label` | `string` | Field label |
+| `placeholder` | `string` (optional) | Placeholder text |
+| `initialOption` | `string` (optional) | Pre-selected value |
+| `optional` | `boolean` (optional) | Allow empty submission |
+
+### ExternalSelect
+
+A dropdown that loads its options dynamically from a handler as the user types. Useful for large or remote-backed option sets (people, tickets, records) where a static `<Select>` would be impractical. Slack-only.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `id` | `string` | Field identifier (key in `event.values`) |
+| `label` | `string` | Field label |
+| `placeholder` | `string` (optional) | Placeholder text |
+| `minQueryLength` | `number` (optional) | Minimum characters before the loader fires (Slack default: 3) |
+| `initialOption` | `{ label, value }` (optional) | Pre-selected option when the modal opens (must match an option returned by the loader). For static `<Select>`, `initialOption` is just the value string — for `<ExternalSelect>` it's the full `{ label, value }` object since the loader hasn't run yet. |
+| `optional` | `boolean` (optional) | Allow empty submission |
+
+Register the loader with `onOptionsLoad`:
+
+```tsx title="lib/bot.tsx" lineNumbers
+import { ExternalSelect, Modal } from "chat";
+
+bot.onAction("assign", async (event) => {
+  await event.openModal(
+    <Modal callbackId="assign_form" title="Assign to…">
+      <ExternalSelect
+        id="assignee"
+        label="Assignee"
+        placeholder="Search people"
+        minQueryLength={1}
+      />
+    </Modal>
+  );
+});
+
+bot.onOptionsLoad("assignee", async (event) => {
+  const people = await peopleService.search(event.query);
+  return people.map((p) => ({ label: p.fullName, value: p.id }));
+});
+
+bot.onModalSubmit("assign_form", async (event) => {
+  const assigneeId = event.values.assignee;
+  // …
+});
+```
+
+The selected value arrives in `event.values` on submit just like a static `<Select>`.
+
+#### Grouped options
+
+Return an array of groups instead of a flat options array to render headers between sections (e.g. "Recent" / "All"):
+
+```tsx
+bot.onOptionsLoad("assignee", async (event) => {
+  const [recent, all] = await Promise.all([
+    peopleService.recent(event.user.userId),
+    peopleService.search(event.query),
+  ]);
+  return [
+    { label: "Recent", options: recent.map((p) => ({ label: p.fullName, value: p.id })) },
+    { label: "All", options: all.map((p) => ({ label: p.fullName, value: p.id })) },
+  ];
+});
+```
+
+Slack limits: max 100 groups, max 100 options per group, group label max 75 characters.
+
+<Callout type="warn">
+Slack requires a response within 3 seconds for options requests. The adapter caps the loader at ~2.5s and returns an empty result on timeout — keep your loader fast (cache, prefetch, or narrow the query server-side).
+</Callout>
+
+<Callout type="info">
+**Slack setup:** `ExternalSelect` uses Slack's `block_suggestion` payload, which is dispatched to the **Options Load URL**. In your [Slack app settings](https://api.slack.com/apps) go to **Interactivity & Shortcuts** → **Select Menus** and set the **Options Load URL** to the same endpoint as your Interactivity Request URL (e.g. `https://your-domain.com/api/webhooks/slack`). Without this, typing into an external select will silently return no results.
+</Callout>
+
+### RadioSelect
+
+A radio button group for mutually exclusive options.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `id` | `string` | Field identifier |
+| `label` | `string` | Field label |
+| `initialOption` | `string` (optional) | Pre-selected value |
+| `optional` | `boolean` (optional) | Allow empty submission |
+
+### SelectOption
+
+An option for `Select` or `RadioSelect`.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `label` | `string` | Display text |
+| `value` | `string` | Value passed to handler |
+| `description` | `string` (optional) | Help text below the label |
+
+## Handle submissions
+
+Register a handler with `onModalSubmit` using the same `callbackId`:
+
+```typescript title="lib/bot.ts" lineNumbers
+bot.onModalSubmit("feedback_form", async (event) => {
+  const { message, category, email } = event.values;
+
+  // Validate input — return errors to show in the modal
+  if (!message || message.length < 5) {
+    return {
+      action: "errors",
+      errors: { message: "Feedback must be at least 5 characters" },
+    };
+  }
+
+  // Post confirmation to the original thread
+  if (event.relatedThread) {
+    await event.relatedThread.post(`Feedback received! Category: ${category}`);
+  }
+
+  // Update the message that triggered the modal
+  if (event.relatedMessage) {
+    await event.relatedMessage.edit("Feedback submitted!");
+  }
+
+  // Return nothing (or { action: "close" }) to close the modal
+});
+```
+
+### Response types
+
+| Response | Description |
+|----------|-------------|
+| `undefined` or `{ action: "close" }` | Close the current view (goes back one level in the stack) |
+| `{ action: "clear" }` | Close all views and dismiss the modal entirely |
+| `{ action: "errors", errors: { fieldId: "message" } }` | Show validation errors on specific fields |
+| `{ action: "update", modal: ModalElement }` | Replace the modal content |
+| `{ action: "push", modal: ModalElement }` | Push a new modal view onto the stack |
+
+### ModalSubmitEvent
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `callbackId` | `string` | Modal identifier |
+| `viewId` | `string` | Platform view ID |
+| `values` | `Record<string, string>` | Form field values keyed by input `id` |
+| `user` | `Author` | The user who submitted |
+| `privateMetadata` | `string` (optional) | Custom context from the Modal component |
+| `relatedThread` | `Thread` (optional) | Thread where the modal was triggered |
+| `relatedMessage` | `SentMessage` (optional) | Message with the button that opened the modal |
+| `relatedChannel` | `Channel` (optional) | Channel where the modal was triggered (from [slash commands](/docs/slash-commands)) |
+| `adapter` | `Adapter` | The platform adapter |
+| `raw` | `unknown` | Platform-specific payload |
+
+## Handle cancellation
+
+Optionally handle when users cancel a modal. Requires `notifyOnClose` on the `Modal` component:
+
+```typescript title="lib/bot.ts" lineNumbers
+bot.onModalClose("feedback_form", async (event) => {
+  console.log(`${event.user.userName} cancelled the feedback form`);
+
+  if (event.relatedThread) {
+    await event.relatedThread.post("No worries, let us know if you change your mind!");
+  }
+});
+```
+
+## Callback URLs
+
+Like buttons, modals accept a `callbackUrl`. When the modal is submitted, the form values are POSTed to the URL:
+
+```tsx title="lib/bot.tsx" lineNumbers
+await event.openModal(
+  <Modal callbackUrl={webhook.url} callbackId="intake" title="Request Access" submitLabel="Submit">
+    <TextInput id="reason" label="Reason" multiline />
+  </Modal>
+);
+```
+
+The POST body for modal submissions:
+
+```json
+{
+  "type": "modal_submit",
+  "callbackId": "intake",
+  "values": { "reason": "Need access to production logs" },
+  "user": { "id": "U123", "name": "alice" }
+}
+```
+
+## Pass context with privateMetadata
+
+Use `privateMetadata` to carry context from the button click through to the submit handler:
+
+```tsx title="lib/bot.tsx" lineNumbers
+bot.onAction("report", async (event) => {
+  await event.openModal(
+    <Modal
+      callbackId="report_form"
+      title="Report Bug"
+      submitLabel="Submit"
+      privateMetadata={JSON.stringify({
+        reportType: event.value,
+        threadId: event.threadId,
+      })}
+    >
+      <TextInput id="title" label="Bug Title" />
+      <TextInput id="steps" label="Steps to Reproduce" multiline />
+    </Modal>
+  );
+});
+
+bot.onModalSubmit("report_form", async (event) => {
+  const metadata = event.privateMetadata
+    ? JSON.parse(event.privateMetadata)
+    : {};
+
+  console.log(metadata.reportType); // "bug"
+});
+```

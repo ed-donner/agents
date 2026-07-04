@@ -1,0 +1,44 @@
+---
+title: State Adapters
+description: Pluggable state adapters for thread subscriptions, distributed locking, and caching.
+type: overview
+prerequisites:
+  - /docs/getting-started
+---
+
+State adapters handle persistent storage for thread subscriptions, distributed locks (to prevent duplicate processing), and caching. You must provide a state adapter when creating a `Chat` instance. Browse all available state adapters on the [Adapters](/adapters) page.
+
+## What state adapters manage
+
+### Thread subscriptions
+
+When your bot calls `thread.subscribe()`, the state adapter persists that subscription. On subsequent webhooks, the SDK checks subscriptions to route messages to `onSubscribedMessage` handlers. With a production adapter, subscriptions survive restarts and work across multiple instances.
+
+### Distributed locking
+
+When a webhook arrives, the SDK acquires a lock on the thread to prevent duplicate processing. This is critical for serverless deployments where multiple instances may receive the same event.
+
+By default, if a lock is already held, the incoming message is dropped with a `LockError`. For long-running handlers (e.g. AI agent streaming), you can configure `onLockConflict: 'force'` to force-release the existing lock and allow the new message through:
+
+```typescript
+const chat = new Chat({
+  userName: 'my-bot',
+  adapters: { slack },
+  state: createRedisState(),
+  onLockConflict: 'force',
+});
+```
+
+You can also pass a callback for custom logic:
+
+```typescript
+onLockConflict: (threadId, message) => {
+  return message.text.includes('stop') ? 'force' : 'drop';
+}
+```
+
+Note that force-releasing a lock does not cancel the previous handler — it continues running. Only the lock is released, so two handlers may briefly run concurrently on the same thread.
+
+### Caching
+
+State adapters provide key-value storage with TTL for thread state (`thread.setState()`), message deduplication, and other internal caching.
