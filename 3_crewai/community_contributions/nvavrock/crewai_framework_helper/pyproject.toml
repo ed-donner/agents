@@ -11,14 +11,12 @@ dependencies = [
     "langchain-openai>=0.3.33",
     "langchain-text-splitters>=0.3.11",
     "chromadb>=1.1.0",
-    "pyyaml>=6.0.0",
 ]
 
 [project.scripts]
 crewai_framework_helper = "crewai_framework_helper.main:run"
 run_crew = "crewai_framework_helper.main:run"
-bootstrap-index = "rag.bootstrap:main"
-eval-rag = "eval.eval_rag:main"
+bootstrap-index = "crewai_framework_helper.rag:bootstrap_main"
 
 [build-system]
 requires = ["hatchling"]
@@ -26,10 +24,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/crewai_framework_helper"]
-
-[tool.hatch.build.targets.wheel.force-include]
-"rag" = "rag"
-"eval" = "eval"
 
 [tool.crewai]
 type = "crew"

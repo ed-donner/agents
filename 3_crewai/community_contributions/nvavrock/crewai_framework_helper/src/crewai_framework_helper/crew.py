@@ -2,8 +2,8 @@ from crewai import Agent, Crew, Process, Task
 from crewai.knowledge.source.text_file_knowledge_source import TextFileKnowledgeSource
 from crewai.project import CrewBase, agent, crew, task
 
+from crewai_framework_helper.rag import project_root
 from crewai_framework_helper.tools.framework_search import FrameworkSearchTool
-from rag.paths import project_root
 
 
 def _knowledge_sources() -> list[TextFileKnowledgeSource]:

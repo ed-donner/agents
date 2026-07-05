@@ -7,4 +7,3 @@ upstream/
 output/
 .uv/
 .DS_Store
-eval/results/

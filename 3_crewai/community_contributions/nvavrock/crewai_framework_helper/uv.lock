@@ -566,7 +566,6 @@ dependencies = [
     { name = "langchain-openai" },
     { name = "langchain-text-splitters" },
     { name = "python-dotenv" },
-    { name = "pyyaml" },
 ]
 
 [package.metadata]
@@ -577,7 +576,6 @@ requires-dist = [
     { name = "langchain-openai", specifier = ">=0.3.33" },
     { name = "langchain-text-splitters", specifier = ">=0.3.11" },
     { name = "python-dotenv", specifier = ">=1.0.0" },
-    { name = "pyyaml", specifier = ">=6.0.0" },
 ]
 
 [[package]]

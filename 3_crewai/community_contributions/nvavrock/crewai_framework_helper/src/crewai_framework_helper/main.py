@@ -10,7 +10,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from crewai_framework_helper.crew import FrameworkHelperCrew
-from rag.paths import project_root
+from crewai_framework_helper.rag import project_root
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 

@@ -7,7 +7,7 @@ from typing import Type
 from crewai.tools import BaseTool
 from pydantic import BaseModel, Field
 
-from rag.retrieve import format_results, search
+from crewai_framework_helper.rag import format_results, search
 
 
 class FrameworkSearchInput(BaseModel):
