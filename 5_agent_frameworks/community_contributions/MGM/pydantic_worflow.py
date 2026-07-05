@@ -1,7 +1,6 @@
 import asyncio
 import os
 from dataclasses import dataclass
-
 from dotenv import load_dotenv
 from pydantic_graph import GraphBuilder, StepContext
 from pydantic_ai import Agent
@@ -89,11 +88,10 @@ async def write_tagline(ctx: StepContext[WorkflowState, None, str]) -> str:
 @g.step
 async def translate(ctx: StepContext[WorkflowState, None, str]) -> str:
     """
-    Invokes the translator agent to translate the provided text into the 
-    target language.
+    Invokes the translator agent to translate the provided text into the target language.
     
-    If the agent returns an empty response, a default organic energy drink 
-    tagline in Spanish is applied as a fallback.
+    If the agent returns an empty response, a default organic energy drink tagline in Spanish is 
+    applied as a fallback.
 
     Args:
         ctx: The step context containing the text string to be translated.

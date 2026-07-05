@@ -1,7 +1,7 @@
+import re
 import asyncio
 import os
 from typing import Any
-
 from dotenv import load_dotenv
 from mcp.client.stdio import stdio_client, StdioServerParameters
 from strands import Agent
@@ -27,6 +27,7 @@ filesystem_mcp = MCPClient(
         StdioServerParameters(
             command="npx",
             args=["-y", "@modelcontextprotocol/server-filesystem", workspace],
+            cwd=workspace
         )
     )
 )
@@ -147,6 +148,33 @@ def ask_human(text: str, invocation_state: dict) -> str:
     print(f"🔍 DEBUG: received answer = {answer!r}")   # <-- add this
     return answer
 
+
+def _extract_last_agent_response(text: str) -> str:
+    """
+    Strips the graph-generated lineage wrapper ('Original Task: ...',
+    'Inputs from previous nodes: ...') and returns only the most recent
+    upstream agent's raw output.
+    """
+    matches = re.findall(r"-\s*Agent:\s*(.+)", text)
+    if matches:
+        return matches[-1].strip()
+    return text.strip()
+
+
+def ask_human(text: str, invocation_state: dict) -> str:
+    """
+    Prompts human operator via console input to decide if progress is persisted.
+    
+    Stashes the validated string content inside the shared `invocation_state` 
+    reference mapping so it can be extracted in later pipeline steps.
+    """
+    print(f"\n🔍 [TRANSLATION PREVIEW]:\n{text}")
+    clean_text = _extract_last_agent_response(text)
+    invocation_state["saved_text"] = clean_text
+    answer = input("💾 Would you like to save this translation to a file? (y/n): ").strip().lower()
+    print(f"🔍 DEBUG: received answer = {answer!r}")
+    return answer
+
 def save_file(_text: str, invocation_state: dict) -> str:
     """
     Saves stashed string content to disk using the active workspace directory.
@@ -162,7 +190,7 @@ def save_file(_text: str, invocation_state: dict) -> str:
             result = filesystem_mcp.call_tool_sync(
                 tool_use_id="save-translation",
                 name="write_file",
-                arguments={"path": "workspace/strands_translate.txt", "content": text_to_save},
+                arguments={"path": "strands_translate.txt", "content": text_to_save},
             )
         if getattr(result, "isError", False):
             raise RuntimeError(f"MCP tool reported error: {result}")

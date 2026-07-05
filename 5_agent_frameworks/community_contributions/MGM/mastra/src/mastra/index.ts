@@ -1,5 +1,5 @@
 /**
- * Register the worker agent so Mastra's Studio can show it.
+ * Register the workflow as a Mastra app instance, so Mastra's Studio can show it.
  *
  * `npm run dev` (mastra dev) reads this file, finds the Mastra instance, and opens
  * Studio at http://localhost:4111, a local UI where you chat with the agent and watch

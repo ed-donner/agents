@@ -147,7 +147,7 @@ export const translationWorkflow = createWorkflow({
   .then(formatterStep)
   .commit();
 
-
+// From here, you have the code snippet to run this TypeScript file locally.
 const mastra = new Mastra({
   workflows: { translationWorkflow },
   storage: new LibSQLStore({
