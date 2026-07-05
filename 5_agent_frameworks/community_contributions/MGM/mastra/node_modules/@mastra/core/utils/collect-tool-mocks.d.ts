@@ -1,1 +1,0 @@
-export * from './../dist/utils/collect-tool-mocks.d.ts';
