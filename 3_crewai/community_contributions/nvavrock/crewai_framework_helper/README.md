@@ -11,10 +11,12 @@ cd 3_crewai/community_contributions/nvavrock/crewai_framework_helper
 cp .env.example .env   # add OPENAI_API_KEY
 uv sync
 uv run bootstrap-index --yes   # clones upstream/crewai, builds .rag_index/
-uv run crewai run
+uv run run_crew
 ```
 
-Custom question: `QUESTION="How do Flow @start and @listen work?" uv run crewai run`
+Custom question: `QUESTION="How do Flow @start and @listen work?" uv run run_crew`
+
+Or, if you have the CrewAI CLI installed (`uv tool install crewai==1.14.4`): `crewai run`
 
 ## What's unique here
 
