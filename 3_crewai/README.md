@@ -2,7 +2,7 @@
 
 ## Installing Crew
 
-**Windows users: be sure to have installed the MS Build Tools per initial setup instructions otherwise you’ll get a complex error involving chroma when you install crewai. Here are [instructions](https://chatgpt.com/share/67b0b762-327c-8012-b809-b4ec3b9e7be0). A student also mentioned that [these instructions](https://github.com/bycloudai/InstallVSBuildToolsWindows) might be helpful for people on Windows 11.**
+__Windows users: be sure to have installed the MS Build Tools per initial setup instructions otherwise you’ll get a complex error involving chroma when you install crewai. Here are [instructions](https://chatgpt.com/share/67b0b762-327c-8012-b809-b4ec3b9e7be0). A student also mentioned that [these instructions](https://github.com/bycloudai/InstallVSBuildToolsWindows) might be helpful for people on Windows 11.__
 
 To start, run this command in the project root (agents):
 
@@ -20,13 +20,13 @@ And then do `uv tool list` to confirm you have CrewAI 1.14.4!
 
 If you want, you could use the latest version (just don't pin to 1.14.4) but then you might encounter changes - CrewAI does sometimes make breaking changes.
 
-If you'd like to use Coding Agents to help with CrewAI, then here are instructions:
+If you'd like to use Coding Agents to help with CrewAI, then here are instructions:  
 
 1. Install node if you don't have it on your system:
-   https://nodejs.org/en/download
+https://nodejs.org/en/download
 
 2. Run this command:  
-   `npx skills add crewaiinc/skills`
+`npx skills add crewaiinc/skills`
 
 ## How to work together
 
