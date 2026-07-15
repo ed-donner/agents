@@ -37,8 +37,8 @@ class ResearchManager:
         """ Plan the searches to perform for the query """
         clarify = ""
         for question in questions:
-            clarify += f"Question: {question.question}\n"
-            clarify += f"Answer: {question.answer}\n"
+            clarify += f"Q: {question.question}\n"
+            clarify += f"A: {question.answer}\n"
         result = await Runner.run(planner_agent, f"Query: {query}\n Clarifications:\n{clarify}")
         return result.final_output
 

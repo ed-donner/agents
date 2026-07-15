@@ -22,7 +22,6 @@ with gr.Blocks() as ui:
         if len(state["questions"]) == 0:
             state["query"] = message
             state["questions"] = await ResearchManager().run_clarify(message)
-            # chat_history.append({"role": "assistant", "content": state["questions"][0].question})
             response = {"role": "assistant", "content": state["questions"][0].question}
             return response, state
         
