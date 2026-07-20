@@ -56,7 +56,7 @@ Generates a complete travel package as a Markdown file:
 
 ## ❓ Troubleshooting
 
-**Missing crewai**: `pip install crewai[tools]`  
+**Missing crewai**: `pip install 'crewai[tools]'`<br>
 **API key error**: Check your `.env` file has `OPENAI_API_KEY=your_key`
 
 ---
