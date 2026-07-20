@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+python-multipart
+sendgrid
+openai-agents
+openai
+python-dotenv
+ngrok
