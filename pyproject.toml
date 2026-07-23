@@ -32,6 +32,7 @@ dependencies = [
     "strands-agents[openai]>=1.43.0",
     "uvicorn[standard]>=0.46.0",
     "wikipedia>=1.4.0",
+    "groq>=1.4.0"
 ]
 
 [dependency-groups]
