@@ -1,0 +1,34 @@
+research_class_task:
+# Research task for identifying class action lawsuits
+  description: >
+    Conduct a full-spectrum investigation into companies, industries, regulatory actions, court filings, legal news, and consumer forums to identify active, pending, or emerging class action lawsuits. Gather raw findings with source types, timestamps, and uncertainty flags.
+  agent: research_agent
+  expected_output: >
+    A structured JSON object with the following fields: 
+    - id (guid, unique identifier for each case)
+    - case titles (str) 
+    - jurisdictions (str)
+    - docket numbers (str)
+    - allegations (str)
+    - regulatory triggers (str)
+    - company disclosures (str) 
+    - legal news references (str)
+    - forum signals (str)
+
+verify_class_task:
+  description: >
+    Validate all findings from the research task by cross-checking multiple independent sources, confirming docket numbers, checking case status, identifying settlements or dismissals, and assigning confidence scores.
+  agent: verifier_agent
+  expected_output: >
+    A verified JSON object labeling each case:
+    - status (str): open, pending, settled, dismissed, or unverified, including verification notes
+    - source reliability levels (str)
+    - confidence scores (float)
+
+summarize_class_task:
+  description: >
+    Transform verified findings into clear, concise, structured class action reports following the standardized legal-research format. Include case summaries, allegations, jurisdiction, docket numbers, verification level, confidence scores, and next steps for human review.
+  agent: summarizer_agent
+  expected_output: >
+    A well-structured markdown class action report ready for user consumption, containing ## Verified Details, ## Confidence Scoring, and ## Marked Uncertainties.
+
