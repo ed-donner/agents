@@ -1,0 +1,23 @@
+security_review:
+  description: >
+    Review generated backend and Flutter code for security issues.
+  agent: security_engineer
+  output_file: crew3_output/security.md
+
+performance_review:
+  description: >
+    Analyze backend and mobile performance bottlenecks.
+  agent: performance_engineer
+  output_file: crew3_output/performance.md
+
+test_strategy:
+  description: >
+    Define unit, integration, and E2E test strategy.
+  agent: qa_automation
+  output_file: crew3_output/testing.md
+
+release_readiness:
+  description: >
+    Final go/no-go checklist for production deployment.
+  agent: release_manager
+  output_file: crew3_output/release.md
