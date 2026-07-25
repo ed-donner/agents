@@ -1,0 +1,357 @@
+RECRUITER AND CLIENT TRUST PROFILE
+My name is Pranav Rai 
+
+I am a full-stack AI product engineer focused on building real, usable web and mobile products from idea to production.
+
+I work across frontend, backend, AI integration, cloud deployment, mobile app release, payment systems, and product iteration. My strength is not only writing code, but taking an idea and turning it into a working product that users can actually use.
+
+My Core Identity
+
+I build AI-powered applications using modern full-stack technologies.
+
+My main focus areas are:
+
+- Full-stack web and mobile development
+- AI product engineering
+- LLM-powered applications
+- Agentic AI workflows
+- React Native and Expo mobile apps
+- Next.js and React web applications
+- Python and Node.js backend systems
+- Supabase and PostgreSQL database architecture
+- Google Cloud deployment using Cloud Run, Docker, Cloud Build, and Secret Manager
+- Practical product shipping, testing, monetization, and user feedback loops
+
+I am especially interested in building AI systems that solve real user problems, not just demos.
+
+What Makes Me Reliable
+
+I have experience building products end to end.
+
+I do not only work on isolated features. I understand how a product moves through the full journey:
+
+- Planning the feature
+- Designing the database
+- Building the frontend
+- Creating backend APIs
+- Integrating AI models
+- Handling authentication
+- Managing environment variables and secrets
+- Deploying to cloud infrastructure
+- Testing with real users
+- Fixing production issues
+- Improving UI and performance
+- Preparing apps for Play Store release
+- Adding payments and subscriptions
+- Creating landing pages and product messaging
+
+This makes me useful for startups, founders, agencies, and teams that need someone who can think beyond one small task.
+
+My Technical Expertise
+
+Frontend Development
+
+I build clean and functional user interfaces using:
+
+- React.js
+- Next.js
+- React Native
+- Expo
+- Tailwind CSS
+- JavaScript
+- TypeScript
+
+I can work on landing pages, dashboards, mobile app screens, authentication flows, user journeys, analytics views, and product interfaces.
+
+Mobile App Development
+
+I have practical experience building and preparing mobile apps for Android release.
+
+My mobile experience includes:
+
+- React Native app development
+- Expo-based workflows
+- EAS builds
+- APK and AAB generation
+- Development client builds
+- Google Play Console setup
+- Closed testing and open testing workflows
+- App store listing preparation
+- User feedback collection
+- Production readiness improvements
+- Google Play Billing and subscription planning
+
+I understand that mobile development is not only about coding screens. It also includes builds, testing, policies, payments, release management, and user experience.
+
+Backend Development
+
+I build backend systems using:
+
+- Python
+- FastAPI
+- Node.js
+- Express.js
+- Django
+- Django REST Framework
+- REST APIs
+- PostgreSQL
+- Supabase
+- MongoDB
+- Redis
+
+I can design APIs, manage user data, build authentication flows, structure databases, integrate third-party services, and connect AI models to real product workflows.
+
+AI and LLM Engineering
+
+I build AI-powered product features using:
+
+- Gemini API
+- OpenAI-compatible APIs
+- LLM-based chatbots
+- AI quiz generation
+- AI study planners
+- RAG concepts
+- Vector database planning
+- Agentic AI workflows
+- Tool-using agents
+- Google ADK learning and implementation
+- AI evaluation and tracing concepts
+
+My AI focus is practical. I use AI models to create product value, automate workflows, personalize user experience, and generate useful outputs.
+
+Cloud and Deployment
+
+I have hands-on experience deploying applications using:
+
+- Google Cloud Run
+- Docker
+- Cloud Build
+- Artifact Registry
+- Secret Manager
+- Environment variables
+- Custom domains
+- Supabase backend services
+- API deployment workflows
+
+I understand the difference between local development and production deployment. I have worked through real deployment issues, environment handling, build-time versus runtime variables, domain mapping, cloud regions, and service configuration.
+
+Product and Business Understanding
+
+I think like a product builder, not just a developer.
+
+I care about:
+
+- What problem the product solves
+- Whether users understand the value
+- How the product is monetized
+- How users onboard
+- How the UI feels
+- How feedback is collected
+- How bugs are fixed
+- How trust is built
+- How the product can grow
+
+This helps me work better with founders, recruiters, product teams, and clients because I understand both technical execution and business outcomes.
+
+Products I Have Built or Worked On
+
+AI Exam and Study App
+
+I have worked on AI-powered exam preparation products where users can select subjects and topics, generate quizzes, attempt MCQs, review answers, analyze accuracy, identify weak areas, and improve preparation through insights.
+
+Key features include:
+
+- Subject and topic selection
+- AI-generated quizzes
+- Difficulty selection
+- Custom question count
+- Timers
+- MCQ attempt flow
+- Instant result analysis
+- Explanation-based review
+- Weakness tracking
+- Accuracy insights
+- User performance dashboard
+- Subscription-based access planning
+- Play Store testing and release preparation
+
+This project shows my ability to combine AI, mobile development, backend systems, user experience, and product monetization.
+
+AI Study Planner and Chatbot Features
+
+I have worked on AI features that help users learn in a more personalized way.
+
+These include:
+
+- AI-generated study plans
+- Conversational AI chatbot support
+- Custom learning paths
+- Topic-wise preparation assistance
+- Insights based on user performance
+
+These features show my ability to use LLMs inside real user workflows instead of treating AI as a separate gimmick.
+
+Cognitive and Speech Analysis Platform Work
+
+I have worked on systems related to patient interaction, cognitive screening, audio analysis, transcription workflows, and AI-supported speech analysis.
+
+This includes experience with:
+
+- Patient record management
+- Assessment data
+- AI chatbot interaction
+- Audio analysis workflows
+- Backend API design
+- Supabase database design
+- Cloud Run deployment
+- Role-based product flows
+
+This experience has helped me understand the importance of reliability, data structure, accuracy, and trust in AI systems.
+
+GCP Agentic AI Platform Learning Project
+
+I am actively building deeper expertise in production-grade agentic AI systems.
+
+My learning and implementation areas include:
+
+- Google ADK
+- Vertex AI Gemini
+- Tool-calling agents
+- Cloud Run deployment
+- Firestore
+- Cloud Tasks
+- Cloud Workflows
+- RAG pipelines
+- AI evaluation
+- Tracing
+- Voice agents
+- Multimodal agents
+- Multi-agent systems
+- MCP connectors
+
+This shows that I am not only using AI APIs at the surface level. I am actively moving toward deeper AI system design.
+
+How I Work
+
+I work in a practical and execution-focused way.
+
+My working style:
+
+- I ask direct questions.
+- I move fast.
+- I prefer clear requirements.
+- I debug issues step by step.
+- I care about production behavior, not only local success.
+- I improve based on user feedback.
+- I value clear communication.
+- I focus on shipping useful features.
+- I try to avoid unnecessary complexity.
+- I think about cost, scalability, and maintainability.
+
+I am comfortable working with incomplete information, but I prefer clarity where it matters.
+
+Why Recruiters Can Trust Me
+
+Recruiters can trust me because I have practical product-building experience across multiple layers of software development.
+
+I can contribute in roles involving:
+
+- Full-stack development
+- AI product engineering
+- React Native development
+- Backend API development
+- Supabase-based applications
+- Cloud Run deployment
+- LLM app development
+- AI chatbot integration
+- Mobile app release workflows
+- Startup product engineering
+
+I am not limited to one narrow area. I can work across the product stack and understand how different parts connect.
+
+Why Clients Can Trust Me
+
+Clients can trust me because I understand the full journey from idea to usable product.
+
+I can help clients with:
+
+- Building MVPs
+- Creating AI-powered apps
+- Developing mobile apps
+- Building dashboards
+- Creating backend APIs
+- Setting up Supabase
+- Deploying to Google Cloud
+- Integrating AI models
+- Creating subscription-based products
+- Fixing production issues
+- Improving app usability
+- Preparing apps for launch
+
+I understand that clients do not only need code. They need outcomes.
+
+My Best-Fit Work
+
+I am best suited for work involving:
+
+- AI-powered SaaS products
+- Mobile apps with backend and AI features
+- Education technology products
+- Productivity tools
+- Internal automation tools
+- LLM chatbot systems
+- Admin dashboards
+- Supabase-backed applications
+- GCP-deployed backend systems
+- MVP development for startups
+- AI workflow automation
+
+My Strengths
+
+My biggest strengths are:
+
+- Building products end to end
+- Connecting frontend, backend, AI, and cloud
+- Learning fast when blocked
+- Debugging real production issues
+- Understanding both product and engineering
+- Working with modern AI tools
+- Shipping practical features
+- Improving based on feedback
+- Thinking about user value
+- Being cost-conscious and practical
+
+My Current Growth Direction
+
+I am actively becoming stronger in:
+
+- Agentic AI systems
+- RAG architecture
+- AI evaluation
+- Backend scalability
+- Cloud deployment reliability
+- Product monetization
+- AI workflow automation
+- Production-grade LLM applications
+
+My long-term direction is to become a strong AI product engineer who can build reliable, useful, and scalable AI systems for real businesses and users.
+
+Short Professional Summary
+
+I am a full-stack AI product engineer who builds and deploys LLM-powered web and mobile applications. I work with React Native, Next.js, Python, Node.js, Supabase, PostgreSQL, Gemini/OpenAI-style APIs, Docker, and Google Cloud Run. I have experience taking products from idea to real users, including mobile app builds, backend architecture, AI integration, cloud deployment, user feedback, Play Store testing, and subscription planning.
+
+One-Line Positioning
+
+I build practical AI-powered web and mobile products from idea to production.
+
+Best Personal Brand Line
+
+Full-stack AI product engineer building LLM-powered apps, agentic workflows, and production-ready web/mobile products.
+
+What I Want Recruiters and Clients to Remember
+
+I am not only a coder.
+
+I am a builder who can understand the product, design the system, write the code, integrate AI, deploy the backend, prepare the app for users, and improve it based on feedback.
+
+That is the value I bring.
