@@ -1,0 +1,6 @@
+Replace this with a short professional summary in first person.
+
+Example:
+- 5+ years building data products
+- Python, APIs, cloud architecture
+- Interested in applied AI and automation

@@ -1,0 +1,77 @@
+strategist_task:
+  description: >
+    Read the curriculum brief and produce a structured handoff for the team.
+
+    The output must include exactly these string fields:
+    1. learning_spec — audience, prior knowledge, measurable outcomes, constraints, success criteria
+    2. course_title — short working title
+    3. delivery_context — modality, total duration or weeks, sync/async, tools allowed
+
+    Curriculum brief:
+    {curriculum_brief}
+
+  expected_output: >
+    A single JSON object with exactly three string keys: "learning_spec", "course_title",
+    "delivery_context".
+
+  agent: curriculum_strategist
+  output_file: output/01_strategist_spec.txt
+
+
+syllabus_task:
+  description: >
+    Using the strategist task output in context (learning_spec, course_title, delivery_context),
+    design the course structure: modules or weeks, objectives per unit, topic sequence, and pacing.
+    Output markdown with clear headings.
+
+  expected_output: >
+    A syllabus in markdown: overview, schedule table or numbered modules, and learning objectives.
+  agent: instructional_designer
+  context:
+    - strategist_task
+  output_file: output/02_syllabus.md
+
+
+lesson_plan_task:
+  description: >
+    Expand the syllabus from context into detailed lesson plans. Each planned session should include:
+    learning objectives, agenda with times, activities, materials, formative assessment, and homework or extension.
+    Ground everything in learning_spec from the strategist output in context.
+
+  expected_output: >
+    Markdown lesson plans ready for an instructor to follow.
+  agent: lesson_developer
+  context:
+    - syllabus_task
+    - strategist_task
+  output_file: output/03_lesson_plans.md
+
+
+stakeholder_task:
+  description: >
+    Write a one-page stakeholder summary using course_title and themes from context.
+    Assume the reader has not seen the full lesson plans. Max ~400 words, markdown.
+
+  expected_output: >
+    Short markdown suitable for email or PDF: purpose, audience, outcomes, time commitment, success measures.
+  agent: stakeholder_writer
+  context:
+    - lesson_plan_task
+    - strategist_task
+  output_file: output/04_stakeholder_summary.md
+
+
+assessment_task:
+  description: >
+    Design assessments aligned to learning_spec and the syllabus in context.
+    Include: map of which outcomes each assessment measures, brief task descriptions,
+    and rubrics or mastery checklists. Prefer practical tasks over trivia.
+
+  expected_output: >
+    Markdown assessment pack with formative map, summative suggestion, and rubrics.
+  agent: assessment_designer
+  context:
+    - lesson_plan_task
+    - syllabus_task
+    - strategist_task
+  output_file: output/05_assessments.md

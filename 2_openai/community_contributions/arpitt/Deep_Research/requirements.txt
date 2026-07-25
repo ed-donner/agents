@@ -1,0 +1,4 @@
+openai-agents
+pydantic
+gradio
+sendgrid

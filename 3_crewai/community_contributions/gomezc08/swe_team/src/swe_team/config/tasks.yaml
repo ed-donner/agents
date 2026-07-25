@@ -1,0 +1,54 @@
+design_task:
+  description: >
+    Analyze the following requirements: {requirements}.
+    Create a technical blueprint for the module '{module_name}.py' and the class '{class_name}'.
+    
+    CRITICAL GRADING CRITERIA:
+    1. Structure: You must include a 'Development Phases' section.
+    2. Depth: The 'Development Phases' must contain at least 5 detailed bullet points.
+    3. Technical Rigor: You must produce a 'technical_spec.json' block within your output
+       that defines every class method, including specific Python types for all 
+       arguments and return values.
+    
+    If these criteria are not met, the automated guardrail will reject your work.
+  expected_output: >
+    A detailed markdown document containing a comprehensive 'Development Phases' list 
+    and a valid, structured 'technical_spec.json'.
+  output_file: output/{module_name}_design.md
+
+code_task:
+  description: >
+    Implement the '{class_name}' within '{module_name}.py' based on the blueprint in the design_task.
+    The implementation must satisfy these requirements: {requirements}.
+    Ensure all logic is self-contained and handles basic error cases.
+  expected_output: >
+    The raw Python code for '{module_name}.py'. 
+    IMPORTANT: No markdown, no backticks, no explanation. Just executable code.
+  context:
+    - design_task
+  output_file: output/{module_name}.py
+
+frontend_task:
+  description: >
+    Create 'app.py' using Gradio to demonstrate '{class_name}'.
+    You MUST import the class using: from {module_name} import {class_name}.
+    Build a simple interface that allows a user to interact with the core methods 
+    defined in the code_task.
+  expected_output: >
+    The raw Python code for 'app.py'. 
+    IMPORTANT: No markdown, no backticks, no explanation. Just executable code.
+  context:
+    - code_task
+  output_file: output/app.py
+
+test_task:
+  description: >
+    Write a comprehensive pytest suite for '{module_name}.py'.
+    Import the class from the module and write tests for each method implemented in the code_task.
+    Include at least one test case for "happy path" and one for "edge case/error."
+  expected_output: >
+    The raw Python code for 'test_{module_name}.py'. 
+    IMPORTANT: No markdown, no backticks, no explanation. Just executable code.
+  context:
+    - code_task
+  output_file: output/test_{module_name}.py

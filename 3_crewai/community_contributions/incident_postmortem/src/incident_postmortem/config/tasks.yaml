@@ -1,0 +1,65 @@
+summarize_incident_task:
+  description: >
+    Review the raw incident notes below. Service: {service_name}. Severity: {severity}.
+    Report date: {report_date}.
+
+    Raw notes:
+    ---
+    {incident_notes}
+    ---
+
+    Produce a factual summary with: (1) a bullet timeline in chronological order
+    (use approximate times if exact timestamps are missing, and label estimates clearly),
+    (2) scope of impact (users, regions, data, SLAs), (3) detection and mitigation
+    highlights. Use neutral, blameless language throughout.
+  expected_output: >
+    Markdown sections titled "## Timeline", "## Impact", and "## Detection and mitigation"
+    suitable for inclusion in a postmortem. No root cause conclusions yet.
+  agent: incident_summarizer
+
+analyze_root_cause_task:
+  description: >
+    Using the timeline and impact from the previous task plus the same raw notes,
+    perform a blameless root cause analysis for service {service_name} (severity {severity}).
+
+    Raw notes (reference as needed):
+    ---
+    {incident_notes}
+    ---
+
+    Cover: proximate trigger vs systemic contributing factors; what controls failed
+    or were missing (monitoring, runbooks, rate limits, deploy process, etc.).
+    If information is insufficient, list explicit questions or data gaps rather than guessing.
+  expected_output: >
+    Markdown sections titled "## Root cause analysis", "## Contributing factors",
+    and "## What went well" (if anything constructive is evident from the notes).
+  agent: root_cause_analyst
+
+finalize_postmortem_task:
+  description: >
+    Combine the outputs from prior tasks into one complete blameless postmortem
+    document for service {service_name}, severity {severity}, report date {report_date}.
+
+    Ensure the final document uses EXACTLY these top-level headings in order:
+    # Postmortem: {service_name}
+    ## Metadata
+    ## Summary
+    ## Timeline
+    ## Impact
+    ## Detection and mitigation
+    ## Root cause analysis
+    ## Contributing factors
+    ## What went well
+    ## Action items
+    ## What we learned
+
+    Under "## Metadata", include bullet lines for Severity, Report date, and Service.
+    Under "## Action items", use a numbered list; each item must include:
+    suggested owner role (not a person's name), action, and how success will be verified.
+    Use TBD for dates if unknown.
+
+    The document must be self-contained and readable without the prior task outputs.
+  expected_output: >
+    A single complete Markdown postmortem ready for human review and editing.
+  agent: action_owner
+  output_file: output/postmortem.md

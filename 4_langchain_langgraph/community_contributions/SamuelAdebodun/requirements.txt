@@ -1,0 +1,9 @@
+# SamuelAdebodun/ is intentionally 5 files: graph.py (incl. tools), app.py, this file,
+# week4_platform_incident.ipynb, ui_example.png — see notebook intro.
+# Pin broadly compatible versions with the agents course repo (see root requirements.txt).
+langchain-core>=0.3.64
+langchain-openai>=0.3.21
+langgraph>=0.4.8
+gradio>=5.33
+python-dotenv>=1.0
+pydantic>=2.0

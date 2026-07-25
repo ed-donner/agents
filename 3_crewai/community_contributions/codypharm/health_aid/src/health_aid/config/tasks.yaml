@@ -1,0 +1,64 @@
+triage_nurse_task:
+  description: >
+    You have received the following raw patient health data:
+
+    {patient_data}
+
+    Parse this into structured fields. Extract the following values:
+    blood pressure, glucose level (mg/dL), BMI, cholesterol (mg/dL),
+    age, and any metrics that fall outside normal ranges.
+    Flag any abnormal values clearly in the `flagged` field.
+  expected_output: >
+    A structured JSON object with the following fields:
+    - blood_pressure (str, e.g. "140/90")
+    - glucose_mg_dl (float)
+    - bmi (float)
+    - cholesterol_mg_dl (float)
+    - age (int)
+    - flagged (list of strings describing abnormal metrics)
+  agent: triage_nurse
+
+medical_researcher_task:
+  description: >
+    Using the structured health metrics provided by the triage nurse,
+    research the medical risks associated with the flagged conditions.
+    Determine the overall severity of the patient's health profile
+    and decide whether clinical intervention (diet/lifestyle changes) is required.
+  expected_output: >
+    A structured JSON object with the following fields:
+    - risks (list of strings, each describing a specific medical risk)
+    - severity (str, one of: "low", "moderate", "critical")
+    - requires_intervention (bool, true if severity is moderate or critical)
+  agent: medical_researcher
+  context:
+    - triage_nurse_task
+
+nutritionist_task:
+  description: >
+    Based on the medical researcher's risk report, provide targeted
+    nutrition and lifestyle recommendations for the patient.
+    Only runs if the researcher flagged requires_intervention as true.
+  expected_output: >
+    A structured JSON object with the following fields:
+    - recommendations (list of strings)
+    - foods_to_avoid (list of strings)
+    - lifestyle_tips (list of strings)
+  agent: nutritionist
+  context:
+    - medical_researcher_task
+
+report_writer_task:
+  description: >
+    Using all findings from the triage nurse, medical researcher,
+    and nutritionist (if available), compile a complete wellness report
+    for the patient. Write in plain language the patient can understand.
+    Structure it with sections: Summary, Risk Assessment, and Recommendations.
+  expected_output: >
+    A well-structured markdown report with three sections:
+    ## Summary, ## Risk Assessment, ## Recommendations.
+    Should be clear, concise, and actionable for a non-medical reader.
+  agent: report_writer
+  context:
+    - triage_nurse_task
+    - medical_researcher_task
+    - nutritionist_task

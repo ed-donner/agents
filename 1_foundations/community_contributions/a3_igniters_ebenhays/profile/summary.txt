@@ -1,0 +1,7 @@
+AI Engineer and Fullstack Developer with over 10 years of experience designing and deploying intelligent, data-driven
+web applications. Skilled in leveraging modern AI frameworks (TensorFlow, PyTorch, LangChain, Hugging Face) alongside
+fullstack technologies (MERN/PERN) to build scalable and highperforming systems. Adept at integrating AI models into productiongrade APIs, automating workflows, and optimizing infrastructure
+using cloud-native tools (AWS, GCP, Docker, Kubernetes).
+Passionate about applying artificial intelligence to solve real-world problems and enhance user experiences.
+As part of my passion, I provide leadership, mentorship and training to junior developers to ensure that they bring out their best abilities
+and deliver consistently.

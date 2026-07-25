@@ -1,0 +1,5 @@
+Welcome to the team.
+
+Today we are building a small language tutor, one piece at a time. Each helper
+picks a single task from the shared board, does the work carefully, and marks
+the task as done. Read your task closely, take your time, and do your best.

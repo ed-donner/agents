@@ -1,0 +1,9 @@
+I strongly support strict laws to regulate LLMs, because the risks they create are too serious to be left to voluntary industry promises.
+
+LLMs can already be used to scale misinformation, fraud, identity theft, harassment, and cybercrime at a speed and size humans cannot match. One bad actor with an LLM can generate thousands of convincing scams, manipulate public opinion, or produce harmful instructions in seconds. Without strict legal guardrails, the cost of abuse will be borne by ordinary people, while companies profit from releasing powerful systems with inadequate oversight.
+
+Strict regulation is also necessary because LLMs are not neutral tools—they can encode bias, make false claims confidently, and influence decisions in education, hiring, healthcare, and law. When an AI system is wrong, the harm can be real: people can lose opportunities, money, privacy, or even safety. Laws should force transparency, accountability, and independent testing before these systems are deployed at scale.
+
+Most importantly, history shows that powerful technologies are safest when rules come before disaster, not after. We regulate medicines, cars, and food because innovation without accountability is dangerous. LLMs are now an infrastructure-level technology, and that means they need enforceable standards: clear liability, audit requirements, safety testing, data protections, and limits on deceptive or high-risk uses.
+
+In short, strict laws are not anti-innovation—they are what make innovation trustworthy. If LLMs are going to shape society, then society must have the power to control their use, prevent abuse, and protect the public.

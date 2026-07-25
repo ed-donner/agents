@@ -1,0 +1,2 @@
+python-dotenv
+# Add any other dependencies required by your agents package here

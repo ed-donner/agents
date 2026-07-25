@@ -1,0 +1,64 @@
+================================================================================
+                    LECTURER AGENT - ARCHITECTURE
+================================================================================
+
+                              ┌─────────────┐
+                              │    USER     │
+                              │  (Gradio)   │
+                              └──────┬──────┘
+                                    │
+                                    ▼
+                         ┌─────────────────────┐
+                         │  INPUT GUARDRAIL    │
+                         │  (Guardrail Agent)  │
+                         │  ✓ Appropriate?     │
+                         └──────────┬──────────┘
+                                    │
+                                    ▼
+                         ┌─────────────────────┐
+                         │  LECTURER AGENT     │
+                         │  (Ifedayo)          │
+                         │  Teaches & explains │
+                         └──────────┬──────────┘
+                                    │
+              ┌─────────────────────┼─────────────────────┐
+              │                     │                     │
+              ▼                     │                     ▼
+    ┌─────────────────┐            │          ┌─────────────────────┐
+    │ RESEARCHER      │            │          │  OUTPUT GUARDRAIL   │
+    │ (handoff)       │            │          │  (Guardrail Agent)   │
+    └────────┬────────┘            │          │  ✓ Appropriate?     │
+             │                     │          └──────────┬────────────┘
+             │                     │                     │
+             ▼                     │                     │
+    ┌─────────────────────────────────────────┐          │
+    │  TOOLS:                                 │          │
+    │  • plan_searches  → Planner Agent       │          │
+    │  • peform_searches → Search Agent (×N)  │          │
+    │  • search         → Search Agent        │          │
+    └────────┬────────────────────┬───────────┘          │
+             │                    │                      │
+             ▼                    ▼                      │
+    ┌──────────────┐    ┌─────────────────┐              │
+    │   PLANNER    │    │  SEARCH AGENT    │             │
+    │   AGENT      │    │  (WebSearchTool) │             │
+    │  WebSearch   │    │                  │             │
+    │  Plan        │    └─────────────────┘              │
+    └──────────────┘                                     │
+             │                    │                      │
+             └────────────────────┴──────────────────────┘
+                                    │
+                                    ▼
+                              ┌─────────────┐
+                              │    USER     │
+                              └─────────────┘
+
+================================================================================
+FLOW:
+  1. User input → Input Guardrail (block if inappropriate)
+  2. Lecturer Agent processes (teaches, explains)
+  3. If research needed → handoff to Researcher Agent
+  4. Researcher: plan_searches → peform_searches/search → synthesize
+  5. Lecturer output → Output Guardrail (replace if inappropriate)
+  6. Response streamed back to user
+================================================================================

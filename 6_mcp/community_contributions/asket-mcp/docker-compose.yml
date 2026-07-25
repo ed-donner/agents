@@ -1,0 +1,51 @@
+services:
+  asket-mcp:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "${ASKET_MCP_PORT:-8765}:8765"
+    environment:
+      ASKET_MCP_DATA_DIR: /data
+      PERSONAL_STUDY_BRAIN_DIR: ${PERSONAL_STUDY_BRAIN_DIR:-/data/brain}
+      ASKET_MCP_TRANSPORT: ${ASKET_MCP_TRANSPORT:-sse}
+      ASKET_MCP_HOST: "0.0.0.0"
+      ASKET_MCP_PORT: "8765"
+      ASKET_MCP_LOG_LEVEL: ${ASKET_MCP_LOG_LEVEL:-INFO}
+      PUSHOVER_USER: ${PUSHOVER_USER:-}
+      PUSHOVER_TOKEN: ${PUSHOVER_TOKEN:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    volumes:
+      - asket_data:/data
+
+  asket-mcp-ui:
+    build: .
+    restart: unless-stopped
+    command: ["python", "-m", "asket_mcp.ui.app"]
+    ports:
+      - "${ASKET_UI_PORT:-7860}:7860"
+    environment:
+      ASKET_UI_HOST: "0.0.0.0"
+      ASKET_UI_PORT: "7860"
+      ASKET_MCP_DATA_DIR: /data
+      PERSONAL_STUDY_BRAIN_DIR: ${PERSONAL_STUDY_BRAIN_DIR:-/data/brain}
+      ASKET_MCP_LOG_LEVEL: ${ASKET_MCP_LOG_LEVEL:-INFO}
+      ASKET_UI_AUTH_USERNAME: ${ASKET_UI_AUTH_USERNAME:-}
+      ASKET_UI_AUTH_PASSWORD: ${ASKET_UI_AUTH_PASSWORD:-}
+      ASKET_UI_AUTH_MESSAGE: ${ASKET_UI_AUTH_MESSAGE:-}
+      ASKET_UI_ROOT_PATH: ${ASKET_UI_ROOT_PATH:-}
+      ASKET_UI_SSL_CERTFILE: ${ASKET_UI_SSL_CERTFILE:-}
+      ASKET_UI_SSL_KEYFILE: ${ASKET_UI_SSL_KEYFILE:-}
+      ASKET_UI_MAX_THREADS: ${ASKET_UI_MAX_THREADS:-16}
+      ASKET_UI_STRICT_CORS: ${ASKET_UI_STRICT_CORS:-false}
+      ASKET_UI_MINIMAL_FOOTER: ${ASKET_UI_MINIMAL_FOOTER:-false}
+      ASKET_UI_QUIET: "true"
+      PUSHOVER_USER: ${PUSHOVER_USER:-}
+      PUSHOVER_TOKEN: ${PUSHOVER_TOKEN:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    volumes:
+      - asket_data:/data
+    depends_on:
+      - asket-mcp
+
+volumes:
+  asket_data:

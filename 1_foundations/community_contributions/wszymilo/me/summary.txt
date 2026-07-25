@@ -1,0 +1,71 @@
+My name is Wojciech Szymiłowski. 
+
+I live in a small village between Toruń and Bydgoszcz in Poland.
+I love playing computer games, especially old-timer MMORPGs like vanilla World of Warcraft. I like watching sci-fi movies and read books of 
+this gendre and spend my free time with Family.
+
+I'm a software engineer rebranding myself to AI engineer and data scientist. I'm currently taking intensive "AI Engineering Bootcamp" course by Andela
+as well as bi-weekly "AI & ML Engineering" course prepared by Sages.
+
+My core skills:
+ * Python
+ * C/C++
+ * Software Design
+ * I'm learing AI engineering
+
+# "AI & ML Engineering" course summary
+
+This is a practical "AI & Machine Learning Engineering" course designed for programmers transitioning to AI roles like AI engineers, ML engineers, or deep learning engineers. It spans 14 weekends (224 hours) of live sessions with experts, focusing on building production-ready AI systems using Python, ML algorithms, neural networks, and deployment tools. Emphasizes hands-on projects, best practices, and professional implementation.
+Target Audience
+
+Ideal for:
+
+* Programmers (1+ year experience in Python, C#, Java, PHP, R, C++) wanting to switch to AI.
+* CS/math/physics students starting in AI.
+* Data scientists building engineering/MLOps skills.
+
+Not for beginners without programming experience (they recommend a Python intro e-learning). Non-Python users get a short prep course.
+Key Learning Outcomes
+
+* Build high-quality AI/ML systems.
+* Professional Python programming (OOP, best practices, SOLID).
+* Implement ML pipelines, neural networks, NLP, computer vision.
+* Deploy via REST APIs, Docker, Kubernetes, CI/CD.
+* Tools: scikit-learn, PyTorch, Hugging Face, FastAPI, MLflow, pytest.
+
+Course Program Highlights
+
+Organized into modules covering Python foundations to advanced deployment:
+
+* Python Advanced: OOP (inheritance, mixins, DI), decorators, generators, type hints, testing (pytest), design patterns.
+* ML Basics & Pipelines: Regression, classification, trees (Random Forest), overfitting, feature engineering, scikit-learn.
+* Deep Learning: PyTorch, MLPs, CNNs (vision), RNNs/Transformers (NLP), embeddings, LLMs, RAG, agents.
+* AI Systems: Concurrency, versioning (MLflow), experiments, optimization.
+
+    Deployment:
+    | Area        | Topics                                            |
+    |-------------|---------------------------------------------------|
+    | REST API    | FastAPI, Pydantic, async, caching, tests.         |
+    | Docker      | Images, multi-stage builds, .dockerignore, compose.|
+    | Kubernetes  | Pods, Services, Ingress, HPA, probes, namespaces. |
+    | CI/CD       | Linting, testing, building, dev/prod pipelines.   |
+
+Includes real-world practices like data augmentation, load testing (locust), and open-source usage.
+
+
+# "AI Engineering Bootcamp" course scope
+
+This is a 10-week intensive, exclusive, career-defining, and specialised training program that aims to equip 
+you with all the competencies you need to become a forward-deployed, enterprise-ready, and AI-fluent engineer.
+
+What You’ll Master:
+
+   * Level up your AI and LLM engineering skills to be at the forefront of the industry.
+   * Develop proficiency with platforms like HuggingFace, LangChain, and Gradio.
+   * Implement state-of-the-art techniques such as RAG (Retrieval-Augmented Generation), QLoRA fine-tuning, and Agents.
+   * Develop and evaluate GenAI applications.
+   * Deploy AI products to production with polished user interfaces and advanced capabilities.
+   * Design and develop multi-agent systems.
+   * Build advanced Generative AI products using cutting-edge models and frameworks.
+   * Demonstrate autonomous problem-solving thinking, leadership, and advanced AI engineering skills.
+

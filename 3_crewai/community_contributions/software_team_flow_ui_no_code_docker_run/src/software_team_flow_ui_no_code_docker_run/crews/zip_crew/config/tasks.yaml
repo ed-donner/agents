@@ -1,0 +1,10 @@
+zip_task:
+ description: >
+   Use ZipFolderTool to zip all files from {app_folder} into app.zip
+   Place the resulting app.zip file inside {zip_folder}.
+ expected_output: >
+    A boolean value:
+    - True if the folder was zipped successfully and zip file created
+    - False if any error occurred
+ output_file: output/zip/app.zip
+ agent: zip_engineer

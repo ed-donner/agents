@@ -1,0 +1,29 @@
+{
+  "name": "mastra-worker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Week 5 Day 4: the Mastra (TypeScript) worker on the shared SQLite board",
+  "scripts": {
+    "step1": "node --disable-warning=ExperimentalWarning --import tsx step1.ts",
+    "step2": "node --disable-warning=ExperimentalWarning --import tsx step2.ts",
+    "step3": "node --disable-warning=ExperimentalWarning --import tsx step3.ts",
+    "step4": "node --disable-warning=ExperimentalWarning --import tsx step4.ts",
+    "step5": "node --disable-warning=ExperimentalWarning --import tsx step5.ts",
+    "worker": "node --disable-warning=ExperimentalWarning --import tsx worker.ts",
+    "dev": "node --import tsx scripts/dev.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^3.0.71",
+    "@mastra/core": "^1.42.0",
+    "@mastra/mcp": "^1.10.0",
+    "dotenv": "^17.2.3",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.0",
+    "mastra": "^1.13.0",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}

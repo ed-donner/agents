@@ -1,0 +1,8 @@
+python-dotenv
+openai
+openai-agents
+resend
+fastapi
+uvicorn
+python-multipart
+resend

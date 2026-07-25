@@ -1,0 +1,114 @@
+generation_alpha_task:
+  description: >
+    Convert this Python code to a speed-optimized Fortran 90 program.
+    Use integer(8) for large integers, system_clock for timing.
+    Output ONLY raw Fortran source — no markdown, no backticks, no prose.
+    {python_code}
+  expected_output: Complete compilable Fortran 90 program, raw source only.
+  agent: generator_alpha
+  async_execution: true
+  output_file: outputs/alpha.f90
+
+generation_beta_task:
+  description: >
+    Convert this Python code to a memory-efficient Fortran 90 program.
+    Use integer(8) for large integers, system_clock for timing.
+    Output ONLY raw Fortran source — no markdown, no backticks, no prose.
+    {python_code}
+  expected_output: Complete compilable Fortran 90 program, raw source only.
+  agent: generator_beta
+  async_execution: true
+  output_file: outputs/beta.f90
+
+generation_gamma_task:
+  description: >
+    Convert this Python code to a parallelized Fortran 90 program using OpenMP.
+    Use integer(8) for large integers, system_clock for timing,
+    !$OMP PARALLEL DO REDUCTION clauses where applicable.
+    Output ONLY raw Fortran source — no markdown, no backticks, no prose.
+    {python_code}
+  expected_output: Complete compilable Fortran 90 program with OpenMP, raw source only.
+  agent: generator_gamma
+  async_execution: true
+  output_file: outputs/gamma.f90
+
+optimization_task:
+  description: >
+    Synthesize the single best Fortran 90 program from the three implementations
+    provided in context. Combine the strongest techniques from each.
+    Use integer(8) for large integers, system_clock for timing.
+    Output ONLY raw Fortran source — no markdown, no backticks, no prose.
+  expected_output: Single optimized Fortran 90 program, raw source only.
+  agent: optimizer
+  context:
+    - generation_alpha_task
+    - generation_beta_task
+    - generation_gamma_task
+  output_file: outputs/optimized.f90
+
+housekeeping_task:
+  description: >
+    Take the optimized Fortran code from the previous task (in context) and
+    produce a perfectly clean, compilable .f90 source file.
+
+    Apply ALL of these rules:
+    1. Remove ALL markdown formatting: no ```, no ```fortran, no ```f90
+    2. Remove ALL backtick characters anywhere in the file
+    3. Remove ALL XML-like reasoning tags: anything between <think> and </think>
+    4. Remove ALL explanatory prose, preambles, and postambles
+    5. Ensure the file starts with PROGRAM (or a valid Fortran comment !)
+    6. Ensure the file ends with END PROGRAM <name>
+    7. Ensure IMPLICIT NONE appears in every program unit and subroutine
+    8. Ensure integer(8) is used for large integers (n, seeds, sums, etc.)
+    9. Ensure system_clock is used for timing (NOT cpu_time)
+    10. Ensure USE omp_lib is present if any !$OMP directives appear
+    11. Fix loop variable conflicts: if the same variable name (e.g. 'run', 'i', 'j')
+        is used as a DO loop counter in an outer loop AND reused as a counter in an
+        inner loop, rename the inner loop variable (e.g. 'i' -> 'ii', 'run' -> 'irun')
+        to eliminate the "cannot be redefined inside loop" gfortran error
+    12. Fix OpenMP SHARED/PRIVATE clause errors: PARAMETER constants (declared with
+        the PARAMETER attribute) are NOT variables and cannot appear in !$OMP SHARED(),
+        !$OMP PRIVATE(), or any other OpenMP data-sharing clauses. Remove any PARAMETER
+        names from all OpenMP clauses — they are implicitly shared already.
+    13. Fix any other obvious Fortran syntax errors
+
+    Output ONLY valid, raw Fortran 90 source code. Nothing else at all.
+    The output must be directly saveable as a .f90 file and compile with:
+    gfortran -Ofast -march=native -g0 -mtune=native -fopenmp -fomit-frame-pointer
+  expected_output: >
+    Clean, valid Fortran 90 source code with zero markdown artifacts, zero
+    backticks, zero prose. The output is ONLY Fortran source lines.
+  agent: housekeeper
+  context:
+    - optimization_task
+  output_file: outputs/final.f90
+
+execution_task:
+  description: >
+    Perform the following steps IN ORDER using your tools. Do not skip any step.
+
+    Step 1: Use the Fortran Compiler tool to compile outputs/final.f90
+            Pass source_file="outputs/final.f90" and output_binary="outputs/fortran_binary"
+            Save the full tool output as compile_result.
+
+    Step 2: Use the Fortran Binary Executor tool to run outputs/fortran_binary
+            Pass binary_path="outputs/fortran_binary"
+            Save the full tool output as fortran_result.
+
+    Step 3: Use the Python Code Executor tool to run the original Python code.
+            Pass the exact python_code string: {python_code}
+            Save the full tool output as python_result.
+
+    Step 4: Use the Plain Text Output Formatter tool to generate the final report.
+            Pass the full raw strings: fortran_result, python_result, compile_result
+            (Pass them verbatim — do not summarize or truncate.)
+
+    Your final answer must be the complete formatted report returned by the
+    Output Formatter tool. Do not add any markdown or extra text.
+  expected_output: >
+    A plain text benchmark report containing Fortran output, Python output,
+    execution times, and speedup ratio. No markdown, no code blocks. Plain text only.
+  agent: code_runner
+  context:
+    - housekeeping_task
+  output_file: outputs/final_output.txt

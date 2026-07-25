@@ -1,0 +1,9 @@
+openai==1.83.0
+python-dotenv>=1.0.0
+pypdf>=4.0.0
+gradio==3.44.0
+pydantic==2.11.9
+rich>=13.0.0
+crewai[tools,azure-ai-inference]==1.9.3
+litellm==1.73.0
+sendgrid==6.12.5

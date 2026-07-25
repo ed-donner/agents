@@ -1,0 +1,24 @@
+[project]
+name = "sx_debate"
+version = "0.1.0"
+description = "sx_debate using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[litellm,tools]==1.9.3",
+]
+
+[project.scripts]
+sx_debate = "sx_debate.main:run"
+run_crew = "sx_debate.main:run"
+train = "sx_debate.main:train"
+replay = "sx_debate.main:replay"
+test = "sx_debate.main:test"
+run_with_trigger = "sx_debate.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

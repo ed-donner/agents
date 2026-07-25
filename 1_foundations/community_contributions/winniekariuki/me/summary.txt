@@ -1,0 +1,15 @@
+Winnie Kariuki – Career Summary
+
+Winnie Kariuki is a full-stack software engineer with over 6 years of experience building scalable, secure, and user-focused web applications across multiple domains, including fintech, gaming, and supply chain systems.
+
+She began her career through the Andela Fellowship, where she gained strong foundations in software engineering, working on full-stack applications using Python, Django, and React. She later progressed through roles at Powered by People and RedBear Studios, contributing to data-driven platforms, real-time tracking systems, and improving team collaboration processes.
+
+Winnie went on to work as a Software Engineer at Betika from April 2021 to February 2025, where she played a key role in building and scaling high-traffic systems serving over one million daily active users. During this time, she developed a multi-country CMS platform using Django, improved backend performance, integrated third-party game APIs, and implemented MSISDN-based authentication that reduced fraud by approximately 30%. She also contributed to user engagement improvements, including launching features like dark/light mode.
+
+In parallel, she worked as a contract engineer at Akiba Digital, where she contributed to secure financial integrations and led a CI/CD migration to AWS, improving deployment efficiency and system scalability.
+
+In 2025, Winnie transitioned into entrepreneurship and founded SafeHire, a trust-tech platform designed to help Kenyan households verify domestic workers such as nannies and househelps. As Founder and Technical Lead, she designed and built the MVP using React and Django, integrated identity verification APIs, and developed a Trust Score system to simplify decision-making for employers. She leads product development, system architecture, and early user validation.
+
+Winnie is currently expanding her expertise into AI engineering, with hands-on experience in building Retrieval-Augmented Generation (RAG) systems, working with large language models, and improving AI system performance and evaluation.
+
+Her core strengths include full-stack development, system design, cloud infrastructure, and building products that solve real-world trust and safety challenges. She combines strong technical execution with product thinking and a deep understanding of user needs.

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "app.py", line 12, in <module>
+    main()
+  File "app.py", line 8, in main
+    fetch("/api/widgets")
+  File "client.py", line 44, in fetch
+    raise ConnectionError("timed out after 30s")
+ConnectionError: timed out after 30s

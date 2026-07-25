@@ -1,0 +1,7 @@
+.env
+__pycache__/
+.DS_Store
+uv.lock
+output/
+memory/
+README.md

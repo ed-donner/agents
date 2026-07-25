@@ -1,0 +1,5 @@
+GET /v1/chat/completions HTTP/1.1
+Authorization: Bearer sk-fake1234567890123456789012345678901234567890
+Host: api.openai.com
+
+{"error": {"message": "Rate limit exceeded", "type": "rate_limit_error"}}

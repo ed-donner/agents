@@ -1,0 +1,70 @@
+research_task:
+  description: >
+    Analyze the startup idea and identify the target users, the problem it solves, the market need, and the existing competitors. 
+    Focus on factual market context and concise insight.
+    The idea: {idea}.
+    The current year is {current_year}.
+  expected_output: >
+    A structured. professional market research summary on {idea} startup idea containing:
+    1. Startup idea summary
+    2. target audience
+    3. problem being solved
+    4. market need
+    5. 3 to 5 likely competitors or alternatives
+    6. brief note on current opportunity in the market
+    7. conclusion
+  agent: researcher
+  output_file: output/market_research.md
+
+critical_evaluation_task:
+  description: >
+    Review the {idea} startup idea using the market research output. 
+    Identify weaknesses, risks, hidden assumptions, execution challenges, and reasons the idea may fail in the market.
+  expected_output: >
+   A concise critical analysis containing:
+    1. main risks
+    2. weak assumptions
+    3. differentiation concerns
+    4. adoption or execution challenges
+    5. overall realism assessment
+  context:
+    - research_task
+  agent: critic
+  output_file: output/critical_evaluation.md
+
+product_strategy_task:
+  description: >
+    Using the research and critique, refine the startup idea into a sharper and more viable product concept.
+    Define a focused MVP, a clearer positioning angle, and practical recommendations for improving the {idea} idea.
+  expected_output: >
+    A final validation report containing:
+    1. summary of the idea
+    2. market opportunity snapshot
+    3. key risks
+    4. product strategy recommendation
+    5. final verdict: Proceed, Refine, or Reject
+    6. short rationale for the verdict
+  context:
+    - research_task
+    - critical_evaluation_task
+  agent: product_strategist
+  output_file: output/product_strategy.md
+
+validation_report_task:
+  description: >
+    Combine all previous outputs into a final decision-ready report.
+    Present a balanced evaluation of the {idea} startup idea and provide a clear recommendation on whether to proceed, refine, or abandon the idea.
+  expected_output: >
+    A final validation report containing:
+    1. summary of the idea
+    2. market opportunity snapshot
+    3. key risks
+    4. product strategy recommendation
+    5. final verdict: Proceed, Refine, or Reject
+    6. short rationale for the verdict
+  context:
+    - research_task
+    - critical_evaluation_task
+    - product_strategy_task
+  agent: synthesizer
+  output_file: output/validation_report.md

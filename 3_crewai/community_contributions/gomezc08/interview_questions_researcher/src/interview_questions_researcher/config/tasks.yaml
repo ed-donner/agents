@@ -1,0 +1,37 @@
+research_task:
+  description: >
+    Conduct thorough research on company {company} and ensure that the research is up
+    to date with the following date: {current_date}. Focus on:
+    1. Current company status and health
+    2. Historical company performance
+    3. Major challenges and opportunities
+    4. Recent news and events
+    5. Future outlook and potential developments
+
+    Make sure to organize your findings in a structured format with clear sections.
+  expected_output: >
+    A comprehensive research document with well-organized sections covering
+    all the requested aspects of {company}. Include specific facts, figures,
+    and examples where relevant.
+  agent: researcher
+
+generate_interview_questions_task:
+  description: >
+    Review the Corporate Intelligence Brief. Your task is to design 10 
+    "Future-Proof" interview questions for University-level candidates. 
+    
+    Structure each entry as follows:
+    - The Question: A behavioral or situational question.
+    - The 'Why': A brief explanation of the intent.
+    - The Research Link: A direct quote or fact from the research task that 
+      inspired this question (e.g., "Because {company} is expanding into 
+      Cloud AI, we need to test for X...").
+    - Evaluation Criteria: What a 'Gold Standard' answer sounds like.
+  expected_output: >
+    A comprehensive 'Candidate Assessment Guide' for {company} in professional 
+    Markdown format, starting with a 1-paragraph strategic summary of the 
+    company's current state.
+  agent: recruiter
+  context:
+    - research_task
+  output_file: output/interview_questions.md

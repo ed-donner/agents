@@ -1,0 +1,19 @@
+[project]
+name = "web-lang-auditor"
+version = "0.1.0"
+description = "Auditor compares html lang param with detected language and checks if it is valid with iana, finally it provides recommendation"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "asyncio>=4.0.0",
+    "beautifulsoup4>=4.14.3",
+    "dotenv>=0.9.9",
+    "langcodes>=3.5.1",
+    "langdetect>=1.0.9",
+    "language-data>=1.4.0",
+    "openai-agents>=0.0.15",
+    "pandas>=2.3.3",
+    "python-dotenv>=1.2.1",
+    "requests>=2.32.5",
+    "uvloop>=0.22.1",
+]

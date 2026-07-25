@@ -1,0 +1,14 @@
+research_task:
+  description: >
+    Conduct a thorough research to find events holding in the {location} in the {period}
+    Make sure you find any interesting and relevant information given
+  expected_output: >
+    A list of events holding in the {location} in the {period}, for each event, you should include the name, startDate, endDate, shortDescription and description
+  agent: researcher
+
+data_entry_task:
+  description: >
+    Review the events you found and input them into a database.
+  expected_output: >
+    All events have been input into the database.
+  agent: data_entry_analyst

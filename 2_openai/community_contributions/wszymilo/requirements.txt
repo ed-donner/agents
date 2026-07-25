@@ -1,0 +1,8 @@
+# v1 stack (see plan.md). Python 3.12 recommended.
+gradio==6.5.1
+openai-agents
+httpx>=0.27
+python-dotenv
+requests
+pytest
+pytest-asyncio

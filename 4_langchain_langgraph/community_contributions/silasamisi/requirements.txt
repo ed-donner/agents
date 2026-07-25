@@ -1,0 +1,12 @@
+langchain
+langchain-openai
+langchain-community
+langgraph
+pydantic
+gradio
+python-dotenv
+nest_asyncio
+playwright
+wikipedia
+requests
+duckduckgo-search

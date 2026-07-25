@@ -1,0 +1,37 @@
+scout_task:
+  description: >
+    Search for the most popular dining spots in {country}. 
+    Focus on cities with the highest density of restaurants. 
+    Collect the the following information for each restaurant: 
+    
+    - name
+    - phone number
+    - website
+    - location
+    - cuisine type
+    - reviews
+    - reviewlink
+    - Social media links
+  expected_output: >
+    A list of 10 restaurants with the following information:
+    - name
+    - phone number
+    - website
+    - location
+    - cuisine type
+    - reviews
+    - reviewlink
+    - Social media links
+  agent: scout
+  output_file: output/scout_report.md
+
+analyst_task:
+  description: >
+   Take the list of 10 restaurants and perform a deep dive into their popularity.
+   Compare their total review counts and average ratings. 
+   Rank them from 1 to 10 based on their popularity.
+  expected_output: >
+    A formatted Markdown list of 10 restaurants ranked from 1 to 10 based on their popularity
+    including their Name, Location, Primary Cuisine and Popularity Score (1-100).
+  agent: analyst
+  output_file: output/analyst_report.md

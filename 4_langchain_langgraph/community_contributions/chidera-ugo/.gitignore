@@ -1,0 +1,7 @@
+knowledge_base/
+sidekick_memory.db
+sandbox/
+.env
+__pycache__/
+*.pyc
+.venv/
