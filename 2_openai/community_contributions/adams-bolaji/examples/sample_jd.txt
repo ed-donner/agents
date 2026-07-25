@@ -1,0 +1,21 @@
+Software Engineer – Backend (Remote-friendly)
+
+About us
+CloudLedger builds compliance-ready fintech tools for mid-size companies. We are a small product engineering team shipping fast with high quality.
+
+What you will do
+- Design and maintain REST and event-driven services (Python).
+- Improve reliability: metrics, alerting, incident reviews.
+- Collaborate with product on API contracts and SLAs.
+- Mentor junior engineers through design reviews.
+
+Requirements
+- 4+ years professional backend development.
+- Strong Python, SQL, and experience with PostgreSQL.
+- Experience with cloud deploys (AWS or GCP) and Docker.
+- Comfortable with async workloads (queues or Kafka a plus).
+- Clear written communication for cross-functional work.
+
+Nice to have
+- Prior work in regulated industries (SOC2, audit trails).
+- OpenAPI / schema-first API design.
