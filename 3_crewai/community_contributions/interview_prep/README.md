@@ -91,4 +91,4 @@ interview_prep/
 
 ## Author
 
-Shivam Gupta — built as part of Ed Donner's Agentic AI course (Week 3 — CrewAI).
+Shivam Garg — built as part of Ed Donner's Agentic AI course (Week 3 — CrewAI).
