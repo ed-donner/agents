@@ -38,6 +38,8 @@ uv run run_crew
 
 Input sample: `broken_script.py`. Example fixed output: `fixed_script.py`.
 
+Full project (optional): https://github.com/Sama-ndari/code-phoenix
+
 ## Author
 
 [Sama-ndari](https://github.com/Sama-ndari) — https://www.samandari.dev
