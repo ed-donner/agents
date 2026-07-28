@@ -27,6 +27,8 @@ OPENAI_API_KEY=...
 
 Open `ops_manager.ipynb` and run all cells.
 
+Full project (optional): https://github.com/Sama-ndari/ai-operations-manager-agent
+
 ## Author
 
 [Sama-ndari](https://github.com/Sama-ndari) — https://www.samandari.dev
