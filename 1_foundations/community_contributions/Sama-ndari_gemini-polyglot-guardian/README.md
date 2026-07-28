@@ -29,6 +29,8 @@ GEMINI_API_KEY=your_key
 
 Open `gemini_polyglot_guardian.ipynb` and run all cells (launches Gradio).
 
+Full project (optional): https://github.com/Sama-ndari/gemini-polyglot-guardian
+
 ## Author
 
 [Sama-ndari](https://github.com/Sama-ndari) — https://www.samandari.dev
