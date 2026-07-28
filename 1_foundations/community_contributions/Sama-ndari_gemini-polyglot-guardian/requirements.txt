@@ -1,0 +1,20 @@
+# Google GenAI SDK for Gemini API (new package)
+google-genai>=1.0.0
+
+# LangGraph for multi-agent orchestration
+langgraph>=0.2.0
+langchain-core>=0.3.0
+
+# Gradio for web interface
+gradio>=5.0.0
+
+# Jupyter notebook support
+jupyter>=1.0.0
+ipykernel>=6.29.0
+
+# Utilities
+python-dotenv>=1.0.0
+typing-extensions>=4.0.0
+
+# For JSON handling and validation
+pydantic>=2.0.0
