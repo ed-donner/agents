@@ -28,6 +28,8 @@ SENDGRID_API_KEY=...
 
 Open `sdr_agent.ipynb` and run all cells.
 
+Full project (optional): https://github.com/Sama-ndari/autonomous-sdr-agent
+
 ## Author
 
 [Sama-ndari](https://github.com/Sama-ndari) — https://www.samandari.dev
