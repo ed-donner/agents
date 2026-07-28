@@ -1,0 +1,9 @@
+discovery_design_task:
+  description: >
+    1. Search the web for best practices regarding: {user_requirement}.
+    2. Define the project name and the required stack.
+    3. Determine exactly which specialized agents (roles, goals, tools) are needed.
+    4. List the sequence of dynamic tasks required to complete the project.
+  expected_output: >
+    A structured ProjectBlueprint containing the team composition and task sequence.
+  agent: architect
