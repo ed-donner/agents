@@ -31,7 +31,7 @@ SERPER_API_KEY=...
 uv run run_crew
 ```
 
-Full project (optional): https://github.com/Sama-ndari/dev-swarm
+Full project (optional): https://github.com/Sama-ndari/dev-swarm-autonomous-agency
 
 ## Author
 
