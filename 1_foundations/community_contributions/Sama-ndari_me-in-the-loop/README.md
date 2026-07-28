@@ -37,6 +37,8 @@ python app.py
 
 Or open `personal_ai_clone.ipynb` and run the cells.
 
+Full project (optional): https://github.com/Sama-ndari/personal-ai-clone
+
 ## Author
 
 [Sama-ndari](https://github.com/Sama-ndari) — https://www.samandari.dev
