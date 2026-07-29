@@ -1,87 +1,82 @@
-"""Styling constants for the digital twin Gradio app."""
-
-GOLD = "#ecad0a"
-BLUE = "#209dd7"
-PURPLE = "#753991"
+"""Styling constants for the digital twin Gradio app with a full-width WhatsApp-style modern design."""
 
 EXAMPLES = [
-    "Tell me about your background and experience.",
-    "What kinds of projects are you working on now?",
-    "What are your strongest technical skills?",
-    "How can I get in touch with you?",
+    "Tell me about your background and AI/ML experience.",
+    "What key projects in LLMs, RAG, and AI have you built?",
+    "What are your strongest technical skills and programming tools?",
+    "How can I get in touch or schedule a meeting with you?",
 ]
 
 CSS = """
-:root {
-  --twin-gold: #ecad0a;
-  --twin-blue: #209dd7;
-  --twin-purple: #753991;
-  --twin-bg: #0d0d10;
-  --twin-surface: #16161b;
-  --twin-surface-2: #1c1c22;
-  --twin-border: #2a2a32;
-  --twin-border-strong: #3a3a44;
-  --twin-text: #ececef;
-  --twin-muted: #8c8c95;
-}
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap');
 
-/* Light mode: Gradio adds `.dark` to <body> when dark; absence = light.
-   Only the neutral palette flips — gold/blue/purple accents stay identical. */
-body:not(.dark) {
-  --twin-bg: #f4f4f6;
-  --twin-surface: #ffffff;
-  --twin-surface-2: #ededf0;
-  --twin-border: #dcdce2;
-  --twin-border-strong: #b8b8c0;
-  --twin-text: #1a1a20;
-  --twin-muted: #6a6a72;
+:root {
+  --wa-bg: #0b1019;
+  --wa-chat-bg: #0f172a;
+  --wa-user-bg: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  --wa-bot-bg: #1e293b;
+  --wa-border: rgba(255, 255, 255, 0.08);
+  --wa-text: #f8fafc;
+  --wa-muted: #94a3b8;
+  --wa-accent: #10b981;
 }
 
 footer, .built-with, .show-api, .api-docs { display: none !important; }
 
-html, body, gradio-app { background: var(--twin-bg) !important; }
-
-/* ---------- Stable layout ---------- */
-.gradio-container {
-  background: var(--twin-bg) !important;
-  color: var(--twin-text) !important;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+html, body, gradio-app {
+  background: var(--wa-bg) !important;
+  color: var(--wa-text) !important;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  overflow-x: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
   width: 100% !important;
-  max-width: 880px !important;
+}
+
+/* ---------- Full Width Layout Container ---------- */
+.gradio-container {
+  background: transparent !important;
+  color: var(--wa-text) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  width: 100% !important;
+  max-width: 1380px !important;
   min-width: 0 !important;
   margin: 0 auto !important;
-  padding: 32px 24px 48px !important;
+  padding: 24px 32px 40px !important;
 }
+
 .gradio-container .main, .gradio-container .contain, .gradio-container .wrap {
   width: 100% !important;
   max-width: 100% !important;
   min-width: 0 !important;
 }
-.gradio-container * { min-width: 0; }
 
-/* ---------- Title ---------- */
+/* ---------- Title & Futuristic Header ---------- */
 .gradio-container h1 {
-  color: var(--twin-text) !important;
+  font-family: 'Outfit', sans-serif !important;
   font-size: 26px !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.02em !important;
-  border-left: 3px solid var(--twin-gold);
-  padding-left: 12px !important;
-  margin: 4px 0 8px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  background: linear-gradient(135deg, #34d399 0%, #60a5fa 100%);
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  border-left: 4px solid var(--wa-accent);
+  padding-left: 16px !important;
+  margin: 4px 0 6px !important;
   text-align: left !important;
 }
 
-/* ---------- Sharp corners on structural pieces ---------- */
-.chatbot, .chatbot *, .block, .form,
-button, input, textarea,
-.examples button {
-  border-radius: 0 !important;
+.gradio-container p, .gradio-container .description {
+  color: var(--wa-muted) !important;
+  font-size: 14.5px !important;
+  font-weight: 500 !important;
+  margin-bottom: 20px !important;
 }
 
-/* ---------- Block surfaces ---------- */
-.block, .form { background: transparent !important; box-shadow: none !important; }
+/* ---------- Block Surfaces ---------- */
+.block, .form { background: transparent !important; box-shadow: none !important; border: none !important; }
 
-/* ---------- Hide the Chatbot label / header strip ---------- */
+/* Hide default chatbot header labels */
 .chatbot > .block-label,
 .chatbot > label,
 .chatbot .label-wrap,
@@ -90,271 +85,256 @@ button, input, textarea,
   display: none !important;
 }
 
-/* ---------- Chatbot frame ---------- */
+/* ---------- Full Width Chatbot Panel ---------- */
 .chatbot, .chatbot.block {
-  background: var(--twin-surface) !important;
-  border: 1px solid var(--twin-border) !important;
-  min-height: 460px !important;
-  box-shadow: none !important;
+  background: var(--wa-chat-bg) !important;
+  border: 1px solid var(--wa-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6) !important;
+  height: 640px !important;
+  min-height: 640px !important;
+  padding: 28px 24px !important;
+  overflow-y: auto !important;
+  width: 100% !important;
 }
-.chatbot .placeholder, .chatbot .placeholder * { color: var(--twin-muted) !important; }
 
-/* ---------- Message rows: strip parent backgrounds ---------- */
-.message-row,
-.message-row > div,
-.message-row .role,
-.message-wrap, .bubble-wrap {
+.chatbot .placeholder, .chatbot .placeholder * {
+  color: var(--wa-muted) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 15px !important;
+}
+
+/* ---------- NEUTRALIZE ALL NESTED GRADIO CONTAINERS ---------- */
+/* Strip backgrounds, borders, padding, and shadows from all nested wrapper elements */
+.chatbot *,
+.chatbot .message-row,
+.chatbot .message-row *,
+.chatbot .message-wrap,
+.chatbot .bubble-wrap,
+.chatbot .prose {
   background: transparent !important;
-  border: 0 !important;
+  border: none !important;
   box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  outline: none !important;
 }
 
-/* ---------- Reset borders on every bubble variant first ---------- */
-.message-row .message,
-.message-row .message-bubble,
-.message-row .bubble {
-  border: 0 !important;
-  box-shadow: none !important;
-  padding: 6px 10px !important;
+/* Hide Gradio action buttons / share / copy popovers */
+.chatbot .action-buttons,
+.chatbot .message-buttons,
+.chatbot [data-testid="copy-button"],
+.chatbot .icon-button,
+.chatbot button.copy,
+.chatbot .bot-row button,
+.chatbot .user-row button {
+  display: none !important;
 }
 
-/* ---------- Bubble backgrounds (broad to cover Gradio variants) ---------- */
-.message-row.user-row .message,
-.message-row.user-row .message-bubble,
-.message-row.user-row .bubble,
-.message-row[data-role="user"] .message,
-.message-row[data-role="user"] .message-bubble {
-  background: var(--twin-blue) !important;
+/* ---------- Generous Row Spacing & Flex Alignments ---------- */
+.chatbot .message-row {
+  margin-bottom: 24px !important;
+  display: flex !important;
+  width: 100% !important;
+}
+
+.chatbot .message-row.user-row,
+.chatbot .message-row[data-role="user"] {
+  justify-content: flex-end !important;
+}
+
+.chatbot .message-row.bot-row,
+.chatbot .message-row[data-role="assistant"] {
+  justify-content: flex-start !important;
+}
+
+/* ---------- WHATSAPP STYLE CHAT BUBBLES ---------- */
+
+/* USER BUBBLE (Right-aligned, WhatsApp Emerald Green) */
+.chatbot .message-row.user-row > div,
+.chatbot .message-row.user-row .message,
+.chatbot .message-row[data-role="user"] > div,
+.chatbot .message-row[data-role="user"] .message {
+  background: var(--wa-user-bg) !important;
+  border-radius: 18px 18px 4px 18px !important;
   color: #ffffff !important;
+  padding: 14px 20px !important;
+  max-width: 72% !important;
+  margin-left: auto !important;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.25) !important;
+  word-break: break-word !important;
+  display: block !important;
 }
 
-.message-row.bot-row .message,
-.message-row.bot-row .message-bubble,
-.message-row.bot-row .bubble,
-.message-row[data-role="assistant"] .message,
-.message-row[data-role="assistant"] .message-bubble {
-  background: var(--twin-surface-2) !important;
-  color: var(--twin-text) !important;
+/* ASSISTANT / BOT BUBBLE (Left-aligned, Dark Slate Glass) */
+.chatbot .message-row.bot-row > div,
+.chatbot .message-row.bot-row .message,
+.chatbot .message-row[data-role="assistant"] > div,
+.chatbot .message-row[data-role="assistant"] .message {
+  background: var(--wa-bot-bg) !important;
+  border: 1px solid var(--wa-border) !important;
+  border-radius: 18px 18px 18px 4px !important;
+  color: #f8fafc !important;
+  padding: 16px 22px !important;
+  max-width: 78% !important;
+  margin-right: auto !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+  word-break: break-word !important;
+  display: block !important;
 }
 
-/* ---------- Purple stripe ----------
-   Apply to every common bubble class for assistant rows (we don't know which
-   one the running Gradio uses), then suppress on any *nested* instance so the
-   stripe lands on the outermost matching element only — exactly one stripe. */
-.message-row.bot-row .message,
-.message-row.bot-row .bubble,
-.message-row.bot-row .message-bubble,
-.message-row[data-role="assistant"] .message,
-.message-row[data-role="assistant"] .bubble,
-.message-row[data-role="assistant"] .message-bubble {
-  border-left: 2px solid var(--twin-purple) !important;
-}
-
-.message-row.bot-row .message .message,
-.message-row.bot-row .message .bubble,
-.message-row.bot-row .message .message-bubble,
-.message-row.bot-row .bubble .message,
-.message-row.bot-row .bubble .bubble,
-.message-row.bot-row .bubble .message-bubble,
-.message-row.bot-row .message-bubble .message,
-.message-row.bot-row .message-bubble .bubble,
-.message-row.bot-row .message-bubble .message-bubble,
-.message-row[data-role="assistant"] .message .message,
-.message-row[data-role="assistant"] .message .bubble,
-.message-row[data-role="assistant"] .message .message-bubble,
-.message-row[data-role="assistant"] .bubble .message,
-.message-row[data-role="assistant"] .bubble .bubble,
-.message-row[data-role="assistant"] .bubble .message-bubble,
-.message-row[data-role="assistant"] .message-bubble .message,
-.message-row[data-role="assistant"] .message-bubble .bubble,
-.message-row[data-role="assistant"] .message-bubble .message-bubble {
-  border-left: 0 !important;
-}
-
-/* ---------- Uniform font size in bubbles ----------
-   The "first paragraph different size" was caused by a leaky `.prose p:first-of-type`
-   selector. Force every paragraph in a bubble to the same size. */
-.message-row .message,
-.message-row .message-bubble,
-.message-row .bubble {
-  font-size: 14px !important;
-  line-height: 1.55 !important;
-}
-.message-row .message p,
-.message-row .message-bubble p,
-.message-row .bubble p,
-.message-row .prose p {
-  font-size: 14px !important;
-  line-height: 1.55 !important;
-  margin: 0 0 8px !important;
+/* ---------- PARAGRAPH & TYPOGRAPHY INSIDE BUBBLES ---------- */
+.chatbot .message-row p,
+.chatbot .message-row .prose p {
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  margin: 0 0 10px 0 !important;
   color: inherit !important;
 }
-.message-row .message p:last-child,
-.message-row .message-bubble p:last-child,
-.message-row .bubble p:last-child,
-.message-row .prose p:last-child { margin-bottom: 0 !important; }
 
-/* Strip stray internal borders/backgrounds from anything inside a bubble */
-.message-row .message *,
-.message-row .message-bubble *,
-.message-row .bubble * {
-  background: transparent !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-  color: inherit !important;
+.chatbot .message-row p:last-child,
+.chatbot .message-row .prose p:last-child {
+  margin-bottom: 0 !important;
 }
-.message-row .message a,
-.message-row .message-bubble a {
-  color: var(--twin-gold) !important;
+
+.chatbot .message-row ul,
+.chatbot .message-row ol {
+  margin: 8px 0 12px 22px !important;
+  padding: 0 !important;
+}
+
+.chatbot .message-row li {
+  margin-bottom: 6px !important;
+  line-height: 1.6 !important;
+}
+
+.chatbot .message-row a {
+  color: #34d399 !important;
   text-decoration: underline;
 }
 
-/* ---------- Input row alignment ---------- */
-.input-row,
-.gr-input-row,
-.chat-input-row,
-form[class*="input"] { align-items: stretch !important; }
+/* ---------- Textarea & Inputs Row ---------- */
+.input-row, .gr-input-row, .chat-input-row {
+  margin-top: 18px !important;
+  gap: 14px !important;
+  display: flex !important;
+  align-items: center !important;
+}
 
 textarea, input[type="text"] {
-  background: var(--twin-surface) !important;
-  border: 1px solid var(--twin-border) !important;
-  color: var(--twin-text) !important;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
-  font-size: 14px !important;
-  padding: 12px 14px !important;
-  line-height: 1.4 !important;
-  min-height: 48px !important;
+  background: #1e293b !important;
+  border: 1px solid var(--wa-border) !important;
+  border-radius: 16px !important;
+  color: #ffffff !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 15px !important;
+  padding: 16px 20px !important;
+  line-height: 1.5 !important;
+  min-height: 56px !important;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+  transition: border-color 0.2s ease !important;
+  flex: 1 !important;
 }
+
 textarea:focus, input[type="text"]:focus {
-  border-color: var(--twin-gold) !important;
+  border-color: var(--wa-accent) !important;
   outline: none !important;
-  box-shadow: 0 0 0 1px var(--twin-gold) !important;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3) !important;
 }
-textarea::placeholder, input::placeholder { color: var(--twin-muted) !important; }
 
-/* ---------- Buttons ---------- */
-button {
-  font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace !important;
-  letter-spacing: 0.12em !important;
-  text-transform: uppercase !important;
-  font-size: 11px !important;
-  font-weight: 600 !important;
-  border: 1px solid var(--twin-border) !important;
-  background: transparent !important;
-  color: var(--twin-text) !important;
-  padding: 0 16px !important;
-  min-height: 48px !important;
-  align-self: stretch !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  cursor: pointer;
-  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+textarea::placeholder, input::placeholder {
+  color: var(--wa-muted) !important;
 }
-button:hover { border-color: var(--twin-gold) !important; color: var(--twin-gold) !important; }
 
+/* ---------- Submit Button ---------- */
 button.primary,
 button[variant="primary"],
 button.submit,
 button.submit-button,
-.submit-button,
-button.lg.primary {
-  background: var(--twin-gold) !important;
-  border: 1px solid var(--twin-gold) !important;
-  color: #111111 !important;
-  min-height: 48px !important;
-  align-self: stretch !important;
-  padding: 0 14px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-button.primary:hover,
-button.submit:hover,
-.submit-button:hover,
-button.lg.primary:hover {
-  background: #ffc320 !important;
-  border-color: #ffc320 !important;
-  color: #111111 !important;
+.submit-button {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+  border: none !important;
+  color: #ffffff !important;
+  min-height: 56px !important;
+  padding: 0 24px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3) !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
 }
 
-/* ---------- Submit-button icon: center vertically and size correctly ---------- */
+button.primary:hover,
+button.submit:hover,
+.submit-button:hover {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%) !important;
+  box-shadow: 0 6px 22px rgba(16, 185, 129, 0.5) !important;
+  transform: translateY(-1px) !important;
+}
+
 button.submit svg,
 button.submit-button svg,
 .submit-button svg,
-button.primary svg,
-button[variant="primary"] svg {
-  width: 18px !important;
-  height: 18px !important;
-  margin: 0 auto !important;
-  display: block !important;
-  align-self: center !important;
-  color: #111111 !important;
+button.primary svg {
+  width: 20px !important;
+  height: 20px !important;
+  color: #ffffff !important;
   fill: currentColor !important;
   stroke: currentColor !important;
 }
 
-/* ---------- Examples ---------- */
+/* ---------- Example Chips ---------- */
 .examples, .examples-holder, [data-testid="examples"] {
   background: transparent !important;
   padding: 0 !important;
-  margin-top: 14px !important;
+  margin-top: 20px !important;
 }
 .examples table, .examples-table { background: transparent !important; border: 0 !important; }
-.examples button, .example, .examples td button, [data-testid="examples"] button {
-  background: var(--twin-surface) !important;
-  border: 1px solid var(--twin-border) !important;
-  color: var(--twin-text) !important;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
-  font-size: 13px !important;
-  font-weight: 400 !important;
-  padding: 10px 14px !important;
+
+.examples button, .example, [data-testid="examples"] button {
+  background: #1e293b !important;
+  border: 1px solid var(--wa-border) !important;
+  border-radius: 14px !important;
+  color: #cbd5e1 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 12px 18px !important;
   text-align: left !important;
-  min-height: 0 !important;
-  align-self: auto !important;
-  display: inline-block !important;
-}
-.examples button:hover, .example:hover, [data-testid="examples"] button:hover {
-  border-color: var(--twin-blue) !important;
-  color: var(--twin-blue) !important;
-  background: var(--twin-surface) !important;
+  transition: all 0.2s ease !important;
 }
 
-/* ---------- Icon buttons (clear, retry, copy) ---------- */
-.icon-button, .chatbot .icon-button {
-  color: var(--twin-muted) !important;
-  background: transparent !important;
-  border: 0 !important;
-  min-height: 0 !important;
-  align-self: auto !important;
-  padding: 4px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+.examples button:hover, .example:hover, [data-testid="examples"] button:hover {
+  background: rgba(16, 185, 129, 0.12) !important;
+  border-color: var(--wa-accent) !important;
+  color: #34d399 !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2) !important;
+  transform: translateY(-1px) !important;
 }
-.icon-button:hover, .chatbot .icon-button:hover { color: var(--twin-gold) !important; }
 
 /* ---------- Scrollbar ---------- */
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: var(--twin-bg); }
-::-webkit-scrollbar-thumb { background: var(--twin-border-strong); }
-::-webkit-scrollbar-thumb:hover { background: var(--twin-purple); }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--wa-chat-bg); }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--wa-accent); }
 
-/* ---------- Selection ---------- */
-::selection { background: var(--twin-gold); color: #111111; }
+::selection { background: var(--wa-accent); color: #0b1019; }
 
-/* ---------- Mobile ---------- */
 @media (max-width: 640px) {
-  .gradio-container { padding: 22px 14px 36px !important; }
-  .gradio-container h1 { font-size: 22px !important; }
+  .gradio-container { padding: 16px 12px 32px !important; }
+  .chatbot .message-row.user-row > div, .chatbot .message-row.user-row .message { max-width: 88% !important; }
+  .chatbot .message-row.bot-row > div, .chatbot .message-row.bot-row .message { max-width: 92% !important; }
 }
 """
 
 JS = """
 () => {
-  document.title = 'Digital Twin';
+  document.title = 'AI Digital Agent // Bhupesh Danewa';
 
   const focusInput = () => {
     const areas = document.querySelectorAll('textarea');
@@ -362,8 +342,6 @@ JS = """
   };
   setTimeout(focusInput, 300);
 
-  // Re-focus the message field whenever Gradio re-enables it
-  // (i.e. after the assistant finishes responding).
   const watchTextarea = (area) => {
     if (area.dataset.twinWatched) return;
     area.dataset.twinWatched = '1';

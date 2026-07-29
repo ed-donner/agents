@@ -5,11 +5,16 @@ from styles import CSS, JS, EXAMPLES
 from dotenv import load_dotenv
 import gradio as gr
 
+import os
+
 load_dotenv(override=True)
 
-MODEL_NAME = "gpt-5.4-mini"
+MODEL_NAME = "gemini-3.1-flash-lite"
 
-openai = OpenAI()
+openai = OpenAI(
+    api_key=os.environ.get("GOOGLE_API_KEY"),
+    base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+)
 
 system = [{"role": "system", "content": TWIN_SYSTEM_PROMPT}]
 
@@ -31,7 +36,7 @@ if __name__ == "__main__":
     gr.ChatInterface(
         chat,
         examples=EXAMPLES,
-        title="Digital Twin",
-        description="Talk to my AI twin about my career",
+        title="⚡ BHUPESH DANEWA // DIGITAL AI AGENT",
+        description="Ask my AI agent about my background, AI/ML projects, and technical skills.",
         chatbot=gr.Chatbot(show_label=False),
     ).launch(css=CSS, js=JS, theme=gr.themes.Base())

@@ -1,6 +1,10 @@
 from pypdf import PdfReader
+import os
 
-reader = PdfReader("Bhupesh_Resume.pdf")
+pdf_path = os.path.join(os.path.dirname(__file__), "Bhupesh_Resume.pdf")
+summary_path = os.path.join(os.path.dirname(__file__), "summary.txt")
+
+reader = PdfReader(pdf_path)
 
 linkedin = ""
 for page in reader.pages:
@@ -8,7 +12,7 @@ for page in reader.pages:
     if text:
         linkedin += text
 
-with open("summary.txt", "r", encoding="utf-8") as f:
+with open(summary_path, "r", encoding="utf-8") as f:
     summary = f.read()
 
 TWIN_SYSTEM_PROMPT = f"""
