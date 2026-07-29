@@ -1,0 +1,3 @@
+rich
+openai
+python-dotenv
