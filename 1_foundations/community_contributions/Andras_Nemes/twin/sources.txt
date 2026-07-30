@@ -1,0 +1,132 @@
+# Source corpus for Andras Nemes
+
+This file combines the text-only source files in this folder for use as LLM context. The PDF file is intentionally excluded.
+
+---
+
+## Personal summary
+
+My name is András Nemes, pronounced (/ˈɒndraːʃ ˈnɛmɛʃ/, ON-drahsh NEH-mesh). 
+I am a Senior Engineering Manager with a long background in software development and a strong interest in AI and large 
+language models. Originally from Hungary, I moved to Stockholm, Sweden, in 2011, after previously living and working in Munich, Germany. 
+I bring with me a long international career and extensive experience working across cultures, countries, and distributed teams.
+
+I have a passion for languages, both human and programming. Hungarian is my native language, and I also speak English and Swedish 
+fluently, German and French at an intermediate level, and Italian conversationally. In my software development career, I have worked
+ with a range of languages and technologies including Java, C#, Go, JavaScript, and some Python. My strongest background is in 
+backend and platform-oriented engineering, especially in cloud-native and microservices-based environments.
+
+I currently work as a Senior Engineering Manager, leading software engineers across distributed teams and helping create the 
+conditions for strong delivery, technical quality, and healthy team culture. I care deeply about building empowered teams, 
+reducing unnecessary complexity, promoting automation, and creating clear ownership. I strongly believe in continuous improvement, 
+reliable delivery, unit testing, and engineering practices that support both product development and operational excellence.
+
+I also serve as a mentor at my company, supporting colleagues who are interested in moving into people leadership roles. 
+In addition to mentoring, I voluntarily take on leadership-related responsibilities such as moderating and facilitating internal 
+manager-led discussion groups, where we explore topics related to leadership and management.
+
+Outside work, I enjoy reading books and watching films. I am especially fond of the Alien and Terminator series. 
+I am also a big football fan and enjoy following major tournaments such as the European Championship and the World Cup. 
+I cycle regularly and practise karate to stay fit. In the winter, I enjoy skiing when there is enough snow. I also love animals, 
+especially dogs and cats.
+
+I have children and enjoy spending time with my family, doing my best to encourage curiosity, respect, and kindness. 
+I have a strong interest in leadership and enjoy learning about management theory and practical leadership to 
+become the kind of leader people enjoy working with. I am also passionate about AI tools and use products such as ChatGPT 
+and Cursor to strengthen my workflows and explore new ways of working.
+
+---
+
+## Elevator pitch
+
+I’m a Senior Engineering Manager with over 15 years of experience in software development and more than 5 years in direct 
+people leadership. I specialise in building high-performing teams, driving engineering excellence, 
+and delivering scalable solutions in complex environments. My background in both hands-on development and leadership helps 
+me connect business goals with technical execution.
+
+I have led strong teams in both local and distributed setups across multiple countries and time zones, working with engineers 
+from junior to principal level. I have experience from both smaller growth-oriented companies and larger established organisations. 
+As a manager, I believe in building systems that reduce unnecessary complexity, promote automation, and give users and teams more control.
+
+In my current role, I lead teams of highly skilled software engineers working on business-critical, high-impact platform capabilities. 
+We work in a cloud-native, microservices-based environment where reliability, clear ownership, and smooth service-to-service 
+communication are essential. I work closely with product managers, peer engineering leaders, and other stakeholders to deliver 
+meaningful outcomes while maintaining technical quality and long-term sustainability.
+
+I strive to foster a culture of continuous improvement, accountability, and collaboration. I care deeply about helping engineers 
+grow, and I believe in creating empowered teams where people can do their best work without micromanagement. I enjoy giving credit 
+where it is due, supporting people in their development, and staying engaged until problems and obstacles are properly resolved.
+
+I believe strongly in unit testing, continuous delivery, and clear service ownership. I am particularly interested in building 
+autonomous teams that take responsibility for their systems from development to operations. I am also a strong advocate of simplicity, 
+maintainable design, and engineering practices that support both product delivery and operational excellence.
+
+---
+
+## Key achievements and leadership strengths
+
+Selected achievements
+Played a key leadership role during Flexera’s acquisition of Snow Software, helping guide two engineering teams through a major organisational transition. Maintained team morale, focus, continuity, and retention during a period of uncertainty and change, earning strong praise from management for communication and leadership.
+Led two high-performing software development teams at Flexera, delivering platform features and maintaining strong team engagement and productivity post-acquisition. Successfully supported the expansion of team scope, onboarding of new engineers, and transfer of new business domains in a distributed setup across countries and time zones.
+Despite the challenges of the acquisition, successfully led the delivery of several high-impact projects on Flexera’s platform. Teams had to ramp up quickly on unfamiliar systems and domains while continuing to deliver important features on time and to a high standard.
+Led the delivery of Zero Downtime Deployment capabilities that enabled self-service PowerBI report deployments through pipeline automation, improving delivery autonomy and reducing operational friction.
+Contributed to the development of a Notification Service that standardised customer notifications across the platform, improving consistency and enabling broader reuse across products and teams.
+Supported the modernisation of the Snow Atlas ingestion pipeline, improving a platform that processes data from thousands of customer devices and strengthening the technical foundation for data-driven capabilities.
+Drove platform enablement through services such as File Manager, helping establish reusable internal capabilities that could be adopted by other teams and domains.
+Supported cross-sell enablement and platform alignment between Snow Atlas and Flexera One after the acquisition, helping connect systems, teams, and priorities across the broader organisation.
+Built and evolved distributed, cloud-native platforms using technologies such as Go, .NET, Kubernetes, and messaging-based architectures, supporting scalable services, real-time communication, and data-heavy platform capabilities.
+Drove architectural and design initiatives in previous roles, including the adoption of domain-driven design, event-based architecture, and stronger software delivery practices.
+Leadership strengths
+Strong experience leading engineering teams in both local and distributed environments, including teams spread across countries and time zones.
+Comfortable leading engineers across a wide range of seniority levels, from junior developers to senior and principal engineers.
+Strong track record of combining people leadership with technical credibility, with a background that includes hands-on work in Go, .NET, microservices, messaging, and cloud-native systems.
+Experienced in building collaborative relationships with Product Managers, Product Owners, and other stakeholders to deliver business-critical and platform-critical initiatives.
+Advocate for engineering excellence through unit testing, clear service ownership, automation, maintainable design, and strong operational practices.
+Focused on creating empowered teams with high trust, clear expectations, and a strong sense of accountability, while avoiding micromanagement.
+Invested in coaching and mentoring engineers and aspiring managers, supporting internal leadership growth and long-term team health.
+Active contributor to engineering culture through knowledge sharing, leadership discussions, and continuous improvement of team processes and ways of working.
+
+---
+
+## Leadership style
+
+I lead with a focus on empowerment, clarity, and continuous improvement. 
+I strive to build high-performing teams by fostering a culture of trust, ownership, and collaboration—whether the team is local or distributed. 
+I believe in removing unnecessary complexity, promoting automation, and ensuring developers have the tools and autonomy they need to succeed. 
+I'm a firm believer in giving credit where it's due and in creating an environment where people can grow towards their professional goals. 
+I avoid micromanagement and instead focus on aligning priorities, solving obstacles, and supporting my team through open communication and accountability.
+
+---
+
+## Flexera company context
+
+Here's an intro on Flexera's business and domain:
+
+Use AI to simplify managing technology spend and risk
+Software, SaaS, hardware, cloud, containers and now AI—your hybrid IT environment keeps getting more complex. Gain the visibility and insight you need to optimize spend, minimize risk, achieve sustainability goals and make data-driven decisions to propel your business forward.
+Trusted answers for your technology questions
+Imagine having a complete picture of your technology everywhere it lives — and add AI to help you get your answers faster. This is Flexera.
+Turn insight into action with Flexera
+We help organizations understand and maximize the value of their technology investments.
+The intelligence to make better decisions, the data to bring teams together
+We are the industry leader in hybrid IT asset management (ITAM) and FinOps, with the numbers to back it up.
+
+Our vision: We are reimagining the way technology is bought, sold, managed and secured. Flexera develops industry-leading, Al-enabled technology to help you discover and manage your software, SaaS applications, hardware, cloud instances, containers and more.
+
+Our customers: Our success depends on your success. That's why we pride ourselves on helping customers drive meaningful outcomes for their organizations. Whether that's seeing thousands to millions in cost savings, avoiding surprise bills or audits, minimizing risks and addressing vulnerabilities, meeting your IT sustainability goals or just strengthening your position in vendor renewals.
+
+---
+
+## Contact details
+
+You can contact me on my LinkedIn profile here: https://www.linkedin.com/in/andrasnemes/
+Check out my technical blog here: https://dotnetcodr.com/
+You can also contact me via my technical blog: https://dotnetcodr.com/contact/
+
+---
+
+## Ask me anything prompts
+
+Curious about how I structure 1:1s? 
+How I balance technical depth with leadership responsibilities? 
+Or how I've handled acquisitions and team transitions? Feel free to reach out—I'm happy to share!

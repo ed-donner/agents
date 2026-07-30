@@ -60,7 +60,13 @@ async def judge_game(language: str, objective: str, uri: str) -> dict | None:
         verdict["note"] = note
         return {"recorded": True}
 
-    args = ["-y", "@playwright/mcp@latest", "--browser", "chrome", "--isolated"]
+    args = [
+        "-y",
+        "@playwright/mcp@latest",
+        "--browser", "chrome",
+        "--isolated",
+        "--allow-unrestricted-file-access"
+    ]
     if os.environ.get("QA_HEADLESS") == "1":
         args.append("--headless")
     browser = McpToolset(
