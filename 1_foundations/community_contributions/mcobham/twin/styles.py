@@ -1,8 +1,11 @@
 """Styling constants for the digital twin Gradio app."""
 
-GOLD = "#ecad0a"
-BLUE = "#209dd7"
-PURPLE = "#753991"
+GOLD = "#D4AF37"
+GOLD_HOVER = "#E8C547"
+GOLD_DEEP = "#9A7B1A"
+COPPER = "#6B4F2E"
+COPPER_TEXT = "#FFF8EC"
+CHAMPAGNE = "#B8A078"
 
 EXAMPLES = [
     "Tell me about your background and experience.",
@@ -13,28 +16,35 @@ EXAMPLES = [
 
 CSS = """
 :root {
-  --twin-gold: #ecad0a;
-  --twin-blue: #209dd7;
-  --twin-purple: #753991;
-  --twin-bg: #0d0d10;
-  --twin-surface: #16161b;
-  --twin-surface-2: #1c1c22;
-  --twin-border: #2a2a32;
-  --twin-border-strong: #3a3a44;
-  --twin-text: #ececef;
-  --twin-muted: #8c8c95;
+  --twin-gold: #D4AF37;
+  --twin-gold-hover: #E8C547;
+  --twin-gold-deep: #9A7B1A;
+  --twin-copper: #6B4F2E;
+  --twin-copper-text: #FFF8EC;
+  --twin-champagne: #B8A078;
+  --twin-on-gold: #111111;
+  --twin-bg: #0F0E0C;
+  --twin-surface: #1A1814;
+  --twin-surface-2: #242019;
+  --twin-border: #3D3629;
+  --twin-border-strong: #524A3A;
+  --twin-text: #F5F0E8;
+  --twin-muted: #9A9288;
 }
 
 /* Light mode: Gradio adds `.dark` to <body> when dark; absence = light.
-   Only the neutral palette flips — gold/blue/purple accents stay identical. */
+   Neutrals flip; gold darkens for legibility on light surfaces. */
 body:not(.dark) {
-  --twin-bg: #f4f4f6;
-  --twin-surface: #ffffff;
-  --twin-surface-2: #ededf0;
-  --twin-border: #dcdce2;
-  --twin-border-strong: #b8b8c0;
-  --twin-text: #1a1a20;
-  --twin-muted: #6a6a72;
+  --twin-bg: #FAF8F4;
+  --twin-surface: #FFFFFF;
+  --twin-surface-2: #F0EBE3;
+  --twin-border: #E0D8CC;
+  --twin-border-strong: #C4B8A8;
+  --twin-text: #1A1610;
+  --twin-muted: #6B6560;
+  --twin-gold: #B8860B;
+  --twin-gold-hover: #D4AF37;
+  --twin-on-gold: #FFFFFF;
 }
 
 footer, .built-with, .show-api, .api-docs { display: none !important; }
@@ -65,7 +75,7 @@ html, body, gradio-app { background: var(--twin-bg) !important; }
   font-size: 26px !important;
   font-weight: 700 !important;
   letter-spacing: -0.02em !important;
-  border-left: 3px solid var(--twin-gold);
+  border-left: 4px solid var(--twin-gold);
   padding-left: 12px !important;
   margin: 4px 0 8px !important;
   text-align: left !important;
@@ -124,8 +134,8 @@ button, input, textarea,
 .message-row.user-row .bubble,
 .message-row[data-role="user"] .message,
 .message-row[data-role="user"] .message-bubble {
-  background: var(--twin-blue) !important;
-  color: #ffffff !important;
+  background: var(--twin-copper) !important;
+  color: var(--twin-copper-text) !important;
 }
 
 .message-row.bot-row .message,
@@ -137,7 +147,7 @@ button, input, textarea,
   color: var(--twin-text) !important;
 }
 
-/* ---------- Purple stripe ----------
+/* ---------- Champagne stripe ----------
    Apply to every common bubble class for assistant rows (we don't know which
    one the running Gradio uses), then suppress on any *nested* instance so the
    stripe lands on the outermost matching element only — exactly one stripe. */
@@ -147,7 +157,7 @@ button, input, textarea,
 .message-row[data-role="assistant"] .message,
 .message-row[data-role="assistant"] .bubble,
 .message-row[data-role="assistant"] .message-bubble {
-  border-left: 2px solid var(--twin-purple) !important;
+  border-left: 2px solid var(--twin-champagne) !important;
 }
 
 .message-row.bot-row .message .message,
@@ -261,7 +271,7 @@ button.submit-button,
 button.lg.primary {
   background: var(--twin-gold) !important;
   border: 1px solid var(--twin-gold) !important;
-  color: #111111 !important;
+  color: var(--twin-on-gold) !important;
   min-height: 48px !important;
   align-self: stretch !important;
   padding: 0 14px !important;
@@ -273,9 +283,9 @@ button.primary:hover,
 button.submit:hover,
 .submit-button:hover,
 button.lg.primary:hover {
-  background: #ffc320 !important;
-  border-color: #ffc320 !important;
-  color: #111111 !important;
+  background: var(--twin-gold-hover) !important;
+  border-color: var(--twin-gold-hover) !important;
+  color: var(--twin-on-gold) !important;
 }
 
 /* ---------- Submit-button icon: center vertically and size correctly ---------- */
@@ -289,7 +299,7 @@ button[variant="primary"] svg {
   margin: 0 auto !important;
   display: block !important;
   align-self: center !important;
-  color: #111111 !important;
+  color: var(--twin-on-gold) !important;
   fill: currentColor !important;
   stroke: currentColor !important;
 }
@@ -317,8 +327,8 @@ button[variant="primary"] svg {
   display: inline-block !important;
 }
 .examples button:hover, .example:hover, [data-testid="examples"] button:hover {
-  border-color: var(--twin-blue) !important;
-  color: var(--twin-blue) !important;
+  border-color: var(--twin-gold) !important;
+  color: var(--twin-gold) !important;
   background: var(--twin-surface) !important;
 }
 
@@ -340,10 +350,10 @@ button[variant="primary"] svg {
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: var(--twin-bg); }
 ::-webkit-scrollbar-thumb { background: var(--twin-border-strong); }
-::-webkit-scrollbar-thumb:hover { background: var(--twin-purple); }
+::-webkit-scrollbar-thumb:hover { background: var(--twin-gold-deep); }
 
 /* ---------- Selection ---------- */
-::selection { background: var(--twin-gold); color: #111111; }
+::selection { background: var(--twin-gold); color: var(--twin-on-gold); }
 
 /* ---------- Mobile ---------- */
 @media (max-width: 640px) {
