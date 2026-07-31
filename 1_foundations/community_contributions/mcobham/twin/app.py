@@ -7,7 +7,7 @@ import gradio as gr
 
 load_dotenv(override=True)
 
-MODEL_NAME = "gpt-5.4-mini"
+MODEL_NAME = "gpt-5.5"
 
 openai = OpenAI()
 
