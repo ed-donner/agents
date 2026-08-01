@@ -30,6 +30,7 @@ def push(text):
         }
     )
 
+
 def record_user_details(email, name="Name not provided", notes="not provided"):
     push(f"Recording {name} with email {email} and notes {notes}")
     return {"recorded": "ok"}
@@ -144,9 +145,10 @@ class Evaluator:
 class Me:
 
     def __init__(self):
-        self.openai = OpenAI()
-        self.name = "Abdulrazaq Haroon"
-        reader = PdfReader("./me/linkedIn.pdf")
+        self.client = Anthropic()
+        self.model = "claude-sonnet-4-6"
+        self.name = "Ryan John"
+        reader = PdfReader("me/ryan_john.pdf")
         self.linkedin = ""
         for page in reader.pages:
             text = page.extract_text()
