@@ -186,3 +186,5 @@ memory.db
 # Ignore Accounts database in capstone project
 6_mcp/accounts.db
 6_mcp/memory/*.db
+1_foundations/my-resume/docs/*.*
+1_foundations/me/
