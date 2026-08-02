@@ -1,0 +1,1 @@
+export const currency = (n: number) => `$${n.toFixed(2)}`;

@@ -1,0 +1,52 @@
+design_task:
+  description: >
+    Review the requirements and produce a detailed design for {module_name}.
+    The module should contain a class {class_name} and a helper function
+    get_share_price(symbol). Describe every method signature and data structure.
+    Requirements: {requirements}
+  expected_output: >
+    A markdown design document with class diagram, method signatures, and
+    data descriptions.
+  agent: engineering_lead
+  output_file: output/{module_name}_design.md
+
+code_task:
+  description: >
+    Write the Python module {module_name} containing class {class_name}
+    that implements the design. Include get_share_price(symbol) with mock
+    prices for AAPL, TSLA, GOOGL.
+    Requirements: {requirements}
+  expected_output: >
+    Your final answer must contain ONLY the Python code wrapped in a
+    ```python ... ``` code block. No explanations, no thinking, no prose.
+  agent: backend_engineer
+  context:
+    - design_task
+  output_file: output/{module_name}
+
+frontend_task:
+  description: >
+    Create a Gradio app in app.py that lets a user interact with the
+    {class_name} class from {module_name}. Single-user, simple UI.
+    Requirements: {requirements}
+  expected_output: >
+    Your final answer must contain ONLY the Python code wrapped in a
+    ```python ... ``` code block. No explanations, no thinking, no prose.
+  agent: frontend_engineer
+  context:
+    - code_task
+  output_file: output/app.py
+
+test_task:
+  description: >
+    Write unit tests for {module_name} in test_{module_name} using unittest.
+    Test all public methods of {class_name}, including edge cases and
+    error conditions (insufficient funds, invalid quantities).
+    Requirements: {requirements}
+  expected_output: >
+    Your final answer must contain ONLY the Python code wrapped in a
+    ```python ... ``` code block. No explanations, no thinking, no prose.
+  agent: test_engineer
+  context:
+    - code_task
+  output_file: output/test_{module_name}

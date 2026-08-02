@@ -1,0 +1,26 @@
+[project]
+name = "code_phoenix"
+version = "0.1.0"
+description = "code_phoenix using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]==1.6.1",
+    "pydantic>=2.12.5",
+    "requests>=2.32.5",
+]
+
+[project.scripts]
+code_phoenix = "code_phoenix.main:run"
+run_crew = "code_phoenix.main:run"
+train = "code_phoenix.main:train"
+replay = "code_phoenix.main:replay"
+test = "code_phoenix.main:test"
+run_with_trigger = "code_phoenix.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

@@ -1,0 +1,21 @@
+[project]
+name = "job-scout-agent"
+version = "0.1.0"
+description = "Agentic AI pipeline for job search, ranking, review, and cover letter generation"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "openai-agents>=0.3.3",
+    "python-dotenv>=1.1.1",
+    "pyyaml>=6.0.2",
+    "gradio>=5.0.0",
+    "fpdf2>=2.7.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ipykernel>=6.30.1",
+]
+
+[tool.uv]
+package = false
