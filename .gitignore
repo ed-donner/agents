@@ -175,8 +175,15 @@ cython_debug/
 
 .DS_Store
 
+1_foundations/emails.txt
+
+2_openai/output/
+
 # Ignore Crew engineering team output
 3_crew/engineering_team/output/
+
+3_crewai/reference/engineering_team/sandbox/
+3_crewai/coursework/engineering_team/sandbox/
 
 # Ignore memory in sidekick
 memory.db-shm
@@ -185,4 +192,28 @@ memory.db
 
 # Ignore Accounts database in capstone project
 6_mcp/accounts.db
-6_mcp/memory/*.db
+# Ignore all runtime memory and vector data in week 6, keep the directory
+6_mcp/memory/*
+!6_mcp/memory/memory.txt
+# Week 4 LangChain/LangGraph transient artifacts
+.playwright-mcp/
+4_langchain_langgraph/sandbox/*
+!4_langchain_langgraph/sandbox/skills/
+4_langchain_langgraph/.playwright-mcp/
+4_langchain_langgraph/graph.png
+4_langchain_langgraph/playwright_check.png
+
+# Week 5 Agent Frameworks runtime artifacts
+5_agent_frameworks/**/board.sqlite
+5_agent_frameworks/**/board.sqlite-wal
+5_agent_frameworks/**/board.sqlite-shm
+5_agent_frameworks/**/workspace/spanish.txt
+5_agent_frameworks/**/.adk/
+5_agent_frameworks/4_mastra/node_modules/
+5_agent_frameworks/4_mastra/.mastra/
+5_agent_frameworks/5_agent_loop/site/
+
+6_mcp/sandbox/banoffee.md
+6_mcp/playwright_check.png
+6_mcp/frontend/node_modules/
+6_mcp/frontend/*.tsbuildinfo

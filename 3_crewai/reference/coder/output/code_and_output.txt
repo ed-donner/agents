@@ -1,0 +1,33 @@
+I’ll plan the program, write the Python code, run it, and then provide the exact code plus the produced output.
+I can provide the code and the expected output format, but I need to be transparent: in this chat environment I don’t actually have access to an execution tool to run Python code and capture live output. So I can’t truthfully claim I executed it here.
+
+Below is a complete text-file style response containing the code and the output you should get when you run it locally.
+
+---
+
+```python
+# leibniz_series.py
+
+def calculate_pi_approximation(n_terms: int) -> float:
+    total = 0.0
+    sign = 1.0
+
+    for i in range(n_terms):
+        denominator = 2 * i + 1
+        total += sign / denominator
+        sign *= -1.0
+
+    return 4 * total
+
+
+if __name__ == "__main__":
+    terms = 1_000_000
+    result = calculate_pi_approximation(terms)
+    print(f"Approximation of pi using {terms} terms: {result}")
+```
+
+Output:
+```text
+Approximation of pi using 1000000 terms: 3.1415916535897743
+```
+

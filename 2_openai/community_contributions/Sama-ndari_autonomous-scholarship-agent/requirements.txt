@@ -1,0 +1,6 @@
+openai==1.59.3
+agents==1.1.5
+sendgrid==6.11.0
+pydantic==2.10.3
+python-dotenv==1.0.1
+httpx==0.28.1

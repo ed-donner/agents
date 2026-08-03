@@ -1,0 +1,29 @@
+investigate_task:
+  description: >
+    1. Read the file '{filename}'.
+    2. Analyze the code to find syntax errors and logic bugs.
+    3. Produce a detailed report on WHY it is failing.
+  expected_output: >
+    A clear summary of the bug, the root cause, and the recommended fix.
+  agent: investigator
+
+fix_and_verify_task:
+  description: >
+    1. Use the report from the investigator.
+    2. Write a NEW file called 'fixed_script.py' with the corrected code.
+    3. Execute 'fixed_script.py' to ensure it runs without errors.
+    4. If it fails execution, read the error, fix the code, and try again.
+  expected_output: >
+    The content of the fixed python file and the result of the execution verification.
+  agent: engineer
+  context: [investigate_task]
+
+notify_task:
+  description: >
+    1. Summarize what was fixed.
+    2. Send a push notification to the user saying "CodePhoenix has fixed your script!".
+    3. Return a structured JSON report.
+  expected_output: >
+    A JSON object containing the summary, file path, and verification status.
+  agent: manager
+  context: [fix_and_verify_task]

@@ -1,18 +1,36 @@
 ## Master AI Agentic Engineering -  build autonomous AI Agents
 
-### 6 week journey to code and deploy AI Agents with OpenAI Agents SDK, CrewAI, LangGraph, AutoGen and MCP
+### 6 week journey to code and deploy AI Agents with OpenAI Agents SDK, CrewAI, LangGraph, Google ADK, Pydantic AI and MCP
 
-![Autonomous Agent](assets/autonomy.png)
+![Autonomous Agent](assets/agentic.jpg)
 
 _If you're looking at this in Cursor, please right click on the filename in the Explorer on the left, and select "Open preview", to view the formatted version._
 
 I couldn't be more excited to welcome you! This is the start of your 6 week adventure into the powerful, astonishing and often surreal world of Agentic AI.
 
+### This is the refreshed version from Summer 2026
+
+This has fully refreshed content with the latest tools, models and techniques. Answers to common questions:  
+[What changed in the upgrade?](https://edwarddonner.com/avatar?q=67)  
+[Why was there an upgrade?](https://edwarddonner.com/avatar?q=65)  
+[I was in the middle of the course - how do I upgrade my code](https://edwarddonner.com/avatar?q=66)  
+
+### Answers to the most common questions
+
+[My Cursor looks different to yours (new splash screen)](https://edwarddonner.com/avatar?q=54)  
+[Can I use Gemini or free models instead of OpenAI Yes!](https://edwarddonner.com/avatar?q=8)  
+[Where are the course resources](https://edwarddonner.com/2025/04/21/the-complete-agentic-ai-engineering-course/)   
+[How does this course fit in with your others?](https://edwarddonner.com/curriculum)  
+[Can I take this course with no programming background?](https://edwarddonner.com/avatar?q=2)  
+[What job can I get after taking this course?](https://edwarddonner.com/avatar?q=3)  
+
 ### Before you begin
 
 I'm here to help you be most successful! Please do reach out if I can help, either in the platform or by emailing me direct (ed@edwarddonner.com). It's always great to connect with people on LinkedIn to build up the community - you'll find me here:  
 https://www.linkedin.com/in/eddonner/  
-And this is new to me, but I'm also trying out X/Twitter at [@edwarddonner](https://x.com/edwarddonner) - if you're on X, please show me how it's done 😂  
+
+And my YouTube channel has many supplemental videos to add to the course; you'll find it here:  
+https://youtube.com/@edward.donner
 
 ### The not-so-dreaded setup instructions
 
@@ -24,37 +42,11 @@ Perhaps famous last words: but I really, truly hope that I've put together an en
 
 Any problems, please do contact me.
 
-### Important notes for CrewAI week (Week 3)
-
-Windows PC users: you will need to have checked the "gotcha #4" at the top of the [SETUP-PC](setup/SETUP-PC.md) instructions -- installing Microsoft Build Tools.  
-If you don't do this, then CrewAI will fail with an obscure error involving Chroma..
-
-
-Then, you will need to run this command in a Cursor Terminal in the project root directory in order to run the Crew commands:  
-`uv tool install crewai==0.130.0 --python 3.12`   
-And in case you've used Crew before, it might be worth doing this to make sure you have the latest:  
-`uv tool upgrade crewai==0.130.0 --python 3.12`  
-
-This command pins Crew to the same version that I use on the course. If you have any problems with Crew, you could try using the latest version instead, by running this command:  
-`uv tool upgrade crewai --python 3.12`  
-
-At any point, you can see which version of Crew you have installed with this:  
-`uv tool list`
-
-Sidenote: a "tool" with uv is a utility that is installed globally by uv. After installing this tool, you can use "crewai" as a command, and it runs the code associated with this tool.
-
-Then please keep in mind for Crew:
-
-1. There are two ways that you can work on the CrewAI project in week 3. Either review the code for each project while I build it, and then do `crewai run` to see it in action. Or if you prefer to be more hands-on, then create your own Crew project from scratch to mirror mine; for example, create `my_debate` to go alongside `debate`, and write the code alongside me. Either approach works!  
-2. Windows users: there's a new issue that was recently introduced by one of Crew's libraries. Until this is fixed, you might get a "unicode" error when you try to run `crewai create crew`.  If that happens, please try running this command in the Terminal first: `$env:PYTHONUTF8 = "1"`  
-3. Gemini users: in addition to a key in your `.env` file for `GOOGLE_API_KEY`, you will need an identical key for `GEMINI_API_KEY`
-
 ### Super useful resources
 
 - The course [resources](https://edwarddonner.com/2025/04/21/the-complete-agentic-ai-engineering-course/) with videos
 - Many essential guides in the [guides](guides/01_intro.ipynb) section
-- The [troubleshooting](setup/troubleshooting.ipynb) notebook  
-- My overall [FAQ](https://edwarddonner.com/faq) page with common issues and questions
+- My [Avatar](https://edwarddonner.com/avatar) that can answer all common questions
 
 ### API costs - please read me!
 

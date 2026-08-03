@@ -1,0 +1,30 @@
+# Copy to config.yaml and fill in your own details.
+
+candidate:
+  name: "Your Name"
+  email: "your.email@example.com"
+  phone: "+1 123 4567890"
+  location: "Munich, Germany"
+
+profile_path: "profile.md"
+criteria_path: "criteria.md"
+
+profile_summary: |
+  Short 3-6 sentence summary of your background for the prefilter stage.
+  Keep it concise and role-relevant.
+
+search:
+  terms:
+    - "Product Manager"
+    - "Senior Product Manager"
+    - "Product Owner"
+    - "Solutions Architect"
+  location: "Seattle, USA"
+  results_per_call: 25
+  hours_old: 240
+
+prefilter:
+  shortlist_min_size: 30
+
+evaluator:
+  top_n: 10
