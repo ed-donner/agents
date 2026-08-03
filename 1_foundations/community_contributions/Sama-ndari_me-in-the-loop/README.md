@@ -1,33 +1,48 @@
 # Personal AI Clone (Week 1)
 
-Digital twin chatbot with RAG + OpenAI tool calling + Gradio + Pushover notifications.
+Digital twin chatbot with document context + OpenAI tool calling + Gradio + Pushover.
 
-Built for the Agentic AI Engineering Course (Week 1 foundations): resume/PDF context, function tools, and a chat UI.
+Week 1 patterns: load local files into a system prompt, function tools, Gradio chat UI.
 
 ## What it does
 
-- Answers questions from files in `me/` (PDF, DOCX) and optional URLs in `me/links.txt`
+- Answers from files you place in `me/` (PDF, DOCX) and optional URLs in `me/links.txt`
 - Tools: `record_user_details`, `record_unknown_question` (Pushover when configured)
-- Gradio chat UI (`app.py`) and walkthrough notebook (`personal_ai_clone.ipynb`)
+- Gradio UI (`app.py`) and walkthrough notebook (`personal_ai_clone.ipynb`)
+
+## Knowledge files (not in this PR)
+
+Large resume/brain binaries are kept out of the course repo (Ed’s size guidance).
+
+Add your own docs under `me/`, or download sample files from the full project:
+
+https://github.com/Sama-ndari/personal-ai-clone
+
+Expected layout:
+
+```
+me/
+  resume.pdf          # optional — your CV
+  AI-CLONE-BRAIN.docx # optional — Q&A / biography
+  links.txt           # optional — URLs to scrape
+  summary.md          # tiny demo context (included)
+```
 
 ## Setup
 
+Use the course `uv` environment from the repo root (preferred). Then:
+
 ```bash
 cd 1_foundations/community_contributions/Sama-ndari_me-in-the-loop
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
 ```
 
-Create a `.env` (do not commit it):
+Create `.env` (do not commit):
 
 ```
 OPENAI_API_KEY=your_key
 PUSHOVER_USER=optional
 PUSHOVER_TOKEN=optional
 ```
-
-Replace `me/resume.pdf` (and optional DOCX / links) with your own data if you want.
 
 ## Run
 
@@ -37,7 +52,7 @@ python app.py
 
 Or open `personal_ai_clone.ipynb` and run the cells.
 
-Full project (optional): https://github.com/Sama-ndari/personal-ai-clone
+Full project: https://github.com/Sama-ndari/personal-ai-clone
 
 ## Author
 

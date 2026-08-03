@@ -137,6 +137,16 @@ class PersonalAI:
                 except Exception as e:
                     print(f'Error reading DOCX {filename}: {e}')
 
+            # Lightweight markdown / text demos (skip links.txt)
+            elif filename.endswith(('.md', '.txt')) and filename != 'links.txt':
+                try:
+                    with open(path, encoding='utf-8') as fh:
+                        text = fh.read()
+                    full_context.append(f'--- Content from {filename} ---\n{text}')
+                    print(f'Loaded text: {filename}')
+                except OSError as e:
+                    print(f'Error reading {filename}: {e}')
+
         # Handle URL Scraping
         if os.path.exists(url_list_file):
             with open(url_list_file, 'r') as f:
