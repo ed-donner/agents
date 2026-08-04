@@ -4,3 +4,4 @@ __pycache__/
 .venv/
 *.pyc
 output/
+uv.lock

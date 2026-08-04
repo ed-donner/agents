@@ -142,30 +142,3 @@ def run():
 
     if start_mock == "y":
         run_mock_interview(company, role, prep_context)
-
-
-def train():
-    inputs = {"company": "Google", "role": "Software Engineer", "job_description": ""}
-    try:
-        InterviewPrepCrew().crew().train(
-            n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs
-        )
-    except Exception as e:
-        raise Exception(f"An error occurred while training the crew: {e}")
-
-
-def replay():
-    try:
-        InterviewPrepCrew().crew().replay(task_id=sys.argv[1])
-    except Exception as e:
-        raise Exception(f"An error occurred while replaying the crew: {e}")
-
-
-def test():
-    inputs = {"company": "Google", "role": "Software Engineer", "job_description": ""}
-    try:
-        InterviewPrepCrew().crew().test(
-            n_iterations=int(sys.argv[1]), eval_llm=sys.argv[2], inputs=inputs
-        )
-    except Exception as e:
-        raise Exception(f"An error occurred while testing the crew: {e}")

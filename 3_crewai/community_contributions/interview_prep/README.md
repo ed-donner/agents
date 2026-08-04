@@ -1,3 +1,9 @@
+---
+title: interview-prep-crew
+app_file: app.py
+sdk: gradio
+sdk_version: 6.20.0
+---
 # Interview Prep Crew
 
 A multi-agent CrewAI project that researches any company and role to generate a structured, actionable interview preparation guide — then lets you practice with an interactive Gemini-powered mock interview.
