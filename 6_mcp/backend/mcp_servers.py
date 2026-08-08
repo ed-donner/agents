@@ -40,7 +40,7 @@ def researcher_mcp_servers(name: str) -> list[MCPServerStdio]:
     researcher reaches for plain search rather than its heavier crawl or deep-research tools.
     """
     fetch = MCPServerStdio(
-        {"command": "uvx", "args": ["mcp-server-fetch"]},
+        {"command": "uvx", "args": ["--with", "mcp<2","mcp-server-fetch"]},
         client_session_timeout_seconds=TIMEOUT,
     )
     search = MCPServerStdio(
