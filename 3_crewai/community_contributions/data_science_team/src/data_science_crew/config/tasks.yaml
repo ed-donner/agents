@@ -1,0 +1,88 @@
+strategy_task:
+  description: >
+    Take the high level requirements described here and prepare a comprehensive data science & BI architecture design for the team.
+    Business requirements: {business_requirements}
+    Target dataset filename: {dataset_filename}
+    Use your sandbox tools to inspect '{dataset_filename}' — read the header row, check column data types, and count rows.
+    Output your COMPLETE, detailed markdown design document directly as your final response text. Include:
+    1. Executive Summary & Architecture Overview.
+    2. Exact Column Schema of '{dataset_filename}' (from your inspection).
+    3. Key KPI Definitions (Total Revenue, Orders, AOV, Margin, etc.) and exact mathematical formulas.
+    4. Data Cleaning Rules and explicit output column specifications for 'cleaned_data.csv' and 'summary_stats.csv'.
+    5. Dashboard Layout Recommendations: tabbed structure (Executive Overview, Regional Analytics, Product Performance, Summary Data), chart types, and filter specifications.
+    6. Detailed Team Assignments for data_engineer, dashboard_engineer, and qa_reporter.
+    IMPORTANT: Output the entire, full-length markdown document directly as your final text response. Do not truncate or summarize.
+  expected_output: >
+    A comprehensive, production-ready markdown design document detailing dataset structure, KPI metric formulas, data pipeline contracts, and dashboard layout specifications.
+  agent: data_strategist
+  output_file: sandbox/design.md
+
+data_task:
+  description: >
+    Read the design specification in 'sandbox/design.md' created by the data strategist.
+    Write a Python module 'data_pipeline.py' in the sandbox that reads '{dataset_filename}', cleans missing/malformed records, calculates key KPI aggregations, and outputs summary statistics.
+    Use the exact column names specified in the design for your output CSV files.
+    Use your sandbox tools to execute 'data_pipeline.py' inside the sandbox.
+    Fix any bugs or execution errors and rerun the script until it runs cleanly and outputs 'summary_stats.csv' and 'cleaned_data.csv'.
+  expected_output: >
+    Python files written to the sandbox that implement the design.
+    IMPORTANT: Use your sandbox tools to write and check the code.
+  agent: data_engineer
+  context:
+    - strategy_task
+  output_file: sandbox/data_pipeline_summary.md
+
+dashboard_task:
+  description: >
+    Write a visually stunning Gradio 6 dashboard in a module app.py that visualizes cleaned_data.csv and summary_stats.csv, as described in the design.
+    The dashboard should look premium and enterprise-grade, not basic or plain.
+    IMPORTANT FIRST STEP: Before writing any code, use your sandbox tools to READ the first line of 'cleaned_data.csv' to learn the exact column names. Use those exact column names in your code. Do NOT guess or hardcode column names.
+    Use your Context7 MCP tools to check the latest Gradio 6 APIs (e.g., theme/css placement, slider parameter types, event handler signatures) to ensure error-free code.
+    STRICT GRADIO 6 COMPONENT RULES:
+    - `gr.Slider` ONLY accepts a single numeric value (e.g. `value=1`). NEVER pass a tuple or list `value=(min, max)` to `gr.Slider`, because Gradio 6's internal preprocessor will crash with `TypeError: '<' not supported between instances of 'list' and 'float'`.
+    - For date/month range filtering, use TWO separate `gr.Slider` components (e.g. `start_month` slider and `end_month` slider) OR `gr.Dropdown` selectors.
+    VISUAL DESIGN REQUIREMENTS (COHESIVE DARK THEME):
+    - Dark theme palette: `#0f0f1a` page background, `#1e1e2f` card/filter background, indigo/purple gradient headers, and crisp light typography.
+    - Styled HTML KPI cards with dark gradient backgrounds (`#1e1e2f`), box-shadows, large bold metric numbers, and colored top-border accents (`#636EFA`, `#00CC96`, `#AB63FA`).
+    - Use Plotly charts with `plotly_dark` template (NEVER `plotly_white`) and transparent backgrounds (`paper_bgcolor='rgba(0,0,0,0)'`, `plot_bgcolor='rgba(0,0,0,0)'`) so charts blend seamlessly into the dark background.
+    - Style filter row, dropdowns, and sliders with dark containers (`#1e1e2f`), light text, and dark borders — NO bright white container boxes anywhere.
+    - Tabbed layout with gr.Tabs (e.g. Executive Overview, Regional Analytics, Product Performance, Summary Data).
+    - Compact gr.Dropdown filter selectors in a single horizontal row.
+    Then write a validation script 'sandbox/_validate.py' that:
+    1. Monkey-patches demo.launch to a no-op so it does not block.
+    2. Imports app.py and checks the Blocks object constructs.
+    3. Actually CALLS the main event handler function (e.g., update_dashboard) with default/sample inputs (e.g., 'All' for dropdowns, default slider values) and checks it returns valid outputs without any exception.
+    4. Prints VALIDATION PASSED only if everything succeeds.
+    Run _validate.py using your sandbox tools. Fix any errors and rerun until it passes.
+    IMPORTANT: Use your sandbox tools to write and check the code.
+  expected_output: >
+    A Gradio 6 UI in module app.py written to the sandbox that demonstrates the functionality.
+    The file should be ready so that it can be run as-is, in the same sandbox directory as the data files.
+    IMPORTANT: Use your sandbox tools to write and check the code.
+  agent: dashboard_engineer
+  context:
+    - strategy_task
+    - data_task
+  output_file: sandbox/dashboard_summary.md
+
+report_task:
+  description: >
+    Read 'sandbox/design.md', 'sandbox/cleaned_data.csv', and 'sandbox/summary_stats.csv'.
+    Audit the calculated totals across global metrics and dimensional breakdowns to verify numerical consistency.
+    Write a comprehensive executive summary report saved to 'sandbox/executive_summary.md'.
+    The report must cover:
+    1. Executive Summary & Key Highlights
+    2. Overall Performance Metrics (Revenue, Orders, AOV, Margin)
+    3. Category & Product Line Deep Dive
+    4. Regional & Segment Performance Analysis
+    5. Monthly & Quarterly Revenue Trends
+    6. Actionable Strategic Recommendations & Next Steps
+  expected_output: >
+    A detailed, executive-ready markdown report written to sandbox/executive_summary.md.
+    IMPORTANT: Use your sandbox tools to write the report.
+  agent: qa_reporter
+  context:
+    - strategy_task
+    - data_task
+    - dashboard_task
+  output_file: sandbox/executive_summary.md
