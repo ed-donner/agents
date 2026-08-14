@@ -1,0 +1,19 @@
+name: twin-agent
+services:
+  db:
+    image: pgvector/pgvector:pg18 # Postgres 18 + pgvector preinstalled
+    container_name: psql-local-dtwin
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    ports: 
+    - 5434:5432
+    volumes: 
+     - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      
+volumes:  
+  pgdata: 
