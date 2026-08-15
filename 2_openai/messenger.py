@@ -1,8 +1,8 @@
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 import requests
 import os
 
-load_dotenv(override=True)
+load_dotenv(find_dotenv(usecwd=True), override=True)
 
 RESEND_API_KEY = os.getenv("RESEND_API_KEY")
 EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
