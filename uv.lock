@@ -69,6 +69,7 @@ dependencies = [
     { name = "fastapi" },
     { name = "google-adk", extra = ["a2a", "mcp"] },
     { name = "gradio" },
+    { name = "groq" },
     { name = "ipykernel" },
     { name = "ipywidgets" },
     { name = "langchain" },
@@ -89,6 +90,7 @@ dependencies = [
     { name = "requests" },
     { name = "rich" },
     { name = "strands-agents", extra = ["openai"] },
+    { name = "tavily-python" },
     { name = "uvicorn", extra = ["standard"] },
     { name = "wikipedia" },
 ]
@@ -108,6 +110,7 @@ requires-dist = [
     { name = "fastapi", specifier = ">=0.136.1" },
     { name = "google-adk", extras = ["a2a", "mcp"], specifier = ">=2.2.0" },
     { name = "gradio", specifier = ">=6.14.0" },
+    { name = "groq", specifier = ">=1.6.0" },
     { name = "ipykernel", specifier = ">=7.2.0" },
     { name = "ipywidgets", specifier = ">=8.1.8" },
     { name = "langchain", specifier = ">=1.3.4" },
@@ -128,6 +131,7 @@ requires-dist = [
     { name = "requests", specifier = ">=2.33.1" },
     { name = "rich", specifier = ">=15.0.0" },
     { name = "strands-agents", extras = ["openai"], specifier = ">=1.43.0" },
+    { name = "tavily-python", specifier = ">=0.7.27" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.46.0" },
     { name = "wikipedia", specifier = ">=1.4.0" },
 ]
@@ -1406,6 +1410,23 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/52/36/bbdede67400277bef33d3ec0e6a31750da972c469f75966b4930c753218f/groovy-0.1.2.tar.gz", hash = "sha256:25c1dc09b3f9d7e292458aa762c6beb96ea037071bf5e917fc81fb78d2231083", size = 17325, upload-time = "2025-02-28T20:24:56.068Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/28/27/3d6dcadc8a3214d8522c1e7f6a19554e33659be44546d44a2f7572ac7d2a/groovy-0.1.2-py3-none-any.whl", hash = "sha256:7f7975bab18c729a257a8b1ae9dcd70b7cafb1720481beae47719af57c35fa64", size = 14090, upload-time = "2025-02-28T20:24:55.152Z" },
+]
+
+[[package]]
+name = "groq"
+version = "1.6.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "anyio" },
+    { name = "distro" },
+    { name = "httpx" },
+    { name = "pydantic" },
+    { name = "sniffio" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/67/3e/687064918e861082cb02165872bbda31269126a108a78794dae86ddadae2/groq-1.6.0.tar.gz", hash = "sha256:c4237ecf0053ba85fd926bb31cb4b178996310474b4618867994e3e40d8e3c02", size = 158424, upload-time = "2026-07-24T17:25:49.517Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/20/40/164338d796cf41ea5930a42023e986d8c993720bed670d5aa143e5854873/groq-1.6.0-py3-none-any.whl", hash = "sha256:fa16db582455db324adcff1b5908519474736872e28cd5c8fa2b8bef6860e12a", size = 143693, upload-time = "2026-07-24T17:25:48.2Z" },
 ]
 
 [[package]]
@@ -2997,7 +3018,7 @@ name = "pexpect"
 version = "4.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "ptyprocess", marker = "sys_platform != 'emscripten' and sys_platform != 'win32'" },
+    { name = "ptyprocess" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/42/92/cc564bf6381ff43ce1f4d06852fc19a2f11d180f23dc32d9588bee2f149d/pexpect-4.9.0.tar.gz", hash = "sha256:ee7d41123f3c9911050ea2c2dac107568dc43b2d3b0c7557a33212c398ead30f", size = 166450, upload-time = "2023-11-25T09:07:26.339Z" }
 wheels = [
@@ -3954,8 +3975,8 @@ name = "secretstorage"
 version = "3.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "cryptography", marker = "sys_platform != 'emscripten' and sys_platform != 'win32'" },
-    { name = "jeepney", marker = "sys_platform != 'emscripten' and sys_platform != 'win32'" },
+    { name = "cryptography" },
+    { name = "jeepney" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/1c/03/e834bcd866f2f8a49a85eaff47340affa3bfa391ee9912a952a1faa68c7b/secretstorage-3.5.0.tar.gz", hash = "sha256:f04b8e4689cbce351744d5537bf6b1329c6fc68f91fa666f60a380edddcd11be", size = 19884, upload-time = "2025-11-23T19:02:53.191Z" }
 wheels = [
@@ -4136,6 +4157,20 @@ wheels = [
 openai = [
     { name = "aws-bedrock-token-generator" },
     { name = "openai" },
+]
+
+[[package]]
+name = "tavily-python"
+version = "0.7.27"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+    { name = "requests" },
+    { name = "tiktoken" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/92/53/e97950453a215a7b8c2c44d70b216f64c0e1d9844d8b91f025104e96d233/tavily_python-0.7.27.tar.gz", hash = "sha256:3fbbee7fc7e252479b264835e6f943b4a81395429c1bd419e8024d11bf2c1831", size = 30750, upload-time = "2026-07-30T13:44:15.245Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/67/dd/cf4b6668ef06670a27ed4012f2bd3663602ad5f0e1ac9b0c23e8d45d01eb/tavily_python-0.7.27-py3-none-any.whl", hash = "sha256:e5cb40cc852d108ced8a313379b7098108642eedfbd97f821296a5e1a483e9b9", size = 21988, upload-time = "2026-07-30T13:44:14.404Z" },
 ]
 
 [[package]]
