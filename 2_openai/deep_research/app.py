@@ -1,5 +1,6 @@
 import re
 import gradio as gr
+import os
 from dotenv import load_dotenv
 from research_manager import ResearchManager
 from styles import CSS, JS, EXAMPLES, HEADER_HTML
@@ -65,4 +66,8 @@ with gr.Blocks(title="Deep Research AI | Bhupesh Danewa") as ui:
 
 
 if __name__ == "__main__":
-    ui.launch(css=CSS, js=JS, theme=gr.themes.Base())
+    port = int(os.getenv("PORT", 7860))
+    # Use 0.0.0.0 on Render (when PORT env var is present) and 127.0.0.1 locally for Windows browser compatibility
+    server_name = "0.0.0.0" if os.getenv("PORT") else "127.0.0.1"
+    print(f"Launching app on http://{server_name}:{port}")
+    ui.launch(server_name=server_name, server_port=port, css=CSS, js=JS, theme=gr.themes.Base())

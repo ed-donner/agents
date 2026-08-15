@@ -4,3 +4,4 @@ openai
 openai-agents
 gradio
 requests
+tavily-python
