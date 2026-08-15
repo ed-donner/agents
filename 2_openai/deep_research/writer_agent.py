@@ -1,10 +1,23 @@
 from pydantic import BaseModel, Field
-from agents import Agent
+from agents import Agent, OpenAIChatCompletionsModel
+from openai import AsyncOpenAI
 from dotenv import load_dotenv
 import os
 
 load_dotenv(override=True)
-MODEL_NAME = os.getenv("DEFAULT_MODEL_NAME", "gpt-5.4-mini")
+
+MODEL_NAME = os.getenv("GEMINI_MODEL_NAME", "gemini-3.1-flash-lite")
+api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
+
+gemini_client = AsyncOpenAI(
+    api_key=api_key,
+    base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+)
+
+gemini_model = OpenAIChatCompletionsModel(
+    model=MODEL_NAME,
+    openai_client=gemini_client
+)
 
 INSTRUCTIONS = """
 You are a senior researcher tasked with writing a cohesive report for a research query.
@@ -21,4 +34,4 @@ class ReportData(BaseModel):
     follow_up_questions: list[str] = Field(description="Suggested topics to research further")
 
 
-writer_agent = Agent(name="Writer Agent", instructions=INSTRUCTIONS, model=MODEL_NAME, output_type=ReportData)
+writer_agent = Agent(name="Writer Agent", instructions=INSTRUCTIONS, model=gemini_model, output_type=ReportData)

@@ -1,7 +1,7 @@
 EXAMPLES = [
-    "Most popular AI Agent frameworks in 2026",
-    "Most commercially successful Agentic AI implementations in 2026",
-    "Celebrities who don't like cheese",
+    "Tech & AI: Breakthroughs in Agentic AI and Autonomous Multimodal Reasoning in 2026",
+    "Healthcare & Biotech: Impact of AI in Early Disease Detection and Personalized Gene Therapy",
+    "Clean Energy & Climate: Commercial Viability of Solid-State Batteries and Next-Gen Grid Storage",
 ]
 
 HEADER_HTML = """
@@ -12,8 +12,17 @@ HEADER_HTML = """
         <span class="dr-bar dr-bar-3"></span>
     </div>
     <div class="dr-titles">
-        <h1>Deep<span class="dr-sep">/</span>Research</h1>
-        <p>Multi-search web investigation</p>
+        <div class="dr-top-row">
+            <h1>Deep<span class="dr-sep">/</span>Research</h1>
+            <span class="dr-author-badge">By <strong>Bhupesh Danewa</strong></span>
+        </div>
+        <p class="dr-subtitle">Autonomous Multi-Agent Web Research System • Next-Gen AI Intelligence</p>
+    </div>
+</div>
+<div class="dr-feature-banner">
+    <div class="dr-banner-icon">⚡</div>
+    <div class="dr-banner-text">
+        <strong>Autonomous Deep Research Engine:</strong> Performs multi-step web search planning, deep information extraction, cross-synthesis, and comprehensive report generation — built to deliver OpenAI & Gemini class Deep Research capabilities.
     </div>
 </div>
 """
@@ -75,6 +84,33 @@ body { background: var(--dr-bg, #fafaf7); }
 .dr-bar-2 { background: var(--dr-blue);   width: 70%;  }
 .dr-bar-3 { background: var(--dr-purple); width: 45%;  }
 
+.dr-top-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.dr-author-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.65rem;
+    background: rgba(32, 157, 215, 0.08);
+    border: 1.5px solid var(--dr-blue);
+    color: var(--dr-blue);
+    font-size: 0.72rem;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+    letter-spacing: 0.06em;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.dr-author-badge strong {
+    color: var(--dr-text);
+    margin-left: 0.35em;
+    font-weight: 700;
+}
+
 .dr-titles h1 {
     font-size: clamp(1.8rem, 4vw, 2.6rem);
     font-weight: 900;
@@ -91,13 +127,78 @@ body { background: var(--dr-bg, #fafaf7); }
     margin: 0 0.04em;
 }
 
-.dr-titles p {
+.dr-titles p, .dr-subtitle {
     font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
     font-size: 0.7rem;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     margin: 0.55rem 0 0;
     color: var(--dr-muted);
+}
+
+.dr-feature-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 0.9rem 1.15rem;
+    background: var(--dr-surface);
+    border: 1.5px solid var(--dr-line-soft);
+    border-left: 4px solid var(--dr-amber);
+    margin-bottom: 2rem;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    border-radius: 2px;
+}
+
+.dr-banner-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+    color: var(--dr-amber);
+}
+
+.dr-banner-text strong {
+    color: var(--dr-blue);
+}
+
+/* === EMAIL ROW === */
+.dr-email-row {
+    margin-bottom: 0.85rem !important;
+}
+
+#dr-email, #dr-email > div, #dr-email .wrap, #dr-email .form, #dr-email .block {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+
+#dr-email input, #dr-email textarea {
+    background: var(--dr-surface) !important;
+    color: var(--dr-text) !important;
+    border: 1.5px solid var(--dr-line-soft) !important;
+    border-radius: 0 !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.95rem !important;
+    font-family: inherit !important;
+    box-shadow: none !important;
+    transition: border-color 0.15s, box-shadow 0.15s !important;
+}
+
+#dr-email input:focus, #dr-email textarea:focus {
+    outline: none !important;
+    border-color: var(--dr-blue) !important;
+    box-shadow: 4px 4px 0 0 var(--dr-blue) !important;
+}
+
+#dr-email label span {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    color: var(--dr-muted) !important;
+    margin-bottom: 0.35rem !important;
+    display: inline-block !important;
 }
 
 /* === QUERY ROW === */

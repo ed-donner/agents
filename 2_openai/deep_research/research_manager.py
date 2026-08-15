@@ -7,7 +7,7 @@ import asyncio
 
 class ResearchManager:
 
-    async def run(self, query: str):
+    async def run(self, query: str, recipient_email: str = ""):
         """ Run the deep research process, yielding the status updates and the final report"""
         trace_id = gen_trace_id()
         with trace("Research trace", trace_id=trace_id):
@@ -18,7 +18,7 @@ class ResearchManager:
             yield "Searches complete, writing report..."
             report = await self.write_report(query, search_results)
             yield "Report written, sending email..."
-            await self.send_email(report)
+            await self.send_email(report, recipient_email=recipient_email)
             yield "Email sent, research complete"
             yield report.markdown_report
 
@@ -44,5 +44,8 @@ class ResearchManager:
         result = await Runner.run(writer_agent, input_message)
         return result.final_output
     
-    async def send_email(self, report: ReportData) -> None:
-        await Runner.run(email_agent, report.markdown_report)
+    async def send_email(self, report: ReportData, recipient_email: str = "") -> None:
+        message = report.markdown_report
+        if recipient_email:
+            message = f"Recipient Email: {recipient_email}\n\n{message}"
+        await Runner.run(email_agent, message)
