@@ -1,3 +1,4 @@
+# import proxy_patch # Incase running behind corp proxy, not a suggested approach for production
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from langchain.agents import create_agent
