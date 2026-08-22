@@ -1,0 +1,9 @@
+write_unit_tests:
+  description: >
+    Write tests for this requirement: {test_requirement}
+    Test this interface contract: {interface_contract}
+    Import Account with from backend import Account.
+    Use unittest and return only test_backend.py source.
+  expected_output: >
+    Valid Python source code for test_backend.py and nothing else.
+  agent: test_engineer
