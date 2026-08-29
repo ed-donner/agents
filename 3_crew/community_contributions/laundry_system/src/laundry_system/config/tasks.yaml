@@ -1,0 +1,62 @@
+implement_backend:
+  description: >
+    Implement the backend API strictly following:
+    - output/mvp_scope.md
+    - output/system_architecture.md
+    - output/backend_api.md
+
+    Do not redesign endpoints, data models, or flows.
+    Produce runnable backend code. Output real Node.js backend code with folder paths.
+  expected_output: >
+    A complete backend source tree with runnable code. Backend source code including:
+    - API routes
+    - Models
+    - Database schema
+    - Auth & payment integrations
+  agent: backend_builder
+  output_file: crew2_output/backend.md
+
+implement_flutter:
+  description: >
+    Implement the Flutter Android app strictly following:
+    - output/mvp_scope.md
+    - output/flutter_app.md
+    - output/system_architecture.md
+
+    Produce real Flutter code, not pseudocode.Use clean architecture and production conventions.
+  expected_output: >
+    Flutter project structure with:
+    - Screens
+    - State management
+    - API integration
+  agent: flutter_builder
+  output_file: crew2_output/flutter.md
+  depends_on: [implement_backend]
+
+implement_devops:
+  description: >
+    Implement deployment artifacts based on:
+    - output/system_architecture.md
+    - output/devops.md
+
+    Include Dockerfiles, CI/CD pipelines, and environment setup.
+  expected_output: >
+    Deployment-ready configuration including Docker and CI/CD.
+  agent: devops_builder
+  output_file: crew2_output/devops.md
+  depends_on: [implement_backend]
+
+integration_review:
+  description: >
+    Review all subsystems for naming consistency, env vars,
+    ports, and integration correctness.
+  expected_output: >
+    Integration review notes with recommendations for consistency,
+    environment variables, port configurations, and system integration points.
+  agent: repo_integrator
+  depends_on:
+    - implement_backend
+    - implement_flutter
+    - implement_devops
+  output_file: crew2_output/integration_notes.md
+
