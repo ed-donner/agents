@@ -1,0 +1,152 @@
+ideation_task:
+  description: >
+    Generate ideas for the novel focusing on themes, characters, and plot concepts.
+
+    The idea to expand upon:
+    {idea}
+  expected_output: >
+    A document containing a list of potential novel ideas, including themes, character arcs, and plot outlines.
+  agent: idea_developer
+  output_file: output/ideation.json
+
+plot_development_task:
+  description: >
+    Develop the plot structure of the novel, including rising action, climax, falling action, and resolution.
+
+    The idea to expand upon:
+    {idea}
+  expected_output: >
+    A detailed plot outline that includes the main events and character arcs.
+  context:
+    - ideation_task
+  agent: plot_developer
+  output_file: output/plot_development.json
+
+character_development_task:
+  description: >
+    Create multi-dimensional characters with emotional arcs that resonate with readers.
+
+    The idea to expand upon:
+    {idea}
+  expected_output: >
+    A character profile document that includes character backgrounds, motivations, and emotional arcs.
+  context:
+    - ideation_task
+  agent: character_developer
+  output_file: output/character_development.json
+
+book_development_task:
+  description: >
+    If they are not already provided, come up with a title, and author for the book.  Get creative
+    based on the idea and the context of the book.
+
+    Author: {author}
+    Title: {title}
+  expected_output: >
+    Info about the book
+  agent: author
+  output_file: output/book_development.json
+
+artistic_vision_task:
+  description: >
+    Create a visual representation of the novel's themes, characters, and settings.  This will be used to
+    guide the artist in creating illustrations.
+
+    The idea to expand upon:
+    {idea}
+  expected_output: >
+    A document that includes descriptions of the visual elements, including character designs, settings, and
+    color palettes.  This will be used to guide the artist in creating illustrations.
+  context:
+    - ideation_task
+  agent: art_director
+  output_file: output/artistic_vision.json
+
+act1_development_task:
+  description: >
+    Create a detailed outline of the first act of the novel, including character introductions, setting, and 
+    inciting incidents.
+
+    Purpose: Introduce the world, characters, and status quo.  Establish stakes.
+      - Hook: Something that grabs attention immediately (mystery, unusual voie, threat, or intrigue)
+      - Exposition: Introduce setting, protagonist, tone, and rules of the world.
+      - Inciting Incident: A distruption to the protagonist's life that demands a response.
+      - Plot Point 1 - A choice or event that propels the character into the main conflict or journey.
+
+    IMPORTANT: 
+      - Never use structural terms like "Act 1", or "Inciting Incident" in the outline. Act titles, 
+        descriptions, etc. should be creative and engaging.
+      - Never use colons in the outline as they might interfere with text generation processes. This includes
+        other characters like dashes when used as delimiting characters.
+      - Never use numbering in the outline titles.  For example "Chaapter 6: Clay Memory-Fragments" should
+        be "Clay Memory-Fragments" instead.
+
+    The idea to expand upon:
+    {idea}
+  expected_output: >
+    A comprehensive outline document that can be used to write the first act of the novel.
+  context:
+    - ideation_task
+    - plot_development_task
+    - character_development_task
+  agent: outline_developer
+  output_file: output/act1_development.json
+
+act2_development_task:
+  description: >
+    Create a detailed outline of the second act of the novel, including character introductions, setting, and 
+    inciting incidents.
+
+    Purpose: Escalate tension, deepen stakes, show character development.
+      - Rising Action: A series of obstacles and encounters that test the protagonist.
+      - Midpoint Twist: A revelation or turning point that reorients the conflict
+      - Personal Stakes Increase: The protagonist changes, or begins to.
+      - Plot Point 2 - A major crisis or low point, usually a loss or betrayal
+
+    IMPORTANT: 
+      - Never use structural terms like "Act 1", or "Inciting Incident" in the outline. Act titles, 
+        descriptions, etc. should be creative and engaging.
+      - Never use colons in the outline as they might interfere with text generation processes. This includes
+        other characters like dashes when used as delimiting characters.
+      - Never use numbering in the outline titles.  For example "Chaapter 6: Clay Memory-Fragments" should
+        be "Clay Memory-Fragments" instead.
+
+    The idea to expand upon:
+    {idea}
+  expected_output: >
+    A comprehensive outline document that can be used to write the second act of the novel.
+  context:
+    - ideation_task
+    - plot_development_task
+    - character_development_task
+  agent: outline_developer
+  output_file: output/act2_development.json
+
+act3_development_task:
+  description: >
+    Create a detailed outline of the third act of the novel, including character introductions, setting, and 
+    inciting incidents.
+
+    Purpose: Payoff. Resolve internal and external conflicts. Show transformation.
+      - Climax: Final, most intense confrontation. The protagonist makes a key choice or sacrifice.
+      - Denouement: Loose ends tied up. Reflect on meaning and change.
+      - Final Image: A lasting impression that encapsulates the story’s arc or message.
+
+    IMPORTANT: 
+      - Never use structural terms like "Act 1", or "Inciting Incident" in the outline. Act titles, 
+        descriptions, etc. should be creative and engaging.
+      - Never use colons in the outline as they might interfere with text generation processes. This includes
+        other characters like dashes when used as delimiting characters.
+      - Never use numbering in the outline titles.  For example "Chaapter 6: Clay Memory-Fragments" should
+        be "Clay Memory-Fragments" instead.
+
+    The idea to expand upon:
+    {idea}
+  expected_output: >
+    A comprehensive outline document that can be used to write the third act of the novel.
+  context:
+    - ideation_task
+    - plot_development_task
+    - character_development_task
+  agent: outline_developer
+  output_file: output/act3_development.json

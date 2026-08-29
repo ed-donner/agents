@@ -1,0 +1,5 @@
+anthropic>=0.18.0
+gradio>=4.19.0
+pypdf>=4.0.0
+python-dotenv>=1.0.0
+requests>=2.31.0
