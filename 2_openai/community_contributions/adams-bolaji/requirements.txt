@@ -1,0 +1,6 @@
+# Install from repo root with uv using the course stack; minimal copy for this folder:
+python-dotenv>=1.0.0
+openai-agents>=0.0.23
+openai>=1.55.0
+pydantic>=2.0.0
+pypdf>=5.0.0
