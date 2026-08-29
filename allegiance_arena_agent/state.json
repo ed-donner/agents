@@ -1,0 +1,4274 @@
+{
+  "me": "EddyTheArchitect",
+  "trust_decay": 0.92,
+  "current_round": 11,
+  "current_phase": "unknown",
+  "current_ally": null,
+  "last_vote_target": "roller",
+  "pending_commitments": [],
+  "agents": {
+    "okello_agent": {
+      "name": "okello_agent",
+      "votes_given": 21,
+      "votes_received": 0,
+      "votes_to_me": 0,
+      "votes_from_me": 0,
+      "cooperation_rate": 0.0,
+      "betrayal_count": 12,
+      "current_alliance_streak": 0,
+      "trust_score": -2.8484488494871645,
+      "rounds_observed": 21,
+      "last_vote_target": "Wojtek",
+      "recent_votes": [
+        null,
+        null,
+        "Wojtek",
+        "Wojtek",
+        "Wojtek",
+        "Wojtek"
+      ],
+      "commitments_kept": 0,
+      "commitments_broken": 12
+    },
+    "Wojtek": {
+      "name": "Wojtek",
+      "votes_given": 21,
+      "votes_received": 8,
+      "votes_to_me": 8,
+      "votes_from_me": 0,
+      "cooperation_rate": 0.38095238095238093,
+      "betrayal_count": 6,
+      "current_alliance_streak": 0,
+      "trust_score": 0.9149752808801365,
+      "rounds_observed": 21,
+      "last_vote_target": "rajeman",
+      "recent_votes": [
+        "rajeman",
+        null,
+        "rajeman",
+        "rajeman",
+        "rajeman",
+        "rajeman"
+      ],
+      "commitments_kept": 7,
+      "commitments_broken": 3
+    },
+    "roller": {
+      "name": "roller",
+      "votes_given": 33,
+      "votes_received": 8,
+      "votes_to_me": 8,
+      "votes_from_me": 0,
+      "cooperation_rate": 0.24242424242424243,
+      "betrayal_count": 5,
+      "current_alliance_streak": 5,
+      "trust_score": 13.447936802675809,
+      "rounds_observed": 33,
+      "last_vote_target": null,
+      "recent_votes": [
+        "EddyTheArchitect",
+        "EddyTheArchitect",
+        "EddyTheArchitect",
+        "EddyTheArchitect",
+        null,
+        null
+      ],
+      "commitments_kept": 7,
+      "commitments_broken": 5
+    },
+    "DNG": {
+      "name": "DNG",
+      "votes_given": 33,
+      "votes_received": 1,
+      "votes_to_me": 1,
+      "votes_from_me": 0,
+      "cooperation_rate": 0.030303030303030304,
+      "betrayal_count": 14,
+      "current_alliance_streak": 0,
+      "trust_score": -7.615793371430474,
+      "rounds_observed": 33,
+      "last_vote_target": "Diplomat",
+      "recent_votes": [
+        "mutuma",
+        "mutuma",
+        "AGENT_YAQUB",
+        "mutuma",
+        "Diplomat",
+        "Diplomat"
+      ],
+      "commitments_kept": 0,
+      "commitments_broken": 14
+    },
+    "Felix Makinda": {
+      "name": "Felix Makinda",
+      "votes_given": 21,
+      "votes_received": 0,
+      "votes_to_me": 0,
+      "votes_from_me": 0,
+      "cooperation_rate": 0.0,
+      "betrayal_count": 6,
+      "current_alliance_streak": 0,
+      "trust_score": -1.2516304560261486,
+      "rounds_observed": 21,
+      "last_vote_target": null,
+      "recent_votes": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "commitments_kept": 0,
+      "commitments_broken": 6
+    },
+    "rajeman": {
+      "name": "rajeman",
+      "votes_given": 21,
+      "votes_received": 0,
+      "votes_to_me": 0,
+      "votes_from_me": 0,
+      "cooperation_rate": 0.0,
+      "betrayal_count": 0,
+      "current_alliance_streak": 0,
+      "trust_score": -0.44590050266358067,
+      "rounds_observed": 21,
+      "last_vote_target": null,
+      "recent_votes": [
+        null,
+        null,
+        "mutuma",
+        null,
+        "mutuma",
+        null
+      ],
+      "commitments_kept": 0,
+      "commitments_broken": 0
+    },
+    "Olayinka_mrpeski": {
+      "name": "Olayinka_mrpeski",
+      "votes_given": 3,
+      "votes_received": 0,
+      "votes_to_me": 0,
+      "votes_from_me": 0,
+      "cooperation_rate": 0.0,
+      "betrayal_count": 0,
+      "current_alliance_streak": 0,
+      "trust_score": -0.03619627549975259,
+      "rounds_observed": 3,
+      "last_vote_target": null,
+      "recent_votes": [
+        "XanderBot",
+        "rajeman",
+        null
+      ],
+      "commitments_kept": 0,
+      "commitments_broken": 0
+    },
+    "XanderBot": {
+      "name": "XanderBot",
+      "votes_given": 12,
+      "votes_received": 0,
+      "votes_to_me": 0,
+      "votes_from_me": 0,
+      "cooperation_rate": 0.0,
+      "betrayal_count": 0,
+      "current_alliance_streak": 0,
+      "trust_score": -0.2944478535854337,
+      "rounds_observed": 12,
+      "last_vote_target": "Wojtek",
+      "recent_votes": [
+        "Wojtek",
+        "Wojtek",
+        "Wojtek",
+        "Wojtek",
+        "Wojtek",
+        "Wojtek"
+      ],
+      "commitments_kept": 0,
+      "commitments_broken": 0
+    },
+    "Caleb": {
+      "name": "Caleb",
+      "votes_given": 21,
+      "votes_received": 3,
+      "votes_to_me": 3,
+      "votes_from_me": 0,
+      "cooperation_rate": 0.14285714285714285,
+      "betrayal_count": 7,
+      "current_alliance_streak": 0,
+      "trust_score": -1.4037944272783587,
+      "rounds_observed": 21,
+      "last_vote_target": "seuun",
+      "recent_votes": [
+        "Wojtek",
+        "Wojtek",
+        "EddyTheArchitect",
+        "seuun",
+        "mutuma",
+        "seuun"
+      ],
+      "commitments_kept": 1,
+      "commitments_broken": 7
+    },
+    "AGENT_YAQUB": {
+      "name": "AGENT_YAQUB",
+      "votes_given": 31,
+      "votes_received": 1,
+      "votes_to_me": 1,
+      "votes_from_me": 0,
+      "cooperation_rate": 0.03225806451612903,
+      "betrayal_count": 8,
+      "current_alliance_streak": 0,
+      "trust_score": -7.069005105046512,
+      "rounds_observed": 31,
+      "last_vote_target": "DNG",
+      "recent_votes": [
+        "DNG",
+        "DNG",
+        "mutuma",
+        "mutuma",
+        "mutuma",
+        "DNG"
+      ],
+      "commitments_kept": 0,
+      "commitments_broken": 8
+    },
+    "MutumaWin": {
+      "name": "MutumaWin",
+      "votes_given": 3,
+      "votes_received": 0,
+      "votes_to_me": 0,
+      "votes_from_me": 0,
+      "cooperation_rate": 0.0,
+      "betrayal_count": 1,
+      "current_alliance_streak": 0,
+      "trust_score": -0.14717851514346866,
+      "rounds_observed": 3,
+      "last_vote_target": "XanderBot",
+      "recent_votes": [
+        "roller",
+        "Felix Makinda",
+        "XanderBot"
+      ],
+      "commitments_kept": 0,
+      "commitments_broken": 1
+    },
+    "toludee": {
+      "name": "toludee",
+      "votes_given": 18,
+      "votes_received": 0,
+      "votes_to_me": 0,
+      "votes_from_me": 0,
+      "cooperation_rate": 0.0,
+      "betrayal_count": 0,
+      "current_alliance_streak": 0,
+      "trust_score": -0.09986426915805449,
+      "rounds_observed": 18,
+      "last_vote_target": null,
+      "recent_votes": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "commitments_kept": 0,
+      "commitments_broken": 0
+    },
+    "seuun": {
+      "name": "seuun",
+      "votes_given": 18,
+      "votes_received": 0,
+      "votes_to_me": 0,
+      "votes_from_me": 0,
+      "cooperation_rate": 0.0,
+      "betrayal_count": 0,
+      "current_alliance_streak": 0,
+      "trust_score": -0.5488201271885929,
+      "rounds_observed": 18,
+      "last_vote_target": "Caleb",
+      "recent_votes": [
+        null,
+        null,
+        "roller",
+        "toludee",
+        "Caleb",
+        "Caleb"
+      ],
+      "commitments_kept": 0,
+      "commitments_broken": 0
+    },
+    "mutuma": {
+      "name": "mutuma",
+      "votes_given": 28,
+      "votes_received": 0,
+      "votes_to_me": 0,
+      "votes_from_me": 0,
+      "cooperation_rate": 0.0,
+      "betrayal_count": 13,
+      "current_alliance_streak": 0,
+      "trust_score": -7.383415972380796,
+      "rounds_observed": 28,
+      "last_vote_target": "DNG",
+      "recent_votes": [
+        "DNG",
+        "DNG",
+        "DNG",
+        null,
+        "DNG",
+        "DNG"
+      ],
+      "commitments_kept": 0,
+      "commitments_broken": 13
+    },
+    "Diplomat": {
+      "name": "Diplomat",
+      "votes_given": 20,
+      "votes_received": 1,
+      "votes_to_me": 1,
+      "votes_from_me": 0,
+      "cooperation_rate": 0.05,
+      "betrayal_count": 2,
+      "current_alliance_streak": 0,
+      "trust_score": -0.12234840130339245,
+      "rounds_observed": 20,
+      "last_vote_target": null,
+      "recent_votes": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "commitments_kept": 1,
+      "commitments_broken": 2
+    }
+  },
+  "opponent_profiles": {
+    "okello_agent": {
+      "name": "okello_agent",
+      "label": "defector",
+      "confidence": 0.75,
+      "rationale": "High betrayal / low reciprocity pattern.",
+      "switch_rate": 0.25,
+      "reciprocity_rate": 0.0,
+      "exploitation_rate": 0.571
+    },
+    "Wojtek": {
+      "name": "Wojtek",
+      "label": "unknown",
+      "confidence": 0.35,
+      "rationale": "Limited evidence.",
+      "switch_rate": 0.25,
+      "reciprocity_rate": 0.381,
+      "exploitation_rate": 0.286
+    },
+    "roller": {
+      "name": "roller",
+      "label": "unknown",
+      "confidence": 0.35,
+      "rationale": "Limited evidence.",
+      "switch_rate": 0.0,
+      "reciprocity_rate": 0.233,
+      "exploitation_rate": 0.167
+    },
+    "DNG": {
+      "name": "DNG",
+      "label": "defector",
+      "confidence": 0.713,
+      "rationale": "High betrayal / low reciprocity pattern.",
+      "switch_rate": 0.25,
+      "reciprocity_rate": 0.033,
+      "exploitation_rate": 0.467
+    },
+    "Felix Makinda": {
+      "name": "Felix Makinda",
+      "label": "unknown",
+      "confidence": 0.35,
+      "rationale": "Limited evidence.",
+      "switch_rate": 0.0,
+      "reciprocity_rate": 0.0,
+      "exploitation_rate": 0.286
+    },
+    "rajeman": {
+      "name": "rajeman",
+      "label": "opportunist",
+      "confidence": 0.85,
+      "rationale": "Frequently changes allegiance targets.",
+      "switch_rate": 1.0,
+      "reciprocity_rate": 0.0,
+      "exploitation_rate": 0.0
+    },
+    "Olayinka_mrpeski": {
+      "name": "Olayinka_mrpeski",
+      "label": "opportunist",
+      "confidence": 0.85,
+      "rationale": "Frequently changes allegiance targets.",
+      "switch_rate": 1.0,
+      "reciprocity_rate": 0.0,
+      "exploitation_rate": 0.0
+    },
+    "XanderBot": {
+      "name": "XanderBot",
+      "label": "unknown",
+      "confidence": 0.35,
+      "rationale": "Limited evidence.",
+      "switch_rate": 0.0,
+      "reciprocity_rate": 0.0,
+      "exploitation_rate": 0.0
+    },
+    "Caleb": {
+      "name": "Caleb",
+      "label": "opportunist",
+      "confidence": 0.85,
+      "rationale": "Frequently changes allegiance targets.",
+      "switch_rate": 1.0,
+      "reciprocity_rate": 0.143,
+      "exploitation_rate": 0.333
+    },
+    "AGENT_YAQUB": {
+      "name": "AGENT_YAQUB",
+      "label": "unknown",
+      "confidence": 0.35,
+      "rationale": "Limited evidence.",
+      "switch_rate": 0.25,
+      "reciprocity_rate": 0.033,
+      "exploitation_rate": 0.267
+    },
+    "MutumaWin": {
+      "name": "MutumaWin",
+      "label": "opportunist",
+      "confidence": 0.85,
+      "rationale": "Frequently changes allegiance targets.",
+      "switch_rate": 1.0,
+      "reciprocity_rate": 0.0,
+      "exploitation_rate": 0.333
+    },
+    "toludee": {
+      "name": "toludee",
+      "label": "unknown",
+      "confidence": 0.35,
+      "rationale": "Limited evidence.",
+      "switch_rate": 0.0,
+      "reciprocity_rate": 0.0,
+      "exploitation_rate": 0.0
+    },
+    "seuun": {
+      "name": "seuun",
+      "label": "opportunist",
+      "confidence": 0.8,
+      "rationale": "Frequently changes allegiance targets.",
+      "switch_rate": 0.75,
+      "reciprocity_rate": 0.0,
+      "exploitation_rate": 0.0
+    },
+    "mutuma": {
+      "name": "mutuma",
+      "label": "defector",
+      "confidence": 0.719,
+      "rationale": "High betrayal / low reciprocity pattern.",
+      "switch_rate": 0.5,
+      "reciprocity_rate": 0.0,
+      "exploitation_rate": 0.481
+    },
+    "Diplomat": {
+      "name": "Diplomat",
+      "label": "unknown",
+      "confidence": 0.35,
+      "rationale": "Limited evidence.",
+      "switch_rate": 0.0,
+      "reciprocity_rate": 0.056,
+      "exploitation_rate": 0.111
+    }
+  },
+  "round_records": [
+    {
+      "round_number": 4,
+      "votes": {
+        "DNG": "Wojtek",
+        "okello_agent": null,
+        "Caleb": "rajeman",
+        "XanderBot": "Wojtek",
+        "MutumaWin": "roller",
+        "Wojtek": "XanderBot",
+        "rajeman": "Caleb",
+        "Olayinka_mrpeski": "XanderBot",
+        "roller": null,
+        "Felix Makinda": null,
+        "AGENT_YAQUB": null,
+        "EddyTheArchitect": null
+      },
+      "alliances": [
+        [
+          "Wojtek",
+          "XanderBot"
+        ],
+        [
+          "rajeman",
+          "Caleb"
+        ]
+      ],
+      "leaderboard": [],
+      "raw_results": {
+        "round": 4,
+        "pledges": {
+          "DNG": "Wojtek",
+          "okello_agent": "",
+          "Caleb": "rajeman",
+          "XanderBot": "Wojtek",
+          "MutumaWin": "roller",
+          "Wojtek": "XanderBot",
+          "rajeman": "Caleb",
+          "Olayinka_mrpeski": "XanderBot",
+          "roller": "",
+          "Felix Makinda": "",
+          "AGENT_YAQUB": "",
+          "EddyTheArchitect": ""
+        },
+        "mutual_pairs": [
+          [
+            "Wojtek",
+            "XanderBot"
+          ],
+          [
+            "Caleb",
+            "rajeman"
+          ]
+        ],
+        "supporters": {
+          "okello_agent": [],
+          "Wojtek": [
+            "DNG",
+            "XanderBot"
+          ],
+          "roller": [
+            "MutumaWin"
+          ],
+          "DNG": [],
+          "Felix Makinda": [],
+          "rajeman": [
+            "Caleb"
+          ],
+          "Olayinka_mrpeski": [],
+          "XanderBot": [
+            "Wojtek",
+            "Olayinka_mrpeski"
+          ],
+          "Caleb": [
+            "rajeman"
+          ],
+          "AGENT_YAQUB": [],
+          "EddyTheArchitect": [],
+          "MutumaWin": []
+        },
+        "score_changes": {
+          "okello_agent": -2,
+          "Wojtek": 8,
+          "roller": 3,
+          "DNG": -1,
+          "Felix Makinda": -2,
+          "rajeman": 5,
+          "Olayinka_mrpeski": -1,
+          "XanderBot": 8,
+          "Caleb": 5,
+          "AGENT_YAQUB": -2,
+          "EddyTheArchitect": -2,
+          "MutumaWin": -1
+        },
+        "scores_after": {
+          "okello_agent": -8,
+          "Wojtek": 41,
+          "roller": 14,
+          "DNG": -1,
+          "Felix Makinda": 13,
+          "rajeman": 8,
+          "Olayinka_mrpeski": -5,
+          "XanderBot": 17,
+          "Caleb": 8,
+          "AGENT_YAQUB": -7,
+          "EddyTheArchitect": -8,
+          "MutumaWin": 0
+        }
+      }
+    },
+    {
+      "round_number": 5,
+      "votes": {
+        "okello_agent": null,
+        "DNG": "roller",
+        "XanderBot": "Wojtek",
+        "Caleb": "rajeman",
+        "MutumaWin": "Felix Makinda",
+        "rajeman": "Caleb",
+        "Wojtek": "XanderBot",
+        "Felix Makinda": "roller",
+        "AGENT_YAQUB": "XanderBot",
+        "Olayinka_mrpeski": "rajeman",
+        "roller": null,
+        "EddyTheArchitect": null
+      },
+      "alliances": [
+        [
+          "Wojtek",
+          "XanderBot"
+        ],
+        [
+          "rajeman",
+          "Caleb"
+        ]
+      ],
+      "leaderboard": [],
+      "raw_results": {
+        "round": 5,
+        "pledges": {
+          "okello_agent": "",
+          "DNG": "roller",
+          "XanderBot": "Wojtek",
+          "Caleb": "rajeman",
+          "MutumaWin": "Felix Makinda",
+          "rajeman": "Caleb",
+          "Wojtek": "XanderBot",
+          "Felix Makinda": "roller",
+          "AGENT_YAQUB": "XanderBot",
+          "Olayinka_mrpeski": "rajeman",
+          "roller": "",
+          "EddyTheArchitect": ""
+        },
+        "mutual_pairs": [
+          [
+            "Wojtek",
+            "XanderBot"
+          ],
+          [
+            "Caleb",
+            "rajeman"
+          ]
+        ],
+        "supporters": {
+          "okello_agent": [],
+          "Wojtek": [
+            "XanderBot"
+          ],
+          "roller": [
+            "DNG",
+            "Felix Makinda"
+          ],
+          "DNG": [],
+          "Felix Makinda": [
+            "MutumaWin"
+          ],
+          "rajeman": [
+            "Caleb",
+            "Olayinka_mrpeski"
+          ],
+          "Olayinka_mrpeski": [],
+          "XanderBot": [
+            "Wojtek",
+            "AGENT_YAQUB"
+          ],
+          "Caleb": [
+            "rajeman"
+          ],
+          "AGENT_YAQUB": [],
+          "EddyTheArchitect": [],
+          "MutumaWin": []
+        },
+        "score_changes": {
+          "okello_agent": -2,
+          "Wojtek": 5,
+          "roller": 6,
+          "DNG": -1,
+          "Felix Makinda": 4,
+          "rajeman": 8,
+          "Olayinka_mrpeski": -1,
+          "XanderBot": 8,
+          "Caleb": 5,
+          "AGENT_YAQUB": -1,
+          "EddyTheArchitect": -2,
+          "MutumaWin": -1
+        },
+        "scores_after": {
+          "okello_agent": -10,
+          "Wojtek": 46,
+          "roller": 20,
+          "DNG": -2,
+          "Felix Makinda": 17,
+          "rajeman": 16,
+          "Olayinka_mrpeski": -6,
+          "XanderBot": 25,
+          "Caleb": 13,
+          "AGENT_YAQUB": -8,
+          "EddyTheArchitect": -10,
+          "MutumaWin": -1
+        }
+      }
+    },
+    {
+      "round_number": 8,
+      "votes": {
+        "DNG": "Caleb",
+        "okello_agent": null,
+        "XanderBot": "Wojtek",
+        "MutumaWin": "XanderBot",
+        "Caleb": "Olayinka_mrpeski",
+        "Wojtek": "XanderBot",
+        "Felix Makinda": "rajeman",
+        "roller": null,
+        "rajeman": null,
+        "Olayinka_mrpeski": null,
+        "AGENT_YAQUB": null,
+        "EddyTheArchitect": null
+      },
+      "alliances": [
+        [
+          "Wojtek",
+          "XanderBot"
+        ],
+        [
+          "rajeman",
+          "Caleb"
+        ]
+      ],
+      "leaderboard": [],
+      "raw_results": {
+        "round": 8,
+        "pledges": {
+          "DNG": "Caleb",
+          "okello_agent": "",
+          "XanderBot": "Wojtek",
+          "MutumaWin": "XanderBot",
+          "Caleb": "Olayinka_mrpeski",
+          "Wojtek": "XanderBot",
+          "Felix Makinda": "rajeman",
+          "roller": "",
+          "rajeman": "",
+          "Olayinka_mrpeski": "",
+          "AGENT_YAQUB": "",
+          "EddyTheArchitect": ""
+        },
+        "mutual_pairs": [
+          [
+            "Wojtek",
+            "XanderBot"
+          ]
+        ],
+        "supporters": {
+          "okello_agent": [],
+          "Wojtek": [
+            "XanderBot"
+          ],
+          "roller": [],
+          "DNG": [],
+          "Felix Makinda": [],
+          "rajeman": [
+            "Felix Makinda"
+          ],
+          "Olayinka_mrpeski": [
+            "Caleb"
+          ],
+          "XanderBot": [
+            "MutumaWin",
+            "Wojtek"
+          ],
+          "Caleb": [
+            "DNG"
+          ],
+          "AGENT_YAQUB": [],
+          "EddyTheArchitect": [],
+          "MutumaWin": []
+        },
+        "score_changes": {
+          "okello_agent": -2,
+          "Wojtek": 5,
+          "roller": -2,
+          "DNG": -1,
+          "Felix Makinda": -1,
+          "rajeman": 3,
+          "Olayinka_mrpeski": 3,
+          "XanderBot": 8,
+          "Caleb": 4,
+          "AGENT_YAQUB": -2,
+          "EddyTheArchitect": -2,
+          "MutumaWin": -1
+        },
+        "scores_after": {
+          "okello_agent": -16,
+          "Wojtek": 61,
+          "roller": 14,
+          "DNG": -5,
+          "Felix Makinda": 18,
+          "rajeman": 37,
+          "Olayinka_mrpeski": -1,
+          "XanderBot": 43,
+          "Caleb": 15,
+          "AGENT_YAQUB": -14,
+          "EddyTheArchitect": -16,
+          "MutumaWin": -4
+        }
+      }
+    },
+    {
+      "round_number": 1,
+      "votes": {
+        "XanderBot": null,
+        "DNG": null,
+        "AGENT_YAQUB": null,
+        "okello_agent": null,
+        "mutuma": null,
+        "Caleb": "Wojtek",
+        "rajeman": null,
+        "EddyTheArchitect": null,
+        "Wojtek": "EddyTheArchitect",
+        "Felix Makinda": "Wojtek",
+        "toludee": "Wojtek",
+        "seuun": null,
+        "roller": "Wojtek",
+        "Diplomat": null
+      },
+      "alliances": [],
+      "leaderboard": [],
+      "raw_results": {
+        "round": 1,
+        "pledges": {
+          "XanderBot": "",
+          "DNG": "",
+          "AGENT_YAQUB": "",
+          "okello_agent": "",
+          "mutuma": "",
+          "Caleb": "Wojtek",
+          "rajeman": "",
+          "EddyTheArchitect": "",
+          "Wojtek": "EddyTheArchitect",
+          "Felix Makinda": "Wojtek",
+          "toludee": "Wojtek",
+          "seuun": "",
+          "roller": "Wojtek",
+          "Diplomat": ""
+        },
+        "mutual_pairs": [],
+        "supporters": {
+          "DNG": [],
+          "toludee": [],
+          "Wojtek": [
+            "Caleb",
+            "Felix Makinda",
+            "toludee",
+            "roller"
+          ],
+          "EddyTheArchitect": [
+            "Wojtek"
+          ],
+          "Felix Makinda": [],
+          "Caleb": [],
+          "XanderBot": [],
+          "AGENT_YAQUB": [],
+          "seuun": [],
+          "roller": [],
+          "mutuma": [],
+          "rajeman": [],
+          "Diplomat": [],
+          "okello_agent": []
+        },
+        "score_changes": {
+          "DNG": -2,
+          "toludee": -1,
+          "Wojtek": 13,
+          "EddyTheArchitect": 3,
+          "Felix Makinda": -1,
+          "Caleb": -1,
+          "XanderBot": -2,
+          "AGENT_YAQUB": -2,
+          "seuun": -2,
+          "roller": -1,
+          "mutuma": -2,
+          "rajeman": -2,
+          "Diplomat": -2,
+          "okello_agent": -2
+        },
+        "scores_after": {
+          "DNG": -2,
+          "toludee": -1,
+          "Wojtek": 13,
+          "EddyTheArchitect": 3,
+          "Felix Makinda": -1,
+          "Caleb": -1,
+          "XanderBot": -2,
+          "AGENT_YAQUB": -2,
+          "seuun": -2,
+          "roller": -1,
+          "mutuma": -2,
+          "rajeman": -2,
+          "Diplomat": -2,
+          "okello_agent": -2
+        }
+      }
+    },
+    {
+      "round_number": 2,
+      "votes": {
+        "DNG": "Wojtek",
+        "AGENT_YAQUB": "okello_agent",
+        "okello_agent": null,
+        "XanderBot": "Wojtek",
+        "Caleb": "toludee",
+        "rajeman": "XanderBot",
+        "mutuma": null,
+        "EddyTheArchitect": "Wojtek",
+        "Wojtek": "EddyTheArchitect",
+        "Diplomat": "EddyTheArchitect",
+        "toludee": null,
+        "Felix Makinda": null,
+        "seuun": null,
+        "roller": null
+      },
+      "alliances": [],
+      "leaderboard": [],
+      "raw_results": {
+        "round": 2,
+        "pledges": {
+          "DNG": "Wojtek",
+          "AGENT_YAQUB": "okello_agent",
+          "okello_agent": "",
+          "XanderBot": "Wojtek",
+          "Caleb": "toludee",
+          "rajeman": "XanderBot",
+          "mutuma": "",
+          "EddyTheArchitect": "Wojtek",
+          "Wojtek": "EddyTheArchitect",
+          "Diplomat": "EddyTheArchitect",
+          "toludee": "",
+          "Felix Makinda": "",
+          "seuun": "",
+          "roller": ""
+        },
+        "mutual_pairs": [
+          [
+            "EddyTheArchitect",
+            "Wojtek"
+          ]
+        ],
+        "supporters": {
+          "DNG": [],
+          "toludee": [
+            "Caleb"
+          ],
+          "Wojtek": [
+            "DNG",
+            "XanderBot",
+            "EddyTheArchitect"
+          ],
+          "EddyTheArchitect": [
+            "Wojtek",
+            "Diplomat"
+          ],
+          "Felix Makinda": [],
+          "Caleb": [],
+          "XanderBot": [
+            "rajeman"
+          ],
+          "AGENT_YAQUB": [],
+          "seuun": [],
+          "roller": [],
+          "mutuma": [],
+          "rajeman": [],
+          "Diplomat": [],
+          "okello_agent": [
+            "AGENT_YAQUB"
+          ]
+        },
+        "score_changes": {
+          "DNG": -1,
+          "toludee": 3,
+          "Wojtek": 11,
+          "EddyTheArchitect": 8,
+          "Felix Makinda": -2,
+          "Caleb": -1,
+          "XanderBot": 4,
+          "AGENT_YAQUB": -1,
+          "seuun": -2,
+          "roller": -2,
+          "mutuma": -2,
+          "rajeman": -1,
+          "Diplomat": -1,
+          "okello_agent": 3
+        },
+        "scores_after": {
+          "DNG": -3,
+          "toludee": 2,
+          "Wojtek": 24,
+          "EddyTheArchitect": 11,
+          "Felix Makinda": -3,
+          "Caleb": -2,
+          "XanderBot": 2,
+          "AGENT_YAQUB": -3,
+          "seuun": -4,
+          "roller": -3,
+          "mutuma": -4,
+          "rajeman": -3,
+          "Diplomat": -3,
+          "okello_agent": 1
+        }
+      }
+    },
+    {
+      "round_number": 3,
+      "votes": {
+        "DNG": null,
+        "AGENT_YAQUB": "Wojtek",
+        "okello_agent": null,
+        "XanderBot": null,
+        "mutuma": null,
+        "Felix Makinda": null,
+        "EddyTheArchitect": null,
+        "Caleb": null,
+        "Wojtek": null,
+        "rajeman": null,
+        "Diplomat": null,
+        "toludee": "Wojtek",
+        "roller": "Wojtek",
+        "seuun": null
+      },
+      "alliances": [],
+      "leaderboard": [],
+      "raw_results": {
+        "round": 3,
+        "pledges": {
+          "DNG": "",
+          "AGENT_YAQUB": "Wojtek",
+          "okello_agent": "",
+          "XanderBot": "",
+          "mutuma": "",
+          "Felix Makinda": "",
+          "EddyTheArchitect": "",
+          "Caleb": "",
+          "Wojtek": "",
+          "rajeman": "",
+          "Diplomat": "",
+          "toludee": "Wojtek",
+          "roller": "Wojtek",
+          "seuun": ""
+        },
+        "mutual_pairs": [],
+        "supporters": {
+          "DNG": [],
+          "toludee": [],
+          "Wojtek": [
+            "AGENT_YAQUB",
+            "toludee",
+            "roller"
+          ],
+          "EddyTheArchitect": [],
+          "Felix Makinda": [],
+          "Caleb": [],
+          "XanderBot": [],
+          "AGENT_YAQUB": [],
+          "seuun": [],
+          "roller": [],
+          "mutuma": [],
+          "rajeman": [],
+          "Diplomat": [],
+          "okello_agent": []
+        },
+        "score_changes": {
+          "DNG": -2,
+          "toludee": -1,
+          "Wojtek": 9,
+          "EddyTheArchitect": -2,
+          "Felix Makinda": -2,
+          "Caleb": -2,
+          "XanderBot": -2,
+          "AGENT_YAQUB": -1,
+          "seuun": -2,
+          "roller": -1,
+          "mutuma": -2,
+          "rajeman": -2,
+          "Diplomat": -2,
+          "okello_agent": -2
+        },
+        "scores_after": {
+          "DNG": -5,
+          "toludee": 1,
+          "Wojtek": 33,
+          "EddyTheArchitect": 9,
+          "Felix Makinda": -5,
+          "Caleb": -4,
+          "XanderBot": 0,
+          "AGENT_YAQUB": -4,
+          "seuun": -6,
+          "roller": -4,
+          "mutuma": -6,
+          "rajeman": -5,
+          "Diplomat": -5,
+          "okello_agent": -1
+        }
+      }
+    },
+    {
+      "round_number": 4,
+      "votes": {
+        "DNG": "Caleb",
+        "AGENT_YAQUB": "roller",
+        "XanderBot": "Wojtek",
+        "okello_agent": "AGENT_YAQUB",
+        "Caleb": "EddyTheArchitect",
+        "mutuma": null,
+        "EddyTheArchitect": "Wojtek",
+        "Wojtek": "EddyTheArchitect",
+        "rajeman": "XanderBot",
+        "Felix Makinda": "okello_agent",
+        "toludee": null,
+        "seuun": null,
+        "roller": null,
+        "Diplomat": null
+      },
+      "alliances": [],
+      "leaderboard": [],
+      "raw_results": {
+        "round": 4,
+        "pledges": {
+          "DNG": "Caleb",
+          "AGENT_YAQUB": "roller",
+          "XanderBot": "Wojtek",
+          "okello_agent": "AGENT_YAQUB",
+          "Caleb": "EddyTheArchitect",
+          "mutuma": "",
+          "EddyTheArchitect": "Wojtek",
+          "Wojtek": "EddyTheArchitect",
+          "rajeman": "XanderBot",
+          "Felix Makinda": "okello_agent",
+          "toludee": "",
+          "seuun": "",
+          "roller": "",
+          "Diplomat": ""
+        },
+        "mutual_pairs": [
+          [
+            "EddyTheArchitect",
+            "Wojtek"
+          ]
+        ],
+        "supporters": {
+          "DNG": [],
+          "toludee": [],
+          "Wojtek": [
+            "XanderBot",
+            "EddyTheArchitect"
+          ],
+          "EddyTheArchitect": [
+            "Caleb",
+            "Wojtek"
+          ],
+          "Felix Makinda": [],
+          "Caleb": [
+            "DNG"
+          ],
+          "XanderBot": [
+            "rajeman"
+          ],
+          "AGENT_YAQUB": [
+            "okello_agent"
+          ],
+          "seuun": [],
+          "roller": [
+            "AGENT_YAQUB"
+          ],
+          "mutuma": [],
+          "rajeman": [],
+          "Diplomat": [],
+          "okello_agent": [
+            "Felix Makinda"
+          ]
+        },
+        "score_changes": {
+          "DNG": -1,
+          "toludee": -2,
+          "Wojtek": 8,
+          "EddyTheArchitect": 8,
+          "Felix Makinda": -1,
+          "Caleb": 4,
+          "XanderBot": 4,
+          "AGENT_YAQUB": 4,
+          "seuun": -2,
+          "roller": 3,
+          "mutuma": -2,
+          "rajeman": -1,
+          "Diplomat": -2,
+          "okello_agent": 4
+        },
+        "scores_after": {
+          "DNG": -6,
+          "toludee": -1,
+          "Wojtek": 41,
+          "EddyTheArchitect": 17,
+          "Felix Makinda": -6,
+          "Caleb": 0,
+          "XanderBot": 4,
+          "AGENT_YAQUB": 0,
+          "seuun": -8,
+          "roller": -1,
+          "mutuma": -8,
+          "rajeman": -6,
+          "Diplomat": -7,
+          "okello_agent": 3
+        }
+      }
+    },
+    {
+      "round_number": 5,
+      "votes": {
+        "AGENT_YAQUB": "roller",
+        "DNG": "toludee",
+        "okello_agent": "AGENT_YAQUB",
+        "XanderBot": "Wojtek",
+        "mutuma": null,
+        "EddyTheArchitect": "Wojtek",
+        "Caleb": "DNG",
+        "Felix Makinda": "Wojtek",
+        "Wojtek": "EddyTheArchitect",
+        "rajeman": "Caleb",
+        "toludee": null,
+        "seuun": null,
+        "roller": null,
+        "Diplomat": null
+      },
+      "alliances": [
+        [
+          "Wojtek",
+          "EddyTheArchitect"
+        ]
+      ],
+      "leaderboard": [],
+      "raw_results": {
+        "round": 5,
+        "pledges": {
+          "AGENT_YAQUB": "roller",
+          "DNG": "toludee",
+          "okello_agent": "AGENT_YAQUB",
+          "XanderBot": "Wojtek",
+          "mutuma": "",
+          "EddyTheArchitect": "Wojtek",
+          "Caleb": "DNG",
+          "Felix Makinda": "Wojtek",
+          "Wojtek": "EddyTheArchitect",
+          "rajeman": "Caleb",
+          "toludee": "",
+          "seuun": "",
+          "roller": "",
+          "Diplomat": ""
+        },
+        "mutual_pairs": [
+          [
+            "EddyTheArchitect",
+            "Wojtek"
+          ]
+        ],
+        "supporters": {
+          "DNG": [
+            "Caleb"
+          ],
+          "toludee": [
+            "DNG"
+          ],
+          "Wojtek": [
+            "XanderBot",
+            "EddyTheArchitect",
+            "Felix Makinda"
+          ],
+          "EddyTheArchitect": [
+            "Wojtek"
+          ],
+          "Felix Makinda": [],
+          "Caleb": [
+            "rajeman"
+          ],
+          "XanderBot": [],
+          "AGENT_YAQUB": [
+            "okello_agent"
+          ],
+          "seuun": [],
+          "roller": [
+            "AGENT_YAQUB"
+          ],
+          "mutuma": [],
+          "rajeman": [],
+          "Diplomat": [],
+          "okello_agent": []
+        },
+        "score_changes": {
+          "DNG": 4,
+          "toludee": 3,
+          "Wojtek": 11,
+          "EddyTheArchitect": 5,
+          "Felix Makinda": -1,
+          "Caleb": 4,
+          "XanderBot": -1,
+          "AGENT_YAQUB": 4,
+          "seuun": -2,
+          "roller": 3,
+          "mutuma": -2,
+          "rajeman": -1,
+          "Diplomat": -2,
+          "okello_agent": -1
+        },
+        "scores_after": {
+          "DNG": -2,
+          "toludee": 2,
+          "Wojtek": 52,
+          "EddyTheArchitect": 22,
+          "Felix Makinda": -7,
+          "Caleb": 4,
+          "XanderBot": 3,
+          "AGENT_YAQUB": 4,
+          "seuun": -10,
+          "roller": 2,
+          "mutuma": -10,
+          "rajeman": -7,
+          "Diplomat": -9,
+          "okello_agent": 2
+        }
+      }
+    },
+    {
+      "round_number": 6,
+      "votes": {
+        "AGENT_YAQUB": "Caleb",
+        "okello_agent": "AGENT_YAQUB",
+        "DNG": "EddyTheArchitect",
+        "XanderBot": "Wojtek",
+        "mutuma": null,
+        "Felix Makinda": "Wojtek",
+        "EddyTheArchitect": "Wojtek",
+        "Caleb": "rajeman",
+        "Wojtek": "EddyTheArchitect",
+        "rajeman": "Caleb",
+        "toludee": null,
+        "seuun": null,
+        "roller": null,
+        "Diplomat": null
+      },
+      "alliances": [
+        [
+          "Wojtek",
+          "EddyTheArchitect"
+        ]
+      ],
+      "leaderboard": [],
+      "raw_results": {
+        "round": 6,
+        "pledges": {
+          "AGENT_YAQUB": "Caleb",
+          "okello_agent": "AGENT_YAQUB",
+          "DNG": "EddyTheArchitect",
+          "XanderBot": "Wojtek",
+          "mutuma": "",
+          "Felix Makinda": "Wojtek",
+          "EddyTheArchitect": "Wojtek",
+          "Caleb": "rajeman",
+          "Wojtek": "EddyTheArchitect",
+          "rajeman": "Caleb",
+          "toludee": "",
+          "seuun": "",
+          "roller": "",
+          "Diplomat": ""
+        },
+        "mutual_pairs": [
+          [
+            "EddyTheArchitect",
+            "Wojtek"
+          ],
+          [
+            "Caleb",
+            "rajeman"
+          ]
+        ],
+        "supporters": {
+          "DNG": [],
+          "toludee": [],
+          "Wojtek": [
+            "XanderBot",
+            "Felix Makinda",
+            "EddyTheArchitect"
+          ],
+          "EddyTheArchitect": [
+            "DNG",
+            "Wojtek"
+          ],
+          "Felix Makinda": [],
+          "Caleb": [
+            "AGENT_YAQUB",
+            "rajeman"
+          ],
+          "XanderBot": [],
+          "AGENT_YAQUB": [
+            "okello_agent"
+          ],
+          "seuun": [],
+          "roller": [],
+          "mutuma": [],
+          "rajeman": [
+            "Caleb"
+          ],
+          "Diplomat": [],
+          "okello_agent": []
+        },
+        "score_changes": {
+          "DNG": -1,
+          "toludee": -2,
+          "Wojtek": 11,
+          "EddyTheArchitect": 8,
+          "Felix Makinda": -1,
+          "Caleb": 8,
+          "XanderBot": -1,
+          "AGENT_YAQUB": 4,
+          "seuun": -2,
+          "roller": -2,
+          "mutuma": -2,
+          "rajeman": 5,
+          "Diplomat": -2,
+          "okello_agent": -1
+        },
+        "scores_after": {
+          "DNG": -3,
+          "toludee": 0,
+          "Wojtek": 63,
+          "EddyTheArchitect": 30,
+          "Felix Makinda": -8,
+          "Caleb": 12,
+          "XanderBot": 2,
+          "AGENT_YAQUB": 8,
+          "seuun": -12,
+          "roller": 0,
+          "mutuma": -12,
+          "rajeman": -2,
+          "Diplomat": -11,
+          "okello_agent": 1
+        }
+      }
+    },
+    {
+      "round_number": 7,
+      "votes": {
+        "AGENT_YAQUB": "rajeman",
+        "okello_agent": "AGENT_YAQUB",
+        "XanderBot": "Wojtek",
+        "seuun": "roller",
+        "mutuma": null,
+        "Caleb": "rajeman",
+        "EddyTheArchitect": "Wojtek",
+        "Wojtek": "EddyTheArchitect",
+        "DNG": "Caleb",
+        "rajeman": "Caleb",
+        "Felix Makinda": "Wojtek",
+        "toludee": null,
+        "roller": null,
+        "Diplomat": null
+      },
+      "alliances": [
+        [
+          "Wojtek",
+          "EddyTheArchitect"
+        ],
+        [
+          "Caleb",
+          "rajeman"
+        ]
+      ],
+      "leaderboard": [],
+      "raw_results": {
+        "round": 7,
+        "pledges": {
+          "AGENT_YAQUB": "rajeman",
+          "okello_agent": "AGENT_YAQUB",
+          "XanderBot": "Wojtek",
+          "seuun": "roller",
+          "mutuma": "",
+          "Caleb": "rajeman",
+          "EddyTheArchitect": "Wojtek",
+          "Wojtek": "EddyTheArchitect",
+          "DNG": "Caleb",
+          "rajeman": "Caleb",
+          "Felix Makinda": "Wojtek",
+          "toludee": "",
+          "roller": "",
+          "Diplomat": ""
+        },
+        "mutual_pairs": [
+          [
+            "EddyTheArchitect",
+            "Wojtek"
+          ],
+          [
+            "Caleb",
+            "rajeman"
+          ]
+        ],
+        "supporters": {
+          "DNG": [],
+          "toludee": [],
+          "Wojtek": [
+            "XanderBot",
+            "EddyTheArchitect",
+            "Felix Makinda"
+          ],
+          "EddyTheArchitect": [
+            "Wojtek"
+          ],
+          "Felix Makinda": [],
+          "Caleb": [
+            "DNG",
+            "rajeman"
+          ],
+          "XanderBot": [],
+          "AGENT_YAQUB": [
+            "okello_agent"
+          ],
+          "seuun": [],
+          "roller": [
+            "seuun"
+          ],
+          "mutuma": [],
+          "rajeman": [
+            "AGENT_YAQUB",
+            "Caleb"
+          ],
+          "Diplomat": [],
+          "okello_agent": []
+        },
+        "score_changes": {
+          "DNG": -1,
+          "toludee": -2,
+          "Wojtek": 11,
+          "EddyTheArchitect": 5,
+          "Felix Makinda": -1,
+          "Caleb": 8,
+          "XanderBot": -1,
+          "AGENT_YAQUB": 4,
+          "seuun": -1,
+          "roller": 3,
+          "mutuma": -2,
+          "rajeman": 8,
+          "Diplomat": -2,
+          "okello_agent": -1
+        },
+        "scores_after": {
+          "DNG": -4,
+          "toludee": -2,
+          "Wojtek": 74,
+          "EddyTheArchitect": 35,
+          "Felix Makinda": -9,
+          "Caleb": 20,
+          "XanderBot": 1,
+          "AGENT_YAQUB": 12,
+          "seuun": -13,
+          "roller": 3,
+          "mutuma": -14,
+          "rajeman": 6,
+          "Diplomat": -13,
+          "okello_agent": 0
+        }
+      }
+    },
+    {
+      "round_number": 8,
+      "votes": {
+        "DNG": "Caleb",
+        "okello_agent": null,
+        "AGENT_YAQUB": "Felix Makinda",
+        "XanderBot": "Wojtek",
+        "Caleb": "rajeman",
+        "mutuma": null,
+        "seuun": "Wojtek",
+        "EddyTheArchitect": "Wojtek",
+        "Felix Makinda": "Wojtek",
+        "Wojtek": "EddyTheArchitect",
+        "toludee": null,
+        "roller": null,
+        "rajeman": null,
+        "Diplomat": null
+      },
+      "alliances": [
+        [
+          "Wojtek",
+          "EddyTheArchitect"
+        ],
+        [
+          "Caleb",
+          "rajeman"
+        ]
+      ],
+      "leaderboard": [],
+      "raw_results": {
+        "round": 8,
+        "pledges": {
+          "DNG": "Caleb",
+          "okello_agent": "",
+          "AGENT_YAQUB": "Felix Makinda",
+          "XanderBot": "Wojtek",
+          "Caleb": "rajeman",
+          "mutuma": "",
+          "seuun": "Wojtek",
+          "EddyTheArchitect": "Wojtek",
+          "Felix Makinda": "Wojtek",
+          "Wojtek": "EddyTheArchitect",
+          "toludee": "",
+          "roller": "",
+          "rajeman": "",
+          "Diplomat": ""
+        },
+        "mutual_pairs": [
+          [
+            "EddyTheArchitect",
+            "Wojtek"
+          ]
+        ],
+        "supporters": {
+          "DNG": [],
+          "toludee": [],
+          "Wojtek": [
+            "XanderBot",
+            "seuun",
+            "EddyTheArchitect",
+            "Felix Makinda"
+          ],
+          "EddyTheArchitect": [
+            "Wojtek"
+          ],
+          "Felix Makinda": [
+            "AGENT_YAQUB"
+          ],
+          "Caleb": [
+            "DNG"
+          ],
+          "XanderBot": [],
+          "AGENT_YAQUB": [],
+          "seuun": [],
+          "roller": [],
+          "mutuma": [],
+          "rajeman": [
+            "Caleb"
+          ],
+          "Diplomat": [],
+          "okello_agent": []
+        },
+        "score_changes": {
+          "DNG": -1,
+          "toludee": -2,
+          "Wojtek": 14,
+          "EddyTheArchitect": 5,
+          "Felix Makinda": 4,
+          "Caleb": 4,
+          "XanderBot": -1,
+          "AGENT_YAQUB": -1,
+          "seuun": -1,
+          "roller": -2,
+          "mutuma": -2,
+          "rajeman": 3,
+          "Diplomat": -2,
+          "okello_agent": -2
+        },
+        "scores_after": {
+          "DNG": -5,
+          "toludee": -4,
+          "Wojtek": 88,
+          "EddyTheArchitect": 40,
+          "Felix Makinda": -5,
+          "Caleb": 24,
+          "XanderBot": 0,
+          "AGENT_YAQUB": 11,
+          "seuun": -14,
+          "roller": 1,
+          "mutuma": -16,
+          "rajeman": 9,
+          "Diplomat": -15,
+          "okello_agent": -2
+        }
+      }
+    },
+    {
+      "round_number": 9,
+      "votes": {
+        "AGENT_YAQUB": "Diplomat",
+        "okello_agent": "AGENT_YAQUB",
+        "XanderBot": "Wojtek",
+        "Caleb": "DNG",
+        "mutuma": null,
+        "DNG": "Caleb",
+        "EddyTheArchitect": "Wojtek",
+        "Felix Makinda": "AGENT_YAQUB",
+        "Wojtek": "EddyTheArchitect",
+        "rajeman": "Caleb",
+        "seuun": "Caleb",
+        "toludee": null,
+        "roller": null,
+        "Diplomat": null
+      },
+      "alliances": [
+        [
+          "Wojtek",
+          "EddyTheArchitect"
+        ],
+        [
+          "Caleb",
+          "rajeman"
+        ]
+      ],
+      "leaderboard": [],
+      "raw_results": {
+        "round": 9,
+        "pledges": {
+          "AGENT_YAQUB": "Diplomat",
+          "okello_agent": "AGENT_YAQUB",
+          "XanderBot": "Wojtek",
+          "Caleb": "DNG",
+          "mutuma": "",
+          "DNG": "Caleb",
+          "EddyTheArchitect": "Wojtek",
+          "Felix Makinda": "AGENT_YAQUB",
+          "Wojtek": "EddyTheArchitect",
+          "rajeman": "Caleb",
+          "seuun": "Caleb",
+          "toludee": "",
+          "roller": "",
+          "Diplomat": ""
+        },
+        "mutual_pairs": [
+          [
+            "EddyTheArchitect",
+            "Wojtek"
+          ],
+          [
+            "Caleb",
+            "DNG"
+          ]
+        ],
+        "supporters": {
+          "DNG": [
+            "Caleb"
+          ],
+          "toludee": [],
+          "Wojtek": [
+            "XanderBot",
+            "EddyTheArchitect"
+          ],
+          "EddyTheArchitect": [
+            "Wojtek"
+          ],
+          "Felix Makinda": [],
+          "Caleb": [
+            "DNG",
+            "rajeman",
+            "seuun"
+          ],
+          "XanderBot": [],
+          "AGENT_YAQUB": [
+            "okello_agent",
+            "Felix Makinda"
+          ],
+          "seuun": [],
+          "roller": [],
+          "mutuma": [],
+          "rajeman": [],
+          "Diplomat": [
+            "AGENT_YAQUB"
+          ],
+          "okello_agent": []
+        },
+        "score_changes": {
+          "DNG": 5,
+          "toludee": -2,
+          "Wojtek": 8,
+          "EddyTheArchitect": 5,
+          "Felix Makinda": -1,
+          "Caleb": 11,
+          "XanderBot": -1,
+          "AGENT_YAQUB": 7,
+          "seuun": -1,
+          "roller": -2,
+          "mutuma": -2,
+          "rajeman": -1,
+          "Diplomat": 3,
+          "okello_agent": -1
+        },
+        "scores_after": {
+          "DNG": 0,
+          "toludee": -6,
+          "Wojtek": 96,
+          "EddyTheArchitect": 45,
+          "Felix Makinda": -6,
+          "Caleb": 35,
+          "XanderBot": -1,
+          "AGENT_YAQUB": 18,
+          "seuun": -15,
+          "roller": -1,
+          "mutuma": -18,
+          "rajeman": 8,
+          "Diplomat": -12,
+          "okello_agent": -3
+        }
+      }
+    },
+    {
+      "round_number": 1,
+      "votes": {
+        "DNG": "seuun",
+        "AGENT_YAQUB": "rajeman",
+        "okello_agent": "seuun",
+        "Caleb": "seuun",
+        "mutuma": "seuun",
+        "EddyTheArchitect": "Wojtek",
+        "Wojtek": "Diplomat",
+        "seuun": "toludee",
+        "rajeman": null,
+        "Felix Makinda": null,
+        "toludee": null,
+        "Diplomat": null,
+        "roller": null
+      },
+      "alliances": [],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "seuun",
+          "score": 13.0
+        },
+        {
+          "rank": 2,
+          "name": "Wojtek",
+          "score": 4.0
+        },
+        {
+          "rank": 3,
+          "name": "rajeman",
+          "score": 3.0
+        },
+        {
+          "rank": 4,
+          "name": "toludee",
+          "score": 3.0
+        },
+        {
+          "rank": 5,
+          "name": "Diplomat",
+          "score": 3.0
+        },
+        {
+          "rank": 6,
+          "name": "EddyTheArchitect",
+          "score": -1.0
+        },
+        {
+          "rank": 7,
+          "name": "Caleb",
+          "score": -1.0
+        },
+        {
+          "rank": 8,
+          "name": "DNG",
+          "score": -1.0
+        },
+        {
+          "rank": 9,
+          "name": "AGENT_YAQUB",
+          "score": -1.0
+        },
+        {
+          "rank": 10,
+          "name": "mutuma",
+          "score": -1.0
+        },
+        {
+          "rank": 11,
+          "name": "okello_agent",
+          "score": -1.0
+        },
+        {
+          "rank": 12,
+          "name": "Felix Makinda",
+          "score": -2.0
+        },
+        {
+          "rank": 13,
+          "name": "roller",
+          "score": -2.0
+        }
+      ],
+      "raw_results": {
+        "round": 1,
+        "pledges": {
+          "DNG": "seuun",
+          "AGENT_YAQUB": "rajeman",
+          "okello_agent": "seuun",
+          "Caleb": "seuun",
+          "mutuma": "seuun",
+          "EddyTheArchitect": "Wojtek",
+          "Wojtek": "Diplomat",
+          "seuun": "toludee",
+          "rajeman": "",
+          "Felix Makinda": "",
+          "toludee": "",
+          "Diplomat": "",
+          "roller": ""
+        },
+        "mutual_pairs": [],
+        "supporters": {
+          "seuun": [
+            "DNG",
+            "okello_agent",
+            "Caleb",
+            "mutuma"
+          ],
+          "EddyTheArchitect": [],
+          "rajeman": [
+            "AGENT_YAQUB"
+          ],
+          "Wojtek": [
+            "EddyTheArchitect"
+          ],
+          "Caleb": [],
+          "DNG": [],
+          "AGENT_YAQUB": [],
+          "mutuma": [],
+          "Felix Makinda": [],
+          "okello_agent": [],
+          "toludee": [
+            "seuun"
+          ],
+          "Diplomat": [
+            "Wojtek"
+          ],
+          "roller": []
+        },
+        "score_changes": {
+          "seuun": 13,
+          "EddyTheArchitect": -1,
+          "rajeman": 3,
+          "Wojtek": 4,
+          "Caleb": -1,
+          "DNG": -1,
+          "AGENT_YAQUB": -1,
+          "mutuma": -1,
+          "Felix Makinda": -2,
+          "okello_agent": -1,
+          "toludee": 3,
+          "Diplomat": 3,
+          "roller": -2
+        },
+        "scores_after": {
+          "seuun": 13,
+          "EddyTheArchitect": -1,
+          "rajeman": 3,
+          "Wojtek": 4,
+          "Caleb": -1,
+          "DNG": -1,
+          "AGENT_YAQUB": -1,
+          "mutuma": -1,
+          "Felix Makinda": -2,
+          "okello_agent": -1,
+          "toludee": 3,
+          "Diplomat": 3,
+          "roller": -2
+        }
+      }
+    },
+    {
+      "round_number": 2,
+      "votes": {
+        "DNG": null,
+        "AGENT_YAQUB": null,
+        "okello_agent": null,
+        "mutuma": "Wojtek",
+        "Caleb": null,
+        "EddyTheArchitect": null,
+        "Wojtek": "rajeman",
+        "seuun": null,
+        "Diplomat": "Wojtek",
+        "toludee": "Wojtek",
+        "rajeman": null,
+        "Felix Makinda": null,
+        "roller": null
+      },
+      "alliances": [],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "Wojtek",
+          "score": 14.0
+        },
+        {
+          "rank": 2,
+          "name": "seuun",
+          "score": 11.0
+        },
+        {
+          "rank": 3,
+          "name": "rajeman",
+          "score": 6.0
+        },
+        {
+          "rank": 4,
+          "name": "toludee",
+          "score": 2.0
+        },
+        {
+          "rank": 5,
+          "name": "Diplomat",
+          "score": 2.0
+        },
+        {
+          "rank": 6,
+          "name": "mutuma",
+          "score": -2.0
+        },
+        {
+          "rank": 7,
+          "name": "EddyTheArchitect",
+          "score": -3.0
+        },
+        {
+          "rank": 8,
+          "name": "Caleb",
+          "score": -3.0
+        },
+        {
+          "rank": 9,
+          "name": "DNG",
+          "score": -3.0
+        },
+        {
+          "rank": 10,
+          "name": "AGENT_YAQUB",
+          "score": -3.0
+        },
+        {
+          "rank": 11,
+          "name": "okello_agent",
+          "score": -3.0
+        },
+        {
+          "rank": 12,
+          "name": "Felix Makinda",
+          "score": -4.0
+        },
+        {
+          "rank": 13,
+          "name": "roller",
+          "score": -4.0
+        }
+      ],
+      "raw_results": {
+        "round": 2,
+        "pledges": {
+          "DNG": "",
+          "AGENT_YAQUB": "",
+          "okello_agent": "",
+          "mutuma": "Wojtek",
+          "Caleb": "",
+          "EddyTheArchitect": "",
+          "Wojtek": "rajeman",
+          "seuun": "",
+          "Diplomat": "Wojtek",
+          "toludee": "Wojtek",
+          "rajeman": "",
+          "Felix Makinda": "",
+          "roller": ""
+        },
+        "mutual_pairs": [],
+        "supporters": {
+          "seuun": [],
+          "EddyTheArchitect": [],
+          "rajeman": [
+            "Wojtek"
+          ],
+          "Wojtek": [
+            "mutuma",
+            "Diplomat",
+            "toludee"
+          ],
+          "Caleb": [],
+          "DNG": [],
+          "AGENT_YAQUB": [],
+          "mutuma": [],
+          "Felix Makinda": [],
+          "okello_agent": [],
+          "toludee": [],
+          "Diplomat": [],
+          "roller": []
+        },
+        "score_changes": {
+          "seuun": -2,
+          "EddyTheArchitect": -2,
+          "rajeman": 3,
+          "Wojtek": 10,
+          "Caleb": -2,
+          "DNG": -2,
+          "AGENT_YAQUB": -2,
+          "mutuma": -1,
+          "Felix Makinda": -2,
+          "okello_agent": -2,
+          "toludee": -1,
+          "Diplomat": -1,
+          "roller": -2
+        },
+        "scores_after": {
+          "seuun": 11,
+          "EddyTheArchitect": -3,
+          "rajeman": 6,
+          "Wojtek": 14,
+          "Caleb": -3,
+          "DNG": -3,
+          "AGENT_YAQUB": -3,
+          "mutuma": -2,
+          "Felix Makinda": -4,
+          "okello_agent": -3,
+          "toludee": 2,
+          "Diplomat": 2,
+          "roller": -4
+        }
+      }
+    },
+    {
+      "round_number": 3,
+      "votes": {
+        "DNG": "seuun",
+        "okello_agent": "seuun",
+        "AGENT_YAQUB": "Felix Makinda",
+        "mutuma": "rajeman",
+        "seuun": "rajeman",
+        "EddyTheArchitect": "Wojtek",
+        "Caleb": "EddyTheArchitect",
+        "rajeman": "mutuma",
+        "Wojtek": "seuun",
+        "Felix Makinda": null,
+        "toludee": null,
+        "Diplomat": null,
+        "roller": null
+      },
+      "alliances": [],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "seuun",
+          "score": 21.0
+        },
+        {
+          "rank": 2,
+          "name": "Wojtek",
+          "score": 18.0
+        },
+        {
+          "rank": 3,
+          "name": "rajeman",
+          "score": 14.0
+        },
+        {
+          "rank": 4,
+          "name": "mutuma",
+          "score": 3.0
+        },
+        {
+          "rank": 5,
+          "name": "EddyTheArchitect",
+          "score": 1.0
+        },
+        {
+          "rank": 6,
+          "name": "toludee",
+          "score": 0.0
+        },
+        {
+          "rank": 7,
+          "name": "Diplomat",
+          "score": 0.0
+        },
+        {
+          "rank": 8,
+          "name": "Felix Makinda",
+          "score": -1.0
+        },
+        {
+          "rank": 9,
+          "name": "Caleb",
+          "score": -4.0
+        },
+        {
+          "rank": 10,
+          "name": "DNG",
+          "score": -4.0
+        },
+        {
+          "rank": 11,
+          "name": "AGENT_YAQUB",
+          "score": -4.0
+        },
+        {
+          "rank": 12,
+          "name": "okello_agent",
+          "score": -4.0
+        },
+        {
+          "rank": 13,
+          "name": "roller",
+          "score": -6.0
+        }
+      ],
+      "raw_results": {
+        "round": 3,
+        "pledges": {
+          "DNG": "seuun",
+          "okello_agent": "seuun",
+          "AGENT_YAQUB": "Felix Makinda",
+          "mutuma": "rajeman",
+          "seuun": "rajeman",
+          "EddyTheArchitect": "Wojtek",
+          "Caleb": "EddyTheArchitect",
+          "rajeman": "mutuma",
+          "Wojtek": "seuun",
+          "Felix Makinda": "",
+          "toludee": "",
+          "Diplomat": "",
+          "roller": ""
+        },
+        "mutual_pairs": [
+          [
+            "mutuma",
+            "rajeman"
+          ]
+        ],
+        "supporters": {
+          "seuun": [
+            "DNG",
+            "okello_agent",
+            "Wojtek"
+          ],
+          "EddyTheArchitect": [
+            "Caleb"
+          ],
+          "rajeman": [
+            "mutuma",
+            "seuun"
+          ],
+          "Wojtek": [
+            "EddyTheArchitect"
+          ],
+          "Caleb": [],
+          "DNG": [],
+          "AGENT_YAQUB": [],
+          "mutuma": [
+            "rajeman"
+          ],
+          "Felix Makinda": [
+            "AGENT_YAQUB"
+          ],
+          "okello_agent": [],
+          "toludee": [],
+          "Diplomat": [],
+          "roller": []
+        },
+        "score_changes": {
+          "seuun": 10,
+          "EddyTheArchitect": 4,
+          "rajeman": 8,
+          "Wojtek": 4,
+          "Caleb": -1,
+          "DNG": -1,
+          "AGENT_YAQUB": -1,
+          "mutuma": 5,
+          "Felix Makinda": 3,
+          "okello_agent": -1,
+          "toludee": -2,
+          "Diplomat": -2,
+          "roller": -2
+        },
+        "scores_after": {
+          "seuun": 21,
+          "EddyTheArchitect": 1,
+          "rajeman": 14,
+          "Wojtek": 18,
+          "Caleb": -4,
+          "DNG": -4,
+          "AGENT_YAQUB": -4,
+          "mutuma": 3,
+          "Felix Makinda": -1,
+          "okello_agent": -4,
+          "toludee": 0,
+          "Diplomat": 0,
+          "roller": -6
+        }
+      }
+    },
+    {
+      "round_number": 4,
+      "votes": {
+        "AGENT_YAQUB": null,
+        "okello_agent": null,
+        "DNG": "Wojtek",
+        "mutuma": null,
+        "Caleb": "Wojtek",
+        "EddyTheArchitect": null,
+        "Wojtek": "rajeman",
+        "rajeman": null,
+        "toludee": null,
+        "seuun": null,
+        "Diplomat": "Wojtek",
+        "roller": null,
+        "Felix Makinda": null
+      },
+      "alliances": [],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "Wojtek",
+          "score": 28.0
+        },
+        {
+          "rank": 2,
+          "name": "seuun",
+          "score": 19.0
+        },
+        {
+          "rank": 3,
+          "name": "rajeman",
+          "score": 17.0
+        },
+        {
+          "rank": 4,
+          "name": "mutuma",
+          "score": 1.0
+        },
+        {
+          "rank": 5,
+          "name": "EddyTheArchitect",
+          "score": -1.0
+        },
+        {
+          "rank": 6,
+          "name": "Diplomat",
+          "score": -1.0
+        },
+        {
+          "rank": 7,
+          "name": "toludee",
+          "score": -2.0
+        },
+        {
+          "rank": 8,
+          "name": "Felix Makinda",
+          "score": -3.0
+        },
+        {
+          "rank": 9,
+          "name": "Caleb",
+          "score": -5.0
+        },
+        {
+          "rank": 10,
+          "name": "DNG",
+          "score": -5.0
+        },
+        {
+          "rank": 11,
+          "name": "AGENT_YAQUB",
+          "score": -6.0
+        },
+        {
+          "rank": 12,
+          "name": "okello_agent",
+          "score": -6.0
+        },
+        {
+          "rank": 13,
+          "name": "roller",
+          "score": -8.0
+        }
+      ],
+      "raw_results": {
+        "round": 4,
+        "pledges": {
+          "AGENT_YAQUB": "",
+          "okello_agent": "",
+          "DNG": "Wojtek",
+          "mutuma": "",
+          "Caleb": "Wojtek",
+          "EddyTheArchitect": "",
+          "Wojtek": "rajeman",
+          "rajeman": "",
+          "toludee": "",
+          "seuun": "",
+          "Diplomat": "Wojtek",
+          "roller": "",
+          "Felix Makinda": ""
+        },
+        "mutual_pairs": [],
+        "supporters": {
+          "seuun": [],
+          "EddyTheArchitect": [],
+          "rajeman": [
+            "Wojtek"
+          ],
+          "Wojtek": [
+            "DNG",
+            "Caleb",
+            "Diplomat"
+          ],
+          "Caleb": [],
+          "DNG": [],
+          "AGENT_YAQUB": [],
+          "mutuma": [],
+          "Felix Makinda": [],
+          "okello_agent": [],
+          "toludee": [],
+          "Diplomat": [],
+          "roller": []
+        },
+        "score_changes": {
+          "seuun": -2,
+          "EddyTheArchitect": -2,
+          "rajeman": 3,
+          "Wojtek": 10,
+          "Caleb": -1,
+          "DNG": -1,
+          "AGENT_YAQUB": -2,
+          "mutuma": -2,
+          "Felix Makinda": -2,
+          "okello_agent": -2,
+          "toludee": -2,
+          "Diplomat": -1,
+          "roller": -2
+        },
+        "scores_after": {
+          "seuun": 19,
+          "EddyTheArchitect": -1,
+          "rajeman": 17,
+          "Wojtek": 28,
+          "Caleb": -5,
+          "DNG": -5,
+          "AGENT_YAQUB": -6,
+          "mutuma": 1,
+          "Felix Makinda": -3,
+          "okello_agent": -6,
+          "toludee": -2,
+          "Diplomat": -1,
+          "roller": -8
+        }
+      }
+    },
+    {
+      "round_number": 5,
+      "votes": {
+        "AGENT_YAQUB": null,
+        "DNG": "Wojtek",
+        "Diplomat": null,
+        "okello_agent": null,
+        "mutuma": null,
+        "EddyTheArchitect": null,
+        "seuun": null,
+        "rajeman": null,
+        "Caleb": "Wojtek",
+        "Wojtek": null,
+        "Felix Makinda": null,
+        "toludee": null,
+        "roller": "Wojtek"
+      },
+      "alliances": [],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "Wojtek",
+          "score": 37.0
+        },
+        {
+          "rank": 2,
+          "name": "seuun",
+          "score": 17.0
+        },
+        {
+          "rank": 3,
+          "name": "rajeman",
+          "score": 15.0
+        },
+        {
+          "rank": 4,
+          "name": "mutuma",
+          "score": -1.0
+        },
+        {
+          "rank": 5,
+          "name": "EddyTheArchitect",
+          "score": -3.0
+        },
+        {
+          "rank": 6,
+          "name": "Diplomat",
+          "score": -3.0
+        },
+        {
+          "rank": 7,
+          "name": "toludee",
+          "score": -4.0
+        },
+        {
+          "rank": 8,
+          "name": "Felix Makinda",
+          "score": -5.0
+        },
+        {
+          "rank": 9,
+          "name": "Caleb",
+          "score": -6.0
+        },
+        {
+          "rank": 10,
+          "name": "DNG",
+          "score": -6.0
+        },
+        {
+          "rank": 11,
+          "name": "AGENT_YAQUB",
+          "score": -8.0
+        },
+        {
+          "rank": 12,
+          "name": "okello_agent",
+          "score": -8.0
+        },
+        {
+          "rank": 13,
+          "name": "roller",
+          "score": -9.0
+        }
+      ],
+      "raw_results": {
+        "round": 5,
+        "pledges": {
+          "AGENT_YAQUB": "",
+          "DNG": "Wojtek",
+          "Diplomat": "",
+          "okello_agent": "",
+          "mutuma": "",
+          "EddyTheArchitect": "",
+          "seuun": "",
+          "rajeman": "",
+          "Caleb": "Wojtek",
+          "Wojtek": "",
+          "Felix Makinda": "",
+          "toludee": "",
+          "roller": "Wojtek"
+        },
+        "mutual_pairs": [],
+        "supporters": {
+          "seuun": [],
+          "EddyTheArchitect": [],
+          "rajeman": [],
+          "Wojtek": [
+            "DNG",
+            "Caleb",
+            "roller"
+          ],
+          "Caleb": [],
+          "DNG": [],
+          "AGENT_YAQUB": [],
+          "mutuma": [],
+          "Felix Makinda": [],
+          "okello_agent": [],
+          "toludee": [],
+          "Diplomat": [],
+          "roller": []
+        },
+        "score_changes": {
+          "seuun": -2,
+          "EddyTheArchitect": -2,
+          "rajeman": -2,
+          "Wojtek": 9,
+          "Caleb": -1,
+          "DNG": -1,
+          "AGENT_YAQUB": -2,
+          "mutuma": -2,
+          "Felix Makinda": -2,
+          "okello_agent": -2,
+          "toludee": -2,
+          "Diplomat": -2,
+          "roller": -1
+        },
+        "scores_after": {
+          "seuun": 17,
+          "EddyTheArchitect": -3,
+          "rajeman": 15,
+          "Wojtek": 37,
+          "Caleb": -6,
+          "DNG": -6,
+          "AGENT_YAQUB": -8,
+          "mutuma": -1,
+          "Felix Makinda": -5,
+          "okello_agent": -8,
+          "toludee": -4,
+          "Diplomat": -3,
+          "roller": -9
+        }
+      }
+    },
+    {
+      "round_number": 6,
+      "votes": {
+        "AGENT_YAQUB": "EddyTheArchitect",
+        "okello_agent": "Wojtek",
+        "DNG": "rajeman",
+        "mutuma": "Wojtek",
+        "Caleb": "EddyTheArchitect",
+        "seuun": "roller",
+        "rajeman": "mutuma",
+        "Wojtek": "rajeman",
+        "EddyTheArchitect": null,
+        "Felix Makinda": null,
+        "toludee": null,
+        "Diplomat": null,
+        "roller": null
+      },
+      "alliances": [],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "Wojtek",
+          "score": 44.0
+        },
+        {
+          "rank": 2,
+          "name": "rajeman",
+          "score": 22.0
+        },
+        {
+          "rank": 3,
+          "name": "seuun",
+          "score": 16.0
+        },
+        {
+          "rank": 4,
+          "name": "EddyTheArchitect",
+          "score": 3.0
+        },
+        {
+          "rank": 5,
+          "name": "mutuma",
+          "score": 3.0
+        },
+        {
+          "rank": 6,
+          "name": "Diplomat",
+          "score": -5.0
+        },
+        {
+          "rank": 7,
+          "name": "toludee",
+          "score": -6.0
+        },
+        {
+          "rank": 8,
+          "name": "roller",
+          "score": -6.0
+        },
+        {
+          "rank": 9,
+          "name": "Caleb",
+          "score": -7.0
+        },
+        {
+          "rank": 10,
+          "name": "DNG",
+          "score": -7.0
+        },
+        {
+          "rank": 11,
+          "name": "Felix Makinda",
+          "score": -7.0
+        },
+        {
+          "rank": 12,
+          "name": "AGENT_YAQUB",
+          "score": -9.0
+        },
+        {
+          "rank": 13,
+          "name": "okello_agent",
+          "score": -9.0
+        }
+      ],
+      "raw_results": {
+        "round": 6,
+        "pledges": {
+          "AGENT_YAQUB": "EddyTheArchitect",
+          "okello_agent": "Wojtek",
+          "DNG": "rajeman",
+          "mutuma": "Wojtek",
+          "Caleb": "EddyTheArchitect",
+          "seuun": "roller",
+          "rajeman": "mutuma",
+          "Wojtek": "rajeman",
+          "EddyTheArchitect": "",
+          "Felix Makinda": "",
+          "toludee": "",
+          "Diplomat": "",
+          "roller": ""
+        },
+        "mutual_pairs": [],
+        "supporters": {
+          "seuun": [],
+          "EddyTheArchitect": [
+            "AGENT_YAQUB",
+            "Caleb"
+          ],
+          "rajeman": [
+            "DNG",
+            "Wojtek"
+          ],
+          "Wojtek": [
+            "okello_agent",
+            "mutuma"
+          ],
+          "Caleb": [],
+          "DNG": [],
+          "AGENT_YAQUB": [],
+          "mutuma": [
+            "rajeman"
+          ],
+          "Felix Makinda": [],
+          "okello_agent": [],
+          "toludee": [],
+          "Diplomat": [],
+          "roller": [
+            "seuun"
+          ]
+        },
+        "score_changes": {
+          "seuun": -1,
+          "EddyTheArchitect": 6,
+          "rajeman": 7,
+          "Wojtek": 7,
+          "Caleb": -1,
+          "DNG": -1,
+          "AGENT_YAQUB": -1,
+          "mutuma": 4,
+          "Felix Makinda": -2,
+          "okello_agent": -1,
+          "toludee": -2,
+          "Diplomat": -2,
+          "roller": 3
+        },
+        "scores_after": {
+          "seuun": 16,
+          "EddyTheArchitect": 3,
+          "rajeman": 22,
+          "Wojtek": 44,
+          "Caleb": -7,
+          "DNG": -7,
+          "AGENT_YAQUB": -9,
+          "mutuma": 3,
+          "Felix Makinda": -7,
+          "okello_agent": -9,
+          "toludee": -6,
+          "Diplomat": -5,
+          "roller": -6
+        }
+      }
+    },
+    {
+      "round_number": 7,
+      "votes": {
+        "AGENT_YAQUB": "Diplomat",
+        "okello_agent": "Wojtek",
+        "Caleb": "seuun",
+        "DNG": "seuun",
+        "mutuma": "Caleb",
+        "seuun": "toludee",
+        "EddyTheArchitect": "Wojtek",
+        "Wojtek": "rajeman",
+        "rajeman": null,
+        "Felix Makinda": null,
+        "toludee": null,
+        "Diplomat": null,
+        "roller": null
+      },
+      "alliances": [],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "Wojtek",
+          "score": 51.0
+        },
+        {
+          "rank": 2,
+          "name": "rajeman",
+          "score": 25.0
+        },
+        {
+          "rank": 3,
+          "name": "seuun",
+          "score": 23.0
+        },
+        {
+          "rank": 4,
+          "name": "EddyTheArchitect",
+          "score": 2.0
+        },
+        {
+          "rank": 5,
+          "name": "mutuma",
+          "score": 2.0
+        },
+        {
+          "rank": 6,
+          "name": "Diplomat",
+          "score": -2.0
+        },
+        {
+          "rank": 7,
+          "name": "Caleb",
+          "score": -3.0
+        },
+        {
+          "rank": 8,
+          "name": "toludee",
+          "score": -3.0
+        },
+        {
+          "rank": 9,
+          "name": "DNG",
+          "score": -8.0
+        },
+        {
+          "rank": 10,
+          "name": "roller",
+          "score": -8.0
+        },
+        {
+          "rank": 11,
+          "name": "Felix Makinda",
+          "score": -9.0
+        },
+        {
+          "rank": 12,
+          "name": "AGENT_YAQUB",
+          "score": -10.0
+        },
+        {
+          "rank": 13,
+          "name": "okello_agent",
+          "score": -10.0
+        }
+      ],
+      "raw_results": {
+        "round": 7,
+        "pledges": {
+          "AGENT_YAQUB": "Diplomat",
+          "okello_agent": "Wojtek",
+          "Caleb": "seuun",
+          "DNG": "seuun",
+          "mutuma": "Caleb",
+          "seuun": "toludee",
+          "EddyTheArchitect": "Wojtek",
+          "Wojtek": "rajeman",
+          "rajeman": "",
+          "Felix Makinda": "",
+          "toludee": "",
+          "Diplomat": "",
+          "roller": ""
+        },
+        "mutual_pairs": [],
+        "supporters": {
+          "seuun": [
+            "Caleb",
+            "DNG"
+          ],
+          "EddyTheArchitect": [],
+          "rajeman": [
+            "Wojtek"
+          ],
+          "Wojtek": [
+            "okello_agent",
+            "EddyTheArchitect"
+          ],
+          "Caleb": [
+            "mutuma"
+          ],
+          "DNG": [],
+          "AGENT_YAQUB": [],
+          "mutuma": [],
+          "Felix Makinda": [],
+          "okello_agent": [],
+          "toludee": [
+            "seuun"
+          ],
+          "Diplomat": [
+            "AGENT_YAQUB"
+          ],
+          "roller": []
+        },
+        "score_changes": {
+          "seuun": 7,
+          "EddyTheArchitect": -1,
+          "rajeman": 3,
+          "Wojtek": 7,
+          "Caleb": 4,
+          "DNG": -1,
+          "AGENT_YAQUB": -1,
+          "mutuma": -1,
+          "Felix Makinda": -2,
+          "okello_agent": -1,
+          "toludee": 3,
+          "Diplomat": 3,
+          "roller": -2
+        },
+        "scores_after": {
+          "seuun": 23,
+          "EddyTheArchitect": 2,
+          "rajeman": 25,
+          "Wojtek": 51,
+          "Caleb": -3,
+          "DNG": -8,
+          "AGENT_YAQUB": -10,
+          "mutuma": 2,
+          "Felix Makinda": -9,
+          "okello_agent": -10,
+          "toludee": -3,
+          "Diplomat": -2,
+          "roller": -8
+        }
+      }
+    },
+    {
+      "round_number": 8,
+      "votes": {
+        "AGENT_YAQUB": "okello_agent",
+        "okello_agent": "Wojtek",
+        "Caleb": "mutuma",
+        "mutuma": "DNG",
+        "seuun": "Caleb",
+        "rajeman": "mutuma",
+        "Wojtek": "rajeman",
+        "EddyTheArchitect": null,
+        "DNG": null,
+        "Felix Makinda": null,
+        "toludee": null,
+        "Diplomat": null,
+        "roller": null
+      },
+      "alliances": [],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "Wojtek",
+          "score": 55.0
+        },
+        {
+          "rank": 2,
+          "name": "rajeman",
+          "score": 29.0
+        },
+        {
+          "rank": 3,
+          "name": "seuun",
+          "score": 22.0
+        },
+        {
+          "rank": 4,
+          "name": "mutuma",
+          "score": 9.0
+        },
+        {
+          "rank": 5,
+          "name": "Caleb",
+          "score": 1.0
+        },
+        {
+          "rank": 6,
+          "name": "EddyTheArchitect",
+          "score": 0.0
+        },
+        {
+          "rank": 7,
+          "name": "Diplomat",
+          "score": -4.0
+        },
+        {
+          "rank": 8,
+          "name": "DNG",
+          "score": -5.0
+        },
+        {
+          "rank": 9,
+          "name": "toludee",
+          "score": -5.0
+        },
+        {
+          "rank": 10,
+          "name": "okello_agent",
+          "score": -6.0
+        },
+        {
+          "rank": 11,
+          "name": "roller",
+          "score": -10.0
+        },
+        {
+          "rank": 12,
+          "name": "AGENT_YAQUB",
+          "score": -11.0
+        },
+        {
+          "rank": 13,
+          "name": "Felix Makinda",
+          "score": -11.0
+        }
+      ],
+      "raw_results": {
+        "round": 8,
+        "pledges": {
+          "AGENT_YAQUB": "okello_agent",
+          "okello_agent": "Wojtek",
+          "Caleb": "mutuma",
+          "mutuma": "DNG",
+          "seuun": "Caleb",
+          "rajeman": "mutuma",
+          "Wojtek": "rajeman",
+          "EddyTheArchitect": "",
+          "DNG": "",
+          "Felix Makinda": "",
+          "toludee": "",
+          "Diplomat": "",
+          "roller": ""
+        },
+        "mutual_pairs": [],
+        "supporters": {
+          "seuun": [],
+          "EddyTheArchitect": [],
+          "rajeman": [
+            "Wojtek"
+          ],
+          "Wojtek": [
+            "okello_agent"
+          ],
+          "Caleb": [
+            "seuun"
+          ],
+          "DNG": [
+            "mutuma"
+          ],
+          "AGENT_YAQUB": [],
+          "mutuma": [
+            "Caleb",
+            "rajeman"
+          ],
+          "Felix Makinda": [],
+          "okello_agent": [
+            "AGENT_YAQUB"
+          ],
+          "toludee": [],
+          "Diplomat": [],
+          "roller": []
+        },
+        "score_changes": {
+          "seuun": -1,
+          "EddyTheArchitect": -2,
+          "rajeman": 4,
+          "Wojtek": 4,
+          "Caleb": 4,
+          "DNG": 3,
+          "AGENT_YAQUB": -1,
+          "mutuma": 7,
+          "Felix Makinda": -2,
+          "okello_agent": 4,
+          "toludee": -2,
+          "Diplomat": -2,
+          "roller": -2
+        },
+        "scores_after": {
+          "seuun": 22,
+          "EddyTheArchitect": 0,
+          "rajeman": 29,
+          "Wojtek": 55,
+          "Caleb": 1,
+          "DNG": -5,
+          "AGENT_YAQUB": -11,
+          "mutuma": 9,
+          "Felix Makinda": -11,
+          "okello_agent": -6,
+          "toludee": -5,
+          "Diplomat": -4,
+          "roller": -10
+        }
+      }
+    },
+    {
+      "round_number": 9,
+      "votes": {
+        "okello_agent": "Wojtek",
+        "AGENT_YAQUB": "Wojtek",
+        "DNG": "mutuma",
+        "Caleb": "seuun",
+        "mutuma": "rajeman",
+        "seuun": "Caleb",
+        "Wojtek": "rajeman",
+        "EddyTheArchitect": null,
+        "rajeman": null,
+        "Felix Makinda": null,
+        "toludee": null,
+        "Diplomat": null,
+        "roller": null
+      },
+      "alliances": [],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "Wojtek",
+          "score": 62.0
+        },
+        {
+          "rank": 2,
+          "name": "rajeman",
+          "score": 35.0
+        },
+        {
+          "rank": 3,
+          "name": "seuun",
+          "score": 27.0
+        },
+        {
+          "rank": 4,
+          "name": "mutuma",
+          "score": 13.0
+        },
+        {
+          "rank": 5,
+          "name": "Caleb",
+          "score": 6.0
+        },
+        {
+          "rank": 6,
+          "name": "EddyTheArchitect",
+          "score": -2.0
+        },
+        {
+          "rank": 7,
+          "name": "DNG",
+          "score": -6.0
+        },
+        {
+          "rank": 8,
+          "name": "Diplomat",
+          "score": -6.0
+        },
+        {
+          "rank": 9,
+          "name": "okello_agent",
+          "score": -7.0
+        },
+        {
+          "rank": 10,
+          "name": "toludee",
+          "score": -7.0
+        },
+        {
+          "rank": 11,
+          "name": "AGENT_YAQUB",
+          "score": -12.0
+        },
+        {
+          "rank": 12,
+          "name": "roller",
+          "score": -12.0
+        },
+        {
+          "rank": 13,
+          "name": "Felix Makinda",
+          "score": -13.0
+        }
+      ],
+      "raw_results": {
+        "round": 9,
+        "pledges": {
+          "okello_agent": "Wojtek",
+          "AGENT_YAQUB": "Wojtek",
+          "DNG": "mutuma",
+          "Caleb": "seuun",
+          "mutuma": "rajeman",
+          "seuun": "Caleb",
+          "Wojtek": "rajeman",
+          "EddyTheArchitect": "",
+          "rajeman": "",
+          "Felix Makinda": "",
+          "toludee": "",
+          "Diplomat": "",
+          "roller": ""
+        },
+        "mutual_pairs": [
+          [
+            "Caleb",
+            "seuun"
+          ]
+        ],
+        "supporters": {
+          "seuun": [
+            "Caleb"
+          ],
+          "EddyTheArchitect": [],
+          "rajeman": [
+            "mutuma",
+            "Wojtek"
+          ],
+          "Wojtek": [
+            "okello_agent",
+            "AGENT_YAQUB"
+          ],
+          "Caleb": [
+            "seuun"
+          ],
+          "DNG": [],
+          "AGENT_YAQUB": [],
+          "mutuma": [
+            "DNG"
+          ],
+          "Felix Makinda": [],
+          "okello_agent": [],
+          "toludee": [],
+          "Diplomat": [],
+          "roller": []
+        },
+        "score_changes": {
+          "seuun": 5,
+          "EddyTheArchitect": -2,
+          "rajeman": 6,
+          "Wojtek": 7,
+          "Caleb": 5,
+          "DNG": -1,
+          "AGENT_YAQUB": -1,
+          "mutuma": 4,
+          "Felix Makinda": -2,
+          "okello_agent": -1,
+          "toludee": -2,
+          "Diplomat": -2,
+          "roller": -2
+        },
+        "scores_after": {
+          "seuun": 27,
+          "EddyTheArchitect": -2,
+          "rajeman": 35,
+          "Wojtek": 62,
+          "Caleb": 6,
+          "DNG": -6,
+          "AGENT_YAQUB": -12,
+          "mutuma": 13,
+          "Felix Makinda": -13,
+          "okello_agent": -7,
+          "toludee": -7,
+          "Diplomat": -6,
+          "roller": -12
+        }
+      }
+    },
+    {
+      "round_number": 1,
+      "votes": {
+        "AGENT_YAQUB": "DNG",
+        "DNG": "mutuma",
+        "roller": "mutuma",
+        "mutuma": "DNG",
+        "EddyTheArchitect": null
+      },
+      "alliances": [],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "mutuma",
+          "score": 8.0
+        },
+        {
+          "rank": 2,
+          "name": "DNG",
+          "score": 8.0
+        },
+        {
+          "rank": 3,
+          "name": "roller",
+          "score": -1.0
+        },
+        {
+          "rank": 4,
+          "name": "AGENT_YAQUB",
+          "score": -1.0
+        },
+        {
+          "rank": 5,
+          "name": "EddyTheArchitect",
+          "score": -2.0
+        }
+      ],
+      "raw_results": {
+        "round": 1,
+        "pledges": {
+          "AGENT_YAQUB": "DNG",
+          "DNG": "mutuma",
+          "roller": "mutuma",
+          "mutuma": "DNG",
+          "EddyTheArchitect": ""
+        },
+        "mutual_pairs": [
+          [
+            "DNG",
+            "mutuma"
+          ]
+        ],
+        "supporters": {
+          "mutuma": [
+            "DNG",
+            "roller"
+          ],
+          "DNG": [
+            "AGENT_YAQUB",
+            "mutuma"
+          ],
+          "roller": [],
+          "AGENT_YAQUB": [],
+          "EddyTheArchitect": []
+        },
+        "score_changes": {
+          "mutuma": 8,
+          "DNG": 8,
+          "roller": -1,
+          "AGENT_YAQUB": -1,
+          "EddyTheArchitect": -2
+        },
+        "scores_after": {
+          "mutuma": 8,
+          "DNG": 8,
+          "roller": -1,
+          "AGENT_YAQUB": -1,
+          "EddyTheArchitect": -2
+        }
+      }
+    },
+    {
+      "round_number": 2,
+      "votes": {
+        "DNG": "mutuma",
+        "AGENT_YAQUB": "mutuma",
+        "roller": "mutuma",
+        "mutuma": "DNG",
+        "EddyTheArchitect": null
+      },
+      "alliances": [
+        [
+          "mutuma",
+          "DNG"
+        ]
+      ],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "mutuma",
+          "score": 19.0
+        },
+        {
+          "rank": 2,
+          "name": "DNG",
+          "score": 13.0
+        },
+        {
+          "rank": 3,
+          "name": "roller",
+          "score": -2.0
+        },
+        {
+          "rank": 4,
+          "name": "AGENT_YAQUB",
+          "score": -2.0
+        },
+        {
+          "rank": 5,
+          "name": "EddyTheArchitect",
+          "score": -4.0
+        }
+      ],
+      "raw_results": {
+        "round": 2,
+        "pledges": {
+          "DNG": "mutuma",
+          "AGENT_YAQUB": "mutuma",
+          "roller": "mutuma",
+          "mutuma": "DNG",
+          "EddyTheArchitect": ""
+        },
+        "mutual_pairs": [
+          [
+            "DNG",
+            "mutuma"
+          ]
+        ],
+        "supporters": {
+          "mutuma": [
+            "DNG",
+            "AGENT_YAQUB",
+            "roller"
+          ],
+          "DNG": [
+            "mutuma"
+          ],
+          "roller": [],
+          "AGENT_YAQUB": [],
+          "EddyTheArchitect": []
+        },
+        "score_changes": {
+          "mutuma": 11,
+          "DNG": 5,
+          "roller": -1,
+          "AGENT_YAQUB": -1,
+          "EddyTheArchitect": -2
+        },
+        "scores_after": {
+          "mutuma": 19,
+          "DNG": 13,
+          "roller": -2,
+          "AGENT_YAQUB": -2,
+          "EddyTheArchitect": -4
+        }
+      }
+    },
+    {
+      "round_number": 3,
+      "votes": {
+        "AGENT_YAQUB": "mutuma",
+        "DNG": "mutuma",
+        "roller": "EddyTheArchitect",
+        "mutuma": "DNG",
+        "EddyTheArchitect": null
+      },
+      "alliances": [
+        [
+          "mutuma",
+          "DNG"
+        ]
+      ],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "mutuma",
+          "score": 27.0
+        },
+        {
+          "rank": 2,
+          "name": "DNG",
+          "score": 18.0
+        },
+        {
+          "rank": 3,
+          "name": "EddyTheArchitect",
+          "score": -1.0
+        },
+        {
+          "rank": 4,
+          "name": "roller",
+          "score": -3.0
+        },
+        {
+          "rank": 5,
+          "name": "AGENT_YAQUB",
+          "score": -3.0
+        }
+      ],
+      "raw_results": {
+        "round": 3,
+        "pledges": {
+          "AGENT_YAQUB": "mutuma",
+          "DNG": "mutuma",
+          "roller": "EddyTheArchitect",
+          "mutuma": "DNG",
+          "EddyTheArchitect": ""
+        },
+        "mutual_pairs": [
+          [
+            "DNG",
+            "mutuma"
+          ]
+        ],
+        "supporters": {
+          "mutuma": [
+            "AGENT_YAQUB",
+            "DNG"
+          ],
+          "DNG": [
+            "mutuma"
+          ],
+          "roller": [],
+          "AGENT_YAQUB": [],
+          "EddyTheArchitect": [
+            "roller"
+          ]
+        },
+        "score_changes": {
+          "mutuma": 8,
+          "DNG": 5,
+          "roller": -1,
+          "AGENT_YAQUB": -1,
+          "EddyTheArchitect": 3
+        },
+        "scores_after": {
+          "mutuma": 27,
+          "DNG": 18,
+          "roller": -3,
+          "AGENT_YAQUB": -3,
+          "EddyTheArchitect": -1
+        }
+      }
+    },
+    {
+      "round_number": 4,
+      "votes": {
+        "AGENT_YAQUB": "mutuma",
+        "DNG": "mutuma",
+        "roller": "EddyTheArchitect",
+        "mutuma": "DNG",
+        "EddyTheArchitect": null
+      },
+      "alliances": [
+        [
+          "mutuma",
+          "DNG"
+        ]
+      ],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "mutuma",
+          "score": 35.0
+        },
+        {
+          "rank": 2,
+          "name": "DNG",
+          "score": 23.0
+        },
+        {
+          "rank": 3,
+          "name": "EddyTheArchitect",
+          "score": 2.0
+        },
+        {
+          "rank": 4,
+          "name": "roller",
+          "score": -4.0
+        },
+        {
+          "rank": 5,
+          "name": "AGENT_YAQUB",
+          "score": -4.0
+        }
+      ],
+      "raw_results": {
+        "round": 4,
+        "pledges": {
+          "AGENT_YAQUB": "mutuma",
+          "DNG": "mutuma",
+          "roller": "EddyTheArchitect",
+          "mutuma": "DNG",
+          "EddyTheArchitect": ""
+        },
+        "mutual_pairs": [
+          [
+            "DNG",
+            "mutuma"
+          ]
+        ],
+        "supporters": {
+          "mutuma": [
+            "AGENT_YAQUB",
+            "DNG"
+          ],
+          "DNG": [
+            "mutuma"
+          ],
+          "roller": [],
+          "AGENT_YAQUB": [],
+          "EddyTheArchitect": [
+            "roller"
+          ]
+        },
+        "score_changes": {
+          "mutuma": 8,
+          "DNG": 5,
+          "roller": -1,
+          "AGENT_YAQUB": -1,
+          "EddyTheArchitect": 3
+        },
+        "scores_after": {
+          "mutuma": 35,
+          "DNG": 23,
+          "roller": -4,
+          "AGENT_YAQUB": -4,
+          "EddyTheArchitect": 2
+        }
+      }
+    },
+    {
+      "round_number": 5,
+      "votes": {
+        "DNG": "mutuma",
+        "AGENT_YAQUB": "DNG",
+        "roller": "EddyTheArchitect",
+        "mutuma": "DNG",
+        "EddyTheArchitect": null
+      },
+      "alliances": [
+        [
+          "mutuma",
+          "DNG"
+        ]
+      ],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "mutuma",
+          "score": 40.0
+        },
+        {
+          "rank": 2,
+          "name": "DNG",
+          "score": 31.0
+        },
+        {
+          "rank": 3,
+          "name": "EddyTheArchitect",
+          "score": 5.0
+        },
+        {
+          "rank": 4,
+          "name": "roller",
+          "score": -5.0
+        },
+        {
+          "rank": 5,
+          "name": "AGENT_YAQUB",
+          "score": -5.0
+        }
+      ],
+      "raw_results": {
+        "round": 5,
+        "pledges": {
+          "DNG": "mutuma",
+          "AGENT_YAQUB": "DNG",
+          "roller": "EddyTheArchitect",
+          "mutuma": "DNG",
+          "EddyTheArchitect": ""
+        },
+        "mutual_pairs": [
+          [
+            "DNG",
+            "mutuma"
+          ]
+        ],
+        "supporters": {
+          "mutuma": [
+            "DNG"
+          ],
+          "DNG": [
+            "AGENT_YAQUB",
+            "mutuma"
+          ],
+          "roller": [],
+          "AGENT_YAQUB": [],
+          "EddyTheArchitect": [
+            "roller"
+          ]
+        },
+        "score_changes": {
+          "mutuma": 5,
+          "DNG": 8,
+          "roller": -1,
+          "AGENT_YAQUB": -1,
+          "EddyTheArchitect": 3
+        },
+        "scores_after": {
+          "mutuma": 40,
+          "DNG": 31,
+          "roller": -5,
+          "AGENT_YAQUB": -5,
+          "EddyTheArchitect": 5
+        }
+      }
+    },
+    {
+      "round_number": 6,
+      "votes": {
+        "DNG": "mutuma",
+        "AGENT_YAQUB": "DNG",
+        "roller": "EddyTheArchitect",
+        "EddyTheArchitect": "roller",
+        "mutuma": "DNG"
+      },
+      "alliances": [
+        [
+          "mutuma",
+          "DNG"
+        ]
+      ],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "mutuma",
+          "score": 45.0
+        },
+        {
+          "rank": 2,
+          "name": "DNG",
+          "score": 39.0
+        },
+        {
+          "rank": 3,
+          "name": "EddyTheArchitect",
+          "score": 10.0
+        },
+        {
+          "rank": 4,
+          "name": "roller",
+          "score": 0.0
+        },
+        {
+          "rank": 5,
+          "name": "AGENT_YAQUB",
+          "score": -6.0
+        }
+      ],
+      "raw_results": {
+        "round": 6,
+        "pledges": {
+          "DNG": "mutuma",
+          "AGENT_YAQUB": "DNG",
+          "roller": "EddyTheArchitect",
+          "EddyTheArchitect": "roller",
+          "mutuma": "DNG"
+        },
+        "mutual_pairs": [
+          [
+            "DNG",
+            "mutuma"
+          ],
+          [
+            "EddyTheArchitect",
+            "roller"
+          ]
+        ],
+        "supporters": {
+          "mutuma": [
+            "DNG"
+          ],
+          "DNG": [
+            "AGENT_YAQUB",
+            "mutuma"
+          ],
+          "roller": [
+            "EddyTheArchitect"
+          ],
+          "AGENT_YAQUB": [],
+          "EddyTheArchitect": [
+            "roller"
+          ]
+        },
+        "score_changes": {
+          "mutuma": 5,
+          "DNG": 8,
+          "roller": 5,
+          "AGENT_YAQUB": -1,
+          "EddyTheArchitect": 5
+        },
+        "scores_after": {
+          "mutuma": 45,
+          "DNG": 39,
+          "roller": 0,
+          "AGENT_YAQUB": -6,
+          "EddyTheArchitect": 10
+        }
+      }
+    },
+    {
+      "round_number": 7,
+      "votes": {
+        "AGENT_YAQUB": "mutuma",
+        "DNG": "mutuma",
+        "roller": "EddyTheArchitect",
+        "EddyTheArchitect": "roller",
+        "mutuma": "DNG"
+      },
+      "alliances": [
+        [
+          "mutuma",
+          "DNG"
+        ],
+        [
+          "roller",
+          "EddyTheArchitect"
+        ]
+      ],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "mutuma",
+          "score": 53.0
+        },
+        {
+          "rank": 2,
+          "name": "DNG",
+          "score": 44.0
+        },
+        {
+          "rank": 3,
+          "name": "EddyTheArchitect",
+          "score": 15.0
+        },
+        {
+          "rank": 4,
+          "name": "roller",
+          "score": 5.0
+        },
+        {
+          "rank": 5,
+          "name": "AGENT_YAQUB",
+          "score": -7.0
+        }
+      ],
+      "raw_results": {
+        "round": 7,
+        "pledges": {
+          "AGENT_YAQUB": "mutuma",
+          "DNG": "mutuma",
+          "roller": "EddyTheArchitect",
+          "EddyTheArchitect": "roller",
+          "mutuma": "DNG"
+        },
+        "mutual_pairs": [
+          [
+            "DNG",
+            "mutuma"
+          ],
+          [
+            "EddyTheArchitect",
+            "roller"
+          ]
+        ],
+        "supporters": {
+          "mutuma": [
+            "AGENT_YAQUB",
+            "DNG"
+          ],
+          "DNG": [
+            "mutuma"
+          ],
+          "roller": [
+            "EddyTheArchitect"
+          ],
+          "AGENT_YAQUB": [],
+          "EddyTheArchitect": [
+            "roller"
+          ]
+        },
+        "score_changes": {
+          "mutuma": 8,
+          "DNG": 5,
+          "roller": 5,
+          "AGENT_YAQUB": -1,
+          "EddyTheArchitect": 5
+        },
+        "scores_after": {
+          "mutuma": 53,
+          "DNG": 44,
+          "roller": 5,
+          "AGENT_YAQUB": -7,
+          "EddyTheArchitect": 15
+        }
+      }
+    },
+    {
+      "round_number": 8,
+      "votes": {
+        "DNG": "mutuma",
+        "AGENT_YAQUB": "mutuma",
+        "roller": "EddyTheArchitect",
+        "EddyTheArchitect": "roller",
+        "mutuma": null
+      },
+      "alliances": [
+        [
+          "mutuma",
+          "DNG"
+        ],
+        [
+          "roller",
+          "EddyTheArchitect"
+        ]
+      ],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "mutuma",
+          "score": 59.0
+        },
+        {
+          "rank": 2,
+          "name": "DNG",
+          "score": 43.0
+        },
+        {
+          "rank": 3,
+          "name": "EddyTheArchitect",
+          "score": 20.0
+        },
+        {
+          "rank": 4,
+          "name": "roller",
+          "score": 10.0
+        },
+        {
+          "rank": 5,
+          "name": "AGENT_YAQUB",
+          "score": -8.0
+        }
+      ],
+      "raw_results": {
+        "round": 8,
+        "pledges": {
+          "DNG": "mutuma",
+          "AGENT_YAQUB": "mutuma",
+          "roller": "EddyTheArchitect",
+          "EddyTheArchitect": "roller",
+          "mutuma": ""
+        },
+        "mutual_pairs": [
+          [
+            "EddyTheArchitect",
+            "roller"
+          ]
+        ],
+        "supporters": {
+          "mutuma": [
+            "DNG",
+            "AGENT_YAQUB"
+          ],
+          "DNG": [],
+          "roller": [
+            "EddyTheArchitect"
+          ],
+          "AGENT_YAQUB": [],
+          "EddyTheArchitect": [
+            "roller"
+          ]
+        },
+        "score_changes": {
+          "mutuma": 6,
+          "DNG": -1,
+          "roller": 5,
+          "AGENT_YAQUB": -1,
+          "EddyTheArchitect": 5
+        },
+        "scores_after": {
+          "mutuma": 59,
+          "DNG": 43,
+          "roller": 10,
+          "AGENT_YAQUB": -8,
+          "EddyTheArchitect": 20
+        }
+      }
+    },
+    {
+      "round_number": 9,
+      "votes": {
+        "AGENT_YAQUB": "mutuma",
+        "DNG": "AGENT_YAQUB",
+        "roller": "EddyTheArchitect",
+        "mutuma": "DNG",
+        "EddyTheArchitect": "roller"
+      },
+      "alliances": [
+        [
+          "mutuma",
+          "DNG"
+        ],
+        [
+          "roller",
+          "EddyTheArchitect"
+        ]
+      ],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "mutuma",
+          "score": 63.0
+        },
+        {
+          "rank": 2,
+          "name": "DNG",
+          "score": 47.0
+        },
+        {
+          "rank": 3,
+          "name": "EddyTheArchitect",
+          "score": 25.0
+        },
+        {
+          "rank": 4,
+          "name": "roller",
+          "score": 15.0
+        },
+        {
+          "rank": 5,
+          "name": "AGENT_YAQUB",
+          "score": -4.0
+        }
+      ],
+      "raw_results": {
+        "round": 9,
+        "pledges": {
+          "AGENT_YAQUB": "mutuma",
+          "DNG": "AGENT_YAQUB",
+          "roller": "EddyTheArchitect",
+          "mutuma": "DNG",
+          "EddyTheArchitect": "roller"
+        },
+        "mutual_pairs": [
+          [
+            "EddyTheArchitect",
+            "roller"
+          ]
+        ],
+        "supporters": {
+          "mutuma": [
+            "AGENT_YAQUB"
+          ],
+          "DNG": [
+            "mutuma"
+          ],
+          "roller": [
+            "EddyTheArchitect"
+          ],
+          "AGENT_YAQUB": [
+            "DNG"
+          ],
+          "EddyTheArchitect": [
+            "roller"
+          ]
+        },
+        "score_changes": {
+          "mutuma": 4,
+          "DNG": 4,
+          "roller": 5,
+          "AGENT_YAQUB": 4,
+          "EddyTheArchitect": 5
+        },
+        "scores_after": {
+          "mutuma": 63,
+          "DNG": 47,
+          "roller": 15,
+          "AGENT_YAQUB": -4,
+          "EddyTheArchitect": 25
+        }
+      }
+    },
+    {
+      "round_number": 10,
+      "votes": {
+        "AGENT_YAQUB": "DNG",
+        "DNG": "mutuma",
+        "roller": "EddyTheArchitect",
+        "EddyTheArchitect": "roller",
+        "mutuma": "DNG"
+      },
+      "alliances": [
+        [
+          "mutuma",
+          "DNG"
+        ],
+        [
+          "roller",
+          "EddyTheArchitect"
+        ]
+      ],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "mutuma",
+          "score": 68.0
+        },
+        {
+          "rank": 2,
+          "name": "DNG",
+          "score": 55.0
+        },
+        {
+          "rank": 3,
+          "name": "EddyTheArchitect",
+          "score": 30.0
+        },
+        {
+          "rank": 4,
+          "name": "roller",
+          "score": 20.0
+        },
+        {
+          "rank": 5,
+          "name": "AGENT_YAQUB",
+          "score": -5.0
+        }
+      ],
+      "raw_results": {
+        "round": 10,
+        "pledges": {
+          "AGENT_YAQUB": "DNG",
+          "DNG": "mutuma",
+          "roller": "EddyTheArchitect",
+          "EddyTheArchitect": "roller",
+          "mutuma": "DNG"
+        },
+        "mutual_pairs": [
+          [
+            "DNG",
+            "mutuma"
+          ],
+          [
+            "EddyTheArchitect",
+            "roller"
+          ]
+        ],
+        "supporters": {
+          "mutuma": [
+            "DNG"
+          ],
+          "DNG": [
+            "AGENT_YAQUB",
+            "mutuma"
+          ],
+          "roller": [
+            "EddyTheArchitect"
+          ],
+          "AGENT_YAQUB": [],
+          "EddyTheArchitect": [
+            "roller"
+          ]
+        },
+        "score_changes": {
+          "mutuma": 5,
+          "DNG": 8,
+          "roller": 5,
+          "AGENT_YAQUB": -1,
+          "EddyTheArchitect": 5
+        },
+        "scores_after": {
+          "mutuma": 68,
+          "DNG": 55,
+          "roller": 20,
+          "AGENT_YAQUB": -5,
+          "EddyTheArchitect": 30
+        }
+      }
+    },
+    {
+      "round_number": 10,
+      "votes": {
+        "DNG": "Diplomat",
+        "roller": null,
+        "Diplomat": null
+      },
+      "alliances": [],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "roller",
+          "score": 5.0
+        },
+        {
+          "rank": 2,
+          "name": "Diplomat",
+          "score": 5.0
+        },
+        {
+          "rank": 3,
+          "name": "DNG",
+          "score": -10.0
+        }
+      ],
+      "raw_results": {
+        "round": 10,
+        "pledges": {
+          "DNG": "Diplomat",
+          "roller": "",
+          "Diplomat": ""
+        },
+        "mutual_pairs": [],
+        "supporters": {
+          "DNG": [],
+          "roller": [],
+          "Diplomat": [
+            "DNG"
+          ]
+        },
+        "score_changes": {
+          "DNG": -1,
+          "roller": -2,
+          "Diplomat": 3
+        },
+        "scores_after": {
+          "DNG": -10,
+          "roller": 5,
+          "Diplomat": 5
+        }
+      }
+    },
+    {
+      "round_number": 10,
+      "votes": {
+        "DNG": "Diplomat",
+        "roller": null,
+        "Diplomat": null
+      },
+      "alliances": [],
+      "leaderboard": [
+        {
+          "rank": 1,
+          "name": "roller",
+          "score": 5.0
+        },
+        {
+          "rank": 2,
+          "name": "Diplomat",
+          "score": 5.0
+        },
+        {
+          "rank": 3,
+          "name": "DNG",
+          "score": -10.0
+        }
+      ],
+      "raw_results": {
+        "round": 10,
+        "pledges": {
+          "DNG": "Diplomat",
+          "roller": "",
+          "Diplomat": ""
+        },
+        "mutual_pairs": [],
+        "supporters": {
+          "DNG": [],
+          "roller": [],
+          "Diplomat": [
+            "DNG"
+          ]
+        },
+        "score_changes": {
+          "DNG": -1,
+          "roller": -2,
+          "Diplomat": 3
+        },
+        "scores_after": {
+          "DNG": -10,
+          "roller": 5,
+          "Diplomat": 5
+        }
+      }
+    }
+  ]
+}
