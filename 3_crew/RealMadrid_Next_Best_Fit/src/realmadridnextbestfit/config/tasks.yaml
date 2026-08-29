@@ -1,0 +1,37 @@
+trending_player_task:
+  description: >
+    Conduct thorough research about attacking football players (strikers or wingers) 
+    currently playing in {region}. Make sure you find interesting, trending, 
+    and highly relevant targets given the current year is {current_year}.
+  expected_output: >
+    A clean list with exactly 5 bullet points of the most trending attacking players 
+    in {region}, detailing their current club and market buzz.
+  agent: trending_player_finder
+
+research_task:
+  description: >
+    Take the list of 5 players from the scouting task. Briefly find their basic data 
+    for ONLY the most recent season. Keep your research shallow and quick. 
+    Collect only: total goals, total matches played, current fitness status, and estimated wage. 
+    Do not write background stories or detailed histories.
+  expected_output: >
+    A single markdown table containing 5 rows (one per player) with exactly 5 columns: 
+    Player Name, Matches, Goals, Fitness, and Estimated Wage. 
+  agent: research_analyst
+  context :
+    - trending_player_task
+  output_file: output/research_report.json
+
+coach_task:
+  description: >
+    Review the compact statistics table provided by the research task. Evaluate the 5 players 
+    based on their basic metrics. Select the single best attacking option that fits 
+    Real Madrid's quick counter-attacking style. Do not write a long essay.
+  expected_output: >
+    A concise paragraph of exactly 3 to 4 sentences. State the selected player's name, 
+    how they fit your tactical formation, and a brief note on their current fitness risk.
+  agent: coach
+  context :
+    - research_task
+  output_file: output/final_player.md
+
