@@ -1,0 +1,76 @@
+research_company_task:
+  description: >
+    Research {company} for someone interviewing for the role of {role}.
+    Find: tech stack, engineering culture, products they build,
+    what they value in engineers, recent news or launches.
+
+    Job Description context (use this to align research to what the role specifically needs):
+    {job_description}
+  expected_output: >
+    A structured summary covering: tech stack, company culture, product focus,
+    key skills from the JD, and what matters most for {role} candidates at {company}.
+  agent: company_researcher
+
+gather_questions_task:
+  description: >
+    Search for real interview questions asked at {company} for {role} positions.
+    Search Glassdoor, LeetCode discuss, Reddit (r/cscareerquestions), GeeksForGeeks, Blind.
+    Categorize by: DSA, System Design, Behavioral, Domain-specific.
+    Note which questions appear repeatedly across sources.
+
+    Also factor in the job description requirements below — questions that test
+    those specific skills should be prioritized:
+    {job_description}
+  expected_output: >
+    A categorized list of interview questions grouped by type: DSA, System Design,
+    Behavioral, Domain-specific. Each question should note how frequently it appears
+    and which source it came from (with the source URL).
+  agent: interview_intel_agent
+
+build_prep_guide_task:
+  description: >
+    Using ALL prior outputs (company research, interview questions, resource links),
+    create a complete interview prep guide for {role} at {company}.
+
+    Job Description for alignment:
+    {job_description}
+
+    You MUST respond with a valid JSON object containing EXACTLY these fields:
+    - "company": string — the company name
+    - "role": string — the role being interviewed for
+    - "round_breakdown": list of strings — each string describes one interview round
+    - "topic_weightage": list of objects, each with:
+        "topic" (string), "weightage_percent" (integer), "sample_questions" (list of strings)
+    - "one_week_plan": string — a detailed 7-day study schedule
+    - "must_know_questions": list of exactly 10 strings — the top must-prepare questions
+
+    Return ONLY the JSON. No markdown, no explanation, no code fences.
+  expected_output: >
+    A valid JSON object with these exact fields: company (string), role (string),
+    round_breakdown (list of strings), topic_weightage (list of objects with topic,
+    weightage_percent, sample_questions), one_week_plan (string), must_know_questions
+    (list of 10 strings). Pure JSON only — no markdown or explanation around it.
+  agent: interview_strategist
+  output_file: output/prep_guide.md
+
+curate_resources_task:
+  description: >
+    Find REAL, WORKING preparation resources for {role} interview at {company}.
+
+    CRITICAL RULE: Only include URLs that your search tool actually returned in results.
+    Do NOT generate, guess, or construct URLs from memory — hallucinated URLs will be broken.
+
+    Run these exact searches using your search tool and copy URLs from the results:
+    1. Search "{company} interview questions leetcode" — find LeetCode company tag page
+    2. Search "{company} software engineer interview glassdoor" — find Glassdoor interview reviews
+    3. Search "{company} {role} interview questions github" — find GitHub prep repos
+    4. Search "{company} engineering blog" — find their official tech blog
+    5. Search "{company} {role} interview preparation youtube" — find YouTube prep videos
+
+    For each result: use the exact URL as it appears in the search output.
+  expected_output: >
+    A curated list of 5-8 resources. For each: name, exact URL copied from search results,
+    brief description of what it contains, and estimated time to complete.
+    Every URL must be real — sourced from search results, not generated from memory.
+  agent: resource_curator
+  output_file: output/resources.md
