@@ -1,0 +1,15 @@
+sandbox/job_hunt_checkpoints.db
+sandbox/applications/*
+!sandbox/applications/.gitkeep
+.venv/
+_pycache_/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pywz
+*.pyzw
+*.pyzwz
+
