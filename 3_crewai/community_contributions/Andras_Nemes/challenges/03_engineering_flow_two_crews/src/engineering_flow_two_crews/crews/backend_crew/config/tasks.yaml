@@ -1,0 +1,9 @@
+implement_backend:
+  description: >
+    Implement this requirement: {backend_requirement}
+    Follow this interface contract exactly: {interface_contract}
+    Use only the Python standard library and keep it simple.
+    Return only backend.py source, without Markdown or an explanation.
+  expected_output: >
+    Valid Python source code for backend.py and nothing else.
+  agent: backend_developer
