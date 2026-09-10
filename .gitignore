@@ -1,3 +1,8 @@
+# Environment variables / API keys
+.env
+.env.*
+!.env.example
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
