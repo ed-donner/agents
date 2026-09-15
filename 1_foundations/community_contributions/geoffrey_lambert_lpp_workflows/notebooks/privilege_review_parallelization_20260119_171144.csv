@@ -1,0 +1,2 @@
+doc_id,model_a,model_a_classification,model_a_confidence,model_b,model_b_classification,model_b_confidence,consensus_reached,final_classification,escalation_required,escalation_reason,reviewer_notes,reviewer_decision,reviewed_by,review_date
+DOC001,OpenAI GPT-4.1-nano,PRIVILEGED,85,Llama 3.2 (Local),UNCERTAIN,10,False,UNCERTAIN,Yes,"Model disagreement: OpenAI=PRIVILEGED, Llama=UNCERTAIN",,,,
