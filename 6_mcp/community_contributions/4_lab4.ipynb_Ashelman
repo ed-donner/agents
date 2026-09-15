@@ -1,0 +1,657 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "<table style=\"margin: 0; text-align: left; width:100%\">\n",
+    "    <tr>\n",
+    "        <td style=\"width: 220px; height: 150px; vertical-align: middle;\">\n",
+    "            <img src=\"../assets/aaa.png\" width=\"220\" height=\"150\" style=\"display: block;\" />\n",
+    "        </td>\n",
+    "        <td>\n",
+    "            <h2 style=\"color:#ff7800;\">Autonomous Traders</h2>\n",
+    "            <span style=\"color:#ff7800;\">An equity trading simulation to illustrate autonomous agents powered by tools and resources from MCP servers.\n",
+    "            </span>\n",
+    "        </td>\n",
+    "    </tr>\n",
+    "</table>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Week 6 Day 4\n",
+    "\n",
+    "Welcome to the Capstone project!\n",
+    "\n",
+    "# Autonomous Traders\n",
+    "\n",
+    "An equity trading simulation with four Traders and a Researcher, powered by a team of MCP servers and their tools and resources:\n",
+    "\n",
+    "1. Our home-made Accounts server, written by our engineering team\n",
+    "2. Push notifications, to alert us when something happens\n",
+    "3. Market data, for live or simulated share prices\n",
+    "4. Fetch, to read a web page through a local headless browser\n",
+    "5. Tavily, for web search\n",
+    "6. Memory, a knowledge graph the researcher writes to and reads back\n",
+    "\n",
+    "Plus resources to read each trader's account and their investment strategy.\n",
+    "\n",
+    "The whole system already lives in the `backend` package. Today we tour the key pieces, build and run a single trader to watch it work, then bring up a dashboard to see the full team trading."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## The architecture\n",
+    "\n",
+    "Here is how the pieces fit together. Each of the four traders is an agent with its own MCP servers for accounts, push notifications and market data, and it calls a researcher agent as a tool. The researcher is itself an agent, with its own MCP servers for fetching pages, web search and memory. Orange is an agent, blue is an MCP server, and there are six MCP servers in all.\n",
+    "\n",
+    "While I've given the Agents names like \"Trader\" and \"Researcher\", my motivation for this architecture was managing the context effectively with the right prompts and tools for reliable outcomes. It's key to avoid the trap of assigning Agent responsibilities just because that's how human teams are organized..\n",
+    "\n",
+    "<img src=\"../assets/architecture.png\" width=\"820\" />"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "<table style=\"margin: 0; text-align: left; width:100%\">\n",
+    "    <tr>\n",
+    "        <td style=\"width: 150px; height: 150px; vertical-align: middle;\">\n",
+    "            <img src=\"../assets/stop.png\" width=\"150\" height=\"150\" style=\"display: block;\" />\n",
+    "        </td>\n",
+    "        <td>\n",
+    "            <h2 style=\"color:#ff7800;\">One more time --</h2>\n",
+    "            <span style=\"color:#ff7800;\">Please do not use this for actual trading decisions!!\n",
+    "            </span>\n",
+    "        </td>\n",
+    "    </tr>\n",
+    "</table>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 1,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from dotenv import load_dotenv\n",
+    "import json\n",
+    "from contextlib import AsyncExitStack\n",
+    "from agents import Runner, trace, add_trace_processor\n",
+    "from IPython.display import Markdown, display\n",
+    "from backend.market import get_share_price\n",
+    "from backend.accounts import Account\n",
+    "from backend.accounts_client import read_accounts_resource\n",
+    "from backend.reset import reset_traders\n",
+    "from backend.mcp_servers import trader_mcp_servers, researcher_mcp_servers\n",
+    "from backend.traders import get_researcher, get_researcher_tool, Trader\n",
+    "from backend.tracers import LogTracer\n",
+    "\n",
+    "load_dotenv(override=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### A quick note for Windows\n",
+    "\n",
+    "Launching a local MCP server from a notebook hits one rough edge on Windows. The server writes its startup output to stderr, but inside a Windows Jupyter kernel that stream has no real file handle behind it, so the launch fails with an `io.UnsupportedOperation: fileno` error, while Mac and Linux are unaffected.\n",
+    "\n",
+    "The fix is to send the server's stderr to the null device, so it always has somewhere real to write. We do that once in the next cell, which lets every MCP server below start cleanly. On Mac and Linux it costs nothing beyond keeping the server's startup banner out of the notebook."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# On Windows, a stdio MCP server started from a Jupyter kernel writes to a stderr stream with no\n",
+    "# real file descriptor and crashes with io.UnsupportedOperation: fileno. We send the server's\n",
+    "# stderr to the null device so it always has somewhere real to write. Mac and Linux are unaffected.\n",
+    "import functools\n",
+    "import subprocess\n",
+    "import agents.mcp.server\n",
+    "\n",
+    "agents.mcp.server.stdio_client = functools.partial(agents.mcp.server.stdio_client, errlog=subprocess.DEVNULL)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## A tour of the backend\n",
+    "\n",
+    "The trading floor is already built as a Python package in `backend`. Before we run it, let's look at a few of the pieces it gives us."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Market data\n",
+    "\n",
+    "`get_share_price` returns the latest price for a symbol. With a Massive API key it uses live market data; without one it falls back to a simulator, so the floor runs either way."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "324.96"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "get_share_price(\"AAPL\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### The traders' accounts\n",
+    "\n",
+    "Each trader has an account: a balance, holdings, a transaction history and an investment strategy. The `Account` model is the heart of our home-made Accounts server. Let's reset the four traders to their starting strategies and look at one of them.\n",
+    "\n",
+    "#### Ed note:\n",
+    "\n",
+    "I have commented out the first line because I don't want to reset my traders!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Balance: 10000.0\n",
+      "Strategy: \n",
+      "You are Warren, and you are named in homage to your role model, Warren Buffett.\n",
+      "You are a value-oriented investor who prioritizes long-term wealth creation.\n",
+      "You identify high-quality companies trading below their intrinsic value.\n",
+      "You invest patiently and hold positions through market fluctuations, \n",
+      "relying on meticulous fundamental analysis, steady cash flows, strong management teams, \n",
+      "and competitive advantages. You rarely react to short-term market movements, \n",
+      "trusting your deep research and value-driven strategy.\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "reset_traders() \n",
+    "warren = Account.get(\"Warren\")\n",
+    "print(\"Balance:\", warren.balance)\n",
+    "print(\"Strategy:\", warren.get_strategy())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### The MCP servers, and their tools\n",
+    "\n",
+    "The trader and the researcher each get their own set of MCP servers, and `mcp_servers.py` builds them for us. Let's start each one and count the tools they expose."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "python: c:\\Users\\DavidAshelman\\Projects\\agents\\.venv\\Scripts\\python.exe\n",
+      "version: 3.12.12 (main, Feb 12 2026, 00:40:26) [MSC v.1944 64 bit (AMD64)]\n",
+      "stderr fileno ok: True\n",
+      "os.devnull: nul\n"
+     ]
+    }
+   ],
+   "source": [
+    "import sys, os\n",
+    "print(\"python:\", sys.executable)\n",
+    "print(\"version:\", sys.version.splitlines()[0])\n",
+    "print(\"stderr fileno ok:\", hasattr(sys.stderr, \"fileno\") and callable(sys.stderr.fileno))\n",
+    "print(\"os.devnull:\", os.devnull)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1.27.0\n"
+     ]
+    }
+   ],
+   "source": [
+    "import importlib.metadata\n",
+    "print(importlib.metadata.version(\"mcp\"))\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Checking stdio: uv...\n",
+      "  OK → 5 tools available\n",
+      "Checking stdio: uv...\n",
+      "  OK → 1 tools available\n",
+      "Checking stdio: uvx...\n",
+      "  OK → 3 tools available\n",
+      "Checking stdio: uvx...\n",
+      "  OK → 1 tools available\n",
+      "Checking stdio: npx.cmd...\n",
+      "  OK → 1 tools available\n",
+      "Checking stdio: npx.cmd...\n",
+      "  OK → 6 tools available\n"
+     ]
+    }
+   ],
+   "source": [
+    "from backend.mcp_servers import trader_mcp_servers, researcher_mcp_servers\n",
+    "\n",
+    "servers = trader_mcp_servers() + researcher_mcp_servers(\"Warren\")\n",
+    "\n",
+    "for server in servers:\n",
+    "    print(f\"Checking {server.name}...\")\n",
+    "    try:\n",
+    "        async with server:\n",
+    "            tools = await server.list_tools()\n",
+    "            print(f\"  OK → {len(tools)} tools available\")\n",
+    "    except Exception as e:\n",
+    "        print(f\"  FAIL → {e}\")\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "We have 6 MCP servers, and 17 tools\n"
+     ]
+    }
+   ],
+   "source": [
+    "servers = trader_mcp_servers() + researcher_mcp_servers(\"Warren\")\n",
+    "count = 0\n",
+    "for server in servers:\n",
+    "    async with server:\n",
+    "        tools = await server.list_tools()\n",
+    "        count += len(tools)\n",
+    "print(f\"We have {len(servers)} MCP servers, and {count} tools\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## The Researcher\n",
+    "\n",
+    "The trader does not search the web itself. Instead it calls a Researcher agent as one of its tools. The researcher has its own MCP servers: Fetch to read pages, Tavily for web search, and a Memory it writes to and reads back.\n",
+    "\n",
+    "Tavily offers several tools, from plain search to a heavyweight deep-research mode. We restrict its server to `tavily_search`, which keeps the researcher fast and focused. Choosing which tools an agent can see is itself context engineering.\n",
+    "\n",
+    "Wrapping an agent as a tool is different from a handoff: with a tool the trader stays in control and gets the researcher's answer back, where a handoff would pass the whole conversation over."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/markdown": [
+       "Here’s the latest on Amazon from the past few weeks:\n",
+       "\n",
+       "- **FTC antitrust action is the biggest headline.** Reuters reported on **Aug. 31** that the FTC is preparing to sue Amazon, alleging it **deceived advertisers**. This follows broader antitrust scrutiny around Amazon’s marketplace and pricing practices.  \n",
+       "- **A California antitrust case is moving against Amazon as well.** Reuters said a judge was likely to **deny California’s bid to block Amazon** over alleged price-fixing / price pressure allegations, which is a setback for the state’s case.\n",
+       "- **AWS is still the growth engine.** Amazon’s latest earnings-related coverage says **AWS grew 37% YoY** in Q2 2026, its fastest pace in 18 quarters, and that AI-related demand remains a major driver.\n",
+       "- **Capex is huge and still rising.** Amazon reportedly raised 2026 capex guidance to about **$220 billion**, reflecting heavy investment in AI infrastructure, chips, and data centers. That’s bullish for long-term positioning, but it’s pressuring free cash flow in the near term.\n",
+       "- **The stock has been volatile.** Coverage around **Aug. 31** noted shares fell on concerns about AI spending and regulatory risk, though some analysts still see strong underlying fundamentals from AWS and advertising.\n",
+       "\n",
+       "Amazon’s own recent updates are more operational:\n",
+       "- AWS rolled out a **new custom-apps feature for Amazon Quick** using natural language.\n",
+       "- AWS also posted several **training/certification and media-industry AI** updates, signaling continued product expansion.\n",
+       "\n",
+       "**Bottom line:** the latest news is a mix of **legal/regulatory overhang** and **strong AI/cloud growth**. If you want, I can also give you:\n",
+       "1. a **bull vs bear view on AMZN**,  \n",
+       "2. a **short-term trading angle**, or  \n",
+       "3. a **timeline of the most important Amazon headlines**."
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "async with AsyncExitStack() as stack:\n",
+    "    servers = [await stack.enter_async_context(server) for server in researcher_mcp_servers(\"Warren\")]\n",
+    "    researcher = await get_researcher(servers, \"gpt-5.4-mini\")\n",
+    "    with trace(\"Researcher\"):\n",
+    "        result = await Runner.run(researcher, \"What's the latest news on Amazon?\", max_turns=30)\n",
+    "display(Markdown(result.final_output))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Look at the trace\n",
+    "\n",
+    "https://platform.openai.com/traces"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Wrapping the researcher as a tool\n",
+    "\n",
+    "The trader does not talk to the researcher directly. We turn the whole researcher agent into a tool, and the trader calls it like any other tool. `get_researcher_tool` does this with `researcher.as_tool(...)`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Tool name: Researcher\n",
+      "Description: This tool researches online for news and opportunities, either based on your specific request to look into a certain stock, or generally for notable financial news and opportunities. Describe what kind of research you're looking for.\n"
+     ]
+    }
+   ],
+   "source": [
+    "researcher_tool = await get_researcher_tool(researcher_mcp_servers(\"Warren\"), \"gpt-5.4-mini\")\n",
+    "print(\"Tool name:\", researcher_tool.name)\n",
+    "print(\"Description:\", researcher_tool.description)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "{\"name\": \"warren\", \"balance\": 10000.0, \"strategy\": \"\\nYou are Warren, and you are named in homage to your role model, Warren Buffett.\\nYou are a value-oriented investor who prioritizes long-term wealth creation.\\nYou identify high-quality companies trading below their intrinsic value.\\nYou invest patiently and hold positions through market fluctuations, \\nrelying on meticulous fundamental analysis, steady cash flows, strong management teams, \\nand competitive advantages. You rarely react to short-term market movements, \\ntrusting your deep research and value-driven strategy.\\n\", \"holdings\": {}, \"transactions\": [], \"portfolio_value_time_series\": [[\"2026-09-03 10:01:57\", 10000.0]], \"total_portfolio_value\": 10000.0, \"total_profit_loss\": 0.0}\n"
+     ]
+    }
+   ],
+   "source": [
+    "resources = await read_accounts_resource(\"Warren\")\n",
+    "\n",
+    "print(resources)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## The Trader\n",
+    "\n",
+    "The `Trader` class in `traders.py` brings it together. It builds the researcher as a tool, creates the trader agent over the trader's MCP servers (accounts, push and market data) with that tool, and runs it against a message built from the trader's strategy and current account.\n",
+    "\n",
+    "There is one more piece worth seeing. The OpenAI Agents SDK lets you plug into its tracing, so you can follow what each agent does in code. `tracers.py` has a custom trace processor that records each trader's steps to the database, which is how we surface their thinking on the dashboard. We register it now, then run Warren."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "add_trace_processor(LogTracer())\n",
+    "warren = Trader(\"Warren\", \"Patience\", \"gpt-5.4-mini\")\n",
+    "await warren.run()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Account: warren\n",
+      "Balance: 10000.0\n",
+      "Holdings: {}\n",
+      "Transactions: []\n",
+      "Portfolio Value: 10000.0\n"
+     ]
+    }
+   ],
+   "source": [
+    "resources = await read_accounts_resource(\"Warren\")\n",
+    "info = json.loads(resources)\n",
+    "\n",
+    "print(\"Account:\", info[\"name\"])\n",
+    "print(\"Balance:\", info[\"balance\"])\n",
+    "print(\"Holdings:\", info[\"holdings\"])\n",
+    "print(\"Transactions:\", info[\"transactions\"])\n",
+    "print(\"Portfolio Value:\", info[\"total_portfolio_value\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "{'name': 'warren', 'balance': 10000.0, 'strategy': '\\nYou are Warren, and you are named in homage to your role model, Warren Buffett.\\nYou are a value-oriented investor who prioritizes long-term wealth creation.\\nYou identify high-quality companies trading below their intrinsic value.\\nYou invest patiently and hold positions through market fluctuations, \\nrelying on meticulous fundamental analysis, steady cash flows, strong management teams, \\nand competitive advantages. You rarely react to short-term market movements, \\ntrusting your deep research and value-driven strategy.\\n', 'holdings': {}, 'transactions': [], 'portfolio_value_time_series': [['2026-09-03 10:01:57', 10000.0], ['2026-09-03 10:02:07', 10000.0], ['2026-09-03 10:02:48', 10000.0]], 'total_portfolio_value': 10000.0, 'total_profit_loss': 0.0}\n",
+      "Transactions: []\n",
+      "Number of transactions: 0\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(info)\n",
+    "print(\"Transactions:\", info.get(\"transactions\"))\n",
+    "print(\"Number of transactions:\", len(info.get(\"transactions\", [])))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### How did Warren do?\n",
+    "\n",
+    "Reading the account back through its MCP resource shows the trades Warren made and the state of the portfolio."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Warren has no transactions yet.\n"
+     ]
+    },
+    {
+     "ename": "",
+     "evalue": "",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31mThe Kernel crashed while executing code in the current cell or a previous cell. \n",
+      "\u001b[1;31mPlease review the code in the cell(s) to identify a possible cause of the failure. \n",
+      "\u001b[1;31mClick <a href='https://aka.ms/vscodeJupyterKernelCrash'>here</a> for more info. \n",
+      "\u001b[1;31mView Jupyter <a href='command:jupyter.viewOutput'>log</a> for further details."
+     ]
+    }
+   ],
+   "source": [
+    "resources = await read_accounts_resource(\"Warren\")\n",
+    "info = json.loads(resources)\n",
+    "## print(info[\"transactions\"][-1])\n",
+    "transactions = info[\"transactions\"]\n",
+    "\n",
+    "if transactions:\n",
+    "    print(\"Last transaction:\")\n",
+    "    print(transactions[-1])\n",
+    "else:\n",
+    "    print(\"Warren has no transactions yet.\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## The whole team, on a loop\n",
+    "\n",
+    "`trading_floor.py` is the full backend implementation. It creates all four traders and runs them on a timer:\n",
+    "\n",
+    "```\n",
+    "while True:\n",
+    "    await asyncio.gather(*[trader.run() for trader in traders])\n",
+    "    await asyncio.sleep(RUN_EVERY_N_MINUTES * 60)\n",
+    "```\n",
+    "\n",
+    "A few optional settings in your `.env` file control it:\n",
+    "\n",
+    "`RUN_EVERY_N_MINUTES=60` sets how often the team runs, defaulting to every 60 minutes.\n",
+    "\n",
+    "`RUN_EVEN_WHEN_MARKET_IS_CLOSED=False` decides whether the traders run out of hours.\n",
+    "\n",
+    "`USE_MANY_MODELS=False` runs all four traders on gpt-5.4-mini by default. Set it to true to give each trader a different model: GPT-5.5, DeepSeek V4, Gemini 3.5 Flash and Grok 4.3."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## The dashboard\n",
+    "\n",
+    "Now let's watch it. The dashboard lives in the `demo` package, and `app.py` launches it.\n",
+    "\n",
+    "Open a new terminal (the plus on the terminal panel), change to this directory and run the dashboard:\n",
+    "\n",
+    "`cd 6_mcp`\n",
+    "\n",
+    "`uv run app.py`\n",
+    "\n",
+    "Then, to set the team trading, open another terminal, change to the same directory and start the engine:\n",
+    "\n",
+    "`cd 6_mcp`\n",
+    "\n",
+    "`uv run -m backend.trading_floor`\n",
+    "\n",
+    "Watch the dashboard, and see your trading team in action."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "<table style=\"margin: 0; text-align: left; width:100%\">\n",
+    "    <tr>\n",
+    "        <td style=\"width: 150px; height: 150px; vertical-align: middle;\">\n",
+    "            <img src=\"../assets/stop.png\" width=\"150\" height=\"150\" style=\"display: block;\" />\n",
+    "        </td>\n",
+    "        <td>\n",
+    "            <h2 style=\"color:#ff7800;\">Keep an eye on your API usage</h2>\n",
+    "            <span style=\"color:#ff7800;\">The engine runs on a loop, every hour or however you set it. Watch your API usage and stop it when you have seen enough. I find myself watching this happily for hours, and I hope you will too.\n",
+    "            </span>\n",
+    "        </td>\n",
+    "    </tr>\n",
+    "</table>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Almost there\n",
+    "\n",
+    "You have an autonomous trading floor: four traders, a researcher, six MCP servers, persistent memory and a live dashboard.\n",
+    "\n",
+    "In the final lab we give it a production frontend, a separate web app that talks to the same backend."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": ".venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.12"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

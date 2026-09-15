@@ -1,0 +1,12 @@
+openai>=1.0.0
+anthropic>=0.7.0
+google-generativeai>=0.3.0
+groq>=0.3.0
+deepseek-ai>=0.1.0
+python-dotenv>=1.0.0
+numpy>=1.24.0
+pandas>=2.0.0
+matplotlib>=3.7.0
+scikit-learn>=1.2.0
+sentence-transformers>=2.2.2
+ipykernel>=6.0.0

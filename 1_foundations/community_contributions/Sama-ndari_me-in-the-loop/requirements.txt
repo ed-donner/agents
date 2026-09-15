@@ -1,0 +1,9 @@
+openai
+gradio
+pypdf
+beautifulsoup4
+requests
+python-dotenv
+pydantic
+pushover-client
+python-docx

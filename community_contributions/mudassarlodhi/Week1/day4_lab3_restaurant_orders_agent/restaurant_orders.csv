@@ -1,0 +1,23 @@
+order_id,customer_name,customer_email,item,quantity,total_amount,status,order_datetime
+10001,Olivia Carter,olivia.carter@example.com,Classic Flame Burger,1,12.99,Delivered,2026-08-11 12:15
+10002,James Wilson,james.wilson@example.com,Smokehouse Burger,2,31.98,Preparing,2026-08-11 12:32
+10003,Sophia Martinez,sophia.martinez@example.com,Creamy Alfredo,1,14.99,Out for Delivery,2026-08-11 12:41
+10004,Daniel Brown,daniel.brown@example.com,Grilled Chicken Plate,2,35.98,Delivered,2026-08-10 18:20
+10005,Emma Davis,emma.davis@example.com,Crispy Chicken Burger,1,13.99,Cancelled,2026-08-10 19:05
+10006,Liam Taylor,liam.taylor@example.com,Flame Ribeye,1,24.99,Preparing,2026-08-11 13:02
+10007,Ava Anderson,ava.anderson@example.com,Spicy Chicken Pasta,1,16.49,Delivered,2026-08-09 20:10
+10008,Noah Thomas,noah.thomas@example.com,Steak & Cheese Sandwich,2,29.98,Out for Delivery,2026-08-11 13:18
+10009,Isabella Jackson,isabella.jackson@example.com,New York Cheesecake,1,7.49,Delivered,2026-08-09 15:45
+10010,Ethan White,ethan.white@example.com,Loaded Fries,1,7.99,Preparing,2026-08-11 13:25
+10011,Mia Harris,mia.harris@example.com,Grilled Chicken Sandwich,1,12.49,Delivered,2026-08-08 13:30
+10012,Lucas Martin,lucas.martin@example.com,Family Dinner - 4 mains,1,59.96,Delivered,2026-08-07 19:10
+10013,Charlotte Thompson,charlotte.thompson@example.com,Classic Flame Burger,2,25.98,Cancelled,2026-08-07 20:05
+10014,Henry Garcia,henry.garcia@example.com,Chocolate Brownie,2,12.98,Delivered,2026-08-06 21:15
+10015,Amelia Martinez,amelia.martinez@example.com,Grilled Chicken Plate,1,17.99,Out for Delivery,2026-08-11 13:40
+10016,Benjamin Robinson,benjamin.robinson@example.com,Classic Flame Burger,1,12.99,Preparing,2026-08-11 13:48
+10017,Harper Clark,harper.clark@example.com,Fresh Lemonade,2,7.98,Delivered,2026-08-05 14:20
+10018,Alexander Rodriguez,alexander.rodriguez@example.com,Smokehouse Burger,1,15.99,Delivered,2026-08-05 18:35
+10019,Evelyn Lewis,evelyn.lewis@example.com,Side Salad,1,5.49,Cancelled,2026-08-04 12:40
+10020,Michael Lee,michael.lee@example.com,Spicy Chicken Pasta,2,32.98,Delivered,2026-08-03 19:25
+10021,Olivia Carter,olivia.carter@example.com,Crispy Chicken Burger,1,12.99,Delivered,2026-08-11 12:15
+10022,James Wilson,james.wilson@example.com,Desi Chicken Karahi,2,31.98,Preparing,2026-08-11 12:32
