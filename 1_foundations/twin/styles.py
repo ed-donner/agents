@@ -1,40 +1,46 @@
 """Styling constants for the digital twin Gradio app."""
 
-GOLD = "#ecad0a"
-BLUE = "#209dd7"
-PURPLE = "#753991"
+GOLD = "#C6A15B"      # warm brass
+BLUE = "#0B6E8A"      # ocean blue
+PURPLE = "#2A9D8F"    # teal accent
 
 EXAMPLES = [
     "Tell me about your background and experience.",
-    "What kinds of projects are you working on now?",
-    "What are your strongest technical skills?",
-    "How can I get in touch with you?",
+    "Tell me about your maritime and offshore background.",
+    "What experience do you have with autonomous and uncrewed vessels?",
+    "What kind of leadership roles are you interested in next?",
+    "What is your experience in shipbroking, subsea and offshore operations?",
 ]
 
 CSS = """
 :root {
-  --twin-gold: #ecad0a;
-  --twin-blue: #209dd7;
-  --twin-purple: #753991;
-  --twin-bg: #0d0d10;
-  --twin-surface: #16161b;
-  --twin-surface-2: #1c1c22;
-  --twin-border: #2a2a32;
-  --twin-border-strong: #3a3a44;
-  --twin-text: #ececef;
-  --twin-muted: #8c8c95;
+  --twin-gold: #C6A15B;
+  --twin-blue: #0B6E8A;
+  --twin-purple: #2A9D8F;
+
+  --twin-bg: #071A26;
+  --twin-surface: #0D2432;
+  --twin-surface-2: #132F3D;
+
+  --twin-border: #274452;
+  --twin-border-strong: #3D5C69;
+
+  --twin-text: #F4F6F7;
+  --twin-muted: #9AAAB3;
 }
 
 /* Light mode: Gradio adds `.dark` to <body> when dark; absence = light.
    Only the neutral palette flips — gold/blue/purple accents stay identical. */
 body:not(.dark) {
-  --twin-bg: #f4f4f6;
-  --twin-surface: #ffffff;
-  --twin-surface-2: #ededf0;
-  --twin-border: #dcdce2;
-  --twin-border-strong: #b8b8c0;
-  --twin-text: #1a1a20;
-  --twin-muted: #6a6a72;
+  --twin-bg: #F3F6F7;
+  --twin-surface: #FFFFFF;
+  --twin-surface-2: #E9EFF1;
+
+  --twin-border: #CCD8DD;
+  --twin-border-strong: #A7BAC2;
+
+  --twin-text: #102733;
+  --twin-muted: #637983;
 }
 
 footer, .built-with, .show-api, .api-docs { display: none !important; }
@@ -62,22 +68,30 @@ html, body, gradio-app { background: var(--twin-bg) !important; }
 /* ---------- Title ---------- */
 .gradio-container h1 {
   color: var(--twin-text) !important;
-  font-size: 26px !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.02em !important;
-  border-left: 3px solid var(--twin-gold);
-  padding-left: 12px !important;
+  font-size: 28px !important;
+  font-weight: 650 !important;
+  letter-spacing: -0.025em !important;
+
+  border-left: 4px solid var(--twin-blue);
+  padding-left: 14px !important;
+
   margin: 4px 0 8px !important;
   text-align: left !important;
 }
 
 /* ---------- Sharp corners on structural pieces ---------- */
-.chatbot, .chatbot *, .block, .form,
-button, input, textarea,
-.examples button {
-  border-radius: 0 !important;
+.chatbot, .block, .form {
+  border-radius: 8px !important;
 }
 
+textarea, input {
+  border-radius: 6px !important;
+}
+
+button,
+.examples button {
+  border-radius: 5px !important;
+}
 /* ---------- Block surfaces ---------- */
 .block, .form { background: transparent !important; box-shadow: none !important; }
 
@@ -354,7 +368,7 @@ button[variant="primary"] svg {
 
 JS = """
 () => {
-  document.title = 'Digital Twin';
+  document.title = 'Max Hartvigsen | Digital Twin';
 
   const focusInput = () => {
     const areas = document.querySelectorAll('textarea');
