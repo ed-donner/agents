@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedScribe AI — Discharge Summary Generator</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-mark">M</span>
+        <div>
+          <h1>MedScribe AI</h1>
+          <p>Autonomous Discharge Summary Generator</p>
+        </div>
+      </div>
+      <span class="badge">Powered by AI Engineering Team</span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Input Panel -->
+    <section class="card" id="input-section">
+      <h2>Patient Clinical Notes</h2>
+      <p class="subtitle">Paste raw admission notes, physician observations, lab results, and medication records below. The AI Engineering Team will autonomously generate a complete, QA-reviewed discharge summary package.</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="patient-id">Patient ID / Reference</label>
+          <input type="text" id="patient-id" placeholder="e.g. PT-20241501" maxlength="40" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="patient-data">Raw Clinical Notes</label>
+        <textarea id="patient-data" rows="14" placeholder="Paste the full patient record here — admission notes, vitals, lab results, medications administered, physician observations, procedures, and any relevant history..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <button id="btn-load-sample" class="btn-secondary">Load Sample Patient</button>
+        <button id="btn-submit" class="btn-primary">Generate Discharge Summary</button>
+      </div>
+    </section>
+
+    <!-- Progress Panel -->
+    <section class="card hidden" id="progress-section">
+      <h2>AI Engineering Team — Working</h2>
+      <p class="subtitle">Five specialist agents are processing this patient record autonomously.</p>
+
+      <div class="pipeline">
+        <div class="pipeline-step" id="step-1">
+          <div class="step-icon">1</div>
+          <div class="step-info">
+            <strong>Clinical Analyst</strong>
+            <span>Extracting structured clinical data</span>
+          </div>
+          <div class="step-status" id="status-1">Waiting...</div>
+        </div>
+        <div class="pipeline-step" id="step-2">
+          <div class="step-icon">2</div>
+          <div class="step-info">
+            <strong>Discharge Planner</strong>
+            <span>Building comprehensive discharge plan</span>
+          </div>
+          <div class="step-status" id="status-2">Waiting...</div>
+        </div>
+        <div class="pipeline-step" id="step-3">
+          <div class="step-icon">3</div>
+          <div class="step-info">
+            <strong>Medical Writer</strong>
+            <span>Composing clinical discharge summary</span>
+          </div>
+          <div class="step-status" id="status-3">Waiting...</div>
+        </div>
+        <div class="pipeline-step" id="step-4">
+          <div class="step-icon">4</div>
+          <div class="step-info">
+            <strong>QA Reviewer</strong>
+            <span>Auditing for completeness and safety</span>
+          </div>
+          <div class="step-status" id="status-4">Waiting...</div>
+        </div>
+        <div class="pipeline-step" id="step-5">
+          <div class="step-icon">5</div>
+          <div class="step-info">
+            <strong>Code Engineer</strong>
+            <span>Generating deployable Python implementation</span>
+          </div>
+          <div class="step-status" id="status-5">Waiting...</div>
+        </div>
+      </div>
+
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+      <p id="progress-label" class="progress-label">Initialising pipeline...</p>
+    </section>
+
+    <!-- Results Panel -->
+    <section class="card hidden" id="results-section">
+      <div class="results-header">
+        <h2>Results</h2>
+        <div id="qa-badge" class="qa-badge"></div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="summary">Discharge Summary</button>
+        <button class="tab" data-tab="files">Output Files</button>
+        <button class="tab" data-tab="report">Crew Report</button>
+      </div>
+
+      <div class="tab-content active" id="tab-summary">
+        <pre id="summary-text"></pre>
+      </div>
+
+      <div class="tab-content hidden" id="tab-files">
+        <p class="subtitle">All files are saved to <code>output/&lt;run_id&gt;/</code> on the server.</p>
+        <ul id="files-list" class="files-list"></ul>
+      </div>
+
+      <div class="tab-content hidden" id="tab-report">
+        <pre id="report-text"></pre>
+      </div>
+
+      <div class="results-actions">
+        <button id="btn-new" class="btn-secondary">New Patient</button>
+        <button id="btn-copy" class="btn-primary">Copy Summary</button>
+      </div>
+    </section>
+
+    <!-- Error Panel -->
+    <section class="card hidden" id="error-section">
+      <h2>Pipeline Error</h2>
+      <p id="error-message" class="error-text"></p>
+      <button id="btn-retry" class="btn-secondary">Try Again</button>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>MedScribe AI &mdash; For clinical decision support only. All summaries must be reviewed by a licensed physician before use.</p>
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
