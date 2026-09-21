@@ -1,0 +1,37 @@
+find_trip_locations:
+  description: >
+    Find best 3 trip locations strictly based on the user_inputs provided to you.
+    The user_inputs are:
+    {user_inputs}
+    Read the user_inputs carefully and follow these rules strictly. Not following each of them would be incorrect.
+    1.Trip Type
+    Domestic: Destination must be strictly within the same country as the source location; prefer locations closer to the source but only after meeting weather and preference requirements.
+    International: Destination must be strictly in a different country from the source location; prefer locations closer to the source but only after meeting weather and preference requirements.
+    Both: Destination may be anywhere; prefer locations closer to the source but only after meeting weather and preference requirements.
+    2.Select destinations that exactly match the specified weather conditions.
+    3.Carefully analyze user preferences and choose destinations that strictly align with them.
+    4.Consider the trip dates and ensure the destination's weather during those dates (YYYY-MM-DD format) matches the user's requirements.
+  expected_output: > 
+    A list of trip locations
+  agent: tourism_agent
+  output_file: output/places.txt
+
+plan_itinerary:
+  description: > 
+    Create a detailed yet concise travel itineraries for each trip location based strictly on the provided user_inputs. 
+    The user_inputs are:
+    {user_inputs}
+    Ensure the itinerary is fully aligned with the user inputs. 
+    Plan 3 different itineraries each for all the trip locations provided to you.
+    Strictly adhere to the preferences specified in user_inputs and ensure the itinerary fully incorporates them.
+    Ensure you read the user_inputs very carefully and mention the trip_date in the itinerary strictly alligning with the user_inputs: trip_start_date and trip_end_date.
+    Include a complete transportation details from source location to trip location and return journey to make it an exhaustive itinerary. 
+    Include checks in notes for example: rainy weather needs umbrella or any special care to be taken considering the trip destination location.
+  expected_output: Create three separate itineraries, one for each trip location, based on the dates provided in user_inputs (YYYY-MM-DD format). Each itinerary must be organized into a day-wise schedule.
+  agent: itinerary_planner
+  context: 
+    - find_trip_locations 
+  output_file: output/itnerary.txt
+
+
+
