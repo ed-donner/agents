@@ -1,0 +1,47 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Foundations Chat (1_foundations)",
+      "runtimeExecutable": "/Users/mojo/projects/agents/.venv/bin/python3",
+      "runtimeArgs": ["/Users/mojo/projects/agents/1_foundations/app.py"],
+      "port": 7860
+    },
+    {
+      "name": "Deep Research UI (2_openai)",
+      "runtimeExecutable": "/Users/mojo/projects/agents/.venv/bin/python3",
+      "runtimeArgs": ["/Users/mojo/projects/agents/2_openai/deep_research/deep_research.py"],
+      "port": 7861
+    },
+    {
+      "name": "LangGraph Sidekick (4_langgraph)",
+      "runtimeExecutable": "/Users/mojo/projects/agents/.venv/bin/python3",
+      "runtimeArgs": ["/Users/mojo/projects/agents/4_langgraph/app.py"],
+      "port": 7862
+    },
+    {
+      "name": "Trading Floor Dashboard (6_mcp)",
+      "runtimeExecutable": "/Users/mojo/projects/agents/.venv/bin/python3",
+      "runtimeArgs": ["/Users/mojo/projects/agents/6_mcp/app.py"],
+      "port": 7863
+    },
+    {
+      "name": "MCP Accounts Server (6_mcp)",
+      "runtimeExecutable": "/Users/mojo/projects/agents/.venv/bin/python3",
+      "runtimeArgs": ["/Users/mojo/projects/agents/6_mcp/accounts_server.py"],
+      "port": 0
+    },
+    {
+      "name": "MCP Market Server (6_mcp)",
+      "runtimeExecutable": "/Users/mojo/projects/agents/.venv/bin/python3",
+      "runtimeArgs": ["/Users/mojo/projects/agents/6_mcp/market_server.py"],
+      "port": 0
+    },
+    {
+      "name": "MCP Push Server (6_mcp)",
+      "runtimeExecutable": "/Users/mojo/projects/agents/.venv/bin/python3",
+      "runtimeArgs": ["/Users/mojo/projects/agents/6_mcp/push_server.py"],
+      "port": 0
+    }
+  ]
+}
