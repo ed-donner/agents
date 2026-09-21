@@ -1,0 +1,52 @@
+# ── Environment & Secrets ────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+pip-wheel-metadata/
+
+# uv
+uv.lock
+.uv/
+
+# ── Next.js / Node ───────────────────────────────────────────────────────────
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.vercel/
+frontend/tsconfig.tsbuildinfo
+frontend/next-env.d.ts
+
+# ── OS ───────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE ──────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Misc ─────────────────────────────────────────────────────────────────────
+*.zip
