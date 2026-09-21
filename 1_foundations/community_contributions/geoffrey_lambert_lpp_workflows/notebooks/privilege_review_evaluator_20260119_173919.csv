@@ -1,0 +1,2 @@
+doc_id,initial_classification,initial_confidence,errors_found,final_classification,final_confidence,classification_changed,waiver_identified,legal_basis,escalation_required,escalation_reason,reviewer_notes,reviewer_decision,reviewed_by,review_date
+DOC001,PRIVILEGED,85,Yes,PARTIALLY PRIVILEGED,70,Yes,Yes,,Yes,"A detailed human review is necessary to examine the specific circumstances of the disclosures, the dominant purpose of the overall communication, and whether waiver applies given the sharing with third parties.",,,,
