@@ -1,0 +1,25 @@
+[project]
+name = "munger_analyst"
+version = "0.1.0"
+description = "munger_analyst using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]==1.14.4"
+]
+
+[project.scripts]
+munger_analyst = "munger_analyst.main:run"
+run_crew = "munger_analyst.main:run"
+chat = "munger_analyst.main:chat"
+train = "munger_analyst.main:train"
+replay = "munger_analyst.main:replay"
+test = "munger_analyst.main:test"
+run_with_trigger = "munger_analyst.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

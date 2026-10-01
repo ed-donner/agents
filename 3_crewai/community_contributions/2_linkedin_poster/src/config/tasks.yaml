@@ -1,0 +1,58 @@
+research_task:
+  description: >
+    Research this topic: {topic}
+
+    - Use at most 5 web searches.
+    - Return at most 10 bullet points:
+    - focus on 1 key concept at most 3 if referred to the first 1
+    - at most 10 common mistake
+    - at most 10 practical tip
+
+  expected_output: >
+    Research concise notes with 5 bullets only.
+
+
+writing_task:
+  description: >
+    Using the research, write a LinkedIn post.
+    Requirements:
+    - 250 words
+    - conversational
+    - technical
+    - hook
+    - short paragraphs
+    - end with a question
+
+    Topic: {topic}
+  expected_output: >
+    Draft LinkedIn post.
+
+
+editing_task:
+  description: >
+    Review the LinkedIn post.
+    Improve:
+    - readability
+    - grammar
+    - engagement
+    - clarity
+    Keep technical accuracy.
+  expected_output: >
+    Polished LinkedIn post.
+
+optimization_task:
+  description: >
+    Take the final LinkedIn post.
+
+    Produce:
+    1. Final LinkedIn post
+    2. Five hashtags
+    3. One image generation prompt
+    4. One CTA suggestion
+    Format nicely.
+  expected_output: >
+    Markdown containing
+    - LinkedIn Post
+    - Hashtags
+    - Image Prompt
+    - CTA

@@ -1,0 +1,21 @@
+[project]
+name = "twin-agent"
+version = "0.0.1"
+description = "Abrahim's Twin Agent"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "dotenv>=0.9.9",
+    "gradio>=6.24.0",
+    "openai>=3.0.0,<4.0.0",
+    "pypdf>=6.15.0",
+    "requests>=2.34.2",
+    "pandas>=3.0.5",
+    "huggingface_hub>=0.24",
+    "psycopg-pool>=3.2",
+    "psycopg[binary]>=3.1"
+]
+[tool.uv]
+environments = [
+ "sys_platform == 'linux' and platform_machine == 'x86_64'"
+]

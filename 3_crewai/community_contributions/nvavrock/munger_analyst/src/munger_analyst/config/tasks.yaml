@@ -1,0 +1,65 @@
+research_task:
+  description: >
+    Conduct thorough, up-to-date research on {company} as of {current_date}
+    for a value-investing decision. Cover:
+    1. What the business does (products/services, customers, how it makes money)
+    2. Competitive landscape and durable-advantage / moat clues
+    3. Economics & cash: profitability trends, FCF or owner-earnings clues,
+       return-on-capital signals if available
+    4. Balance sheet & downside: debt, cash, leverage, interest coverage if found
+    5. Valuation signals if available (e.g. P/E, P/B, EV/EBIT, FCF yield) —
+       state figures and date; never invent numbers
+    6. Management and incentive structure if discoverable
+    7. Major risks, controversies, cyclicality, accounting red flags, recent news
+    8. What the market narrative seems to emphasize vs what may be ignored
+    9. What remains unknown or outside easy verification
+    IMPORTANT: information MUST be relevant as of {current_date}.
+    Separate facts from speculation. Note sources when possible.
+  expected_output: >
+    A structured research brief on {company} with clear sections for business model,
+    competition/moat clues, economics & cash, balance sheet/downside, valuation
+    signals (or "data not found"), incentives, risks/news, market narrative vs gaps,
+    and open questions. Explicitly list uncertainties.
+  agent: researcher
+
+analysis_task:
+  description: >
+    Using the research brief on {company}, write a BLUF (Bottom Line Up Front)
+    value-investing memo grounded in Charlie Munger's mental models (from your
+    knowledge sources) and any promoted personal models. As of {current_date}.
+
+    IMPORTANT FORMAT — BLUF:
+    - Put the verdict FIRST, before supporting analysis.
+    - Do not bury buy/watch/pass or valuation stance later in the memo.
+
+    Required sections IN THIS ORDER:
+    1. BLUF / Verdict (MUST be first after the title)
+       - Valuation stance: undervalued / fairly valued / overvalued (or "can't tell")
+       - Action: buy / watch / pass
+       - Confidence: low / medium / high
+       - 2-4 sentence bottom line (why)
+    2. Business in plain English
+    3. Circle of competence — understandable enough to evaluate?
+    4. Business quality & moat — economics, durability, capital intensity
+    5. Financial strength & downside — balance sheet, cyclicality, failure modes
+    6. Valuation & margin of safety — use research figures only; if insufficient
+       data, say so and lower confidence (do not invent intrinsic value)
+    7. Mental models applied — name each model and how it applies
+       (at minimum: inversion, incentives, competitive advantage/moat;
+       include Mr. Market / psychological biases if relevant)
+    8. Inversion — how this investment could permanently lose capital
+    9. What would change your mind
+    10. Disclaimer: educational analysis only; not financial advice
+
+    Prefer pass/watch over a forced buy when margin of safety is unclear.
+    Do not invent financials. Missing data → lower confidence.
+  expected_output: >
+    A polished markdown BLUF value memo on {company}. The very first section
+    after the title MUST be the verdict (valuation stance, action, confidence,
+    and short bottom line), followed by supporting analysis, named mental models,
+    and the educational disclaimer.
+  agent: analyst
+  context:
+    - research_task
+  # Filename set via inputs from main.py: output/YYYYMMDD_<company_slug>_memo.md
+  output_file: "{memo_path}"

@@ -32,7 +32,7 @@ A word about Cursor: it's a cool product, but it's not to everyone's liking. It 
 
 After you start Cursor, you can pick the defaults for all its questions.  
 
-IMPORTANT NOTE: Cursor has recently decided to surface its new "Agents" splash screen as the default after you launch Cursor. You can go back to the normal screen with Ctrl+Shift+N. I hope they stop doing this! More in Q54 here:  
+IMPORTANT NOTE: Cursor has recently decided to surface its new "Agents" splash screen as the default after you launch Cursor. You can go back to the normal screen with Command+Shift+N. I hope they stop doing this! More in Q54 here:  
 https://edwarddonner.com/avatar?q=54
 
 ### Part 2: Clone the Repo

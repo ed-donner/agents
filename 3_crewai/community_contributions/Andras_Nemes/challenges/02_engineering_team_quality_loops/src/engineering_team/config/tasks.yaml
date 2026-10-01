@@ -1,0 +1,94 @@
+design_task:
+  description: >
+    Take the high level requirements described here and prepare a detailed design for the engineering team;
+    Here are the requirements: {requirements}
+    IMPORTANT: Only output the design in markdown format, laying out the module(s), classes, functions.
+    Do not actually write any code. Function or method signatures only.
+    You should assign work to the following engineers: backend_engineer, code_quality_reviewer, frontend_engineer, test_engineer, qa_engineer.
+    The backend_engineer should write the backend python code.
+    The code_quality_reviewer should review the backend code and agree on its final form with the backend_engineer.
+    The frontend_engineer should make a gradio app.
+    The test_engineer should write unit tests for the backend module.
+    The qa_engineer should perform the final inspection and add any missing unit tests.
+    All engineers will be working in the same sandbox directory. There is no directory structure, all files are in the same directory.
+    Everything runs in a uv project with gradio installed.
+  expected_output: >
+    A detailed design to achieve the requirements, identifying code structure, and assignments to the engineers.
+  output_file: sandbox/design.md
+
+code_task:
+  description: >
+    Write python code that implements the design described by the engineering lead.
+    Here are the requirements: {requirements}
+  expected_output: >
+    Python files written to the sandbox and tested that implement the design and achieve the requirements.
+    IMPORTANT: Use your sandbox tools to write and check the code.
+  context:
+    - design_task
+
+test_task:
+  description: >
+    Write unit tests for the backend module, in a single test file, using the standard library unittest module.
+    Do not write tests for the Gradio frontend.
+    Fix any errors in the backend code so that the unit tests pass.
+    Keep working until all unit tests pass.
+  expected_output: >
+    A single test file that can be run to test the backend module.
+    IMPORTANT: Use your sandbox tools to write and run the unit tests.
+    Output a summary of the results of the unit tests.
+  context:
+    - code_task
+    - design_task
+  output_file: sandbox/test_summary.md
+
+code_quality_task:
+  description: >
+    Coordinate a code review between the backend_engineer and the code_quality_reviewer.
+    The reviewer should inspect the backend files for correctness, readability,
+    maintainability, and sensible use of SOLID principles.
+    The backend engineer should apply only improvements that both developers agree are useful,
+    then run the backend checks again.
+    Repeat only while the reviewer finds meaningful issues. Stop early when the reviewer
+    approves the code and the backend engineer agrees. Do not exceed 3 review and improvement rounds.
+    The code_quality_reviewer gives feedback but must not edit the files directly.
+  expected_output: >
+    The final reviewed backend code in the sandbox and a concise review summary containing:
+    the number of rounds used, the agreed improvements, the checks that passed,
+    and an explicit statement that both developers approve the final code.
+  context:
+    - design_task
+    - code_task
+    - test_task
+  output_file: sandbox/code_review.md
+
+frontend_task:
+  description: >
+    Write a Gradio UI in a module app.py that demonstrates the reviewed backend code.
+    Assume there is only 1 user, and have the UI be professional, polished, and clean.
+    Then write a separate validation script that imports app.py and confirms the Blocks
+    object constructs without error. The validation script must not call launch().
+    IMPORTANT: Never run app.py with the sandbox runner. Run only the separate validation script.
+    Here are the requirements: {requirements}
+  expected_output: >
+    A Gradio UI in app.py that demonstrates the functionality and a passing validation script.
+    IMPORTANT: Use your sandbox tools to write and check the code.
+  context:
+    - code_quality_task
+    - design_task
+
+qa_task:
+  description: >
+    Perform a final quality inspection of the completed backend, frontend, and unit tests.
+    Check the implementation against the requirements and the agreed code review.
+    Add missing backend unit tests when useful, run the full unit test suite, and confirm
+    that the Gradio validation script still succeeds. Fix test defects, but report any
+    backend implementation defects without changing the agreed backend code.
+  expected_output: >
+    A concise QA report describing the checks performed, any tests added,
+    the final test results, and whether the complete solution is accepted.
+  context:
+    - design_task
+    - code_quality_task
+    - frontend_task
+    - test_task
+  output_file: sandbox/qa_report.md
