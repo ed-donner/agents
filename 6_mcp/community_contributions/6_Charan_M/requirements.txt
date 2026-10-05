@@ -1,0 +1,4 @@
+mcp
+python-dotenv
+requests
+pydantic
