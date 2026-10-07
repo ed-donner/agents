@@ -16,12 +16,19 @@ TIMEOUT = 120
 if massive_api_key:
     market_params = {
         "command": "uvx",
-        "args": ["--from", "git+https://github.com/massive-com/mcp_massive@v0.10.0", "mcp_massive"],
+        "args": [
+            "--with", "mcp<2",
+            "--from", "git+https://github.com/massive-com/mcp_massive@v0.10.0",
+            "mcp_massive"
+        ],
         "env": {"MASSIVE_API_KEY": massive_api_key},
     }
 else:
-    market_params = {"command": "uv", "args": ["run", "-m", "backend.market_server"], "cwd": PROJECT_DIR}
-
+    market_params = {
+        "command": "uv",
+        "args": ["run", "-m", "backend.market_server"],
+        "cwd": PROJECT_DIR
+    }
 
 def trader_mcp_servers() -> list[MCPServerStdio]:
     """The trader's MCP servers: our Accounts server, Push Notification and Market data."""
@@ -57,3 +64,4 @@ def researcher_mcp_servers(name: str) -> list[MCPServerStdio]:
         client_session_timeout_seconds=TIMEOUT,
     )
     return [fetch, search, memory]
+    
