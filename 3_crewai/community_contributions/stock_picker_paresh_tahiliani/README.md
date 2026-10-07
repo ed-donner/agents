@@ -17,8 +17,6 @@ Three agents run in sequence, with memory enabled:
 2. **Financial Researcher** researches each company online → `output/research_report.json`
 3. **Stock Picker** picks the best one, sends a push notification to your phone, and writes the report → `output/decision.md`
 
-The `output/` folder has the results of a sample run from 1 October 2026.
-
 ## Setup
 
 1. **Gemini key:** create a free key at [Google AI Studio](https://aistudio.google.com/apikey).
