@@ -16,8 +16,6 @@ You enter a company name, and two agents run in sequence:
 1. **Researcher** searches the web and news for the company's current status, history, challenges, recent news and outlook.
 2. **Analyst** turns the research into a report with an executive summary → `output/report.md`
 
-The `output/` folder has the report from a sample run for Nvidia on 1 October 2026.
-
 ## Setup
 
 1. Create a free Gemini key at [Google AI Studio](https://aistudio.google.com/apikey).
