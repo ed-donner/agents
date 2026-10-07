@@ -1,0 +1,9 @@
+The **opposition** is more convincing.
+
+Here’s why: the case against strict laws is stronger on **practicality and proportionality**. The opposition acknowledges that LLMs can cause harm, but argues that **broad, strict regulation is the wrong tool** because it would likely impose heavy costs on legitimate innovation while doing little to stop malicious actors who can simply evade compliance. That is a concrete, well-developed objection.
+
+The supporting side makes a strong moral case for safety, accountability, and fairness, but it relies more on **general claims about risk** than on showing that **strict laws specifically** are the best or only effective response. The argument that LLMs should be treated like pharmaceuticals or aircraft is suggestive, but not fully persuasive because LLMs are a much more general-purpose and rapidly changing technology. The opposition is right that rigid legal frameworks may become outdated quickly and could unintentionally entrench large incumbents.
+
+The opposition also offers a better alternative: **target harmful uses, enforce existing laws, and use flexible governance**. That makes its position more balanced. It does not deny the harms; it argues that strict regulation is a blunt instrument that may worsen the situation by slowing beneficial uses and pushing development into less regulated jurisdictions.
+
+So, weighing both sides purely on the arguments presented, the **anti-motion side wins** because it gives a clearer account of why strict laws may be ineffective or counterproductive, while still proposing a more nuanced regulatory approach.

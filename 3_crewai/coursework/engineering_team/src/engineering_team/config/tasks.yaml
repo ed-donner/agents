@@ -1,0 +1,499 @@
+design_task:
+  description: >
+    Take the high level requirements described here and prepare a detailed design for the engineering team.
+    Here are the requirements: {requirements}
+
+    IMPORTANT:
+    - Only output the design in markdown format.
+    - Lay out the module(s), classes, functions, and method signatures.
+    - Do not actually write any code.
+
+    Assign work to the following engineers:
+    - backend_engineer
+    - frontend_engineer
+    - test_engineer
+    - integration_engineer
+
+    Responsibilities:
+    - backend_engineer writes the backend Python code.
+    - frontend_engineer builds the Gradio application.
+    - test_engineer writes unit tests for the backend module.
+    - integration_engineer validates the completed application end to end
+      and acts as the final quality gate.
+
+    The design should include:
+    - expected backend interfaces
+    - expected frontend-to-backend interactions
+    - important callback return types
+    - expected Gradio output component types
+    - major end-to-end user journeys that should be validated
+    - expected failure/error scenarios
+
+    All engineers will be working in the same sandbox directory.
+    There is no directory structure; all generated files are in the same directory.
+    Everything runs in a uv project with Gradio installed.
+
+  expected_output: >
+    A detailed design that achieves the requirements, identifies the code structure,
+    clearly assigns work to all engineers, and defines the important integration
+    contracts and user journeys that must be validated before release.
+
+  agent: engineering_lead
+  output_file: sandbox/design.md
+
+
+code_task:
+  description: >
+    Write Python code that implements the design described by the engineering lead
+    and achieves the requirements.
+
+    Here are the requirements: {requirements}
+
+    IMPORTANT:
+    - Use your sandbox tools to write and check the code.
+    - Keep public interfaces consistent with the design.
+    - Handle invalid input and expected failure conditions cleanly.
+    - Do not write frontend/UI code.
+
+  expected_output: >
+    Python files written to the sandbox and tested sufficiently to implement
+    the backend design and achieve the requirements.
+
+    IMPORTANT:
+    Use your sandbox tools to write and check the code.
+
+  agent: backend_engineer
+  context:
+    - design_task
+
+
+frontend_task:
+  description: >
+    Build a complete Gradio 6 application in a module named app.py that demonstrates
+    and operates the backend code according to the engineering design.
+
+    Here are the requirements: {requirements}
+
+    Assume there is only one user.
+
+    The UI must be professional, polished, clean, and suitable for real interaction,
+    not merely a minimal demonstration.
+
+    The generated app.py must be directly runnable with:
+
+    python app.py
+
+    Therefore app.py MUST contain a proper executable entry point using:
+
+    if __name__ == "__main__":
+
+    and running app.py must actually launch the Gradio application rather than
+    constructing the interface and immediately exiting.
+
+    IMPORTANT Gradio 6 requirements:
+
+    - Use APIs compatible with the installed Gradio 6 version.
+
+    - Do not assume APIs from older Gradio versions.
+
+    - Use the Context7 guidance provided by the engineering lead where applicable.
+
+    - Do not pass parameters to gr.Blocks(...) that have moved elsewhere in Gradio 6.
+
+    - In particular, if the installed Gradio 6 version expects theme and css
+      parameters in demo.launch(...), place them there rather than in gr.Blocks(...).
+
+    - Do not leave avoidable Gradio deprecation or migration warnings in the final app.
+
+    - Do not use raw hex strings in theme shortcut parameters such as
+      primary_hue or secondary_hue.
+
+    - Use valid Gradio theme shortcut names where required.
+
+    - Use exact hex palette values in CSS instead.
+
+    Use the following palette:
+    - #ecad0a
+    - #209dd7
+    - #753991
+    - neutral grays for backgrounds, borders, and text
+
+    The UI must work in both light and dark mode.
+
+    Callback and component requirements:
+
+    - Every callback return value must match the type expected by its output component.
+
+    - A callback connected to a Gradio Dataframe must return a Dataframe-compatible
+      structure such as list[list], dict, dataframe, or another supported format.
+
+    - A Dataframe callback must NEVER return a plain error-message string.
+
+    - User-facing errors must be routed to a Textbox, Markdown, or another
+      text-compatible component.
+
+    - Multi-output callbacks must always return the correct number of output values.
+
+    - Error paths must preserve the same return structure as successful paths.
+
+    - Validate callback behaviour for both normal and invalid inputs.
+
+    - Do not consider the UI complete merely because the Blocks object constructs.
+
+    The application should expose the backend functionality clearly and should include
+    appropriate layouts, controls, tables, status messages, and feedback components.
+
+    Avoid excessively long vertical forms when a clearer dashboard, row, column,
+    tab, or grouped layout would improve usability.
+
+    After creating app.py, create a separate validation script named _validate.py.
+
+    _validate.py must:
+
+    - import app.py
+    - confirm that the Gradio Blocks object constructs successfully
+    - validate that importing app.py does not automatically launch the server
+    - confirm important frontend functions and callbacks can be invoked
+      without structural/type errors where practical
+    - NOT call .launch()
+    - exit successfully only if validation passes
+
+    Use your sandbox tools to run _validate.py.
+
+    Also perform additional direct checks of important callbacks using the sandbox tools
+    so that obvious frontend/backend integration problems are identified before handing
+    the application to the integration engineer.
+
+    Application naming and headings:
+    - Use a clear human-readable application name derived from the user's requirements.
+    - Do not include random IDs, hashes, UUID fragments, temporary workspace names,
+      filenames, test identifiers, or generated prefixes in user-visible titles.
+    - The main page heading should be concise and professional.
+    - If the requirements do not specify an application name, create a sensible
+      descriptive name based only on the application's purpose.
+
+  expected_output: >
+    A complete Gradio 6 application in sandbox/app.py that:
+
+    - uses the backend code correctly
+    - is polished and usable
+    - uses Gradio 6-compatible APIs
+    - contains a proper executable entry point
+    - launches successfully when run with `python app.py`
+    - uses valid callback return types
+    - handles normal and invalid inputs cleanly
+    - supports light and dark mode
+    - uses the specified color palette appropriately
+
+    A separate sandbox/_validate.py must also be created and successfully executed.
+
+    The frontend task is not complete if app.py only imports or constructs successfully;
+    it must also be directly runnable and structurally ready for end-to-end validation.
+
+    IMPORTANT:
+    Use your sandbox tools to write, inspect, and validate all frontend code.
+
+  agent: frontend_engineer
+
+  context:
+    - code_task
+    - design_task
+
+
+test_task:
+  description: >
+    Write unit tests for the backend module in a single test file using the
+    Python standard library unittest module.
+
+    Do not write frontend or Gradio integration tests in this task.
+    Those are the responsibility of the integration_engineer.
+
+    Test:
+    - normal operations
+    - boundary cases
+    - invalid input
+    - expected failures
+    - important business rules
+
+    Fix any defects in the backend code so that the unit tests pass.
+
+    Keep working until all backend unit tests pass.
+
+    If you change backend code:
+    - rerun the unit tests
+    - preserve the public interfaces defined in the design
+    - avoid making changes that would unnecessarily break app.py
+
+  expected_output: >
+    A single test file that can be run to test the backend module.
+
+    All backend unit tests must pass.
+
+    Output a concise summary of:
+    - tests run
+    - tests passed
+    - defects found
+    - defects fixed
+
+    IMPORTANT:
+    Use your sandbox tools to write and run the unit tests.
+
+  agent: test_engineer
+  context:
+    - code_task
+    - design_task
+
+  output_file: sandbox/test_summary.md
+
+
+integration_task:
+  description: >
+    Perform final end-to-end integration and release validation of the completed application.
+
+    You are the final quality gate.
+
+    Do NOT approve the application merely because:
+    - the Python files exist
+    - Python syntax is valid
+    - unit tests pass
+    - app.py imports successfully
+    - the Gradio interface constructs successfully
+    - the Gradio interface launches
+
+    You must validate that the application actually works during realistic interaction.
+
+    IMPORTANT RESPONSIBILITIES:
+
+    - You are responsible for creating any integration testing scripts required
+      to perform this validation.
+
+    - If an integration test script does not already exist, create one yourself
+      in the sandbox, for example integration_test.py.
+
+    - Do NOT stop validation merely because an integration test file is missing.
+
+    - Do NOT ask the user to provide missing test files.
+
+    - If a defect can be fixed with the available sandbox tools, fix it and
+      continue testing.
+
+    - Do not infer that callback behaviour works from code inspection alone.
+      Important callbacks must be executed directly.
+
+    - Do not consider backend-only tests sufficient proof that the UI works.
+
+    Perform the following checks:
+
+    1. SYNTAX VALIDATION
+
+       Run Python syntax checks on all generated Python files.
+
+       No generated Python file may contain syntax errors.
+
+    2. BACKEND UNIT TESTS
+
+       Run all available backend unit tests and confirm they pass.
+
+       If backend defects are found, fix them and rerun the tests.
+
+    3. FRONTEND CONSTRUCTION VALIDATION
+
+       Run the frontend validation script and confirm that:
+
+       - app.py imports without error
+       - the Gradio Blocks object constructs successfully
+       - importing app.py does not automatically launch the server
+       - important frontend functions and handlers exist and are callable
+
+    4. EXECUTABLE APP VALIDATION
+
+       Confirm that app.py contains a proper executable entry point using:
+
+       if __name__ == "__main__":
+
+       Running:
+
+       python app.py
+
+       must actually launch the Gradio application rather than merely construct
+       the interface and exit.
+
+    5. GRADIO 6 API VALIDATION
+
+       Inspect app.py for Gradio 6 compatibility.
+
+       In particular:
+
+       - Search for deprecated or invalid Gradio patterns including `.update(`.
+       - Do not assume that component class methods such as
+         gr.Markdown.update(...) or gr.Textbox.update(...) are valid.
+       - Verify any update behaviour against the installed Gradio 6 API.
+       - Check for migration and deprecation warnings.
+       - Fix avoidable Gradio warnings where practical rather than merely reporting them.
+       - Confirm theme, css, launch, component, and callback APIs are used correctly.
+
+    6. CALLBACK CONTRACT VALIDATION
+
+       Inspect every important Gradio callback and verify that each callback
+       returns values compatible with its declared output components.
+
+       Examples:
+
+       - Dataframe outputs must receive valid dataframe-compatible values such as
+         list[list], dict, dataframe, or another supported structure.
+
+       - Textbox or Markdown outputs may receive strings.
+
+       - Multi-output callbacks must always return the correct number of values.
+
+       - Successful and error paths must return the same number of outputs.
+
+       - Error paths must preserve compatible output types.
+
+       - A callback connected to a Dataframe must never return a plain
+         error-message string.
+
+    7. CALLBACK EXECUTION TESTING
+
+       Do NOT rely only on callback inspection.
+
+       Directly invoke every important frontend callback with:
+
+       - at least one valid/successful input
+       - at least one expected failure or invalid input
+
+       Execute the actual frontend callback functions, not merely the underlying
+       backend functions.
+
+       Where relevant, explicitly test cases such as:
+
+       - successful creation of a new record/account
+       - attempting to create a duplicate
+       - successful update or transaction
+       - invalid numeric values
+       - missing input
+       - invalid identifiers or symbols
+       - insufficient balance/resources
+       - operations that violate business rules
+
+       A RELEASE READY result is not permitted if an important callback's
+       success and failure paths have not both been exercised.
+
+    8. INTEGRATION TEST SCRIPT
+
+       Create integration_test.py if required.
+
+       The integration test must exercise important frontend/backend interactions
+       without requiring manual user intervention where practical.
+
+       The integration test should validate:
+
+       - normal user workflows
+       - callback return structures
+       - backend/frontend interface compatibility
+       - expected error paths
+       - absence of unhandled exceptions
+
+    9. END-TO-END USER JOURNEYS
+
+       Derive the application's major user journeys from the requirements
+       and design.
+
+       Exercise those journeys end to end.
+
+       Do not limit testing to isolated functions if the application workflow
+       spans multiple steps.
+
+    10. ERROR HANDLING
+
+        Test invalid inputs and expected failure conditions.
+
+        Confirm that expected errors:
+
+        - are presented cleanly to the user
+        - do not cause unhandled exceptions
+        - do not break unrelated UI state
+        - return values compatible with the declared Gradio outputs
+
+    11. FRONTEND/BACKEND CONTRACTS
+
+        Confirm that frontend and backend function/method signatures match.
+
+        Confirm that the frontend passes arguments in the correct order and type.
+
+        Confirm that backend return values are handled correctly by the frontend.
+
+    12. DEFECT REPAIR AND RETESTING
+
+        If defects are found:
+
+        - identify the root cause
+        - fix the appropriate generated files
+        - rerun syntax checks
+        - rerun affected backend unit tests
+        - rerun frontend validation
+        - rerun callback validation
+        - rerun callback success and failure tests
+        - rerun integration tests
+        - rerun relevant end-to-end user journeys
+
+    13. COMPLETION RULE
+
+        Continue until either:
+
+        - all required validation passes
+
+        or
+
+        - there is a genuine blocker that cannot be resolved with the available tools.
+
+        A missing integration test file is NOT a genuine blocker if you can create it yourself.
+
+        An application that launches successfully but fails when a user performs
+        an action is NOT considered complete.
+
+        The application must NOT be reported as complete if any known integration
+        defect remains.
+
+  expected_output: >
+    A final release validation report containing:
+
+    - syntax check results
+    - backend unit test results
+    - frontend construction validation
+    - executable launch validation
+    - Gradio 6 compatibility checks
+    - callback contract validation
+    - callback success-path test results
+    - callback failure-path test results
+    - integration test results
+    - end-to-end user journeys tested
+    - error conditions tested
+    - frontend/backend contract validation
+    - Gradio warnings or deprecations found
+    - defects found
+    - fixes applied
+    - final release status
+
+    The final release status must be one of:
+
+    RELEASE READY
+
+    or
+
+    NOT RELEASE READY
+
+    Only use RELEASE READY when all required validation has passed.
+
+    If the final status is RELEASE READY, also provide the exact terminal command
+    required to launch the finished application locally.
+
+  agent: integration_engineer
+
+  context:
+    - design_task
+    - code_task
+    - frontend_task
+    - test_task
+
+  output_file: sandbox/integration_report.md

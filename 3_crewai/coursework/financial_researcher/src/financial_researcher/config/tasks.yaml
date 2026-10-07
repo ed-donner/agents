@@ -1,0 +1,355 @@
+research_task:
+  description: >
+    Conduct thorough and up-to-date research on company {company}. Focus on:
+    1. Current company status and health
+    2. Historical company performance
+    3. Major challenges and opportunities
+    4. Recent news and events
+    5. Future outlook and potential developments
+
+    IMPORTANT: Your information MUST be up to date and relevant to
+    the current date, {current_date}.
+
+    Make sure to organize your findings in a structured format with
+    clear sections.
+
+  expected_output: >
+    A comprehensive research document with well-organized sections covering
+    all the requested aspects of {company}. Include specific facts, figures,
+    dates, sources and examples where relevant.
+
+  agent: researcher
+
+
+analysis_task:
+  description: >
+    Analyze the research findings and create a comprehensive report on {company}.
+
+    Your report should:
+
+    1. Begin with an executive summary
+    2. Include all key information from the research
+    3. Provide insightful analysis of trends and patterns
+    4. Offer a market outlook for the company, noting that this should
+       not be used for trading decisions
+    5. Be formatted in a professional, easy-to-read style with clear headings
+
+    Clearly distinguish between:
+    - verified facts
+    - analysis or inference
+    - information that could not be verified
+
+    Never invent financial figures, dates, transactions or corporate events.
+
+    End the report with:
+
+    ## Recommended Next Analysis
+
+    Identify up to three specific follow-on analyses that would
+    materially improve the investment assessment.
+
+    Only identify the analyses.
+
+    Do NOT claim that they have been completed.
+    Do NOT say "I can create..." or offer future work.
+
+  expected_output: >
+    A polished, professional report on {company} that presents the research
+    findings with added analysis and insights. The report should be well-structured
+    with an executive summary, main sections, conclusion, and recommended
+    next analysis.
+
+  agent: analyst
+
+  context:
+    - research_task
+
+  output_file: output/report.md
+
+
+create_investment_memo:
+  description: >
+    Using the completed company research and analysis report for {company},
+    prepare a concise ONE-PAGE INVESTMENT MEMO.
+
+    This is not a new general research task.
+
+    Use the completed analysis report as the primary source.
+    Do not repeat the full report.
+
+    The purpose is to convert the research into an executive-level
+    investment screening document that can be understood quickly.
+
+    Structure the memo as:
+
+    # {company} — Investment Memo
+
+    ## Investment Snapshot
+
+    Briefly explain:
+    - what the company is
+    - what it invests in or how it creates value
+    - current corporate status
+    - why the opportunity may warrant further investigation
+
+    ## Investment Thesis
+
+    Identify 3–5 concrete factors that could support value creation.
+
+    ## Key Risks
+
+    Identify 3–5 material risks.
+
+    ## Portfolio / Strategic Activity
+
+    Summarise the most important known investments, acquisitions,
+    combinations or portfolio developments.
+
+    ## Financial Visibility
+
+    Clearly distinguish:
+    - financial information that is known
+    - financial information that remains unverified or unavailable
+
+    Never invent financial figures.
+
+    ## Key Questions Before Investing
+
+    List the most important unanswered questions an investor should
+    resolve before committing capital.
+
+    ## Bottom Line
+
+    Give a concise screening conclusion describing:
+    - what is known
+    - what appears potentially attractive
+    - what must still be verified
+
+    Do NOT issue a buy/sell recommendation.
+
+  expected_output: >
+    A polished one-page Markdown investment memo suitable for an
+    investor, family office, board member or senior executive.
+
+  agent: analyst
+
+  context:
+    - analysis_task
+
+  output_file: output/investment_memo.md
+
+
+create_company_timeline:
+  description: >
+    Using the completed research and analysis report for {company},
+    build a chronological timeline of all material company events
+    identified in the research.
+
+    Do not perform a completely new company research exercise unless
+    necessary to resolve a date already identified in the report.
+
+    Include events such as:
+    - investments
+    - acquisitions or majority stakes
+    - portfolio combinations
+    - financing events
+    - corporate announcements
+    - AGM and governance events
+    - annual reports
+    - investor communications
+    - major strategic changes
+    - material portfolio developments
+
+    For every event include:
+
+    - date or best-known time period
+    - event
+    - entities involved
+    - short explanation
+    - why the event matters
+
+    Distinguish clearly between:
+    - confirmed dates
+    - approximate dates
+    - events where the exact date could not be established
+
+    Do not invent missing dates.
+
+    Order the timeline oldest to newest.
+
+  expected_output: >
+    A clear Markdown chronological timeline of {company}'s known
+    material events, with dates, event descriptions and significance.
+
+  agent: researcher
+
+  context:
+    - research_task
+    - analysis_task
+
+  output_file: output/company_timeline.md
+
+
+create_annual_report_due_diligence:
+  description: >
+    Using the completed research and analysis report for {company},
+    prepare a detailed investor due diligence checklist focused on
+    the company's 2024 Annual Report.
+
+    IMPORTANT:
+
+    This task is intended to identify what must be extracted and
+    verified from the annual report.
+
+    Do NOT claim that a financial item has been verified unless
+    that information is actually contained in the source material
+    available to you.
+
+    If the existing research did not establish a figure or fact,
+    mark it as not yet verified.
+
+    Organise the checklist into:
+
+    # 1. Income Statement
+
+    Review or identify the need to extract:
+    - revenue
+    - operating income
+    - EBIT
+    - financial income/expense
+    - profit/loss before tax
+    - net income
+    - year-over-year changes
+
+    # 2. Balance Sheet
+
+    Review or identify the need to extract:
+    - total assets
+    - investment assets
+    - portfolio holdings
+    - cash and cash equivalents
+    - receivables
+    - debt
+    - current liabilities
+    - long-term liabilities
+    - equity
+
+    # 3. Cash and Liquidity
+
+    Determine what is known or needs verification regarding:
+    - available cash
+    - cash burn
+    - operating cash flow
+    - financing requirements
+    - debt maturity
+    - liquidity runway where reasonably calculable
+
+    # 4. Portfolio Valuation
+
+    Investigate or flag for extraction:
+    - portfolio companies
+    - ownership percentages
+    - carrying values
+    - valuation methodology
+    - fair-value adjustments
+    - write-downs or impairments
+    - realized gains/losses
+    - unrealized gains/losses
+
+    # 5. Net Asset Value
+
+    Determine whether NAV is already known or needs to be extracted.
+
+    Where available identify:
+    - reported equity
+    - portfolio fair value
+    - NAV
+    - NAV per share
+    - changes versus prior year
+
+    # 6. Capital Structure
+
+    Review or flag:
+    - shares outstanding
+    - share classes
+    - options/warrants
+    - shareholder loans
+    - convertible instruments
+    - new share issues
+    - dilution
+
+    # 7. Shareholders
+
+    Identify what is known or must be verified regarding:
+    - major shareholders
+    - ownership concentration
+    - insider ownership
+    - changes in ownership
+
+    # 8. Related-Party Transactions
+
+    Review or flag:
+    - loans
+    - investments
+    - transactions with directors/shareholders
+    - management-related entities
+    - unusual related-party arrangements
+
+    # 9. Portfolio Funding Exposure
+
+    Determine whether evidence exists that portfolio companies
+    require further capital and whether {company} has commitments
+    to provide it.
+
+    # 10. Auditor and Accounting Issues
+
+    Review or flag for verification:
+    - auditor
+    - audit opinion
+    - qualifications
+    - going-concern comments
+    - material uncertainties
+    - accounting policy changes
+
+    # 11. Subsequent Events
+
+    Identify all known material events after the balance-sheet date
+    and flag anything that still requires verification.
+
+    # 12. Red Flags
+
+    Specifically look for evidence or unresolved questions concerning:
+    - declining equity
+    - negative cash flow
+    - recurring losses
+    - portfolio impairments
+    - shareholder funding dependence
+    - high related-party exposure
+    - unusual valuation assumptions
+    - liquidity problems
+    - contingent liabilities
+    - auditor warnings
+
+    For every checklist item assign one status:
+
+    ✅ Confirmed / satisfactory
+    ⚠️ Requires investigation
+    ❌ Potential red flag
+    ⬜ Not yet verified
+
+    Never infer that an item is satisfactory simply because no
+    information was found.
+
+  expected_output: >
+    A structured Markdown due diligence checklist for the {company}
+    2024 Annual Report showing what is currently known, what must
+    still be extracted or verified, why each item matters, and any
+    potential red flags identified by the existing research.
+
+  agent: analyst
+
+  context:
+    - research_task
+    - analysis_task
+
+  output_file: output/annual_report_due_diligence.md

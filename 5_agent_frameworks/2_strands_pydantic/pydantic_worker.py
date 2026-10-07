@@ -34,7 +34,7 @@ from fastmcp.client.transports import StdioTransport  # noqa: E402
 import board  # noqa: E402
 
 load_dotenv(override=True)
-
+#1. Create the Agent
 MODEL = f"openai-chat:{os.environ.get('WORKER_MODEL', 'gpt-5.4-mini')}"
 WORKSPACE = Path(__file__).resolve().parent / "workspace"
 GOAL = "Read notes.txt, translate its contents into natural Spanish, and write the Spanish to spanish.txt."
