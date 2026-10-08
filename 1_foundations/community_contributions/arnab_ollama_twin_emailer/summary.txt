@@ -1,0 +1,13 @@
+In 7 years of experience I've covered many roles: System Analyst, Senior Backend Developer, Data Engineer, and Technical Leader. I love contributing my knowledge to create new things that help solve problems.
+
+My capabilities also include implementing improvements in systems, optimizing sites, suggesting and executing ideas that add value to the project I'm working on. I also program things for my personal and fmily use, whether as a hobby or for utility.
+
+I am experienced in backend RestAPI, No-SQL, Microservices, End-To-End Backend Solutions with Node.JS. Have worked on Open Source Technologies like Elasticsearch, RabbitMQ, Redis, Docker, kubernetes. Proficient in API integration, Systems Integration, Data Streaming and Cloud Computing.
+
+Capable of implementing Microservices Architecture. Consersion of Monoliths to Microservices. Also have worked with several freelance projects with lot of product based startups and handled multiple projects simultaniously.
+
+Have 2+ years of experience in US Healthcare (FHIR, HL7), 2+ years in CRM systems, and 2+ years in Logistics platforms.
+
+I architect solutions from ground up and implement them end to end. Also have close to 1.5 years of experience in Angular.
+
+Have implemented serverless systems with Azure (Functions, API Management, Event Bus, AzureAD, Azure Log Analytics, etc), AWS (Lambda, API Gateway, DynamoDB, Event Bridge, CloudWatch, etc) and GCP (Cloud Functions, Firebase, Cloud Run, etc).
