@@ -1,0 +1,357 @@
+{
+  "schema_version": "1.1",
+  "language": "en",
+  "source": {
+    "filename": "linkedin.pdf",
+    "library_file_id": "libfile_ac6333ffe5c08191a646eec28d9deaef"
+  },
+  "review_notes": [
+    "La descripción de inglés no es una certificación; confirmar si representa adecuadamente el nivel actual.",
+    "Las cifras de experiencia y el progreso del curso están referidos a la fecha as_of.",
+    "No inferir años por tecnología, salario, disponibilidad, motivos de cambio ni métricas de impacto."
+  ],
+  "faqs": [
+    {
+      "id": "perfil",
+      "question": "What is your professional background?",
+      "answer": "I am a Senior Software Engineer with over 10 years of experience building, evolving, and troubleshooting production systems. My experience spans backend development, cloud, distributed architectures, and web platforms.",
+      "tags": [
+        "perfil",
+        "seniority",
+        "backend"
+      ],
+      "source_pages": [
+        1
+      ]
+    },
+    {
+      "id": "stack",
+      "question": "Which technologies do you work with?",
+      "answer": "My main stack includes Python, FastAPI, Node.js, React, Vue, Redis, MongoDB, Kubernetes, AWS, and Azure. I also have experience with distributed processing, OCR pipelines, WebSockets, CI/CD, and generative AI integrations.",
+      "tags": [
+        "tecnologias",
+        "python",
+        "cloud"
+      ],
+      "source_pages": [
+        1
+      ]
+    },
+    {
+      "id": "actual",
+      "question": "What are you currently working on?",
+      "answer": "At Pervasive Mind, I work on Omnitok, outbound messaging systems, product indexing workflows, and legacy applications. I develop backend services and integrations and troubleshoot issues across frontend, backend, and infrastructure.",
+      "tags": [
+        "trabajo_actual",
+        "omnitok",
+        "indexado"
+      ],
+      "source_pages": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "legacy",
+      "question": "Do you have experience modernizing existing systems?",
+      "answer": "Yes. I investigate issues in existing systems, identify root causes across different layers, and contribute to service architecture and modernization to improve reliability, maintainability, and operational processes.",
+      "tags": [
+        "legacy",
+        "arquitectura",
+        "produccion"
+      ],
+      "source_pages": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "data",
+      "question": "What experience do you have with data processing?",
+      "answer": "I previously worked with Pervasive Mind's Data Engineering team, where I designed processing services with Python and FastAPI, OCR pipelines, distributed workers, and automation workflows.",
+      "tags": [
+        "datos",
+        "ocr",
+        "workers"
+      ],
+      "source_pages": [
+        2
+      ]
+    },
+    {
+      "id": "liderazgo",
+      "question": "Do you have technical leadership experience?",
+      "answer": "Yes. At Pervasive Mind, I held Technical Leader responsibilities between 2021 and 2023, working on software development, estimates, technology integrations, and complex problem solving.",
+      "tags": [
+        "liderazgo",
+        "estimaciones"
+      ],
+      "source_pages": [
+        2
+      ]
+    },
+    {
+      "id": "lupai",
+      "question": "What is Lupai, and what is your role?",
+      "answer": "Lupai is a family-run venture focused on the Uruguayan market. It started in June 2024, and I work on it outside my regular working hours. I am a co-founder and software architect. The platform is deployed in production and has been used by real customers.",
+      "tags": [
+        "lupai",
+        "emprendimiento",
+        "arquitectura"
+      ],
+      "source_pages": [
+        2
+      ],
+      "source_note": "La fecha de inicio fue corregida por Karina el 7 de octubre de 2026; prevalece sobre la fecha del PDF."
+    },
+    {
+      "id": "lupai_stack",
+      "question": "What did you build at Lupai?",
+      "answer": "I designed the cloud architecture using AWS ECS/ECR, S3, and DynamoDB. I built backend services with FastAPI and WebSockets and an embeddable React widget. I also integrated Twilio WhatsApp and generative AI services and designed intelligent routing and automated deployments.",
+      "tags": [
+        "lupai",
+        "aws",
+        "whatsapp",
+        "ia"
+      ],
+      "source_pages": [
+        2
+      ]
+    },
+    {
+      "id": "fullstack",
+      "question": "Do you have both frontend and backend experience?",
+      "answer": "Yes. My experience covers architecture, backend services, frontend integrations, infrastructure, and automation. I have worked with React, Vue, Node.js, and Python, as well as AngularJS, PHP, and Java earlier in my career.",
+      "tags": [
+        "fullstack",
+        "frontend",
+        "backend"
+      ],
+      "source_pages": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "id": "mobile",
+      "question": "Do you have mobile development experience?",
+      "answer": "Yes. At Hecticus, I worked on Android and iOS projects using Unity3D and C#, Android development with Java, and the migration of a game from iOS to Android using Cocos2dx and the Android SDK.",
+      "tags": [
+        "mobile",
+        "android",
+        "unity"
+      ],
+      "source_pages": [
+        3
+      ]
+    },
+    {
+      "id": "formacion",
+      "question": "What is your educational background?",
+      "answer": "I hold a degree in Computer Science from Universidad Central de Venezuela, where I studied between 2005 and 2011. I also studied Materials Engineering at Universidad Simon Bolivar between 2003 and 2005.",
+      "tags": [
+        "educacion",
+        "universidad"
+      ],
+      "source_pages": [
+        4
+      ]
+    },
+    {
+      "id": "docencia",
+      "question": "Do you have experience helping others learn?",
+      "answer": "Yes. I was a teaching assistant for the Algorithms and Data Structures course at UCV and at its Center for Computer Graphics, where I supported students and teachers and helped maintain equipment and the laboratory network.",
+      "tags": [
+        "docencia",
+        "algoritmos"
+      ],
+      "source_pages": [
+        3,
+        4
+      ]
+    },
+    {
+      "id": "experiencia",
+      "question": "How many years of software development experience do you have?",
+      "answer": "I have worked professionally in software development since 2011, which gives me approximately 15 years of experience as of 2026. My work has covered backend, frontend, mobile applications, infrastructure, and integrations.",
+      "tags": [
+        "experiencia",
+        "trayectoria"
+      ],
+      "source_pages": [
+        3
+      ],
+      "source_note": "El año 2011 también fue indicado por Karina en conversaciones previas. La cifra es aproximada y está referida a 2026."
+    },
+    {
+      "id": "rest",
+      "question": "Do you have experience developing and integrating REST APIs?",
+      "answer": "Yes. I have experience developing backend services and integrating systems using Python, FastAPI, and Node.js. At Hecticus, I also worked on a REST-based server for image processing and client data synchronization.",
+      "tags": [
+        "rest",
+        "api",
+        "integraciones"
+      ],
+      "source_pages": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "cloud",
+      "question": "What cloud experience do you have?",
+      "answer": "I have experience with AWS and Azure. At Lupai, I designed an AWS architecture using ECS/ECR, S3, and DynamoDB, along with automated deployments. I have also worked with Kubernetes and cloud services in production systems.",
+      "tags": [
+        "cloud",
+        "aws",
+        "azure"
+      ],
+      "source_pages": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "ingles",
+      "question": "What is your English level?",
+      "answer": "I am not bilingual, and I am continuing to improve my English. I practice with Loora and Duolingo and am focusing especially on fluency. I do not have a recent certified proficiency level; I prefer to have my communication skills assessed through a conversation.",
+      "tags": [
+        "ingles",
+        "idiomas"
+      ],
+      "source_pages": [],
+      "source_note": "Respuesta basada en lo reportado por Karina; no asigna un nivel CEFR ni adopta automáticamente la etiqueta del PDF."
+    },
+    {
+      "id": "cinco_anos",
+      "question": "Where do you see yourself professionally in five years?",
+      "answer": "I see myself as an engineer specializing in AI agents, able to design and integrate reliable solutions into real products. I want to combine that specialization with my experience in backend, cloud, and production systems, keep learning, and adapt to technological changes to solve concrete problems.",
+      "tags": [
+        "objetivos",
+        "ia",
+        "carrera"
+      ],
+      "source_pages": [],
+      "source_note": "Redacción basada en el objetivo expresado por Karina el 7 de octubre de 2026; no describe una especialización ya adquirida."
+    },
+    {
+      "id": "ia_actual",
+      "question": "What experience do you currently have with AI and agents?",
+      "answer": "I have integrated generative AI services into Lupai and am taking Ed Donner's AI Agent Engineer course. I have implemented an evaluator to check that responses stay within professional topics. I am preparing a professional Twin with FAQs and planning its integration with an API and routing; that integration is not finished yet.",
+      "tags": [
+        "ia",
+        "agentes",
+        "aprendizaje"
+      ],
+      "source_pages": [
+        2
+      ],
+      "source_note": "Combina el PDF con el progreso reportado por Karina. Estado de aprendizaje referido al 7 de octubre de 2026."
+    },
+    {
+      "id": "fortalezas",
+      "question": "What are your main professional strengths?",
+      "answer": "My strengths include understanding existing architectures, investigating issues across multiple layers, and finding practical solutions for production systems. My experience combines backend, integrations, infrastructure, and frontend, allowing me to approach problems from a broad perspective.",
+      "tags": [
+        "fortalezas",
+        "produccion"
+      ],
+      "source_pages": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "proyecto",
+      "question": "Which project best represents your experience?",
+      "answer": "Lupai represents my experience well because I contributed from architecture through implementation and deployment. I designed the AWS infrastructure, built services with FastAPI and WebSockets and a React widget, and integrated WhatsApp and generative AI. The platform is in production and has been used by real customers.",
+      "tags": [
+        "proyectos",
+        "lupai"
+      ],
+      "source_pages": [
+        2
+      ]
+    },
+    {
+      "id": "aprendizaje",
+      "question": "How do you keep your skills up to date?",
+      "answer": "I am currently studying AI agent engineering through Ed Donner's AI Agent Engineer course and practicing with its labs. I am applying concepts such as response evaluation, information retrieval, and routing to a professional Twin.",
+      "tags": [
+        "aprendizaje",
+        "curso",
+        "agentes"
+      ],
+      "source_pages": [],
+      "source_note": "Basado en el estudio y proyecto compartidos por Karina; no implica que todos los componentes estén implementados."
+    }
+  ],
+  "user_confirmed_facts": {
+    "lupai_start_date": "2024-06",
+    "confirmed_on": "2026-10-07"
+  },
+  "as_of": "2026-10-07",
+  "recruiting_references": [
+    {
+      "url": "https://www.indeed.com/career-advice/interviewing/software-engineer-interview-questions",
+      "purpose": "Selección de temas de entrevista; no aporta hechos sobre Karina."
+    },
+    {
+      "url": "https://www.indeed.com/career-advice/interviewing/entry-level-software-engineer-interview-questions",
+      "purpose": "Temas generales de objetivos y aprendizaje; no implica un perfil junior."
+    }
+  ],
+  "pending_questions": [
+    {
+      "id": "salario",
+      "question": "What are your salary expectations?",
+      "answer": null,
+      "status": "needs_user_input"
+    },
+    {
+      "id": "disponibilidad",
+      "question": "When could you start?",
+      "answer": null,
+      "status": "needs_user_input"
+    },
+    {
+      "id": "cambio",
+      "question": "What would motivate you to change jobs?",
+      "answer": null,
+      "status": "needs_user_input"
+    },
+    {
+      "id": "modalidad",
+      "question": "What working arrangement are you looking for, and would you consider relocation?",
+      "answer": null,
+      "status": "needs_user_input"
+    },
+    {
+      "id": "reto",
+      "question": "Tell me about a difficult problem: what did you do, and what was the outcome?",
+      "answer": null,
+      "status": "needs_user_input"
+    },
+    {
+      "id": "colaboracion",
+      "question": "Tell me about a collaboration experience or technical disagreement.",
+      "answer": null,
+      "status": "needs_user_input"
+    },
+    {
+      "id": "anos_stack",
+      "question": "How many years of experience do you have with each technology?",
+      "answer": null,
+      "status": "needs_user_input"
+    }
+  ],
+  "retrieval_policy": {
+    "include": "faqs",
+    "exclude": "pending_questions",
+    "rule": "Usar solo FAQs con answer no vacío. No convertir notas, preguntas pendientes ni referencias de reclutamiento en hechos del perfil."
+  },
+  "translation_of": "twin_faqs_es.json"
+}
