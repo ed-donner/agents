@@ -209,9 +209,10 @@ memory.db
 5_agent_frameworks/**/board.sqlite-shm
 5_agent_frameworks/**/workspace/spanish.txt
 5_agent_frameworks/**/.adk/
-5_agent_frameworks/4_mastra/node_modules/
-5_agent_frameworks/4_mastra/.mastra/
-5_agent_frameworks/5_agent_loop/site/
+5_agent_frameworks/**/node_modules/
+5_agent_frameworks/**/.mastra/
+5_agent_frameworks/**/site/
+5_agent_frameworks/community_contributions/Andras_Nemes/**/workspace/
 
 6_mcp/sandbox/banoffee.md
 6_mcp/playwright_check.png
