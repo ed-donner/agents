@@ -1,0 +1,4 @@
+{"type": "message", "role": "user", "contents": [{"type": "text", "text": "Remember: I love skiing holidays in Austria.", "additional_properties": {}}], "additional_properties": {}}
+{"type": "message", "role": "assistant", "contents": [{"type": "text", "text": "Got it! You love skiing holidays in Austria. If you need recommendations or tips for your next ski trip, just let me know!", "additional_properties": {}}], "author_name": "persistent_concierge", "additional_properties": {}}
+{"type": "message", "role": "user", "contents": [{"type": "text", "text": "What type of holiday did I mention I enjoy?", "additional_properties": {}}], "additional_properties": {}}
+{"type": "message", "role": "assistant", "contents": [{"type": "text", "text": "You mentioned that you enjoy skiing holidays in Austria.", "additional_properties": {}}], "author_name": "persistent_concierge", "additional_properties": {}}
