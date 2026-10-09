@@ -91,7 +91,7 @@ Evaluator
 pip install gradio langgraph langchain langchain-openai langchain-community
 pip install langchain-experimental playwright aiosqlite
 pip install langgraph-checkpoint-sqlite
-pip install langchain-community[playwright]
+pip install 'langchain-community[playwright]'
 playwright install chromium
 ```
 

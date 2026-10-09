@@ -26,7 +26,7 @@ Senior Frontend Engineer at a fintech scale-up.
 ### 2. Install dependencies
 
 ```bash
-pip install autogen-agentchat autogen-ext[grpc,openai] python-dotenv
+pip install autogen-agentchat 'autogen-ext[grpc,openai]' python-dotenv
 ```
 
 ### 3. Add your API key
