@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MedScribe Mini</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0d0f12;--mist:#f2f3f5;--line:#e2e4e8;--soft:#8b909a;
+  --teal:#0e9f8e;--teal2:#0c8a7b;--cream:#fdfcf9;
+  --r:10px;--shadow:0 2px 12px rgba(0,0,0,.07);
+}
+body{font-family:'Instrument Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+/* header */
+header{padding:20px 32px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:#fff}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:36px;height:36px;background:var(--ink);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Instrument Serif',serif;font-size:16px;font-style:italic}
+.brand-name{font-family:'Instrument Serif',serif;font-size:20px;letter-spacing:-.3px}
+.brand-tag{font-size:11px;color:var(--soft);margin-top:1px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--teal);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+/* layout */
+main{flex:1;max-width:920px;width:100%;margin:40px auto;padding:0 24px;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+/* card */
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:24px}
+.card-title{font-family:'Instrument Serif',serif;font-size:18px;margin-bottom:4px}
+.card-sub{font-size:13px;color:var(--soft);margin-bottom:20px;line-height:1.5}
+/* form */
+label{font-size:12px;font-weight:600;color:var(--soft);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+textarea,input{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-family:'Instrument Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--mist);resize:vertical;transition:border-color .15s,box-shadow .15s}
+textarea:focus,input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(14,159,142,.1)}
+textarea.mono{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6}
+.field{margin-bottom:14px}
+/* buttons */
+.row{display:flex;gap:10px;justify-content:flex-end;margin-top:4px}
+.btn{padding:10px 20px;border-radius:8px;border:none;font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-primary{background:var(--ink);color:#fff}.btn-primary:hover{background:#222}
+.btn-ghost{background:none;border:1px solid var(--line);color:var(--ink)}.btn-ghost:hover{background:var(--mist)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+/* pipeline steps */
+.steps{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.step{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;border:1px solid var(--line);background:var(--mist);transition:all .3s}
+.step.active{background:#eff6ff;border-color:#93c5fd}
+.step.done{background:#f0fdf4;border-color:#6ee7b7}
+.step.fail{background:#fef2f2;border-color:#fca5a5}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;transition:background .3s,color .3s}
+.step.active .step-num{background:#3b82f6;color:#fff}
+.step.done  .step-num{background:var(--teal);color:#fff}
+.step.fail  .step-num{background:#ef4444;color:#fff}
+.step-info{flex:1}.step-name{font-size:13px;font-weight:600}.step-desc{font-size:12px;color:var(--soft)}
+.step-badge{font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px}
+.badge-wait{background:var(--mist);color:var(--soft);border:1px solid var(--line)}
+.badge-run{background:#dbeafe;color:#1d4ed8}
+.badge-ok{background:#dcfce7;color:#166534}
+.badge-fail{background:#fee2e2;color:#dc2626}
+/* progress */
+.pbar-wrap{height:4px;background:var(--line);border-radius:2px;margin:16px 0 8px}
+.pbar{height:100%;background:var(--teal);border-radius:2px;width:0;transition:width .5s}
+.pbar-label{font-size:12px;color:var(--soft);text-align:center}
+/* result */
+.qa-row{display:flex;align-items:center;gap:14px;padding:14px;background:var(--mist);border-radius:8px;margin-bottom:14px}
+.qa-score{font-family:'Instrument Serif',serif;font-size:42px;color:var(--ink);line-height:1}
+.qa-label{font-size:13px;font-weight:600}
+.qa-sub{font-size:12px;color:var(--soft);margin-top:2px}
+.pill{display:inline-block;padding:3px 11px;border-radius:20px;font-size:12px;font-weight:600}
+.pill-ok{background:#dcfce7;color:#166534}.pill-warn{background:#fef9c3;color:#854d0e}.pill-fail{background:#fee2e2;color:#dc2626}
+.output-pre{background:var(--mist);border:1px solid var(--line);border-radius:8px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;white-space:pre-wrap;word-break:break-word;max-height:380px;overflow-y:auto}
+.error-box{background:#fff5f5;border:1px solid #fca5a5;border-radius:8px;padding:14px;font-size:13px;color:#dc2626;margin-top:12px}
+/* idle */
+.idle{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px;text-align:center;min-height:300px}
+.idle-rings{position:relative;width:80px;height:80px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center}
+.ring{position:absolute;border-radius:50%;border:1px solid var(--teal);animation:ripple 3s ease-out infinite}
+.ring:nth-child(1){width:28px;height:28px;animation-delay:0s;opacity:.7}
+.ring:nth-child(2){width:52px;height:52px;animation-delay:.6s;opacity:.4}
+.ring:nth-child(3){width:76px;height:76px;animation-delay:1.2s;opacity:.2}
+@keyframes ripple{0%{transform:scale(.8);opacity:.6}100%{transform:scale(1.15);opacity:0}}
+.idle span{font-size:11px;font-weight:600;color:var(--teal);z-index:1}
+.idle p{font-size:13px;color:var(--soft);max-width:220px;line-height:1.6}
+/* spinner */
+.spin{width:20px;height:20px;border:2px solid var(--line);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hidden{display:none!important}
+footer{text-align:center;padding:20px;font-size:12px;color:var(--soft);border-top:1px solid var(--line)}
+@media(max-width:700px){main{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-mark">M</div>
+    <div><div class="brand-name">MedScribe Mini</div><div class="brand-tag">Autonomous Discharge Summary · 3-Agent Pipeline</div></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--soft)">
+    <div class="dot"></div> OpenRouter
+  </div>
+</header>
+
+<main>
+  <!-- Input -->
+  <div class="card">
+    <div class="card-title">Patient Notes</div>
+    <div class="card-sub">Paste raw clinical notes. Three specialist agents will autonomously produce a QA-reviewed discharge summary.</div>
+    <div class="field">
+      <label>Patient ID</label>
+      <input type="text" id="pid" placeholder="PT-2024-001" maxlength="40">
+    </div>
+    <div class="field">
+      <label>Clinical Notes</label>
+      <textarea id="notes" class="mono" rows="13" placeholder="Paste admission notes, vitals, labs, medications, procedures..."></textarea>
+    </div>
+    <div class="row">
+      <button class="btn btn-ghost" onclick="loadSample()">Sample</button>
+      <button class="btn btn-primary" id="btnRun" onclick="runJob()">Run Agents</button>
+    </div>
+  </div>
+
+  <!-- Output -->
+  <div class="card">
+    <!-- idle -->
+    <div id="stateIdle" class="idle">
+      <div class="idle-rings"><div class="ring"></div><div class="ring"></div><div class="ring"></div><span>Ready</span></div>
+      <p>Paste clinical notes and click <strong>Run Agents</strong> to start the pipeline.</p>
+    </div>
+
+    <!-- running -->
+    <div id="stateRun" class="hidden">
+      <div class="card-title" style="margin-bottom:4px" id="runTitle">Running pipeline...</div>
+      <div class="card-sub" id="runSub">Assembling agent team</div>
+      <div class="steps">
+        <div class="step" id="s1"><div class="step-num">1</div><div class="step-info"><div class="step-name">Clinical Analyst</div><div class="step-desc">Extracting structured clinical data</div></div><span class="step-badge badge-wait" id="b1">waiting</span></div>
+        <div class="step" id="s2"><div class="step-num">2</div><div class="step-info"><div class="step-name">Medical Writer</div><div class="step-desc">Composing discharge summary</div></div><span class="step-badge badge-wait" id="b2">waiting</span></div>
+        <div class="step" id="s3"><div class="step-num">3</div><div class="step-info"><div class="step-name">QA Reviewer</div><div class="step-desc">Auditing completeness &amp; safety</div></div><span class="step-badge badge-wait" id="b3">waiting</span></div>
+      </div>
+      <div class="pbar-wrap"><div class="pbar" id="pbar"></div></div>
+      <div class="pbar-label" id="pbarLabel">Initialising...</div>
+    </div>
+
+    <!-- result -->
+    <div id="stateResult" class="hidden">
+      <div id="qaRow" class="qa-row">
+        <div class="qa-score" id="qaScore">—</div>
+        <div><div class="qa-label">QA Score <span class="pill" id="qaPill">—</span></div><div class="qa-sub" id="qaIssues"></div></div>
+      </div>
+      <div style="margin-bottom:8px;font-size:12px;font-weight:600;color:var(--soft);text-transform:uppercase;letter-spacing:.06em">Discharge Summary</div>
+      <pre class="output-pre" id="output"></pre>
+      <div class="row" style="margin-top:14px">
+        <button class="btn btn-ghost" onclick="reset()">New Patient</button>
+        <button class="btn btn-primary" onclick="copy()">Copy Summary</button>
+      </div>
+    </div>
+
+    <!-- error -->
+    <div id="stateError" class="hidden">
+      <div class="idle" style="min-height:200px"><p style="color:#dc2626;font-weight:600">Pipeline Error</p></div>
+      <div class="error-box" id="errMsg"></div>
+      <div class="row" style="margin-top:12px"><button class="btn btn-ghost" onclick="reset()">Try Again</button></div>
+    </div>
+  </div>
+</main>
+
+<footer>MedScribe Mini — For clinical decision support only. All outputs require physician review before use.</footer>
+
+<script>
+const SAMPLE = `Patient: Kofi Asante, 62M | ID: PT-20241201
+Attending: Dr. Ama Serwah | Ward: Cardiology 3B
+Admitted: 2024-12-01 | Discharge: 2024-12-06
+
+CHIEF COMPLAINT: Chest pain, exertional dyspnoea x 2 days.
+DIAGNOSIS: NSTEMI — Troponin I 3.8 ng/mL, dynamic ST changes V4-V6.
+PMH: Hypertension 12y, T2DM, Hyperlipidaemia. Smoker 20 pack-years.
+ALLERGIES: Aspirin-exacerbated respiratory disease — use clopidogrel only.
+VITALS: BP 158/94, HR 96, Temp 37.0, SpO2 96% RA.
+LABS: Troponin I 3.8, HbA1c 8.9%, LDL 4.2, eGFR 61, Hb 12.4.
+ECHO: EF 48%, inferior wall hypokinesia. Coronary angio: 70% RCA stenosis.
+PCI: DES to RCA 2024-12-02. Post-procedure troponin peak 12.1.
+MEDICATIONS: Clopidogrel 75mg OD, Atorvastatin 80mg nocte, Ramipril 5mg OD,
+Bisoprolol 5mg OD, Metformin 1g BD resumed day 3, GTN PRN.
+COURSE: Uneventful post-PCI recovery. Stable by day 4. Cardiac rehab referred.`;
+
+let jobId = null, timer = null;
+
+function show(id) {
+  ['stateIdle','stateRun','stateResult','stateError'].forEach(s =>
+    document.getElementById(s).classList.toggle('hidden', s !== id));
+}
+
+function setStep(n, cls) {
+  const s = document.getElementById('s'+n), b = document.getElementById('b'+n);
+  s.className = 'step ' + cls;
+  b.className = 'step-badge ' + {active:'badge-run',done:'badge-ok',fail:'badge-fail'}[cls];
+  b.textContent = {active:'running',done:'done',fail:'failed'}[cls];
+}
+
+function loadSample() {
+  document.getElementById('notes').value = SAMPLE;
+  document.getElementById('pid').value = 'PT-20241201';
+}
+
+async function runJob() {
+  const notes = document.getElementById('notes').value.trim();
+  if (notes.length < 50) { alert('Notes too short — paste full clinical notes.'); return; }
+  document.getElementById('btnRun').disabled = true;
+  show('stateRun');
+  document.getElementById('pbar').style.width = '5%';
+  document.getElementById('pbarLabel').textContent = 'Clinical Analyst running...';
+  setStep(1,'active');
+
+  const res  = await fetch('/api/run', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({notes})});
+  const data = await res.json();
+  if (!res.ok) { showErr(data.error); return; }
+  jobId = data.job_id;
+  poll();
+}
+
+function poll() {
+  let tick = 0;
+  timer = setInterval(async () => {
+    tick += 3;
+    animTick(tick);
+    const res  = await fetch('/api/status/' + jobId);
+    const data = await res.json();
+    if (data.status === 'done') {
+      clearInterval(timer);
+      data.result.success ? showResult(data.result) : showErr(data.result.error);
+    }
+  }, 3000);
+}
+
+function animTick(t) {
+  const pct = Math.min(10 + t * 2.5, 90);
+  document.getElementById('pbar').style.width = pct + '%';
+  if (t < 25)      { setStep(1,'active'); document.getElementById('pbarLabel').textContent = 'Clinical Analyst extracting data...'; }
+  else if (t < 50) { setStep(1,'done'); setStep(2,'active'); document.getElementById('pbarLabel').textContent = 'Medical Writer composing summary...'; }
+  else             { setStep(2,'done'); setStep(3,'active'); document.getElementById('pbarLabel').textContent = 'QA Reviewer auditing output...'; }
+}
+
+function showResult(r) {
+  document.getElementById('pbar').style.width = '100%';
+  setStep(1,'done'); setStep(2,'done'); setStep(3,'done');
+  setTimeout(() => {
+    show('stateResult');
+    document.getElementById('qaScore').textContent = r.qa_score;
+    const cls = r.qa_score >= 80 ? 'pill-ok' : r.qa_score >= 60 ? 'pill-warn' : 'pill-fail';
+    const lbl = r.approved ? 'Approved' : r.qa_score >= 60 ? 'Review' : 'Failed';
+    document.getElementById('qaPill').className = 'pill ' + cls;
+    document.getElementById('qaPill').textContent = lbl;
+    document.getElementById('qaIssues').textContent = r.issues?.length ? r.issues.slice(0,2).join(' · ') : 'No issues found.';
+    document.getElementById('output').textContent = r.summary;
+    document.getElementById('btnRun').disabled = false;
+  }, 400);
+}
+
+function showErr(msg) {
+  clearInterval(timer);
+  show('stateError');
+  document.getElementById('errMsg').textContent = msg || 'An unexpected error occurred.';
+  document.getElementById('btnRun').disabled = false;
+}
+
+function reset() {
+  clearInterval(timer);
+  jobId = null;
+  document.getElementById('btnRun').disabled = false;
+  document.getElementById('pbar').style.width = '0';
+  ['s1','s2','s3'].forEach((id,i) => {
+    document.getElementById(id).className = 'step';
+    const b = document.getElementById('b'+(i+1));
+    b.className = 'step-badge badge-wait'; b.textContent = 'waiting';
+  });
+  show('stateIdle');
+}
+
+function copy() {
+  navigator.clipboard.writeText(document.getElementById('output').textContent)
+    .then(() => { const b = event.target; b.textContent = 'Copied!'; setTimeout(() => b.textContent = 'Copy Summary', 2000); });
+}
+</script>
+</body>
+</html>

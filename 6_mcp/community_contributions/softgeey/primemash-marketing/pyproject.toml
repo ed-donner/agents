@@ -1,0 +1,28 @@
+[project]
+name = "primemash-marketing"
+version = "0.1.0"
+description = "Primemash Technologies - Autonomous Digital Marketing Agent System"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "openai>=1.75.0",
+    "openai-agents>=0.0.14",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "httpx>=0.27.0",
+    "python-dotenv>=1.0.0",
+    "supabase>=2.4.0",
+    "tweepy>=4.14.0",
+    "requests-oauthlib>=1.3.1",
+    "pydantic>=2.7.0",
+    "apscheduler>=3.10.4",
+    "python-jose[cryptography]>=3.3.0",
+    "python-multipart>=0.0.9",
+    "tenacity>=8.3.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
