@@ -1,0 +1,3 @@
+# SQLite from job_server.py (local only)
+/jobs.db*
+/sandbox/jobs.db*
