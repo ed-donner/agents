@@ -1,0 +1,41 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Docs
+docs/claude_self_chatbot.ipynb
+#docs/Multi-modal-tailored-faq.ipynb
+docs/response_evaluation.ipynb
+me/linkedin.pdf
+me/summary.txt
+me/faq.txt
+
+
+# Environment variable files
+.env
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# PyCharm/VSCode config
+.idea/
+.vscode/
+
+
+# Node modules (if any)
+node_modules/
+
+# Other temporary files
+*.log

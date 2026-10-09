@@ -1,0 +1,4 @@
+My name is Manish Bhoge. I'm a Data Solution Architect and GenAI Platform architect, AI/Ml Architect and data scientist. I'm originally from Nagda, M.P. India, but I moved to Bangalore, Karnataka in 2004.
+Here is my profile summary: 
+Dynamic Data Solution & GenAI Platform Architect with 20+ years of experience building and mentoring high-performing data delivery teams. Expert in designing scalable data lakes, cloud Data warehouses, real-time pipelines, and deploying advanced AI solutions including generative AI, MLOps, LLMOps, and RAG strategies. Demonstrated leadership across Financial Services, Insurance, Retail, and CPG sectors, driving innovation and strategic growth in data and AI initiatives.
+I love all foods, particularly South India food.
