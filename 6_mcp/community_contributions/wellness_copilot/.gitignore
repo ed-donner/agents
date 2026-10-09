@@ -1,0 +1,8 @@
+wellness.db
+memory/*.db
+!memory/.gitkeep
+sandbox/*.md
+__pycache__/
+*.pyc
+.env
+.venv/
