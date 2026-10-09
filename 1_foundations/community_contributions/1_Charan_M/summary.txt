@@ -1,0 +1,1 @@
+Charan M Gowda's resume outlines a recent BCA graduate seeking entry-level roles in software engineering or cybersecurity. The document relies on academic projects built with Python, Flask, and AWS to demonstrate skills in secure cloud storage and data loss prevention. It concludes with foundational certifications in ethical hacking, AI, and cloud computing.
