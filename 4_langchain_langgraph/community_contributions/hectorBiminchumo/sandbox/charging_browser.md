@@ -1,5 +1,5 @@
-# US Public EV Charging Ports
+# Public EV Charging Ports in the US
 
-Roughly **211,382 public EV charging ports** were listed in the U.S. DOE Alternative Fuels Data Center Station Locator as of Q2 2024.
+The U.S. Department of Energy's Alternative Fuels Data Center says: **"In Q2 2024, there were 188,096 public EV charging ports in the Station Locator."**
 
-Source: https://www.energy.gov/eere/vehicles/articles/quarterly-report-ev-charging-port-growth-q2-2024
+Source URL: https://afdc.energy.gov/fuels/electricity-infrastructure
