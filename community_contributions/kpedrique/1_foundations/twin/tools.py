@@ -5,30 +5,34 @@ from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
-pushover_user = os.getenv("PUSHOVER_USER")
-pushover_token = os.getenv("PUSHOVER_TOKEN")
+GUPSHUP_TOKEN = os.getenv("GUPSHUP_TOKEN")
+DESTINATION = os.getenv("DESTINATION")
+RECORD_UNKNOWN_QUESTION = os.getenv("RECORD_UNKNOWN_QUESTION")
+RECORD_USER_DETAIL = os.getenv("RECORD_USER_DETAIL")
 
-pushover_url = "https://api.pushover.net/1/messages.json"
+channel_url = "https://channel-dev.lupai.app/lupai/start_message"
 
 
-def push(text):
+def push(template_id, params):
     requests.post(
-        pushover_url,
+        channel_url,
         data={
-            "token": pushover_token,
-            "user": pushover_user,
-            "message": text,
+            "token": GUPSHUP_TOKEN,
+            "user_id": f"whatsapp:{DESTINATION}",
+            "conversation_id": "LupaiKanban",
+            "message": f"--template:{template_id}",
+            "params": params
         },
     )
 
 
 def record_user_details(email, name="Name not provided", notes="not provided"):
-    push(f"Recording interest from {name} with email {email} and notes {notes}")
+    push(RECORD_USER_DETAIL, [name, email, notes])
     return "OK"
 
 
 def record_unknown_question(question):
-    push(f"Recording {question} asked that I couldn't answer")
+    push(RECORD_UNKNOWN_QUESTION, [question])
     return "OK"
 
 
