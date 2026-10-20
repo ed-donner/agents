@@ -33,6 +33,8 @@ load_dotenv(override=True)
 HERE = os.path.dirname(os.path.abspath(__file__))
 SANDBOX = os.path.join(HERE, "sandbox")
 MAX_ATTEMPTS = 3
+# Tools of the filesystem MCP server that modify files, so they pause for approval
+WRITE_TOOLS = ["write_file", "edit_file", "move_file", "create_directory"]
 
 
 class EvaluatorOutput(BaseModel):
@@ -99,7 +101,13 @@ class Sidekick:
                 PIIMiddleware("credit_card", apply_to_tool_results=True),
                 ModelCallLimitMiddleware(run_limit=30),
                 HumanInTheLoopMiddleware(
-                    interrupt_on={"send_push_notification": True, "request_human_help": True}
+                    interrupt_on={
+                        "send_push_notification": True,
+                        "request_human_help": True,
+                        # Exercise: the filesystem tools that change the sandbox now need my approval too.
+                        # Read-only tools (read_file, list_directory...) are left out so browsing stays fast.
+                        **{name: True for name in WRITE_TOOLS},
+                    }
                 ),
             ],
             checkpointer=self.memory,
