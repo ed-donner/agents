@@ -3,6 +3,7 @@
 import asyncio
 import os
 from contextlib import AsyncExitStack
+from datetime import datetime
 
 import requests
 import wikipedia
@@ -40,6 +41,25 @@ def request_human_help(instructions: str) -> str:
     such as logging in to a site, passing a captcha, or approving two-factor authentication.
     Explain exactly what you need them to do. The run pauses until they have done it."""
     return "The user says it is done. Continue with the task."
+
+
+@tool
+def days_until(date: str) -> str:
+    """Count the days from today until a date given as YYYY-MM-DD. Use this instead of
+    doing date arithmetic yourself. A negative result means the date is in the past."""
+    target = datetime.strptime(date, "%Y-%m-%d").date()
+    days = (target - datetime.now().date()).days
+    return f"{date} is {days} days from today ({target:%A %d %B %Y})."
+
+
+@tool
+def split_cost(total: float, people: int, tip_percent: float = 0) -> str:
+    """Split a bill between a number of people, with an optional tip percentage.
+    Use this for any money arithmetic so the numbers are exact."""
+    if people < 1:
+        return "people must be at least 1"
+    grand_total = total * (1 + tip_percent / 100)
+    return f"Total with {tip_percent}% tip: {grand_total:.2f}. Each of {people} pays {grand_total / people:.2f}."
 
 
 def mcp_connections(sandbox: str) -> dict:
@@ -99,5 +119,5 @@ async def get_all_tools(sandbox: str):
     """Return the full tool list (our tools plus the MCP server tools) and the session holder."""
     sessions = McpSessions(mcp_connections(sandbox))
     mcp_tools = await sessions.start()
-    our_tools = [search, send_push_notification, wikipedia_lookup, request_human_help]
+    our_tools = [search, send_push_notification, wikipedia_lookup, request_human_help, days_until, split_cost]
     return our_tools + mcp_tools, sessions
