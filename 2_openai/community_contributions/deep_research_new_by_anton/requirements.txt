@@ -1,0 +1,8 @@
+pydantic
+python-dotenv
+openai
+openai-agents
+gradio
+requests
+httpx
+beautifulsoup4
