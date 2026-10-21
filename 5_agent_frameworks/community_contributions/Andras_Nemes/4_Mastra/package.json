@@ -1,0 +1,23 @@
+{
+  "name": "mastra-exercise",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Week 5 Day 4 exercise solution: the Mastra worker on a new goal, and on a different endpoint",
+  "scripts": {
+    "exercise1": "node --disable-warning=ExperimentalWarning --import tsx exercise1.ts",
+    "exercise2": "node --disable-warning=ExperimentalWarning --import tsx exercise2.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^3.0.71",
+    "@mastra/core": "^1.42.0",
+    "@mastra/mcp": "^1.10.0",
+    "dotenv": "^17.2.3",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.0",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}
