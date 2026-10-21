@@ -1,1 +1,0 @@
-Human approval matters for AI agents because it adds accountability, catches mistakes, and ensures actions align with human intent.
