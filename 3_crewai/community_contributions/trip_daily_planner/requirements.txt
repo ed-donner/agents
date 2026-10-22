@@ -1,4 +1,0 @@
-gradio
-resend
-crewai
-crewai_tools

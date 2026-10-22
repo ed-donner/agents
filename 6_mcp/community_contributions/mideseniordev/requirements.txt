@@ -1,3 +1,0 @@
-mcp
-openai-agents
-python-dotenv

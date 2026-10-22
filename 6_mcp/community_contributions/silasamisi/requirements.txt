@@ -1,4 +1,0 @@
-openai-agents
-python-dotenv
-gradio
-pypdf

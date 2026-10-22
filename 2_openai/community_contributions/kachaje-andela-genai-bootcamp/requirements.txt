@@ -1,7 +1,0 @@
-sendgrid
-gradio
-openai
-openai-agents
-ddgs
-pytest>=8.0.0
-pytest-mock>=3.12.0

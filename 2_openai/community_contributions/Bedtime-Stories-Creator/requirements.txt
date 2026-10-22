@@ -1,5 +1,0 @@
-gradio
-openai-agents
-pydantic
-python-dotenv
-httpx

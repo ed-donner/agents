@@ -1,8 +1,0 @@
-python-dotenv
-langgraph
-langchain
-langchain-openai
-langchain-community
-langchain-experimental
-gradio
-wikipedia
