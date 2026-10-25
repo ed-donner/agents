@@ -43,8 +43,7 @@ From this project directory:
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
-cp .env.example .env
+python -m pip install pydantic python-dotenv openai openai-agents gradio requests httpx beautifulsoup4
 ```
 
 On Windows PowerShell, activate the virtual environment with:
@@ -53,11 +52,11 @@ On Windows PowerShell, activate the virtual environment with:
 .venv\Scripts\Activate.ps1
 ```
 
-Edit `.env` with your own credentials. Never commit `.env` or share its contents.
+Create a local `.env` file in this directory and add the settings you need from the sections below. Never commit `.env` or share its contents.
 
 ### Model configuration
 
-Set the following for the model endpoint:
+Add the following to `.env` for the model endpoint:
 
 ```dotenv
 ANTHROPIC_API_KEY=
@@ -101,8 +100,6 @@ deep_research_anton/
 ├── ai_model.py            # Model client configuration
 ├── styles.py              # Gradio layout, examples, and styling
 ├── simple.py              # Alternate minimal Gradio interface
-├── requirements.txt
-└── .env.example           # Empty credential placeholders
 ```
 
 ## Limitations
