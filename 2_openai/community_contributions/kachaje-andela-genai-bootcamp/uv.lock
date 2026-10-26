@@ -1,31 +1,6 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.13"
-
-[[package]]
-name = "deep_research"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "ddgs" },
-    { name = "gradio" },
-    { name = "openai" },
-    { name = "openai-agents" },
-    { name = "pytest" },
-    { name = "pytest-mock" },
-    { name = "sendgrid" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "ddgs", specifier = ">=4.0.0" },
-    { name = "gradio", specifier = ">=5.49.1" },
-    { name = "openai", specifier = ">=2.7.1" },
-    { name = "openai-agents", specifier = ">=0.4.2" },
-    { name = "pytest", specifier = ">=8.0.0" },
-    { name = "pytest-mock", specifier = ">=3.12.0" },
-    { name = "sendgrid", specifier = ">=6.12.5" },
-]
 
 [[package]]
 name = "aiofiles"
@@ -171,11 +146,11 @@ wheels = [
 
 [[package]]
 name = "certifi"
-version = "2025.10.5"
+version = "2026.10.23"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/4c/5b/b6ce21586237c77ce67d01dc5507039d444b630dd76611bbca2d8e5dcd91/certifi-2025.10.5.tar.gz", hash = "sha256:47c09d31ccf2acf0be3f701ea53595ee7e0b8fa08801c6624be771df09ae7b43", size = 164519, upload-time = "2025-10-05T04:12:15.808Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/fd/11/b524cbd9bbdaca58608e4cf4053fd463417549e1959fa8d3aa18319f9555/certifi-2026.10.23.tar.gz", hash = "sha256:a9895e6e2758b371e0545e321a3a8fd1fcfd9829ada8824a936dfb16aaaf36cd", size = 136225, upload-time = "2026-10-23T11:36:16.478Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e4/37/af0d2ef3967ac0d6113837b44a4f0bfe1328c2b9763bd5b1744520e5cfed/certifi-2025.10.5-py3-none-any.whl", hash = "sha256:0f212c2744a9bb6de0c56639a6f68afe01ecd92d91f14ae897c4fe7bbeeef0de", size = 163286, upload-time = "2025-10-05T04:12:14.03Z" },
+    { url = "https://files.pythonhosted.org/packages/32/d1/a3652fe2c19134d0d15922177821d863cbd7e842d53a21bbe7e8e3a1b5ac/certifi-2026.10.23-py3-none-any.whl", hash = "sha256:e9b54de76e530bb6cf0ccd036787103acb58fd42ba930ea8bf948ddbaa2f61d1", size = 135082, upload-time = "2026-10-23T11:36:14.763Z" },
 ]
 
 [[package]]
@@ -354,6 +329,31 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/66/b6/881f4740a6c138fefe44707012f44860c0c6ff3cde1419e960cfd47f0a4d/ddgs-9.7.1.tar.gz", hash = "sha256:0a0f6878e50e64e2a396635f6754f13be8751d73a5b8c7d31acda729c97f4d66", size = 36486, upload-time = "2025-11-05T08:15:35.796Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/5d/53/70c3bc616fd1f374f70832539aaa8996780d08cf4afa7edf6b0c6bb6d529/ddgs-9.7.1-py3-none-any.whl", hash = "sha256:f3768dc4054470b49547f41ebab0b09a034eb61e8884c992585898cc49687de0", size = 42383, upload-time = "2025-11-05T08:15:34.252Z" },
+]
+
+[[package]]
+name = "deep-research"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "ddgs" },
+    { name = "gradio" },
+    { name = "openai" },
+    { name = "openai-agents" },
+    { name = "pytest" },
+    { name = "pytest-mock" },
+    { name = "sendgrid" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "ddgs", specifier = ">=4.0.0" },
+    { name = "gradio", specifier = ">=5.49.1" },
+    { name = "openai", specifier = ">=2.7.1" },
+    { name = "openai-agents", specifier = ">=0.4.2" },
+    { name = "pytest", specifier = ">=8.0.0" },
+    { name = "pytest-mock", specifier = ">=3.12.0" },
+    { name = "sendgrid", specifier = ">=6.12.5" },
 ]
 
 [[package]]
