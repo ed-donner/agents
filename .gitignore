@@ -176,7 +176,7 @@ cython_debug/
 .DS_Store
 
 1_foundations/emails.txt
-community_contributions/kpedrique/1_foundations/twin/data/
+community_contributions/**/twin/data/
 
 2_openai/output/
 
