@@ -1,0 +1,38 @@
+{
+  "performance": {
+    "type": "bug",
+    "keywords": ["slow", "lag", "laggy", "freezes", "freezing", "loading", "timeout", "takes forever"]
+  },
+  "crashes": {
+    "type": "bug",
+    "keywords": ["crash", "crashes", "crashed", "error", "broken", "bug", "glitch"]
+  },
+  "data_loss": {
+    "type": "bug",
+    "keywords": ["lost", "data loss", "disappeared", "deleted", "missing"]
+  },
+  "login": {
+    "type": "usability",
+    "keywords": ["login", "log in", "sign in", "password", "account locked"]
+  },
+  "onboarding_docs": {
+    "type": "usability",
+    "keywords": ["confusing", "unclear", "docs", "documentation", "tutorial", "how do i"]
+  },
+  "pricing": {
+    "type": "usability",
+    "keywords": ["price", "expensive", "cost", "billing", "charged", "subscription"]
+  },
+  "ui_design": {
+    "type": "usability",
+    "keywords": ["layout", "button", "font", "hard to find", "cluttered", "ugly"]
+  },
+  "feature_requests": {
+    "type": "request",
+    "keywords": ["wish", "would be nice", "please add", "feature", "option to", "should be able"]
+  },
+  "integrations": {
+    "type": "request",
+    "keywords": ["integrate", "integration", "export", "api", "zapier", "slack"]
+  }
+}
