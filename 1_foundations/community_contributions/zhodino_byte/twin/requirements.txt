@@ -1,0 +1,5 @@
+aiogram>=3.0,<4
+gradio>=5.0,<6
+openai>=1.0,<3
+pypdf>=5.0,<7
+python-dotenv>=1.0,<2
