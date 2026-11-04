@@ -68,6 +68,10 @@ def chat(message, history):
                         "tool_call_id": tc.id,
                     }
                 )
+            else:
+                messages.append(
+                    {"role": "tool", "content": "Unknown tool", "tool_call_id": tc.id}
+                )
         response = openai.chat.completions.create(
             model="gpt-5.4-mini", messages=messages, tools=tools
         )
