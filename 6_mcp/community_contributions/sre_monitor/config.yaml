@@ -1,0 +1,52 @@
+# SRE Monitor configuration.
+# Every agent uses the one model selected here. Override the provider for a single run with
+# SRE_LLM_PROVIDER=openai (or gemini) in the environment.
+llm:
+  provider: openai            # gemini | openai
+  gemini_model: gemini-3.5-flash-lite
+  openai_model: gpt-5.4-mini
+
+monitor:
+  poll_interval_minutes: 2    # how often the status pages are checked
+  daily_review_hour: 9        # local hour at which the 24-hour postmortem review runs, once a day
+  lookback_hours: 24          # incidents older than this are never alerted on
+  alert_active_on_first_run: true   # on the first check of a service, alert on incidents that are still open
+  max_postmortem_incidents: 15      # cap on incidents the postmortem analyst reads in one review
+
+verification:
+  enabled: true
+  severities: [SEV1, SEV2]    # only these preliminary severities trigger Serper
+  results_per_query: 5        # each incident uses one Reddit query and one broader web query
+
+tracing:
+  enabled: true
+  project: SRE Monitor          # traces appear in this LangSmith project
+
+email:
+  # Defaults to EMAIL_ADDRESS from .env when empty. SMTP settings come from EMAIL_SMTP_SERVER,
+  # EMAIL_APP_PASSWORD and optionally EMAIL_SMTP_PORT (default 587).
+  recipients: []
+  priority_recipients: []     # extra people for global/priority incidents; defaults to recipients
+  dry_run: false              # true saves emails to data/outbox instead of sending them
+
+# CA bundle for networks that intercept TLS. Ignored if the file does not exist.
+ca_bundle: /opt/uber/sase/zscaler_root_ca.pem
+
+# The status pages to watch. Only the site root of each URL is used, so the /history or
+# ?type=incident part of a link is just for reference.
+#   auto (default): Atlassian Statuspage JSON (/api/v2), falling back to the RSS feed (/history.rss)
+#   zscaler:        the Zscaler Trust Portal incident API; set cloud to the portal's cloud id
+#   rss:            an RSS feed only; set feed_url if it is not /history.rss
+services:
+  - name: GitHub
+    url: https://www.githubstatus.com/history
+  - name: Cloudflare
+    url: https://www.cloudflarestatus.com/history?type=incident
+  - name: Zscaler
+    url: https://trust.zscaler.com/zscaler.net/incidents
+    type: zscaler
+    cloud: zsn
+  - name: OpenAI
+    url: https://status.openai.com/history
+  - name: Zoom
+    url: https://www.zoomstatus.com/
