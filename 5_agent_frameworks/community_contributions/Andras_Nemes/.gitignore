@@ -1,0 +1,5 @@
+node_modules/
+.mastra/
+site/
+workspace/
+4_Mastra/package-lock.json

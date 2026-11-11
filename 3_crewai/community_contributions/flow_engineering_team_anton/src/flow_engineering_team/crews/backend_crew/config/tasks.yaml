@@ -1,0 +1,37 @@
+backend_implementation_task:
+  description: >
+    Implement the backend for {app_name} based on the approved design.
+
+    Use the sandbox file tool to create the backend app files under
+    sandbox/backend. Include the main backend module, supporting helpers if
+    needed, and a short README that explains how the backend works. For every
+    file write, do not call write_sandbox_file until the complete file content
+    is already fully composed in memory. Then call write_sandbox_file exactly
+    once with both relative_path and content in the same call. Do not make a
+    filename-only or path-only call. Do not add external dependencies such as
+    databases, third-party APIs, or third-party libraries unless they are
+    explicitly mentioned in the prompt or already listed as project
+    dependencies. Keep the backend simple and do not implement any
+    functionality beyond what the requirements explicitly ask for.
+  expected_output: >
+    A backend implementation plan and the generated backend files saved in sandbox.
+  agent: backend_engineer
+
+backend_test_task:
+  description: >
+    Review the backend implementation for {app_name} and produce pytest coverage.
+
+    Make sure the tests are aligned with the backend design and that any gaps
+    are called out clearly. Save the testing artifacts into sandbox/backend.
+    For every file write, do not call write_sandbox_file until the complete
+    file content is already fully composed in memory. Then call
+    write_sandbox_file exactly once with both relative_path and content in the
+    same call. Do not make a filename-only or path-only call. Do not add
+    external dependencies such as databases, third-party APIs, or third-party
+    libraries unless they are explicitly mentioned in the prompt or already
+    listed as project dependencies. Keep the backend simple and do not
+    implement any functionality beyond what the requirements explicitly ask
+    for.
+  expected_output: >
+    A backend test report plus any generated pytest files needed to validate the backend.
+  agent: backend_tester

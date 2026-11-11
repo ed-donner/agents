@@ -1,0 +1,43 @@
+frontend_implementation_task:
+  description: >
+    Implement the frontend for {app_name} based on the approved design and backend contract.
+
+    Use the sandbox file tool to create frontend files under sandbox/frontend.
+    Build the UI only with the Gradio library. Use Gradio Blocks, components,
+    and event handlers to assemble the interface, and consult the Context7 MCP
+    docs server before choosing the right Gradio primitives.
+
+    Do not use React, Vue, Svelte, Angular, Tailwind, Bootstrap, or custom
+    JavaScript frameworks. Keep the implementation in Python and make the UI
+    runnable with a Gradio launch entrypoint. For every file write, do not call
+    write_sandbox_file until the complete file content is already fully
+    composed in memory. Then call write_sandbox_file exactly once with both
+    relative_path and content in the same call. Do not make a filename-only or
+    path-only call. Do not add external dependencies such as databases,
+    third-party APIs, or third-party libraries unless they are explicitly
+    mentioned in the prompt or already listed as project dependencies. Keep
+    the frontend simple and do not add any UI behavior that is not explicitly
+    required.
+  expected_output: >
+    A frontend implementation summary and the generated frontend files saved in sandbox.
+  agent: frontend_engineer
+
+frontend_test_task:
+  description: >
+    Review the frontend implementation for {app_name} and add browser-facing checks.
+
+    Verify the Gradio app launches, renders its primary components, and keeps
+    the interaction flow aligned with the design. Create or refine
+    pytest-playwright coverage where it adds value, and save the testing
+    artifacts into sandbox/frontend. For every file write, first generate the
+    complete file content, do not call write_sandbox_file until the complete
+    file content is already fully composed in memory. Then call
+    write_sandbox_file exactly once with both relative_path and content in the
+    same call. Do not make a filename-only or path-only call. Do not add
+    external dependencies such as databases, third-party APIs, or third-party
+    libraries unless they are explicitly mentioned in the prompt or already
+    listed as project dependencies. Keep the frontend simple and do not add
+    any UI behavior that is not explicitly required.
+  expected_output: >
+    A frontend test report plus any generated browser test files.
+  agent: frontend_tester

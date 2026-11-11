@@ -1,7 +1,0 @@
-openai
-chromadb
-python-dotenv
-ipykernel
-requests
-gradio
-litellm

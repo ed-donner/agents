@@ -1,0 +1,36 @@
+integration_review_task:
+  description: >
+    Review the design, backend, and frontend artifacts for {app_name} together.
+
+    Confirm that the generated files are internally consistent, that the app is
+    testable, and that the workflow produced a coherent build. Save the review
+    artifacts into sandbox/validation. For every file write, do not call
+    write_sandbox_file until the complete file content is already fully
+    composed in memory. Then call write_sandbox_file exactly once with both
+    relative_path and content in the same call. Do not make a filename-only or
+    path-only call. Do not add external dependencies such as databases,
+    third-party APIs, or third-party libraries unless they are explicitly
+    mentioned in the prompt or already listed as project dependencies. Keep
+    the validation focused on the required app behavior and do not add extra
+    functionality.
+  expected_output: >
+    A concise integration review with a clear readiness recommendation.
+  agent: product_owner
+
+signoff_task:
+  description: >
+    Decide whether {app_name} should be accepted.
+
+    The output must include a clear verdict, the main reasons for the verdict,
+    and any follow-up work that is still needed. For every file write, do not
+    call write_sandbox_file until the complete file content is already fully
+    composed in memory. Then call write_sandbox_file exactly once with both
+    relative_path and content in the same call. Do not make a filename-only or
+    path-only call. Do not add external dependencies such as databases,
+    third-party APIs, or third-party libraries unless they are explicitly
+    mentioned in the prompt or already listed as project dependencies. Keep
+    the validation focused on the required app behavior and do not add extra
+    functionality.
+  expected_output: >
+    A final sign-off note with either APPROVED or REVISE in the first line.
+  agent: quality_auditor

@@ -1,0 +1,41 @@
+design_task:
+  description: >
+    Create the initial design for {app_name}.
+
+    The design must include:
+    - The app purpose and target users
+    - The recommended backend stack and data model
+    - The recommended frontend structure
+    - A concise file tree for the app
+    - Acceptance criteria for implementation
+
+    Write the important artifacts into sandbox/design using the file tool.
+    For every file write, first generate the complete markdown content for the
+    target file, then call write_sandbox_file exactly once with both
+    relative_path and content in the same call. Do not make a filename-only or
+    path-only call. Do not add external dependencies such as databases,
+    third-party APIs, or third-party libraries unless they are explicitly
+    mentioned in the prompt or already listed as project dependencies. Keep
+    the design simple and do not introduce functionality beyond what the
+    requirements explicitly ask for.
+  expected_output: >
+    A practical architecture brief that can be handed to backend and frontend
+    crews without additional clarification.
+  agent: engineering_lead
+
+polish_design_task:
+  description: >
+    Review the initial design for {app_name}, remove ambiguity, and finalize it.
+
+    Make sure the final design is concrete enough for implementation and testing.
+    If anything is underspecified, resolve it now. If you write the finalized
+    design file, generate the complete markdown content first and then call
+    write_sandbox_file exactly once with both relative_path and content in the
+    same call. Never emit a partial write call. Do not add external
+    dependencies such as databases, third-party APIs, or third-party
+    libraries unless they are explicitly mentioned in the prompt or already
+    listed as project dependencies. Keep the design simple and do not
+    introduce functionality beyond what the requirements explicitly ask for.
+  expected_output: >
+    A finalized design spec written in markdown, ready to drive implementation.
+  agent: engineering_editor

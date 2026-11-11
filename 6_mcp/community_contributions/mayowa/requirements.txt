@@ -1,8 +1,0 @@
-gradio
-python-dotenv
-openai
-openai-agents
-pydantic
-requests
-mcp
-mcp-server-fetch
