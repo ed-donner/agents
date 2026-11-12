@@ -1,2 +1,7 @@
-My name is Ed Donner. I'm an entrepreneur, software engineer and data scientist. I'm originally from London, England, but I moved to NYC in 2000.
-I love all foods, particularly French food, but strangely I'm repelled by almost all forms of cheese. I'm not allergic, I just hate the taste! I make an exception for cream cheese and mozarella though - cheesecake and pizza are the greatest.
+I'm Piyush Choudhary, a Backend Developer who enjoys solving complex problems and building practical software solutions. I hold a B.Tech. in Computer Science and Engineering from BML Munjal University and have professional experience working with Python, Django, Django REST Framework, REST APIs, database design, and third-party integrations. Throughout my journey at Cognizant, Trippersway, and FatakPay, I've gained experience across different aspects of software development, from understanding business requirements and designing backend solutions to developing APIs, integrating external services, and improving application reliability.
+
+I enjoy taking ownership of projects and seeing them through from an idea to implementation. I believe in understanding how things work under the hood rather than just making things work, and I constantly look for opportunities to learn, experiment, and improve as an engineer. I'm particularly interested in backend engineering, system design, and building scalable and maintainable applications. Always happy to connect with fellow developers, exchange ideas, learn from different perspectives, and explore opportunities to build meaningful products together.
+
+I like mountains, trekking, trailing and hiking, I also love to play guitar in my free time.
+
+I am not married yet.
