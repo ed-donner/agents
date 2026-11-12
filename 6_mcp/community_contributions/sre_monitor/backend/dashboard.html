@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRE Monitor</title>
+<style>
+  :root { --bg:#0f1218; --panel:#171b23; --line:#262c38; --text:#e6e9ef; --muted:#8b93a3;
+          --ok:#2ecc71; --minor:#f1c40f; --major:#e67e22; --critical:#e74c3c; --unknown:#7f8c8d; --accent:#4ea1ff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.45 -apple-system,"Segoe UI",Roboto,Arial,sans-serif; background:var(--bg); color:var(--text); }
+  header { display:flex; align-items:center; gap:16px; padding:14px 24px; border-bottom:1px solid var(--line); }
+  header h1 { font-size:18px; margin:0; }
+  .meta { color:var(--muted); font-size:12px; display:flex; gap:16px; flex-wrap:wrap; }
+  .pill { padding:2px 8px; border-radius:999px; background:#22314a; color:var(--accent); font-size:12px; }
+  main { padding:20px 24px; display:grid; gap:20px; grid-template-columns:2fr 1fr; }
+  section { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px; min-width:0; }
+  section h2 { font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:0 0 12px; }
+  .full { grid-column:1 / -1; }
+  .services { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:10px; }
+  .svc { border:1px solid var(--line); border-left:5px solid var(--unknown); border-radius:8px; padding:10px 12px; }
+  .svc a { color:var(--text); font-weight:600; text-decoration:none; }
+  .svc .desc { color:var(--muted); font-size:12px; margin-top:4px; }
+  .svc.none { border-left-color:var(--ok); } .svc.minor { border-left-color:var(--minor); }
+  .svc.major { border-left-color:var(--major); } .svc.critical { border-left-color:var(--critical); }
+  .svc.maintenance { border-left-color:var(--accent); }
+  .incident { border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin-bottom:10px; }
+  .incident.priority { border-color:var(--critical); box-shadow:0 0 0 1px var(--critical) inset; }
+  .incident .top { display:flex; gap:8px; align-items:center; flex-wrap:wrap; font-size:12px; color:var(--muted); }
+  .incident h3 { font-size:15px; margin:6px 0; }
+  .incident h3 a { color:var(--text); }
+  .badge { padding:1px 7px; border-radius:4px; font-size:11px; font-weight:700; color:#111; }
+  .SEV1 { background:var(--critical); color:#fff; } .SEV2 { background:var(--major); }
+  .SEV3 { background:var(--minor); } .SEV4 { background:#95a5a6; } .GLOBAL { background:#9b59b6; color:#fff; }
+  .untriaged { background:#3a4252; color:var(--text); }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--muted); font-weight:500; }
+  td a { color:var(--accent); }
+  .log { max-height:420px; overflow:auto; font:12px/1.5 Menlo,Consolas,monospace; }
+  .log div { padding:3px 0; border-bottom:1px dashed var(--line); }
+  .log .agent { font-weight:700; }
+  .Orchestrator { color:#4ea1ff; } .Status-Watcher { color:#1abc9c; } .Triage { color:#f39c12; }
+  .Notifier { color:#9b59b6; } .Postmortem-Analyst { color:#e84393; } .Poller, .Engine { color:#e74c3c; }
+  .empty { color:var(--muted); }
+  pre.report { white-space:pre-wrap; font:12px/1.5 Menlo,Consolas,monospace; max-height:520px; overflow:auto; margin:0; }
+  select { background:var(--bg); color:var(--text); border:1px solid var(--line); border-radius:6px; padding:4px; }
+  @media (max-width:1000px) { main { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>SRE Monitor</h1>
+  <span class="pill" id="model">model</span>
+  <div class="meta"><span id="last-poll"></span><span id="schedule"></span><span id="refreshed"></span></div>
+</header>
+<main>
+  <section class="full"><h2>Vendor status</h2><div class="services" id="services"></div></section>
+  <section><h2>Active incidents</h2><div id="active"></div></section>
+  <section><h2>Agent activity</h2><div class="log" id="activity"></div></section>
+  <section><h2>Incidents in the last 24 hours</h2><div id="recent"></div></section>
+  <section><h2>Notifications</h2><div id="emails"></div></section>
+  <section class="full">
+    <h2>Postmortem review <select id="report-select"></select></h2>
+    <pre class="report" id="report"></pre>
+  </section>
+</main>
+<script>
+const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const when = (iso) => iso ? new Date(iso).toLocaleString() : "never";
+const getJson = async (url) => (await fetch(url)).json();
+
+function badges(incident) {
+  let html = incident.severity ? `<span class="badge ${incident.severity}">${incident.severity}</span>`
+                               : `<span class="badge untriaged">not triaged</span>`;
+  if (incident.global_impact) html += ` <span class="badge GLOBAL">GLOBAL</span>`;
+  return html;
+}
+
+function incidentCard(incident) {
+  return `<div class="incident ${incident.priority ? "priority" : ""}">
+    <div class="top">${badges(incident)}<span>${esc(incident.service)}</span><span>${esc(incident.status)}</span>
+      <span>impact: ${esc(incident.impact)}</span><span>${when(incident.created_at)}</span></div>
+    <h3><a href="${esc(incident.link)}" target="_blank" rel="noopener">${esc(incident.name)}</a></h3>
+    <div>${esc(incident.summary || (incident.updates || [])[0] || "")}</div>
+    ${incident.triage_reason ? `<div class="empty" style="margin-top:4px">Triage: ${esc(incident.triage_reason)}</div>` : ""}
+    ${incident.verification_summary ? `<div class="empty" style="margin-top:4px">External verification (${esc(incident.verification_confidence)}): ${esc(incident.verification_summary)}
+      ${(incident.verification_sources || []).map((url, i) => `<a href="${esc(url)}" target="_blank" rel="noopener">source ${i + 1}</a>`).join(" · ")}</div>` : ""}
+  </div>`;
+}
+
+async function refreshOverview() {
+  const data = await getJson("/api/overview");
+  document.getElementById("model").textContent = `All agents: ${data.model}`;
+  document.getElementById("last-poll").textContent = `Last check: ${when(data.last_poll)}`;
+  document.getElementById("schedule").textContent =
+    `Every ${data.poll_interval_minutes} min · daily review after ${data.daily_review_hour}:00 (last: ${data.last_daily_review || "never"})`;
+  document.getElementById("services").innerHTML = data.services.map((s) => `
+    <div class="svc ${esc(s.error ? "unknown" : s.indicator)}">
+      <a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>
+      <div class="desc">${esc(s.error ? "Unreachable: " + s.error : s.description)}</div>
+      ${(s.degraded_components || []).length ? `<div class="desc">${s.degraded_components.length} degraded component(s)</div>` : ""}
+    </div>`).join("");
+}
+
+async function refreshIncidents() {
+  const data = await getJson("/api/incidents?hours=24");
+  document.getElementById("active").innerHTML = data.active.length
+    ? data.active.map(incidentCard).join("") : `<div class="empty">No open incidents on the monitored status pages.</div>`;
+  document.getElementById("recent").innerHTML = data.recent.length ? `<table>
+    <tr><th>Service</th><th>Incident</th><th>Triage</th><th>Status</th><th>Opened</th></tr>
+    ${data.recent.map((i) => `<tr><td>${esc(i.service)}</td>
+      <td><a href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.name)}</a></td>
+      <td>${badges(i)}</td><td>${esc(i.status)}</td><td>${when(i.created_at)}</td></tr>`).join("")}
+  </table>` : `<div class="empty">No incidents in the last 24 hours.</div>`;
+}
+
+async function refreshActivity() {
+  const rows = await getJson("/api/activity?limit=80");
+  document.getElementById("activity").innerHTML = rows.length ? rows.map((r) => `
+    <div><span class="empty">${new Date(r.ts).toLocaleTimeString()}</span>
+    <span class="agent ${esc(r.agent.replace(/ /g, "-"))}">${esc(r.agent)}</span> ${esc(r.message)}</div>`).join("")
+    : `<div class="empty">No agent activity yet.</div>`;
+}
+
+async function refreshEmails() {
+  const rows = await getJson("/api/emails?limit=20");
+  document.getElementById("emails").innerHTML = rows.length ? `<table>
+    <tr><th>When</th><th>Subject</th><th>Result</th></tr>
+    ${rows.map((e) => `<tr><td>${when(e.ts)}</td><td>${e.kind === "push" ? '<span class="badge SEV2">PUSH</span> ' : ""}${e.priority ? '<span class="badge SEV1">PRIORITY</span> ' : ""}${esc(e.subject)}</td>
+      <td>${e.sent ? "sent" : esc(e.error || "not sent")}</td></tr>`).join("")}
+  </table>` : `<div class="empty">No emails yet.</div>`;
+}
+
+async function refreshReports() {
+  const select = document.getElementById("report-select");
+  const names = await getJson("/api/reports");
+  const current = select.value;
+  select.innerHTML = names.map((n) => `<option ${n === current ? "selected" : ""}>${esc(n)}</option>`).join("");
+  if (!names.length) { document.getElementById("report").textContent = "No postmortem review yet."; return; }
+  await showReport(select.value || names[0]);
+}
+
+async function showReport(name) {
+  const response = await fetch(`/api/reports/${encodeURIComponent(name)}`);
+  document.getElementById("report").textContent = await response.text();
+}
+
+document.getElementById("report-select").addEventListener("change", (e) => showReport(e.target.value));
+
+async function refresh() {
+  try {
+    await Promise.all([refreshOverview(), refreshIncidents(), refreshActivity(), refreshEmails()]);
+    document.getElementById("refreshed").textContent = `Dashboard refreshed ${new Date().toLocaleTimeString()}`;
+  } catch (error) {
+    document.getElementById("refreshed").textContent = `API unreachable: ${error}`;
+  }
+}
+
+refresh(); refreshReports();
+setInterval(refresh, 10000);
+setInterval(refreshReports, 60000);
+</script>
+</body>
+</html>
