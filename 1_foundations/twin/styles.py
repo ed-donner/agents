@@ -1,6 +1,6 @@
 """Styling constants for the digital twin Gradio app."""
 
-GOLD = "#2563eb"  # was gold (#ecad0a); now site brand blue — var name kept to avoid churn
+GOLD = "#ecad0a"
 BLUE = "#209dd7"
 PURPLE = "#753991"
 
@@ -13,7 +13,7 @@ EXAMPLES = [
 
 CSS = """
 :root {
-  --twin-gold: #2563eb;
+  --twin-gold: #ecad0a;
   --twin-blue: #209dd7;
   --twin-purple: #753991;
   --twin-bg: #0d0d10;
@@ -26,7 +26,7 @@ CSS = """
 }
 
 /* Light mode: Gradio adds `.dark` to <body> when dark; absence = light.
-   Only the neutral palette flips — brand accents stay identical. */
+   Only the neutral palette flips — gold/blue/purple accents stay identical. */
 body:not(.dark) {
   --twin-bg: #f4f4f6;
   --twin-surface: #ffffff;
@@ -261,7 +261,7 @@ button.submit-button,
 button.lg.primary {
   background: var(--twin-gold) !important;
   border: 1px solid var(--twin-gold) !important;
-  color: #ffffff !important;
+  color: #111111 !important;
   min-height: 48px !important;
   align-self: stretch !important;
   padding: 0 14px !important;
@@ -273,9 +273,9 @@ button.primary:hover,
 button.submit:hover,
 .submit-button:hover,
 button.lg.primary:hover {
-  background: #1d4ed8 !important;
-  border-color: #1d4ed8 !important;
-  color: #ffffff !important;
+  background: #ffc320 !important;
+  border-color: #ffc320 !important;
+  color: #111111 !important;
 }
 
 /* ---------- Submit-button icon: center vertically and size correctly ---------- */
@@ -289,7 +289,7 @@ button[variant="primary"] svg {
   margin: 0 auto !important;
   display: block !important;
   align-self: center !important;
-  color: #ffffff !important;
+  color: #111111 !important;
   fill: currentColor !important;
   stroke: currentColor !important;
 }
@@ -343,7 +343,7 @@ button[variant="primary"] svg {
 ::-webkit-scrollbar-thumb:hover { background: var(--twin-purple); }
 
 /* ---------- Selection ---------- */
-::selection { background: var(--twin-gold); color: #ffffff; }
+::selection { background: var(--twin-gold); color: #111111; }
 
 /* ---------- Mobile ---------- */
 @media (max-width: 640px) {
