@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import json
 import sys
 
 from crewai.flow import Flow, listen, start
@@ -10,6 +9,7 @@ from .crews.design_crew.design_crew import DesignCrew
 from .crews.frontend_crew.frontend_crew import FrontendCrew
 from .crews.validation_crew.validation_crew import ValidationCrew
 from .sandbox import SANDBOX_ROOT, ensure_sandbox_tree, sandbox_path
+from .trigger import FlowTriggerError, parse_trigger_payload
 
 
 
@@ -25,10 +25,6 @@ app_description = """
     from buying more shares than they can afford, or selling shares that they don't have.
     The system has access to a function get_share_price(symbol) which returns the current price of a share, and includes a test implementation that returns fixed prices for AAPL, TSLA, GOOGL
 """
-
-class FlowTriggerError(RuntimeError):
-    """Raised when the flow trigger payload cannot be read."""
-
 
 class AppBuildState(BaseModel):
     app_name: str = "Trading Simulation app"
@@ -176,10 +172,7 @@ def run_with_trigger():
             "No trigger payload provided. Please provide JSON payload as argument."
         )
 
-    try:
-        trigger_payload = json.loads(sys.argv[1])
-    except json.JSONDecodeError as exc:
-        raise FlowTriggerError("Invalid JSON payload provided as argument") from exc
+    trigger_payload = parse_trigger_payload(sys.argv[1])
 
     # Create flow and kickoff with trigger payload.
     # The @start() method will automatically receive crewai_trigger_payload.
