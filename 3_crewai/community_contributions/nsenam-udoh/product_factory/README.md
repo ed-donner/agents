@@ -10,7 +10,14 @@ Requirements: Python 3.10–3.13, uv, and Docker. The entrypoints configure UTF-
 uv sync
 ```
 
-Copy `.env.example` to `.env` and fill in `OPENAI_API_KEY` and `OPENROUTER_API_KEY` yourself. Never commit `.env`. The manager, test engineer, and quality inspector use `openai/gpt-5.5`; backend and frontend workers use `openrouter/deepseek/deepseek-v4.1-flash`.
+Create a file named `.env` in the project root (next to pyproject.toml) and put your own keys in it:
+
+```
+OPENAI_API_KEY=your-openai-key
+OPENROUTER_API_KEY=your-openrouter-key
+```
+
+Never commit `.env`. The manager, test engineer, and quality inspector use `openai/gpt-5.5`; backend and frontend workers use `openrouter/deepseek/deepseek-v4.1-flash`.
 
 The DeepSeek worker was chosen as a lower-cost coding model. Its OpenRouter provider page listed approximately $0.10–0.21 input and $0.40–0.80 output per million tokens when checked during planning: <https://openrouter.ai/deepseek/deepseek-v4.1-flash>. Prices for `google/gemini-4-argon` and `anthropic/claude-fable-5.2` were not verified; no price claims are made for them.
 
@@ -22,7 +29,7 @@ crewai traces enable
 crewai traces status
 ```
 
-Every crew sets `tracing=True`, and `.env.example` sets `CREWAI_TRACING_ENABLED=true`. CrewAI prints a `View traces` link after a successful trace export. The app reads the current installation's `.crewai/last_run.json` record through CrewAI's `read_last_run()` API and shows **Open trace** when a URL is available. If no URL appears, use the link printed in the terminal.
+Every crew and the Flow set `tracing=True` in code, so no env setting is needed. CrewAI prints a `View traces` link after a successful trace export. The app reads the current installation's `.crewai/last_run.json` record through CrewAI's `read_last_run()` API and shows **Open trace** when a URL is available. If no URL appears, use the link printed in the terminal.
 
 ## Run
 
