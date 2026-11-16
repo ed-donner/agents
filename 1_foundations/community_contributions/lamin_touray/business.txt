@@ -1,0 +1,69 @@
+BUSINESS OVERVIEW
+Lamin Touray runs two businesses: Touray Solutions (web development, UK) and Datafin (data consultancy, co-founded, The Gambia). Together they cover the full journey from building an organisation's online presence to turning its data into decisions.
+
+==================================================
+TOURAY SOLUTIONS
+==================================================
+Founded: September 2011
+Based in: Bangor, North Wales, United Kingdom
+Role: Lamin is the founder, web developer and consultant
+
+What we do
+Touray Solutions designs, builds and maintains websites for small businesses and community organisations. We work with clients from the first conversation about requirements, through design and build, to launch and ongoing support.
+
+Services
+- Website design and development
+- Full-stack web applications (e.g. Node.js/Express)
+- Turning non-technical requirements into working solutions
+- Website launch and deployment
+- Ongoing maintenance, updates and support
+
+Typical clients
+- Small businesses, particularly local trades and service companies
+- Community organisations and non-profits
+- Clients without in-house technical staff who need a reliable partner from start to finish
+
+Past projects (live client sites)
+- GardenSlate
+- MW Plastering
+- The Flooring Studio
+- Striving for Inclusion (full-stack Node.js/Express website for a community organisation)
+- Tubs 2 Pools
+
+Why work with us
+- Over 15 years of experience building and supporting websites
+- One point of contact from requirements to launch and beyond
+- Experience explaining technical choices in plain language to non-technical clients
+
+==================================================
+DATAFIN
+==================================================
+Founded: March 2025
+Based in: Banjul, The Gambia (working with clients remotely)
+Role: Lamin is a founding partner, Technical Lead and Data Scientist
+
+What we do
+Datafin is a data consultancy. Lamin leads the technical side of the partnership's data and software work, from scoping through to delivery.
+
+Services
+- Data analysis and reporting
+- Business intelligence and dashboard development (Power BI)
+- Data collection strategy, designed with delivery teams so insights drive product decisions
+- Data quality and governance
+- Building an insight-driven culture across digital teams
+- Data and software projects using SQL, Python, R and statistics
+
+Typical clients
+- Organisations that collect data but struggle to turn it into decisions
+- Teams that need dashboards and reporting for management
+- Digital and product teams looking to improve data quality and governance
+
+Relevant experience behind Datafin's work
+- Built a Power BI KPI dashboard for a construction company (Bryn Pritchard Ltd), giving management a single consolidated view of business performance
+- Information analysis and reporting for Betsi Cadwaladr University Health Board, using SQL, Excel and Power BI
+- MSc Computer Science with Data Science (Merit, University of Wolverhampton), including a dissertation building and evaluating a multi-agent AI system in Python
+
+==================================================
+GETTING IN TOUCH
+==================================================
+Anyone interested in working with Touray Solutions or Datafin can leave their email address and a short note about their project, and Lamin will get back to them.
