@@ -1,0 +1,122 @@
+
+
+propose:
+  description: |
+    Present a convincing argument IN FAVOR of this motion: {motion}.
+    Include three strong arguments, explanations, and relevant examples.
+  expected_output: |
+    A structured argument supporting the motion, with three arguments,
+    explanations, examples, and a conclusion.
+  agent: proposer
+
+oppose:
+  description: |
+    Present a convincing argument AGAINST this motion: {motion}.
+    Include three strong counterarguments, explanations, and examples.
+  expected_output: |
+    A structured argument opposing the motion, with three counterarguments,
+    explanations, examples, and a conclusion.
+  agent: opposer
+
+decide:
+  description: |
+    Evaluate the arguments for and against this motion: {motion}.
+
+    Score BOTH sides independently using the same five criteria, each
+    from 1 to 5:
+    1. Logical consistency
+    2. Relevance
+    3. Reasoning
+    4. Evidence quality
+    5. Counterargument handling
+
+    Give a separate, concise justification for each side under every criterion.
+    Judge only the arguments actually presented. Apply the same standards
+    to both sides.
+
+    EVIDENCE RULES:
+    A named product, illustrative example, institution, or unsourced
+    reference to research does not establish effectiveness or harm.
+    Do not invent sources, statistics, studies, citations, or facts.
+    Distinguish assertions, examples, and verifiable empirical evidence.
+    If neither side supplies verifiable empirical evidence, neither side
+    may score 4 or 5 for evidence quality.
+    Do not treat a potential benefit as proven improvement or a possible
+    risk as proof that harm has occurred.
+
+    SCORING RULES:
+    Score every criterion from 1 to 5.
+    Calculate each side's total by adding its five criterion scores.
+    Each total must be out of 25 and must match the scoring table exactly.
+    Do not change scores to favor a preferred side.
+    Do not let narrative impressions override the calculated totals.
+
+    REQUIRED CRITERIA, IN THIS EXACT ORDER:
+    - Logical consistency
+    - Relevance
+    - Reasoning
+    - Evidence quality
+    - Counterargument handling
+
+    REQUIRED TABLE:
+    Produce one valid Markdown table with exactly five columns:
+    Criterion | Pro Score | Pro Justification | Counter Score | Counter Justification
+
+    Include exactly five scoring rows, one for each required criterion.
+    Each score must be an integer from 1 to 5.
+    Keep each justification inside its own table cell.
+    Do not substitute alternative criteria such as Logic, Supporting Evidence,
+    or Clarity. Do not split table rows across multiple lines.
+
+    REQUIRED WINNER FORMAT:
+    Use exactly one of these headings, on a single line:
+    **Winning Side: Pro**
+    **Winning Side: Counter**
+    **Winning Side: Tie**
+
+    REQUIRED TOTAL FORMAT:
+    **Pro Total Score: X out of 25**
+    **Counter Total Score: Y out of 25**
+
+    Replace X and Y with the actual calculated totals.
+
+    WINNER RULE — MANDATORY:
+    - If Pro's total is greater than Counter's total, the winner is Pro.
+    - If Counter's total is greater than Pro's total, the winner is Counter.
+    - If the totals are equal, the winner is Tie.
+    - Never declare a winner based on subjective impressions when totals are tied.
+    - The winner heading, calculated totals, and final decision must agree.
+    - If an inconsistency exists, correct it before returning the verdict.
+
+    For a tie, explain the distinct strengths and weaknesses of both sides
+    and explicitly state that the scoring did not establish an overall winner.
+
+    Include the following sections after the scoring table and totals:
+    1. Summary of Both Sides
+    2. Strongest Argument and Most Important Weakness
+    3. Unsupported Claims and Evidence Needed
+    4. Final Decision
+
+    Evaluate both sides fairly. Acknowledge uncertainty when the available
+    evidence is insufficient. Do not claim that the debate establishes
+    the real-world truth of the motion.
+
+    Before returning the verdict, verify:
+    1. All five required criteria are present in the correct order.
+    2. All ten scores are between 1 and 5.
+    3. Both totals equal the corresponding table sums.
+    4. The winner follows exclusively from the totals.
+    5. The winner heading and final decision agree with the totals.
+
+  expected_output: |
+    A complete debate verdict containing:
+    - The motion.
+    - The exact required Winning Side heading.
+    - A balanced summary of both sides.
+    - A valid five-column Markdown scoring table with exactly five required criteria.
+    - Separate justifications for each side under every criterion.
+    - Correct Pro and Counter totals out of 25.
+    - The strongest argument and most important weakness for each side.
+    - Unsupported claims and specific evidence needed to verify them.
+    - A final decision consistent with the scores and winner.
+  agent: judge

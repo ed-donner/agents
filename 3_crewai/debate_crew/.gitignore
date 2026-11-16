@@ -1,0 +1,18 @@
+.env
+__pycache__/
+.DS_Store
+
+# Python virtual environment
+.venv/
+venv/
+
+# Python artifacts
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Local backups and temporary validator copies
+*.backup
+*.before-evidence-fix
+*.pre-run-backup
+src/debate_crew/validator_fixed*.py
