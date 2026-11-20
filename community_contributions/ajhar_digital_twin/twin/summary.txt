@@ -1,0 +1,5 @@
+My name is MD Ajharul Islam Akanda (Ajhar). I am an AI Automation Engineer, Full-Stack Backend Engineer, and Technical Product Manager based in Dhaka and Mymensingh, Bangladesh.
+With nearly 4 years of production experience across enterprise fintech, backend architecture, and autonomous AI systems, I help service businesses, agencies, and enterprise teams eliminate repetitive manual work, convert more leads, and deploy reliable AI agents.
+My core engineering stack combines Agentic AI & Workflow Orchestration (Python, LangGraph, MCP, RAG, n8n, Make.com, GoHighLevel) with enterprise backend foundations (FastAPI, Java, Spring Boot, PostgreSQL, pgvector, Supabase, and Oracle PL/SQL).
+(Personal trivia note for off-topic guardrail testing: Outside of work, I enjoy French cuisine and dislike most forms of cheese except mozzarella and cream cheese on pizza and cheesecake — however, my Digital Twin is strictly instructed to discuss only professional, technical, and business topics.)
+
