@@ -1,0 +1,21 @@
+[project]
+name = "product_factory"
+version = "0.1.0"
+description = "product_factory using crewAI"
+authors = [{ name = "Nsenam Udoh" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=1.15.39,<2.0.0",
+    "gradio>=6.31.0",
+]
+
+[project.scripts]
+run_crew = "product_factory.main:run"
+product_factory_flow = "product_factory.main:cli"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
