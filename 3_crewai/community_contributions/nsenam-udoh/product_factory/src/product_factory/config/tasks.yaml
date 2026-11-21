@@ -1,0 +1,183 @@
+backend_task:
+  description: >
+    Implement the backend for these requirements in workstream {workstream_id}:
+
+    {requirements}
+
+    Follow this approved design, which is also available as design.md:
+
+    {design}
+
+    Write the assigned backend module(s) inside the sandbox. Use only Python
+    standard-library imports. The smoke run is a short script named _smoke.py
+    that imports the module and exercises a few public functions; it is not a
+    test suite. _smoke.py is a deliverable and must not be deleted during
+    cleanup. Smoke-run the backend with run_sandbox_python. Do not write app.py
+    or tests. Claim only what a tool result in this task shows. For anything
+    beyond a write preview, read the file with read_sandbox_file before the
+    final verification run.
+    Finish in this exact order:
+    1. Write or fix the deliverable files until the smoke run exits 0.
+    2. Delete every scratch or probe file you created; only deliverable files
+       may remain.
+    3. Make the smoke run once more as the final tool call. Write and delete
+       nothing after it. The report quotes this final run.
+    After the first smoke run that exits 0, do not rewrite deliverable files for
+    polish, refactoring, or extra coverage. Only delete scratch/probe files, then
+    run the final smoke once. Prefer zero probe scripts; if you must probe, use
+    at most one short probe file and delete it before the final run.
+    If the final run's exit code is not 0, report that the task FAILED and give
+    the remaining error. Never report an unverified or stale result.
+  expected_output: >
+    The report's first line is `Report by: Backend Python engineer`. A complete
+    backend report with these named parts: files written, public functions and
+    their behavior, the exact smoke-run command, its exit code and output, and
+    Tool evidence. Tool evidence must contain the verbatim `Ran:` and `Exit
+    code:` lines of the final run; for each file written, the verbatim `Wrote
+    ... characters to ...` and `SHA256:` lines from write_sandbox_file; and for
+    cleanup, the verbatim `Deleted sandbox file:` lines or "no scratch files
+    created". If the final run's exit code is not 0, say the task FAILED and
+    give the remaining error; never report an unverified or stale result. List
+    file names only; do not paste source code.
+  agent: backend_engineer
+  context:
+    - design_task
+
+frontend_task:
+  description: >
+    Build the frontend for these requirements:
+
+    {requirements}
+
+    Follow the design and integrate the completed backend:
+
+    {design}
+
+    Read design.md first for module signatures and data contracts. Do NOT read
+    full backend source files or write temporary _probe.py scripts unless an
+    import or runtime error occurs; if you must inspect a backend file, use a
+    short start_line/end_line range instead of a full read. Write app.py using
+    gradio and _validate.py inside the sandbox. The validator must import app
+    and construct the Blocks UI without launching a server. Only app.py and
+    _validate.py may import gradio; all other imports must be standard library
+    or the local backend. demo.launch() must not pass server_name or
+    server_port, so those environment variables take effect. demo.launch() may
+    only use arguments that the installed gradio accepts. Never call
+    demo.launch() from run_sandbox_python; use check_sandbox_app for launch.
+    Run _validate.py with run_sandbox_python. After the validator exits 0, call
+    check_sandbox_app. If it does not return HTTP 200, fix app.py and repeat
+    both checks. Claim only what a tool result in this task shows. For anything
+    beyond a write preview, read the file with read_sandbox_file before the
+    final verification run.
+    Finish in this exact order:
+    1. Write or fix the deliverable files until the validator run exits 0 and
+       check_sandbox_app returns HTTP 200.
+    2. Delete only scratch or probe files you created in this task; never delete
+       _smoke.py or another specialist's files. Only deliverable files may remain.
+    3. Make the validator run once more and then check_sandbox_app as the final
+       two tool calls, in that order. Write and delete nothing after the validator.
+       The report quotes both final checks.
+    After the first validator run that exits 0, do not rewrite app.py or
+    _validate.py for polish, Gradio API exploration, or extra assertions. Fixing
+    app.py after a failed app check is required, not polish. Only delete your own
+    scratch/probe files, then run the final validator and app check. Prefer zero
+    probe scripts; if you must probe, use at most one short probe file and delete
+    it before the final checks. After the first green validator and HTTP 200
+    app check, only delete your own probe files, then run the required final
+    validator and check_sandbox_app, then return the report. Do not launch the
+    Gradio server inside run_sandbox_python. If the final validator exit code
+    is not 0 or the final app check is not HTTP 200, report that the task
+    FAILED and give the remaining error. Never report an unverified or stale
+    result.
+  expected_output: >
+    The report's first line is `Report by: Gradio frontend engineer`. A complete
+    frontend report with these named parts: files written (app.py and
+    _validate.py), backend integration points, the exact validator command, its
+    exit code and output, the app launch result, and Tool evidence. Tool evidence
+    must contain the verbatim `Ran:` and `Exit code:` lines of the final validator
+    run and the verbatim `App check:` line showing HTTP 200; for each file written,
+    the verbatim `Wrote ... characters to ...` and `SHA256:` lines from
+    write_sandbox_file; and for cleanup, the verbatim `Deleted sandbox file:` lines
+    or "no scratch files created". If the final validator exit code is not 0 or
+    the app check is not HTTP 200, say the task FAILED and give the remaining
+    error; never report an unverified or stale result. List file names only; do
+    not paste source code.
+  agent: frontend_engineer
+  context:
+    - design_task
+    - backend_task
+
+test_task:
+  description: >
+    Test the backend implemented for these requirements:
+
+    {requirements}
+
+    Write test_backend.py in the sandbox using only standard-library unittest
+    and unittest.mock. Exercise meaningful success and failure behavior without
+    real API calls or external services. Run the tests with run_sandbox_python
+    and coordinate fixes through the manager when needed. Claim only what a tool
+    result in this task shows. For anything beyond a write preview, read the
+    file with read_sandbox_file before the final verification run. Finish in
+    this exact order:
+    1. Write or fix the deliverable files until the unittest run exits 0.
+    2. Delete only scratch or probe files you created in this task; never delete
+       _smoke.py or another specialist's files. Only deliverable files may remain.
+    3. Write test_summary.md from the last run's command, exit code and result.
+    4. Make the unittest run once more as the final tool call. Write and delete
+       nothing after it. The report quotes this final run.
+    After the first unittest run that exits 0, do not rewrite test_backend.py for
+    polish or extra cases. Only delete your own scratch/probe files, write
+    test_summary.md, then run the final unittest once. Prefer zero probe
+    scripts; if you must probe, use at most one short probe file and delete it
+    before the final run.
+    If the final run's exit code is not 0, report that the task FAILED and give
+    the remaining error. Never report an unverified or stale result.
+  expected_output: >
+    The report's first line is `Report by: Python test engineer`. A complete test
+    report with these named parts: files written, behaviors covered, the exact
+    unittest command, its exit code and output, confirmation that
+    test_summary.md contains the same result, and Tool evidence. Tool evidence
+    must contain the verbatim `Ran:` and `Exit code:` lines of the final run;
+    for each file written, the verbatim `Wrote ... characters to ...` and
+    `SHA256:` lines from write_sandbox_file; and for cleanup, the verbatim
+    `Deleted sandbox file:` lines or "no scratch files created". If the final
+    run's exit code is not 0, say the task FAILED and give the remaining error;
+    never report an unverified or stale result. List file names only; do not
+    paste source code.
+  agent: test_engineer
+  context:
+    - backend_task
+
+quality_task:
+  description: >
+    Independently inspect workstream {workstream_id} against:
+
+    {requirements}
+
+    Use the supplied design and all specialist outputs as context. Prefer
+    design.md and list_sandbox_files first. Read full source only when needed
+    for a specific check; prefer short start_line/end_line ranges. Run
+    test_backend.py and _validate.py yourself, then call check_sandbox_app
+    yourself. Do not use run_sandbox_python on app.py. Check requirements
+    coverage, final test and validator exit codes, HTTP 200 from the app check,
+    sandbox confinement, and imports: standard library everywhere, with gradio
+    allowed only in app.py and _validate.py. Fail if list_sandbox_files shows
+    any file that is not a deliverable. Deliverables are backend modules,
+    _smoke.py, app.py, _validate.py, test_backend.py, design.md,
+    test_summary.md, pyproject.toml, uv.lock, .python-version, and README.md;
+    scratch and probe files are never deliverables. Do not write or modify any
+    file. Return passed=true only when tool output supports every required
+    check, including HTTP 200. Populate evidence with concrete exit codes and
+    output excerpts, quoting the `App check:` line that shows HTTP 200;
+    otherwise populate fixes with specific, actionable remaining work.
+  expected_output: >
+    A QualityVerdict with passed, actionable fixes, and evidence containing the
+    observed test, frontend-validation, and app launch results, including HTTP
+    200.
+  agent: quality_inspector
+  context:
+    - design_task
+    - backend_task
+    - frontend_task
+    - test_task
