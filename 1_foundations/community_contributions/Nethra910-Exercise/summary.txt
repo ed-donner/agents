@@ -1,0 +1,140 @@
+**TechNova Solutions – Fictional Travel‑Agency Knowledge‑Base (Version 1.0)**  
+
+*All information below is **sample, fictional content** created for AI‑assistant training only. It does not represent a real company, service, or contact point.*
+
+---
+
+### 1. Company Snapshot
+| Item | Detail |
+|------|--------|
+| **Name** | TechNova Solutions |
+| **Category** | Travel agency & trip‑planning service |
+| **Target customers** | Individuals, couples, families, small groups, startups & small businesses |
+| **Core promise** | Clear packages, practical itineraries, transparent estimates, responsive support. Booking is confirmed only after a written confirmation and payment. |
+| **Key service principles** | • Explain inclusions/exclusions before payment  • No promises on visa, flight or hotel availability  • Quote prices as *estimates* until suppliers confirm  • Protect customer data  • Escalate urgent/ disputed cases to a human |
+
+---
+
+### 2. Services Offered
+| Service | What’s provided | Typical outcome |
+|---------|----------------|-----------------|
+| **Domestic holiday packages** | Sample Indian itineraries, accommodation suggestions, optional transfers | Planned domestic trip with clear estimate |
+| **International trip planning** | Destination research, itinerary ideas, hotel options, visa guidance (no guarantee) | Proposed overseas itinerary & checklist |
+| **Flight assistance** | Route & fare comparison, booking help (subject to airline inventory) | Flight options & assistance |
+| **Hotel reservations** | Shortlist by location, category, budget; final terms set by property | Suitable accommodation options |
+| **Customized itineraries** | Tailored day‑by‑day plans (dates, interests, group size, budget) | Personalized travel plan |
+| **Corporate travel coordination** | Basic schedules & accommodation requests for teams | Consolidated business‑trip plan |
+| **Local experiences** | Sightseeing, cultural activities, third‑party guides | Optional activities to enrich a trip |
+
+---
+
+### 3. Sample Packages (Indicative *per‑person* INR)
+| Package | Duration | Indicative price* | Key inclusions |
+|---------|----------|-------------------|----------------|
+| **Goa Easy Escape** | 3 days / 2 nights | ₹12,999 | Standard hotel, breakfast, airport/bus‑station transfer estimate, 1 local sightseeing tour |
+| **Kerala Backwater Break** | 5 days / 4 nights | ₹24,500 | Hotel, breakfast, selected transfers, backwater experience estimate |
+| **Rajasthan Heritage Trail** | 6 days / 5 nights | ₹31,900 | Hotel, intercity transfers, guided heritage sightseeing estimate |
+| **Dubai City Sampler** | 5 days / 4 nights | ₹58,000 | Hotel estimate, transfers, basic city tour (flights + visa = excluded) |
+| **Singapore Family Discovery** | 5 days / 4 nights | ₹72,500 | Hotel estimate, transfers, attraction planning (flights + visa = excluded) |
+
+\*Prices are **sample estimates only** – not live or guaranteed.
+
+**Add‑on services (indicative)**  
+- Customized itinerary design – ₹999 per trip (may vary for complex groups)  
+- Airport transfer coordination – from ₹1,200 per vehicle  
+- Travel‑insurance assistance – quoted separately by insurer  
+- Local guided‑tour coordination – from ₹1,500 per group  
+- Corporate trip coordination – from ₹2,500 per trip  
+
+**Pricing Rules for the Assistant**  
+- Never present sample prices as live/guaranteed.  
+- For an exact quote, collect destination, dates, traveler count, room needs, preferences, then explain human confirmation is required.  
+- Do not calculate taxes, exchange rates, or supplier fees unless verified data is supplied.  
+
+---
+
+### 4. Booking Process (6 Steps)
+1. **Share requirements** – destination, dates, travelers, budget, preferences.  
+2. **Receive options** – agency prepares sample options (subject to supplier availability).  
+3. **Review quotation** – examine inclusions, exclusions, cancellation terms, final amount.  
+4. **Payment** – through a verified channel; never ask for PINs, OTPs, or full card details in chat.  
+5. **Confirmation** – written confirmation or supplier‑issued documents must be received.  
+6. **Pre‑travel support** – itinerary details & checklist are provided.  
+
+---
+
+### 5. Core Policies (Illustrative)
+
+| Area | Key Points |
+|------|------------|
+| **Reservations & availability** | All bookings depend on real‑time supplier availability; quotes are not confirmed reservations. |
+| **Payments** | Final schedule shown in quotation; booking remains unconfirmed until payment received and supplier confirms. No request for OTPs/PINs. |
+| **Changes/Amendments** | Subject to supplier rules, availability, possible amendment fees or fare differences. Do not promise a change until confirmed. |
+| **Cancellations & refunds** | Charges & eligibility follow supplier terms; some fares/promotions may be non‑refundable. Refund timelines vary – no universal guarantee. |
+| **Travel documents & visas** | Customer must hold valid passports, visas, permits. Agency cannot guarantee visa approval; direct customers to official authorities. |
+| **Delays, disruptions, emergencies** | Decisions lie with airlines, hotels, local authorities. Provide emergency contact info from travel documents, not agency‑run emergency service. |
+| **Data protection** | Collect only needed info, never request sensitive credentials, keep each customer’s data private. |
+
+---
+
+### 6. Customer‑Support Contact (Fictional)
+
+| Channel | Detail |
+|---------|--------|
+| **Email** | support@technovasolutions.example |
+| **Phone** | +91 00000 12345 (placeholder – not operational) |
+| **Website** | https://www.technovasolutions.example (reserved, non‑functional) |
+| **Office** | Demo Office, 100 Sample Business Road, Ahmedabad, Gujarat, India |
+| **Support hours** | Mon‑Sat 9:30 AM – 6:00 PM IST (closed Sun & public holidays) |
+| **Languages** | English, Hindi, Gujarati |
+
+**Support handling guidance** – ask only for information needed to understand the request; for a new inquiry collect name, email, destination & travel dates; never request passport scans or payment credentials; escalate disputes, safety concerns, or urgent travel disruptions to a human representative.
+
+---
+
+### 7. Frequently‑Asked Questions (selected)
+
+- **What does TechNova do?** – Provides planning assistance for domestic & international holidays, flight/hotel options, and custom itineraries.  
+- **Can you book flights/hotels?** – Yes, assistance is offered; actual reservation depends on supplier availability, payment, and written confirmation.  
+- **Are package prices fixed?** – No – they are indicative only; final price varies with dates, taxes, supplier terms, etc.  
+- **Do packages include flights?** – Only if explicitly stated; Dubai & Singapore packages exclude flights & visa fees.  
+- **Can you guarantee visa approval?** – No – visas are decided by the relevant government.  
+- **How is a booking confirmed?** – After reviewing written quotation, completing payment via a verified channel, and receiving written confirmation/supplier documents.  
+- **What is the cancellation policy?** – Depends on each supplier’s terms; always ask for a written breakdown before proceeding.  
+- **How long do refunds take?** – Varies by supplier & payment provider – no guaranteed timeline.  
+- **Can travel dates be changed?** – Possible, subject to supplier rules, availability, and any extra fees.  
+- **What info is needed for a quote?** – Destination, departure city, travel dates, number of adults/children, room requirements, budget, special preferences.  
+- **How to speak to a person?** – Email or call the (fictional) contacts; in a real deployment replace with operational details.  
+- **Can I share my email for a callback?** – Yes – assistant may collect it with consent and store it via the approved tool.  
+
+---
+
+### 8. AI‑Assistant Operating Rules (summary)
+
+- **Scope** – Answer only about TechNova’s services, sample packages, indicative prices, booking process, policies, and contacts as described in the guide.  
+- **Grounding** – Use the guide as the sole truth source; **do not invent** destinations, prices, discounts, staff, or policy exceptions.  
+- **Unknown info** – Respond: “I don't have confirmed information about that. I can help pass your question to our support team.”  
+- **Price labeling** – Always tag listed prices as *indicative sample estimates*.  
+- **Customer data** – Ask for an email only when a follow‑up is requested; explain why, validate format, store via the approved tool, and confirm only after successful storage.  
+- **Privacy & security** – Never request passwords, OTPs, PINs, or full payment credentials; keep each user’s data private.  
+- **Escalation** – Forward complaints, payment disputes, urgent disruptions, safety issues, special‑assistance requests, or legal/immigration advice to a human or official source.  
+- **Fictional status** – Clearly state that TechNova Solutions and all listed contact details are **fictional examples** used for prototype training.
+
+---
+
+### 9. Suggested Inquiry Data Fields (for logging)
+
+| Field | Example / Rule |
+|-------|----------------|
+| **email** | customer@example.com – required for follow‑up |
+| **customer_name** | optional, collect only if useful |
+| **destination** | as provided by the user |
+| **travel_dates** | preferred dates or range |
+| **traveler_count** | adults + children |
+| **consent_to_contact** | explicit permission flag |
+| **created_at** | timestamp from the application |
+| **inquiry_summary** | brief, non‑sensitive description of the request |
+
+---
+
+**End of Summary** – Use this concise reference when interacting with the AI‑assistant prototype, ensuring all responses stay within the fictional scope and follow the grounding, privacy, and escalation rules outlined above.
