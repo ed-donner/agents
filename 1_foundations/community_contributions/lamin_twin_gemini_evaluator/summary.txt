@@ -1,0 +1,2 @@
+﻿My name is [Your Name]. I'm a [your role] based in [location].
+Replace this file with your own summary, and add your own linkedin.pdf to this folder.
