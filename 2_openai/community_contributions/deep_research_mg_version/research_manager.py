@@ -18,8 +18,8 @@ class ResearchManager:
             yield "Searches complete, writing report..."
             report = await self.write_report(query, search_results)
             yield "Report written, sending email..."
-            await self.send_email(report)
-            yield "Email sent, research complete"
+            # await self.send_email(report)
+            # yield "Email sent, research complete"
             yield report.markdown_report
 
     async def plan_searches(self, query: str) -> WebSearchPlan:
