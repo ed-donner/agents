@@ -1,0 +1,75 @@
+My name is Paul Ishak. I am a computer programmer of over 40 years. I am a 4 time recipient of the Microsoft MVP award. I really love programming!!! I am a technical kind of guy with a logical insight to many things!
+
+I have pretty been a computer need since I was 7 and I'm 41 now... My first computer had a dos prompt and an EGA monitor if anyone even remembers those anymore!
+
+I've also done quite a bit of traveling, i've backpacked across the usa once, drove across 3 times, flown around the place... I've been to italy france spain germany greece slovenia.
+
+I am a United States Navy veteran, where I served as an Electronics Technicial calibrating radiac and dosimetry devices on the Emory S Land.
+
+here is my resume:
+
+Paul Ishak
+Principal Software Engineer
+Wiscasset, Maine, United States • 1111111111 • hello@gmail.com • linkedin.com/in/paul-ishak
+Principal Software Engineer with 11+ years of experience delivering reliable, maintainable systems and accelerating release cadence through
+CI/CD automation. Skilled in C++, C#, Visual Basic, Python, HTML5, CSS, JavaScript, Node.js, NPM, TypeScript, Vue.js, PHP, SQL (Postgres,
+SQLite), Vite, Bash, Batch, XML/JSON, PlantUML, Git, GitLab (Issues, MRs, Pipelines), Docker, Rancher, and unit testing. Strengths include
+architecting scalable pipelines, enforcing code quality with static analysis and review standards, and mentoring engineers to improve delivery
+predictability; seeks to drive platform-level improvements that reduce cycle time and increase deployment frequency.
+Employment history
+Software Engineer V • Beast Code • Maine, United States • Feb 2026 – Present
+Automated CI/CD pipelines to shorten deployment lead time and reduce manual steps, enabling more reliable releases with measurable
+cycle improvements.
+Mentored senior engineers on scalable architecture patterns and code hygiene to improve team consistency and delivery quality.
+Standardized code review templates and checklists to enforce security and performance considerations across repositories, improving review
+thoroughness.
+Coached mid-level engineers on testing strategies and debugging techniques to increase engineer independence and reduce issue resolution
+time.
+Optimized build and test orchestration to remove pipeline bottlenecks and produce measurable improvements in developer cycle time.
+Guided peer code reviews focused on maintainability and performance trade-offs to raise team standards and increase code resilience.
+Software Engineer IV • Beast Code • Fort Walton Beach, FL • 2023 – Mar 2026
+Designed and maintained CI/CD pipelines to accelerate release cadence and achieve measurable cycle time reductions.
+Enforced code quality through structured code reviews and static analysis to reduce regressions and improve maintainability.
+Mentored junior engineers via pair-programming and structured feedback to shorten ramp-up time and strengthen team delivery capability.
+Programmer Analyst • DXC Technology • Remote • Dec 2019 – Apr 2025
+Supported enterprise Communications, Engineering, Design, and Advanced Concepts applications and resolved production incidents to
+restore service availability and reduce downtime.
+Managed small to mid-size software projects from requirements through deployment, delivering releases on schedule and meeting
+stakeholder expectations.
+Gathered requirements and designed, implemented, tested, and maintained custom applications, producing measurable improvements in
+delivery quality.
+Presented project plans to Architectural, Security, and Legal review boards to secure approvals and ensure regulatory and compliance
+adherence.
+Troubleshot, debugged, and remediated software defects while providing technical support to users, reducing repeat incidents and
+improving user satisfaction.
+Mentored and trained new developers on business processes and development best practices to accelerate team productivity and
+onboarding.
+Advised engineers and stakeholders as a subject matter expert on custom applications and technologies to improve technical decision
+making.
+Adhered to Change Management policies, completed required documentation, and participated in change meetings to ensure controlled
+deployments.
+IT Manager • BREAK OF DAY MENTAL HEALTH GROUP INC • Jan 2018 – Oct 2020
+Coached frontline staff on secure device usage and access controls, improving privacy compliance and reducing user-caused incidents.
+Conducted research on telehealth tools and recommended integration options to expand remote care capabilities and clinician productivity.
+Collaborated with clinical leaders to align IT projects with patient workflows, streamlining handoffs and improving staff efficiency.
+Implemented monitoring dashboards for core applications to detect anomalies early and accelerate incident triage, minimizing service
+disruption.
+Delivered training for administrative and clinical staff on secure remote access and troubleshooting, increasing user confidence and
+reducing helpdesk demand.
+Lead Programmer • Dirigo Systems Inc. • Jefferson Maine • 2015 – Feb 2017
+Architected modular backend components to simplify feature rollout, enabling faster deployments and reducing integration friction across
+teams.
+Coached junior developers through pair-programming and targeted feedback, strengthening team capabilities and shortening onboarding
+time.
+Refactored legacy services to improve maintainability and accelerate bug resolution, producing noticeable reductions in turnaround time for
+critical fixes.
+Mentored peers through technical problem-solving sessions and knowledge-sharing workshops, fostering team capability and steady skill
+growth.
+Education
+Certified Electronics Technician, Electronics Repair • Navy Electronics School • 2001 – 2003
+Certified Network Engineer, Network and System Administration/Administrator • Computer Education Institute • 1999 – 2000
+Skills
+C++, C#, Visual Basic, Python, HTML5, CSS, JavaScript, Node.js, NPM, Typescript, Vue.js, Postgres , SQLite , SQL, PHP, Vite, Bash, Batch,
+XML, JSON, PlantUML, Gitlab , Gitlab Issues, Gitlab Merge Requests, Gitlab Pipelines, Git, Docker, Docker Desktop, Rancher, Unit Tests
+
+Did you know that the meaning of life is 42?
