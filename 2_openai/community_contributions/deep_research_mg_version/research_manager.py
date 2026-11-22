@@ -1,9 +1,22 @@
 from agents import Runner, trace, gen_trace_id
 from search_agent import search_agent
-from planner_agent import planner_agent, WebSearchItem, WebSearchPlan
+from planner_agent import planner_agent, WebSearchItem, WebSearchPlan, clarifying_agent, ClarifyingQuestionsList
 from writer_agent import writer_agent, ReportData
 from email_agent import email_agent
 import asyncio
+
+class ClarifyingQuestions:
+    async def run(self, query: str):
+        """ Came up with 5 clarifying qestions """
+        trace_id = gen_trace_id()
+        with trace("Clarifying trace", trace_id=trace_id):
+            yield f"Starting Clarifying. Trace: https://platform.openai.com/traces/trace?trace_id={trace_id}"
+            result = await Runner.run(clarifying_agent, f"Query: {query}")
+            questions = "\n".join(
+                f"{index}. {item.question}"
+                for index, item in enumerate(result.final_output.questions, start=1)
+            )
+            yield questions
 
 class ResearchManager:
 
