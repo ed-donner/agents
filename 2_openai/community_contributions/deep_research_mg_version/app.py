@@ -7,18 +7,15 @@ load_dotenv(override=True)
 
 async def clarfying_questions(query: str):
      async for status_update in ClarifyingQuestions().run(query):
+        print(status_update)
+        print(type(status_update))
+        print(len(status_update))
         yield status_update
          
 
 async def run(query: str):
     async for status_update in ResearchManager().run(query):
         yield status_update
-
-def show_question(name):
-    return (
-        gr.update(visible=True),
-        gr.update(label=f"היי {name}, מה תרצה לחקור היום?")
-    )
 
 with gr.Blocks(title="Deep Research") as ui:
     gr.HTML(HEADER_HTML)
@@ -37,28 +34,21 @@ with gr.Blocks(title="Deep Research") as ui:
     gr.HTML('<div class="dr-examples-label">Try one</div>')
     gr.Examples(examples=EXAMPLES, inputs=query_textbox, elem_id="dr-examples")
 
-    # clarfyiers = gr.Markdown(elem_id="dr-clarfyiers")
+    clarfyiers = gr.Markdown(elem_id="dr-clarfyiers")
     clarfyiers = gr.State([])
 
     run_button.click(clarfying_questions, inputs=query_textbox, outputs=clarfyiers)
     query_textbox.submit(clarfying_questions, inputs=query_textbox, outputs=clarfyiers)
 
-    clarifiers_display = gr.Markdown(elem_id="dr-clarfyiers")  # מציג רק מחרוזת אחת בכל פעם
-    user_box = gr.Textbox(label="Ans")
+    clarifiers_display = gr.Markdown(elem_id="dr-clarfyiers")
+    user_box = gr.Textbox(label="Your Answere Here")
     submit_btn = gr.Button("Submit")
 
-    # answers = gr.State({})
-    # def next_step(text, ans):
-    #     idx = len(ans)
-    #     if idx < len(clarfyiers):
-    #         ans[clarfyiers[idx]] = text
-
-    #     next_idx = len(ans)
-    #     if next_idx < len(clarfyiers):
-    #         return clarfyiers[next_idx], "", ans
-    #     return "Done!", "", ans
-
-    # btn.click(next_step, inputs=[user_box, answers], outputs=[prompt_txt, user_box, answers])
+    clarfyiers.change(
+        fn=lambda q_list: q_list if q_list else "",
+        inputs=clarfyiers,
+        outputs=clarifiers_display,
+    )
 
     # report = gr.Markdown(elem_id="dr-report")
 
