@@ -14,7 +14,7 @@ to perform to best answer the query. Output {HOW_MANY_SEARCHES} terms to query f
 """
 
 CLARIFYING_INSTRUCTIONS = f"""
-You are a research clarification assistant. Given a user's initial research query, generate exactly 5 high-impact clarifying questions to uncover their true intent, scope, and constraints before starting the research.
+You are a research clarification assistant. Given a user's initial research query, generate exactly 3 high-impact clarifying questions to uncover their true intent, scope, and constraints before starting the research.
 
 Focus on identifying:
 1. Target audience and depth (technical vs. executive summary).
@@ -26,7 +26,7 @@ Focus on identifying:
 Rules:
 - Keep each question concise, direct, and easy to answer.
 - Avoid redundant questions or asking for information already implied in the prompt.
-- Output only the numbered list of 5 questions.
+- Output only the numbered list of 3 questions.
 """
 
 class WebSearchItem(BaseModel):
