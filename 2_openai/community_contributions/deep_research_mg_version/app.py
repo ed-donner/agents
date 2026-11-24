@@ -1,22 +1,13 @@
 import gradio as gr
 from dotenv import load_dotenv
-from research_manager import ResearchManager, ClarifyingQuestions
+from research_manager import ResearchManager
 from styles import CSS, JS, EXAMPLES, HEADER_HTML
 
 load_dotenv(override=True)
 
-async def clarfying_questions(query: str):
-    async for status_update in ClarifyingQuestions().run(query):
-        yield (
-            gr.update(value=status_update, visible=True),
-            gr.update(visible=True),
-            gr.update(visible=True),
-        )
-         
-
-async def run(query: str, clarify_q: str, clarify_a: str):
-    async for status_update in ResearchManager().run(query, clarify_q, clarify_a):
-        yield status_update
+async def run(query, clarifying_q, clarifying_a):
+    async for (clarifiers_state, clarifiers_display, user_box, submit_answers_btn, report_display) in ResearchManager().run(query, clarifying_q, clarifying_a):
+        yield (clarifiers_state, clarifiers_display, user_box, submit_answers_btn, report_display)
 
 with gr.Blocks(title="Deep Research") as ui:
     gr.HTML(HEADER_HTML)
@@ -35,31 +26,42 @@ with gr.Blocks(title="Deep Research") as ui:
     gr.HTML('<div class="dr-examples-label">Try one</div>')
     gr.Examples(examples=EXAMPLES, inputs=query_textbox, elem_id="dr-examples")
 
-    clarifiers_display = gr.Markdown(elem_id="dr-clarfyiers", visible=False)
-    user_box = gr.Textbox(label="Your Answer Here", visible=False)
-    submit_btn = gr.Button("Submit", visible=False)
+    clarifiers_state = gr.State("")
+    clarifiers_display = gr.Markdown(elem_id="dr-clarfyiers")
 
-    clarfyiers_ans = gr.State([])
-    report = gr.Markdown(elem_id="dr-report")
+    user_box = gr.Textbox(
+        label="Please Clarify",
+        placeholder="Your Answere Here",
+        lines=4,
+        visible=False,
+      )
+
+    submit_answers_btn = gr.Button("Continue", visible=False)
+    report_display = gr.Markdown(label="Final Report")
+
+    pipeline_inputs = [query_textbox, user_box, clarifiers_state]
+    pipeline_outputs = [
+        clarifiers_state,
+        clarifiers_display,
+        user_box,
+        submit_answers_btn,
+        report_display,
+    ]
     run_button.click(
-        clarfying_questions,
-        inputs=query_textbox,
-        outputs=[clarifiers_display, user_box, submit_btn],
-    )
+      fn=run,
+      inputs=pipeline_inputs,
+      outputs=pipeline_outputs,
+    ) 
     query_textbox.submit(
-        clarfying_questions,
-        inputs=query_textbox,
-        outputs=[clarifiers_display, user_box, submit_btn],
+        fn=run,
+        inputs=pipeline_inputs,
+        outputs=pipeline_outputs,
     )
-    submit_btn.click(
-        run,
-        inputs=[query_textbox, clarifiers_display, user_box],
-        outputs=report,
-    )
-    user_box.submit(
-        run,
-        inputs=[query_textbox, clarifiers_display, user_box],
-        outputs=report,
+
+    submit_answers_btn.click(
+        fn=run,
+        inputs=pipeline_inputs,
+        outputs=pipeline_outputs,
     )
 
 if __name__ == "__main__":
