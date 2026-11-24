@@ -11,22 +11,17 @@ class ClarifyingQuestions:
         trace_id = gen_trace_id()
         with trace("Clarifying trace", trace_id=trace_id):
             yield f"Starting Clarifying. Trace: https://platform.openai.com/traces/trace?trace_id={trace_id}"
-            
-            result = await Runner.run(clarifying_agent, f"Query: {query}")
-
-            # result = self.clac_clarifying_qs(query)
-            # print(result)
+            result = await self.clac_clarifying_qs(query)
             questions = "\n".join(
                 f"{index}. {item.question}"
-                for index, item in enumerate(result.final_output.questions, start=1)
+                for index, item in enumerate(result.questions, start=1)
             )
             yield questions
 
-    # async def clac_clarifying_qs(self, query: str)-> ClarifyingQuestionsList:
-    #     """ Came up with 3 clarifying qestions """
-    #     result = await Runner.run(clarifying_agent, f"Query: {query}")
-    #     print(len(result))
-    #     return result.final_output
+    async def clac_clarifying_qs(self, query: str)-> ClarifyingQuestionsList:
+        """ Came up with 3 clarifying qestions """
+        result = await Runner.run(clarifying_agent, f"Query: {query}")
+        return result.final_output
 
 
 class ResearchManager:
