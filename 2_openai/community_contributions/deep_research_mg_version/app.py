@@ -6,14 +6,6 @@ from styles import CSS, JS, EXAMPLES, HEADER_HTML
 load_dotenv(override=True)
 
 async def clarfying_questions(query: str):
-    if not query or not query.strip():
-        yield (
-            gr.update(value="", visible=False),
-            gr.update(value="", visible=False),
-            gr.update(visible=False),
-        )
-        return
-
     async for status_update in ClarifyingQuestions().run(query):
         yield (
             gr.update(value=status_update, visible=True),
