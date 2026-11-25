@@ -39,6 +39,8 @@ with gr.Blocks(title="Deep Research") as ui:
 
     submit_answers_btn = gr.Button("Continue", visible=False)
     report_display = gr.Markdown(label="Final Report")
+    trace_id_state = gr.State("")
+
 
     pipeline_inputs = [query_textbox, clarifiers_state, user_box]
     pipeline_outputs = [
