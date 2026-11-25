@@ -19,16 +19,21 @@ class ManagerDecision(BaseModel):
 async def clac_clarifying_qs(query: str)-> ClarifyingQuestionsList:
     """ Came up with 3 clarifying qestions """
     result = await Runner.run(clarifying_agent, f"Query: {query}")
-    result = "\n".join(f"{index}. {item.question}" for index, item in enumerate(result.questions, start=1))
-    return result.final_output
+    result = "\n".join(f"{index}. {item.question}" for index, item in enumerate(result.final_output.questions, start=1))
+    print("my Qs:", result, len(result), type(result))
+    return result
 
 @function_tool
-async def plan_searches_and_perform(query: str, clarify_q: str, clarify_a: str) -> WebSearchPlan:
+async def plan_searches_and_perform(query: str, clarify_q: str, clarify_a: str) -> list[str | None]:
     """ Plan the searches to perform for the query + Perform the searches to perform for the query """
-    result = await Runner.run(planner_agent, f"Query: {query}, clarifying questions: {clarify_q}, clarifying answere: {clarify_a}")
-    searches = result.final_output
-    tasks = [search(item) for item in searches]
+    result = await plan_searches(query, clarify_q, clarify_a)
+    tasks = [search(item) for item in result.searches]
     return await asyncio.gather(*tasks)
+
+async def plan_searches(query: str, clarify_q: str, clarify_a: str) -> WebSearchPlan:
+    """ Plan the searches to perform for the query """
+    result = await Runner.run(planner_agent, f"Query: {query}, clarifying questions: {clarify_q}, clarifying answere: {clarify_a}")
+    return result.final_output
 
 async def search(item: WebSearchItem) -> str | None:
     """ Perform a search for the query """
@@ -58,11 +63,14 @@ manager_agent = Agent(
             " `content`."
         ),
         tools = [clac_clarifying_qs, plan_searches_and_perform, write_report],
-        output_type=ManagerDecision,
+        output_type=ManagerDecision
     )
 
 async def run(query: str, history_state: list, clarifying_a: str, trace_id: str):
       """Run the agent-orchestrated research process."""
+      if not trace_id:
+        trace_id = gen_trace_id()
+
       with trace("Research trace", trace_id=trace_id):
         trace_url = f"https://platform.openai.com/traces/trace?trace_id={trace_id}"
         print(f"Starting research. Trace: {trace_url}")
@@ -83,7 +91,8 @@ async def run(query: str, history_state: list, clarifying_a: str, trace_id: str)
                 gr.update(),
                 gr.update(),
                 gr.update(),
-                f"Running tool: **{tool_name}**...\nTrace: {trace_url}",
+                f"Running tool: **{tool_name}**...",
+                trace_id
             )
 
         decision: ManagerDecision = result.final_output
@@ -95,7 +104,8 @@ async def run(query: str, history_state: list, clarifying_a: str, trace_id: str)
               decision.content,
               gr.update(visible=True, value=""),
               gr.update(visible=True),
-              f"Now please answer the questions.\nTrace: {trace_url}",
+              f"Now please answer the questions",
+              trace_id
           )
 
         elif decision.status == "completed":
@@ -105,4 +115,5 @@ async def run(query: str, history_state: list, clarifying_a: str, trace_id: str)
               gr.update(visible=False, value=""),
               gr.update(visible=False),
               decision.content,
+              ""
           )

@@ -6,9 +6,9 @@ from agents_as_tools import run as run_agengts_as_tools
 
 load_dotenv(override=True)
 
-async def run(query, clarifying_q, clarifying_a):
-    async for (clarifiers_state, clarifiers_display, user_box, submit_answers_btn, report_display) in run_agengts_as_tools(query, clarifying_q, clarifying_a):
-        yield (clarifiers_state, clarifiers_display, user_box, submit_answers_btn, report_display)
+async def run(query, clarifying_q, clarifying_a, trace_id):
+    async for (clarifiers_state, clarifiers_display, user_box, submit_answers_btn, report_display, trace_id_state) in run_agengts_as_tools(query, clarifying_q, clarifying_a, trace_id):
+        yield (clarifiers_state, clarifiers_display, user_box, submit_answers_btn, report_display, trace_id_state)
 
 with gr.Blocks(title="Deep Research") as ui:
     gr.HTML(HEADER_HTML)
@@ -42,13 +42,14 @@ with gr.Blocks(title="Deep Research") as ui:
     trace_id_state = gr.State("")
 
 
-    pipeline_inputs = [query_textbox, clarifiers_state, user_box]
+    pipeline_inputs = [query_textbox, clarifiers_state, user_box, trace_id_state]
     pipeline_outputs = [
         clarifiers_state,
         clarifiers_display,
         user_box,
         submit_answers_btn,
         report_display,
+        trace_id_state
     ]
     run_button.click(
       fn=run,
