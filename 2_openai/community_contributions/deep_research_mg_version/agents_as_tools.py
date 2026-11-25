@@ -4,7 +4,8 @@ from typing import Literal
 from agents import Agent, Runner, function_tool, gen_trace_id, trace
 from pydantic import BaseModel
 from search_agent import search_agent
-from planner_agent import planner_agent, WebSearchItem, WebSearchPlan, clarifying_agent, ClarifyingQuestionsList
+from planner_agent import planner_agent, WebSearchItem, WebSearchPlan
+from clarify_agent import clarifying_agent, ClarifyingQuestionsList
 from writer_agent import writer_agent, ReportData
 import gradio as gr
 
@@ -16,7 +17,7 @@ class ManagerDecision(BaseModel):
 
 
 @function_tool
-async def clac_clarifying_qs(query: str)-> ClarifyingQuestionsList:
+async def clac_clarifying_qs(query: str)-> str:
     """ Came up with 3 clarifying qestions """
     result = await Runner.run(clarifying_agent, f"Query: {query}")
     result = "\n".join(f"{index}. {item.question}" for index, item in enumerate(result.final_output.questions, start=1))
