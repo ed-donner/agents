@@ -20,7 +20,6 @@ async def clac_clarifying_qs(query: str)-> ClarifyingQuestionsList:
     """ Came up with 3 clarifying qestions """
     result = await Runner.run(clarifying_agent, f"Query: {query}")
     result = "\n".join(f"{index}. {item.question}" for index, item in enumerate(result.final_output.questions, start=1))
-    print("my Qs:", result, len(result), type(result))
     return result
 
 @function_tool
@@ -73,7 +72,7 @@ async def run(query: str, history_state: list, clarifying_a: str, trace_id: str)
 
       with trace("Research trace", trace_id=trace_id):
         trace_url = f"https://platform.openai.com/traces/trace?trace_id={trace_id}"
-        print(f"Starting research. Trace: {trace_url}")
+        print(f"Research {query}. Trace: {trace_url}")
 
         user_msg = clarifying_a if history_state else query
         current_input = history_state + [{"role": "user", "content": user_msg}]

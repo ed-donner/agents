@@ -1,6 +1,5 @@
 import gradio as gr
 from dotenv import load_dotenv
-from research_manager import ResearchManager
 from styles import CSS, JS, EXAMPLES, HEADER_HTML
 from agents_as_tools import run as run_agengts_as_tools
 
