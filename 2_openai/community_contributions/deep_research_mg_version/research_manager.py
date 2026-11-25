@@ -6,34 +6,6 @@ from email_agent import email_agent
 import asyncio
 import gradio as gr
 
-# description = "Use this tool to write a clarifying questions for the user if the query is not clear. As the input, give it the user query and ask it to ask good clayfing questions regaring the choden research query."
-# clarifying_tool = clarifying_agent.as_tool(tool_name="clarifying_asker", tool_description=description)
-
-# description = "Use this tool to write the report with the research. In the input, just instruct it to search and report."
-# planner_tool = planner_agent.as_tool(tool_name="planner", tool_description=description)
-
-# tools = [clarifying_tool, planner_tool]
-
-# instructions = """
-# You are a Sales Manager at ComplAI. Your goal is to find the single best cold sales email using the sales_writer tools.
-# """
-
-# task = """
-# Follow these steps:
-
-# 1. Generate Drafts: Use each of the three sales_email_writer tools to generate different email drafts.
-# Just instruct each to write a sales email; no further details are needed.
-# Do not proceed until all three drafts are ready, one from each tool.
- 
-# 2. Evaluate and Select: Review the drafts and choose the single best email using your judgment of which one is most effective.
- 
-# 3. Use your tool to send the best email (and only the best email) to the user. Only send 1 email.
-# """
-
-# sales_manager = Agent(name="Sales Manager", instructions=instructions, tools=tools, model=MODEL_NAME)
-
-
-
 
 class ResearchManager:
 
@@ -43,11 +15,8 @@ class ResearchManager:
         with trace("Research trace", trace_id=trace_id):
             print(f"Starting research. Trace: https://platform.openai.com/traces/trace?trace_id={trace_id}")
             if not clarifying_q:
-                result = await self.clac_clarifying_qs(query)
-                questions = "\n".join(
-                    f"{index}. {item.question}"
-                    for index, item in enumerate(result.questions, start=1)
-                )
+                questions = await self.clac_clarifying_qs(query)
+
                 yield (
                     questions, 
                     questions,
@@ -67,14 +36,15 @@ class ResearchManager:
             search_results = await self.perform_searches(search_plan)
             report = await self.write_report(query, search_results)
             yield ("",
-                    clarifying_q,
-                    gr.update(visible=False),  # -> user_box
-        gr.update(visible=False),
-        report.markdown_report)
+                clarifying_q,
+                gr.update(visible=False),
+                gr.update(visible=False),
+                report.markdown_report)
 
     async def clac_clarifying_qs(self, query: str)-> ClarifyingQuestionsList:
         """ Came up with 3 clarifying qestions """
         result = await Runner.run(clarifying_agent, f"Query: {query}")
+        result = "\n".join(f"{index}. {item.question}" for index, item in enumerate(result.questions, start=1))
         return result.final_output
     
     async def plan_searches(self, query: str, clarify_q: str, clarify_a: str) -> WebSearchPlan:

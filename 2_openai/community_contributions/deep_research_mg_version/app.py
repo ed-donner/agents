@@ -2,11 +2,12 @@ import gradio as gr
 from dotenv import load_dotenv
 from research_manager import ResearchManager
 from styles import CSS, JS, EXAMPLES, HEADER_HTML
+from agents_as_tools import run as run_agengts_as_tools
 
 load_dotenv(override=True)
 
 async def run(query, clarifying_q, clarifying_a):
-    async for (clarifiers_state, clarifiers_display, user_box, submit_answers_btn, report_display) in ResearchManager().run(query, clarifying_q, clarifying_a):
+    async for (clarifiers_state, clarifiers_display, user_box, submit_answers_btn, report_display) in run_agengts_as_tools(query, clarifying_q, clarifying_a):
         yield (clarifiers_state, clarifiers_display, user_box, submit_answers_btn, report_display)
 
 with gr.Blocks(title="Deep Research") as ui:
@@ -26,7 +27,7 @@ with gr.Blocks(title="Deep Research") as ui:
     gr.HTML('<div class="dr-examples-label">Try one</div>')
     gr.Examples(examples=EXAMPLES, inputs=query_textbox, elem_id="dr-examples")
 
-    clarifiers_state = gr.State("")
+    clarifiers_state = gr.State([])
     clarifiers_display = gr.Markdown(elem_id="dr-clarfyiers")
 
     user_box = gr.Textbox(
@@ -39,7 +40,7 @@ with gr.Blocks(title="Deep Research") as ui:
     submit_answers_btn = gr.Button("Continue", visible=False)
     report_display = gr.Markdown(label="Final Report")
 
-    pipeline_inputs = [query_textbox, user_box, clarifiers_state]
+    pipeline_inputs = [query_textbox, clarifiers_state, user_box]
     pipeline_outputs = [
         clarifiers_state,
         clarifiers_display,
